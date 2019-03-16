@@ -1,0 +1,10 @@
+#include "../../inc.hpp"
+#include "../../features/chams/chams.h"
+
+void __fastcall hook::DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRenderContext *ctx, void *state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld ){
+	static auto original = g_hooks.m_modelrender.get_old_method< fn::DrawModelExecute_t >( 21 );
+	if ( g_chams.on_dme( ctx, state, pInfo, pCustomBoneToWorld ) )
+		original( ecx, ctx, state, pInfo, pCustomBoneToWorld );
+
+	g_csgo.m_model_render->ForcedMaterialOverride( nullptr );
+}

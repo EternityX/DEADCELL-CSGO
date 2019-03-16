@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="deadcell">
+      <UniqueIdentifier>{f8ae3196-571d-4d99-9e0a-15e24b42b7fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\util">
+      <UniqueIdentifier>{ab0eb108-640a-4f28-bd6c-52d753607a62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\util\misc">
+      <UniqueIdentifier>{7e4d7672-a9d2-4386-a1f6-6a33f4b9cbb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\math">
+      <UniqueIdentifier>{3f6416e7-0cb8-4e56-b590-26185c2dd00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\hash">
+      <UniqueIdentifier>{4b8a8da3-00d9-4943-94ec-2650537898d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\pe">
+      <UniqueIdentifier>{0355caf3-a98b-4fa5-85d8-df8dbcb1119a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\pe\module">
+      <UniqueIdentifier>{d43681e3-af4a-4983-a70e-e1b5fe47cc7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\util\pattern">
+      <UniqueIdentifier>{e78785a6-3829-4518-b5f7-565b7dfff235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\console">
+      <UniqueIdentifier>{aedca8ca-cab0-4703-830a-2b1d6d7fbcca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\oshgui">
+      <UniqueIdentifier>{dc18e173-a715-43c6-835b-9487a0e0b137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\oshgui\d3d9">
+      <UniqueIdentifier>{8def3a69-d9b6-49c2-9f08-fa7e41201af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\input">
+      <UniqueIdentifier>{d1347303-a56d-404d-9fcf-72db47d97c6e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc.hpp">
+      <Filter>deadcell</Filter>
+    </ClInclude>
+    <ClInclude Include="util\misc\misc.hpp">
+      <Filter>deadcell\util\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="hash\hash.hpp">
+      <Filter>deadcell\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="math\math.hpp">
+      <Filter>deadcell\math</Filter>
+    </ClInclude>
+    <ClInclude Include="pe\pe.hpp">
+      <Filter>deadcell\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="pe\module\module.hpp">
+      <Filter>deadcell\pe\module</Filter>
+    </ClInclude>
+    <ClInclude Include="pe\types.hpp">
+      <Filter>deadcell\pe</Filter>
+    </ClInclude>
+    <ClInclude Include="console\console.hpp">
+      <Filter>deadcell\console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9GeometryBuffer.hpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9Renderer.hpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9RenderTarget.hpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9Texture.hpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9TextureTarget.hpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9ViewportTarget.hpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="oshgui\renderer.hpp">
+      <Filter>deadcell\oshgui</Filter>
+    </ClInclude>
+    <ClInclude Include="input\input.hpp">
+      <Filter>deadcell\input</Filter>
+    </ClInclude>
+    <ClInclude Include="oshgui\font.hpp">
+      <Filter>deadcell\oshgui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="util\misc\misc.cpp">
+      <Filter>deadcell\util\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="math\math.cpp">
+      <Filter>deadcell\math</Filter>
+    </ClCompile>
+    <ClCompile Include="pe\module\module.cpp">
+      <Filter>deadcell\pe\module</Filter>
+    </ClCompile>
+    <ClCompile Include="util\pattern\pattern.cpp">
+      <Filter>deadcell\util\pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="console\console.cpp">
+      <Filter>deadcell\console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9GeometryBuffer.cpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9Renderer.cpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9Texture.cpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9TextureTarget.cpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9ViewportTarget.cpp">
+      <Filter>deadcell\oshgui\d3d9</Filter>
+    </ClCompile>
+    <ClCompile Include="oshgui\renderer.cpp">
+      <Filter>deadcell\oshgui</Filter>
+    </ClCompile>
+    <ClCompile Include="input\input.cpp">
+      <Filter>deadcell\input</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="util\pattern\pattern.hpp">
+      <Filter>deadcell\util\pattern</Filter>
+    </None>
+  </ItemGroup>
+</Project>
