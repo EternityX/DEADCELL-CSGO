@@ -25,6 +25,7 @@ https://github.com/alpine971/osh_sdk
 See LICENSE.
 
 # 👀 Media
+*Note* Images are outdated
 
 ![image](https://i.imgur.com/93zfcLP.png)
 
