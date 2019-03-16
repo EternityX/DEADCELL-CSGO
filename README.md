@@ -7,7 +7,7 @@ If you want a clean base without any features, please see the [deadcell SDK](htt
 - Crashes and lots of them.
 - If you come across any more issues, please notify us via the issue tracker.
 
-We are accepting any push requests that fix any of the aforementioned issues.
+We are accepting any pull requests that fix any of the aforementioned issues.
 
 #  ❤️ Credits
 ### Main contributors
