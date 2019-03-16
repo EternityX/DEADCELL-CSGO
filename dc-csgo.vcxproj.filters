@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="dc-csgo">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="dc-csgo\sdk">
+      <UniqueIdentifier>{2dd3801a-8960-403d-8538-4985df7616e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features">
+      <UniqueIdentifier>{a4a14ea9-9f36-4b8e-a862-576f939b66f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\interfaces">
+      <UniqueIdentifier>{7c56f523-e34b-4a7d-9966-425192d92411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\custom classes">
+      <UniqueIdentifier>{c46af043-2880-431a-a8c8-b0094e27a622}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\valve utils">
+      <UniqueIdentifier>{b73199a4-b325-4526-b1c7-ac8e6a757081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\custom classes\entity">
+      <UniqueIdentifier>{ee46e7fe-316a-478b-81b4-b1784c52a1c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\utils">
+      <UniqueIdentifier>{0cdc3bca-40b1-48b4-bd43-92b18c4f1cf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\hooking">
+      <UniqueIdentifier>{81e19811-ced9-4ce2-8b23-dc4166d46018}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\csgo">
+      <UniqueIdentifier>{00af7e4f-202d-46d5-8007-4643d97973e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\utils\netvars">
+      <UniqueIdentifier>{02140a0b-aa5c-4e46-b80d-66b16325471b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\sdk\utils\interface manager">
+      <UniqueIdentifier>{13d2f0a4-48b1-4d9c-89a4-07024accdbc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\hooking\hooks">
+      <UniqueIdentifier>{c4c9bfa9-d5e1-43da-be6b-12afe637df27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\visuals">
+      <UniqueIdentifier>{73605950-3fbf-417d-8e2c-f550ffbfd179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\menu">
+      <UniqueIdentifier>{6b01d6c8-e699-4b33-90c0-4c6fe91a4770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\configs">
+      <UniqueIdentifier>{1b612a33-b764-4e82-943f-b36ee2e7cca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\notifications">
+      <UniqueIdentifier>{b8d3e237-b44d-4ff7-a785-fc520322bfda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\misc">
+      <UniqueIdentifier>{6f12df0a-d3b7-49b8-8c35-6fba67834621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\autowall">
+      <UniqueIdentifier>{a55473ad-6e61-436c-88e3-55eeb15ff4dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\ragebot">
+      <UniqueIdentifier>{d961d724-fe04-45af-859f-4d4dcf4b3cba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\animations">
+      <UniqueIdentifier>{2bbc6511-4c92-497f-be33-98828c9305bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\anti-aim">
+      <UniqueIdentifier>{652d930c-0055-4752-9b9a-9132d49276de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\nade pred">
+      <UniqueIdentifier>{671182b7-977d-4ad5-a2d1-6bb2b0b47665}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\events">
+      <UniqueIdentifier>{6f314770-4387-48f5-9c6f-2f70a64f5040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\player list">
+      <UniqueIdentifier>{5dba3bc6-894e-42e9-9fbf-5433d2ddc417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\engine_pred">
+      <UniqueIdentifier>{a53443f8-457d-465b-a205-9b066572187e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\player_log">
+      <UniqueIdentifier>{d66f17ca-ba80-436a-b7a7-c5199330f0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\chams">
+      <UniqueIdentifier>{1aa07ca5-72cb-470c-bdc2-d5c01b5fc3cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\resolver">
+      <UniqueIdentifier>{60be97db-4b50-4ec9-9b78-0cf11fe5f44c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="csgo\dllmain.cpp">
+      <Filter>dc-csgo</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\present.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\reset.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\visuals\visuals.cpp">
+      <Filter>dc-csgo\features\visuals</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\menu\menu.cpp">
+      <Filter>dc-csgo\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\LevelShutdown.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\LevelInitPostEntity.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\FrameStageNotify.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\CreateMove.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\ShouldDrawFog.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\configs\configs.cpp">
+      <Filter>dc-csgo\configs</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\DoExtraBonesProcessing.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\notifications\notifications.cpp">
+      <Filter>dc-csgo\features\notifications</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\LockCursor.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\UpdateClientSideAnimations.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\misc\misc.cpp">
+      <Filter>dc-csgo\features\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\autowall\autowall.cpp">
+      <Filter>dc-csgo\features\autowall</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\ragebot\ragebot.cpp">
+      <Filter>dc-csgo\features\ragebot</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\PaintTraverse.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\OverrideView.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\animations\anim.cpp">
+      <Filter>dc-csgo\features\animations</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\TestHitboxes.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\GetViewmodelFOV.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\anti-aim\antiaim.cpp">
+      <Filter>dc-csgo\features\anti-aim</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\nade_pred\nade_pred.cpp">
+      <Filter>dc-csgo\features\nade pred</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\events\events.cpp">
+      <Filter>dc-csgo\features\events</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\player list\playerlist.cpp">
+      <Filter>dc-csgo\features\player list</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp">
+      <Filter>dc-csgo\features\engine_pred</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\player_log\player_log.cpp">
+      <Filter>dc-csgo\features\player_log</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\DrawModelExecute.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\SceneEnd.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\chams\chams.cpp">
+      <Filter>dc-csgo\features\chams</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\GetMaterial.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\resolver\resolver.cpp">
+      <Filter>dc-csgo\features\resolver</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\manager.cpp">
+      <Filter>dc-csgo\hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\RenderSmokeOverlay.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="csgo\inc.hpp">
+      <Filter>dc-csgo</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\animstate.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\valve utils\cutlvector.h">
+      <Filter>dc-csgo\sdk\valve utils</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\sdk.h">
+      <Filter>dc-csgo\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\matrix.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\vector.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\cglobalvars.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\chandle.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\cinput.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\client_class.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\clientdll.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\cphysicssurface.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\dt_recv.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\icliententity.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\icliententitylist.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iclientmodeshared.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iclientnetworkable.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iclientrenderable.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iclientunknown.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\icvar.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ienginesounds.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ienginetrace.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\igameevent.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\igamemovement.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\imaterial.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\imaterialsystem.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\imaterialvar.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\imatrendercontext.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ipanel.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iprediction.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\istudiorender.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\isurface.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\itexture.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ivdebugoverlay.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iviewrenderbeams.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ivmodelinfo.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ivmodelrender.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ivrenderview.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iweaponinfo.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iweaponsystem.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\def.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\cglowobjectmanager.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\iefx.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\inetchannel.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\angle.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\color.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\entity.h">
+      <Filter>dc-csgo\sdk\custom classes\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\utils\c_vmt.h">
+      <Filter>dc-csgo\sdk\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\hooking\manager.h">
+      <Filter>dc-csgo\hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\csgo\csgo.h">
+      <Filter>dc-csgo\sdk\csgo</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\utils\netvars.h">
+      <Filter>dc-csgo\sdk\utils\netvars</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\utils\interface_manager.h">
+      <Filter>dc-csgo\sdk\utils\interface manager</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\ilocalize.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\visuals\visuals.h">
+      <Filter>dc-csgo\features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\menu\menu.hpp">
+      <Filter>dc-csgo\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\configs\config.h">
+      <Filter>dc-csgo\configs</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\json.h">
+      <Filter>dc-csgo</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\vars.h">
+      <Filter>dc-csgo\features</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\notifications\notifications.h">
+      <Filter>dc-csgo\features\notifications</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\client.h">
+      <Filter>dc-csgo\features</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\misc\misc.h">
+      <Filter>dc-csgo\features\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\autowall\autowall.h">
+      <Filter>dc-csgo\features\autowall</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\ragebot\ragebot.h">
+      <Filter>dc-csgo\features\ragebot</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\animations\anim.h">
+      <Filter>dc-csgo\features\animations</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\anti-aim\antiaim.h">
+      <Filter>dc-csgo\features\anti-aim</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\nade_pred\nade_pred.h">
+      <Filter>dc-csgo\features\nade pred</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\events\events.h">
+      <Filter>dc-csgo\features\events</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\player list\playerlist.h">
+      <Filter>dc-csgo\features\player list</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\engine_pred\engine_pred.h">
+      <Filter>dc-csgo\features\engine_pred</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\player_log\player_log.h">
+      <Filter>dc-csgo\features\player_log</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\chams\chams.h">
+      <Filter>dc-csgo\features\chams</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\resolver\resolver.h">
+      <Filter>dc-csgo\features\resolver</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\steam.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\address.h">
+      <Filter>dc-csgo\sdk</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
