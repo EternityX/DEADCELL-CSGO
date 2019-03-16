@@ -50,7 +50,7 @@ float at_target( ) {
 }
 
 float c_antiaim::calculate_max_desync_angle( C_CSPlayer *local, CCSGOPlayerAnimState *anim_state ) {
-	return 0.f
+	return 0.f;
 }
 
 void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
