@@ -5,9 +5,9 @@ c_hooks g_hooks{ };
 
 void c_hooks::init( ) {
 
-	static const auto d3doffset = **reinterpret_cast< void*** >( pattern::find( "shaderapidx9.dll", "88 56 10" ) + 17 );
+	// static const auto d3doffset = **reinterpret_cast< void*** >( pattern::find( "shaderapidx9.dll", "88 56 10" ) + 17 );
 
-	m_directx.init( d3doffset );
+	m_directx.init( g_csgo.m_d3d9_vmt );
 	m_clientmode.init( g_csgo.m_client_mode );
 	m_client.init( g_csgo.m_client );
 	m_surface.init( g_csgo.m_surface );
