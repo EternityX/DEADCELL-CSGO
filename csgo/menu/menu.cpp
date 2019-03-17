@@ -190,7 +190,7 @@ void c_main_form::ragebot_tab() {
 	auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
 	auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
 	auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
+	auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"Â°" );
 
 	g_menu.set_y_pos( 10 );
 	auto *fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
@@ -410,7 +410,7 @@ void c_main_form::visuals_tab() {
 	auto remove_flash = new c_checkbox( "Flash", removals_page, &g_vars.visuals.misc.no_flash );
 	auto remove_fog = new c_checkbox( "Fog", removals_page, &g_vars.visuals.misc.fog );
 	auto remove_smoke = new c_checkbox( "Smoke", removals_page, &g_vars.visuals.misc.remove_smoke );
-	auto remove_scope = new c_checkbox( "Scope Overlay", removals_page, &g_vars.visuals.misc.remove_scope );
+	auto remove_scope = new c_checkbox( "Scope", removals_page, &g_vars.visuals.misc.remove_scope );
 	//auto remove_blue = new c_checkbox( "Aug scope blur", removals_page, &g_vars.visuals.misc.remove_blur );
 
 	auto scope_color = new c_colorpicker( removals_page, remove_scope, g_vars.visuals.misc.scope_color );
