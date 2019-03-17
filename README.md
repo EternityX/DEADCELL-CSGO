@@ -29,5 +29,4 @@ See LICENSE.
 ![image](https://i.imgur.com/eGF2wfS.png)
 ![image](https://i.imgur.com/UAaRTQs.png)
 ![image](https://i.imgur.com/SlIhaYK.png)
-![image](https://i.imgur.com/bFjUUPs.png)
 ![image](https://i.imgur.com/ne9eXmB.png)
