@@ -61,9 +61,9 @@ void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
 
 }
 
-void c_antiaim::set_angles( CUserCmd *ucmd, bool& bSendPacket ) {
+void c_antiaim::set_angles( CUserCmd *ucmd ) {
 	
-	if(bSendPacket ){
+	if(g_cl.m_sendpacket){
 		if (ucmd->m_buttons & IN_ATTACK || ucmd->m_buttons & IN_USE)
 			return;
 	switch (g_vars.antiaim.yaw) {
