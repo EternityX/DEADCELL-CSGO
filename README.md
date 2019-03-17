@@ -5,6 +5,7 @@ If you want a clean base without any features, please see the [deadcell SDK](htt
 
 # 💀 Known issues
 - Crashes and lots of them.
+- Game will crash when using -d3d9ex as a launch option.
 - If you come across any more issues, please notify us via the issue tracker.
 
 We are accepting any pull requests that fix any of the aforementioned issues.
