@@ -24,7 +24,7 @@ public:
 	float calculate_max_desync_angle( C_CSPlayer *local, CCSGOPlayerAnimState *anim_state );
 	void adjust_yaw( CUserCmd *ucmd );
 	void adjust_pitch( CUserCmd *ucmd );
-	void	set_angles( CUserCmd *ucmd, bool& bSendPacket );
+	void	set_angles( CUserCmd *ucmd );
 	void manual( CUserCmd *ucmd );
 
 	vec3_t	_real = vec3_t( );
