@@ -27,6 +27,6 @@ See LICENSE.
 # 👀 Media
 *Note* Images are outdated
 
-![image](https://i.imgur.com/93zfcLP.png)
-
-![image](https://deadcell.cc/assets/img/media4.png)
+![image](https://i.imgur.com/eGF2wfS.png)
+![image](https://i.imgur.com/UAaRTQs.png)
+![image](https://i.imgur.com/bFjUUPs.png)
