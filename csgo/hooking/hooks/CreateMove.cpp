@@ -58,7 +58,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	g_ragebot.work( cmd );
 
-	g_antiaim.set_angles( cmd );
+	g_antiaim.set_angles( cmd , g_cl.m_sendpacket);
 
 	g_engine_pred.end( );
 
