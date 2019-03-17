@@ -702,11 +702,11 @@ void c_visuals::watermark( ) {
 	if( connected )
 		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor::FromARGB( 220, 255, 255, 255 ),
 		                      OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, size.Height - size.Height + 22, 0,
-		                      "ricardo | %s | out %ims | choked %i", time.c_str( ), g_cl.m_ping, g_csgo.m_clientstate->m_nChokedCommands );
+		                      "deadcell | %s | out %ims | choked %i", time.c_str( ), g_cl.m_ping, g_csgo.m_clientstate->m_nChokedCommands );
 	else
 		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor( 0.8f, 1.f, 1.f, 1.f ),
 		                      OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, size.Height - size.Height + 22, 0,
-		                      "ricardo | unconnected | %s", time.c_str( ) );
+		                      "deadcell | unconnected | %s", time.c_str( ) );
 }
 
 void c_visuals::draw_scope( ) {

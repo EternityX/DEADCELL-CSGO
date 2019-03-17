@@ -28,7 +28,7 @@ void c_notifications::add( bool display, OSHColor color, const std::string messa
 		m_notifications.pop_front( );
 
 
-	g_csgo.m_convar->PrintToConsole( Color( 206, 115, 136 ), "[ricardo]" );
+	g_csgo.m_convar->PrintToConsole( Color( 206, 115, 136 ), "[deadcell]" );
 	g_csgo.m_convar->PrintToConsole( Color( 255, 255, 255 ), " %s\n", buf.c_str( ) );
 		
 	if( display ){
