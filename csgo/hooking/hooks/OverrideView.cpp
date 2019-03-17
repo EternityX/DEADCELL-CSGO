@@ -11,6 +11,8 @@ void __fastcall hook::OverrideView( uintptr_t ecx, uintptr_t edx, CViewSetup *pS
 			if( local && local->alive( ) && !local->is_scoped( ) ){
 				pSetup->m_fov = g_vars.visuals.effects.camera_fov;
 			}
+			else if (local && local->alive() && g_vars.visuals.misc.remove_scope)
+				pSetup->m_fov = g_vars.visuals.effects.camera_fov;
 		}
 	}
 
