@@ -139,14 +139,14 @@ IMaterial * c_chams::create_material( bool shade, bool wireframe, bool ignorez, 
 
 		InitKeyValuesEx( keyvalues, key_name );
 	};
-	auto load_from_buffer = [ ]( KeyValues *key_values, const char *resource_name, const char *buf, void *file_sys = nullptr, const char *path_id = nullptr, void *eval_sym_proc = nullptr ) -> void {
-		using LoadFromBuffer_t = void(__thiscall *)( void *, const char *, const char *, void *, const char *, void * );
+	auto load_from_buffer = [ ]( KeyValues *key_values, const char *resource_name, const char *buf, void *file_sys = nullptr, const char *path_id = nullptr, void *eval_sym_proc = nullptr, void *unk = nullptr ) -> void {
+		using LoadFromBuffer_t = void(__thiscall *)( void *, const char *, const char *, void *, const char *, void *, void * );
 		static LoadFromBuffer_t LoadFromBufferEx = nullptr;
 		
 		if( !LoadFromBufferEx )
-			LoadFromBufferEx = pattern::find< LoadFromBuffer_t >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89 4C 24 04" );
+			LoadFromBufferEx = pattern::find< LoadFromBuffer_t >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89" );
 
-		LoadFromBufferEx( key_values, resource_name, buf, file_sys, path_id, eval_sym_proc);
+		LoadFromBufferEx( key_values, resource_name, buf, file_sys, path_id, eval_sym_proc, unk);
 	};
 
 	auto *key_values = new KeyValues( );
