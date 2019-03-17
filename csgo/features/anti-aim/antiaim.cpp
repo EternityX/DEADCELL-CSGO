@@ -61,8 +61,25 @@ void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
 
 }
 
-void c_antiaim::set_angles( CUserCmd *ucmd ) {
-
+void c_antiaim::set_angles( CUserCmd *ucmd, bool& bSendPacket ) {
+	
+	if(bSendPacket ){
+		if (ucmd->m_buttons & IN_ATTACK || ucmd->m_buttons & IN_USE)
+			return;
+	switch (g_vars.antiaim.yaw) {
+		case 1:
+			ucmd->m_viewangles.y += 180;
+			break;
+		}
+	switch (g_vars.antiaim.pitch) {
+	case 1:
+		ucmd->m_viewangles.x = 89;
+		
+		break;
+	}
+		
+	_real = ucmd->m_viewangles;
+	}
 }
 
 void c_antiaim::manual( CUserCmd *ucmd ) {
