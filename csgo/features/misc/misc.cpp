@@ -51,66 +51,6 @@ void c_misc::automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd ) 
 	firing = ( cmd->m_buttons & IN_ATTACK ) != 0;
 }
 
-bool c_misc::halftime_fix( CUserCmd * cmd ) {
-	return false;
-}
-
-bool c_misc::get_spread( vec3_t angles, C_CSPlayer *target, CUserCmd *cmd, int chance ) {
-	int traces_hit = 0;
-
-	vec3_t forward, right, up;
-	math::angle_to_vectors( angles, &forward, &right, &up );
-
-	C_BaseCombatWeapon *weapon = g_cl.m_local->get_active_weapon();
-	if( !weapon )
-		return false;
-
-	weapon->update_accuracy( );
-
-	auto get_bullet_location = [ weapon ]( int seed ) {
-		static RandomFloat_t RandomFloat = (RandomFloat_t)GetProcAddress( GetModuleHandleA( "vstdlib" ), "RandomFloat" );
-		static RandomSeed_t RandomSeed = (RandomSeed_t)GetProcAddress( GetModuleHandleA( "vstdlib" ), "RandomSeed" );
-
-		RandomSeed( seed + 1 & 255 );
-
-		weapon->update_accuracy( );
-
-		float a = RandomFloat( 0.f, math::pi_2 );
-		float b = RandomFloat( 0.f, math::pi_2 );
-		float c = RandomFloat( 0.f, weapon->inaccuracy( ) );
-		float d = RandomFloat( 0.f, weapon->spread() );
-
-		float x = std::cos( a ) * c + std::cos( b ) * d;
-		float y = std::sin( a ) * c + std::sin( b ) * d;
-
-		return vec3_t( x, y, 0.f );
-	};
-
-	vec3_t local_eye_position = g_cl.m_local->eye_pos();
-
-	for( int i = 0; i < 255; i++ ) {
-		vec3_t bullet_location = get_bullet_location( i );
-
-		vec3_t direction = forward + bullet_location * right + bullet_location * up;
-
-		Ray_t ray;
-		ray.init( local_eye_position, local_eye_position + direction * weapon->get_weapon_info()->range );
-
-		trace_t trace;
-		g_csgo.m_engine_trace->ClipRayToEntity( ray, MASK_SHOT | CONTENTS_GRATE, target, &trace );
-
-		//g_csgo.m_debug_overlay->AddLineOverlay( local_eye_position, local_eye_position + direction * weapon->get_weapon_info()->range, 0, 255, 0, true, 0.2f );
-
-		if( trace.hit_entity == target )
-			++traces_hit;
-
-		if( traces_hit >= chance )
-			return true;
-	}
-
-	return false;
-}
-
 
 void c_misc::thirdperson( ) {
 	auto local = C_CSPlayer::get_local( );

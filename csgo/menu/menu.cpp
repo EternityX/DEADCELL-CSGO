@@ -729,7 +729,7 @@ c_colorpicker::c_colorpicker( Control *parent, Control *control, float *col ) {
 }
 
 void c_checkbox::init( const AnsiString &text, int x, int y, Control *parent, bool *cvar ) {
-	SetBackColor( OSHColor::FromRGB( 113, 59, 198 ) );
+	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
 	SetFont( g_renderer.m_fonts.at( FONT_VERDANA_7PX ) );
 	SetLocation( x, y );
 	SetText( text );
@@ -954,7 +954,7 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	} );
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
-	SetBackColor( OSHColor::FromRGB( 113, 59, 198 ) );
+	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
 	if( text.empty( ) ){
 		SetLocation( x - 1, y - 20 );
 	}
@@ -991,7 +991,7 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	} );
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
-	SetBackColor( OSHColor::FromRGB( 113, 59, 198 ) );
+	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
 
 	if( text.empty( ) ){
 		SetLocation( x - 1, y - 15 );

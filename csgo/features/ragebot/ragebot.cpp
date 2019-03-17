@@ -100,9 +100,6 @@ void c_ragebot::select_target( ) {
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 			std::array< matrix3x4_t, 128 > _bones = { };
-
-			if( e->animstate( ) )
-				e->animstate( )->m_flFeetYawRate = 0.f;
 			
 			if( !e->SetupBones( _bones.data( ), 128, 0x100, e->simtime( ) + g_csgo.m_global_vars->m_interval_per_tick ) )
 				continue;
@@ -130,17 +127,16 @@ void c_ragebot::select_target( ) {
 			m_players.push_back( data );
 		}
 
-		switch( g_vars.rage.target_selection ) {
-			case 0:
-				std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) { return a.m_damage > b.m_damage; } );
-				break;
-			case 1:
-				std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) { return a.distance < b.distance; } );
-				break;
-			case 2:
-				std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) { return a.index < b.index; } );
-				break;
-		}
+		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
+			switch( g_vars.rage.target_selection ) {
+				case 0:
+					return a.m_damage > b.m_damage;
+				case 1:
+					return a.distance < b.distance;
+				case 2:
+					return a.index < b.index;
+			}
+		} );
 	}
 	catch( ... ) {
 		console::error( "caught exception in select_target( )" );
@@ -321,11 +317,7 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 	if ( !e )
 		return false;
 
-	const auto *model = e->GetModel( );
-	if ( !model )
-		return false;
-
-	auto *studiohdr = g_csgo.m_model_info->GetStudioModel( model );
+	auto *studiohdr = e->studio_hdr( );
 	if ( !studiohdr )
 		return false;
 

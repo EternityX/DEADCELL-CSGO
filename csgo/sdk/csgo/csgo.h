@@ -39,10 +39,6 @@ public:
 	ClientState *m_clientstate;
 	CPhysicsSurface *m_physics_surface;
 	ILocalize *m_localize;
-	C_CSGameRulesProxy **m_gamerules;
-	ISteamClient *m_steamclient;
-	ISteamUser *m_steamuser;
-	ISteamGameCoordinator *m_gamecoordinator;
 	IMemAlloc *m_memalloc;
 	IMDLCache *m_modelcache;
 	IViewRender *m_viewrender;
@@ -119,8 +115,6 @@ public:
 		m_localize = get_interface< ILocalize >( CT_HASH32( "Localize_001" ), 0, false );
 
 		m_modelcache = get_interface< IMDLCache >( CT_HASH32( "MDLCache" ) );
-
-		m_gamerules = *pattern::find< C_CSGameRulesProxy ***>( m_client_dll, "A1 ? ? ? ? 85 C0 0F 84 ? ? ? ? 80 B8 ? ? ? ? ? 0F 84 ? ? ? ? 0F 10 05", 1 );
 
 		return true;
 	}

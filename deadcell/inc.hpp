@@ -28,9 +28,9 @@ using ulong_t = unsigned long;
 
 #include "hash/hash.hpp"
 #include "pe/types.hpp"
-#include "util/misc/misc.hpp"
 #include "pe/module/module.hpp"
 #include "pe/pe.hpp"
+#include "util/misc/misc.hpp"
 #include "util/pattern/pattern.hpp"
 #include "math/math.hpp"
 #include "console/console.hpp"

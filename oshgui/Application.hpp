@@ -238,7 +238,7 @@ namespace OSHGui {
 		Control *FocusedControl;
 		Control *CaptureControl;
 		Control *MouseEnteredControl;
-		Drawing::Color primary_color_ = Drawing::Color::Black();
+		Drawing::Color primary_color_ = OSHGui::Drawing::Color::FromARGB( 255, 206, 115, 136 );
 
 		bool isEnabled_;
 	};

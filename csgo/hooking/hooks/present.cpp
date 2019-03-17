@@ -53,7 +53,7 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_20PX ), OSHColor::FromARGB( 230, 230, 43, 10 ), OSHColor::FromARGB( 200, 0, 0, 0 ), 15, ( screen_height / 2 ) - flag_count++ * 21, DROPSHADOW, "FPS" );
 	}
 
-	//g_visuals.watermark( );
+	g_visuals.watermark( );
 
 	g_renderer.end_drawing( device );
 

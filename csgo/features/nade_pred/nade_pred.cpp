@@ -208,23 +208,8 @@ void c_nade_prediction::draw( ) {
 					g_renderer.rect( p.m_detonate ? OSHColor::FromRGB( 255, 0, 0 ) : OSHColor::White( ), start.x - 2, start.y - 2, 5, 5 );
 				}
 
-
-				if( g_cl.m_local ){
-					if( g_cl.m_local->alive( ) ){
-						auto weapon = g_cl.m_local->get_active_weapon( );
-						if( weapon ){
-							const static std::vector< int > nades{
-								WEAPON_SMOKEGRENADE,
-								WEAPON_MOLOTOV,
-								WEAPON_INCGRENADE
-							};
-							if( std::find( nades.begin( ), nades.end( ), weapon->item_index( ) ) != nades.end( ) ) {
-								if( p.m_detonate )
-									draw_3d_dotted_circle( p.m_end, 100, 150 );
-							}
-						}
-					}
-				}
+				if( p.m_detonate )
+						draw_3d_dotted_circle( p.m_end, 100, 150 );
 			}
 		}
 	}

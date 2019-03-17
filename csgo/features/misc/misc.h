@@ -3,20 +3,11 @@
 
 
 class c_misc {
-
-	using RandomFloat_t = float(__cdecl *)( float, float );
-	using RandomSeed_t = void(__cdecl *)( int );
-
-	bool m_bWasFrozen;
-	vec3_t m_oldangles;
-	
 public:
-	vec3_t m_angle = vec3_t( 0, 0, 0 );
 	vec3_t unpredicted_vel;
+
 	void bunnyhop( CUserCmd *cmd );
 	void automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd );
-	bool halftime_fix(CUserCmd * cmd);
-	bool get_spread( vec3_t angles, C_CSPlayer *target, CUserCmd *cmd, int chance );
 	void thirdperson( CViewSetup *setup );
 	void thirdperson( );
 	void strafe( CUserCmd *cmd );

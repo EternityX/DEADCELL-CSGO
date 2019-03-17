@@ -277,10 +277,11 @@ public:
 
 	OFFSET( float, spawn_time, 0xA350 )
 	OFFSET( CCSGOPlayerAnimState *, animstate, 0x3900 )
-	OFFSET( vec3_t, v_angle, 0x31C8 )
-	OFFSET( CStudioHdr*, model_ptr, 0x294C + sizeof( void* ) )
 	OFFSET( int, get_move_type, 0x25C )
-	OFFSET( CBoneAccessor *, bone_accessor, 0x26A8 + sizeof( void* ) )
+
+	studiohdr_t *studio_hdr( ){
+		return **reinterpret_cast< studiohdr_t *** >( uintptr_t( this ) + 0x294C );
+	}
 
 	template< typename T >
 	T &get( uintptr_t offset ) {

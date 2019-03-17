@@ -247,7 +247,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PrecompiledHeaderFile />
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

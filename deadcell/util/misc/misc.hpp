@@ -1,6 +1,91 @@
 #pragma once
 
 namespace util {
+	using NtCreateThreadEx_t = long(__stdcall*)(PHANDLE, ACCESS_MASK, PVOID, HANDLE, LPTHREAD_START_ROUTINE, PVOID, ULONG, ULONG_PTR, SIZE_T, SIZE_T, PVOID);
+	using DisableThreadLibraryCalls_t = long(__stdcall*)(HMODULE);
+	using CloseHandle_t = long(__stdcall*)(HANDLE);
+	using GetCurrentProcess_t = HANDLE(__stdcall*)(void);
+
+	namespace mem {
+		__forceinline static HANDLE get_current_process() {
+			static GetCurrentProcess_t get_cur_process{};
+
+			if (get_cur_process == nullptr)
+				get_cur_process = pe::get_export<GetCurrentProcess_t>( pe::get_module( "kernel32.dll" ), "GetCurrentProcess" );
+
+			if (get_cur_process != nullptr)
+				return get_cur_process();
+
+			return INVALID_HANDLE_VALUE;
+		}
+
+		__forceinline static HWND find_window( const std::string &window_name ) {
+			static decltype(&FindWindowA) find_window{};
+
+			if (find_window == nullptr)
+				find_window = pe::get_export< decltype( &FindWindowA ) >( pe::get_module( "user32.dll" ), "FindWindowA" );
+
+			if (find_window != nullptr)
+				return find_window(window_name.c_str(), nullptr);
+
+			return 0;
+		}
+
+		// sneaky way of invoking ntcreatethreadex in DllMain
+		__forceinline static HANDLE create_thread(LPTHREAD_START_ROUTINE routine) {
+			static NtCreateThreadEx_t create_thread_ex = nullptr;
+
+			HANDLE                    out = INVALID_HANDLE_VALUE;
+
+			if (create_thread_ex == nullptr)
+				create_thread_ex = pe::get_export< NtCreateThreadEx_t >( pe::get_module( "ntdll.dll" ), "NtCreateThreadEx" );
+
+			if (create_thread_ex != nullptr) {
+				create_thread_ex(
+					&out,
+					THREAD_ALL_ACCESS,
+					0,
+					get_current_process(),
+					routine,
+					0,
+					0x4,
+					0,
+					0,
+					0,
+					0
+				);
+			}
+
+			return out;
+		}
+
+		// sneaky way of closing a handle
+		__forceinline static bool close_handle(HANDLE handle) {
+			static CloseHandle_t close_handle{};
+
+			if (close_handle == nullptr)
+				close_handle = pe::get_export< CloseHandle_t >( pe::get_module( "kernel32.dll" ), "CloseHandle" );
+
+			if (close_handle != nullptr)
+				return !!close_handle(handle);
+
+			return false;
+		}
+
+		// sneaky way of disabling thread lib calls in dllmain
+		__forceinline static bool disable_thread_lib_calls(HMODULE inst) {
+			static DisableThreadLibraryCalls_t disable_calls{};
+
+			if (disable_calls == nullptr)
+				disable_calls = pe::get_export< DisableThreadLibraryCalls_t >( pe::get_module( "kernel32.dll" ), "DisableThreadLibraryCalls" );
+
+			if (disable_calls != nullptr)
+				return !!disable_calls(inst);
+
+			return false;
+		}
+	}
+
 	namespace misc {
 		bool valid_code_ptr( uintptr_t addr );
 
