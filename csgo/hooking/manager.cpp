@@ -5,7 +5,9 @@ c_hooks g_hooks{ };
 
 void c_hooks::init( ) {
 
-	m_directx.init( g_csgo.m_d3d9_vmt );
+	static const auto d3doffset = **reinterpret_cast< void*** >( pattern::find( "shaderapidx9.dll", "A1 ? ? ? ? 50 8B 08 FF 51 0C" ) + 1 );
+
+	m_directx.init( d3doffset );
 	m_clientmode.init( g_csgo.m_client_mode );
 	m_client.init( g_csgo.m_client );
 	m_surface.init( g_csgo.m_surface );
@@ -51,6 +53,5 @@ void c_hooks::release( ) {
 	m_panel.unhook_all(  );
 	m_modelrender.unhook_all( );
 	m_renderview.unhook_all( );
-	m_viewrender.unhook_all( );
 	m_materialsystem.unhook_all( );
 };
