@@ -16,6 +16,7 @@ We are accepting any pull requests that fix any of the aforementioned issues.
 
 ### Extra
 - dex and maddie for their address, vmt, module, hash, and pe classes
+- kn4ck3r for OSHGui
 
 # 👻 Addendum
 For more info on how to utilize OSHGui's renderer for your own drawing you can refer to:   
@@ -28,5 +29,4 @@ See LICENSE.
 ![image](https://i.imgur.com/JGFgqbA.png)
 ![image](https://i.imgur.com/rlRbnEg.png)
 ![image](https://i.imgur.com/PvUF34F.png)
-![image](https://i.imgur.com/bFjUUPs.png)
 ![image](https://i.imgur.com/ne9eXmB.png)
