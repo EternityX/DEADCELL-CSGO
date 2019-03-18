@@ -149,7 +149,8 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 	if( !local )
 		return false;
 
-	vec3_t forward, right, up, eye_position = local->eye_pos( );
+	vec3_t forward, right, up;
+	const vec3_t eye_position = local->eye_pos( );
 	math::angle_to_vectors( angle + local->punch_angle( ) * 2.f, &forward, &right, &up );// maybe add an option to not account for punch.
 
 	C_BaseCombatWeapon *weapon = local->get_active_weapon( );
@@ -160,8 +161,8 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 	float weapon_spread = weapon->spread( );
 	float weapon_cone = weapon->inaccuracy( );
 
-	auto get_bullet_location = [ & ] ( int seed ) {
-		static auto random_seed = ( void( *)( int ) )GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" );
+	const auto get_bullet_location = [ & ] ( int seed ) {
+		static auto random_seed = reinterpret_cast< void( *)( int ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" ) );
 		random_seed( seed );
 
 
@@ -170,9 +171,10 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 		float c = util::misc::get_random_float_range( 0.f, 1.f );
 		float d = util::misc::get_random_float_range( 0.f, 2.f * math::pi );
 
-		float generated_spread = a * weapon_spread, generated_cone = c * weapon_cone;
+		const float generated_spread = a * weapon_spread;
+		const float generated_cone = c * weapon_cone;
 
-		vec3_t spread = vec3_t (
+		const vec3_t spread = vec3_t (
 			std::cos( b ) * generated_spread + std::cos( d ) * generated_cone,
 			std::sin( b ) * generated_spread + std::sin( d ) * generated_cone,
 			0.f
@@ -196,7 +198,7 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 		if ( trace.hit_entity == ent )
 			++traces_hit;
 
-		if ( traces_hit >= (int)( g_vars.rage.hitchance * 2.56f ) )
+		if ( traces_hit >= static_cast< int >( g_vars.rage.hitchance * 2.56f ) )
 			return true;
 	}
 

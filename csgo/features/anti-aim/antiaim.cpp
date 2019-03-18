@@ -17,7 +17,7 @@ float at_target( ) {
 	vec3_t best_angles = vec3_t( 0.0f, 0.f, 0.0f );
 
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
-		C_CSPlayer *player = static_cast< C_CSPlayer * >( g_csgo.m_entity_list->GetClientEntity( i ) );
+		auto player = static_cast< C_CSPlayer * >( g_csgo.m_entity_list->GetClientEntity( i ) );
 
 		if( !player || player == local ) {
 			continue;
@@ -35,7 +35,7 @@ float at_target( ) {
 		vec3_t viewangle;
 		g_csgo.m_engine->GetViewAngles( viewangle );
 
-		float fov = math::get_fov( viewangle, math::calc_angle( local->eye_pos( ), player->eye_pos( ) ) );
+		const float fov = math::get_fov( viewangle, math::calc_angle( local->eye_pos( ), player->eye_pos( ) ) );
 
 		if( fov < best_fov ) {
 			best_fov = fov;

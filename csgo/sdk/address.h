@@ -1,7 +1,5 @@
 #pragma once
 
-// i made this
-
 class Address {
 protected:
 
@@ -11,76 +9,73 @@ public:
 
 	// default c/dtor
 	__forceinline Address( ) : m_ptr{} { };
-	__forceinline ~Address( ) { };
+	__forceinline ~Address( ) = default;
 
 	__forceinline Address( uintptr_t a ) :
 		m_ptr{ a } { }
 
 	__forceinline Address( const void *a ) :
-		m_ptr{ ( uintptr_t )a } { }
+		m_ptr{ reinterpret_cast< uintptr_t >( a ) } { }
 
-	__forceinline operator uintptr_t( ) {
+	__forceinline operator uintptr_t( ) const {
 		return m_ptr;
 	}
 
-	__forceinline operator void*( ) {
-		return ( void* )m_ptr;
+	__forceinline operator void*( ) const {
+		return reinterpret_cast< void* >( m_ptr );
 	}
 
-	__forceinline operator const void*( ) {
-		return ( const void* )m_ptr;
+	__forceinline operator const void*( ) const {
+		return reinterpret_cast< const void* >( m_ptr );
 	}
 
 	// to is like as but dereferences.
 	template< typename t = Address >
 	__forceinline t to( ) const {
-		return *( t* )m_ptr;
+		return *static_cast< t* >( m_ptr );
 	}
 
 	template< typename t = Address >
 	__forceinline t as( ) const {
-		return ( t )m_ptr;
+		return static_cast< t >( m_ptr );
 	}
 
 	template< typename t = Address >
 	__forceinline t at( ptrdiff_t offset ) const {
-		return *( t* )( m_ptr + offset );
+		return *static_cast< t* >( m_ptr + offset );
 	}
 
 	template< typename t = Address >
 	__forceinline t add( ptrdiff_t offset ) const {
-		return ( t )( m_ptr + offset );
+		return static_cast< t >( m_ptr + offset );
 	}
 
 	template< typename t = Address >
 	__forceinline t sub( ptrdiff_t offset ) const {
-		return ( t )( m_ptr - offset );
+		return static_cast< t >( m_ptr - offset );
 	}
 
 	template< typename t = Address >
 	__forceinline t get( size_t dereferences = 1 ) {
-		return ( t )get_( dereferences );
+		return static_cast< t >( get_( dereferences ) );
 	}
 
 	template< typename t = Address >
 	__forceinline void set( t val ) {
-		*( t* )m_ptr = val;
+		*static_cast< t* >( m_ptr ) = val;
 	}
 
 	template< typename t = Address >
 	__forceinline t rel( size_t offset = 0 ) {
-		uintptr_t out;
-		uint32_t rel;
+		uintptr_t out = m_ptr + offset;
 
-		out = m_ptr + offset;
-
-		rel = *( uint32_t * )out;
+		const uint32_t rel = *reinterpret_cast< uint32_t * >( out );
 		if( !rel )
 			return t{};
 
 		out = ( out + 0x4 ) + rel;
 
-		return ( t )out;
+		return static_cast< t >( out );
 	}
 
 	__forceinline static bool safe( Address to_check ) {
@@ -89,7 +84,7 @@ public:
 		if( !to_check
 			|| to_check < 0x10000
 			|| to_check > 0xFFE00000
-			|| !VirtualQuery( to_check, ( PMEMORY_BASIC_INFORMATION )&mbi, sizeof( mbi ) ) )
+			|| !VirtualQuery( to_check, reinterpret_cast< PMEMORY_BASIC_INFORMATION >( &mbi ), sizeof( mbi ) ) )
 			return false;
 
 		if( !mbi.AllocationBase
@@ -106,7 +101,7 @@ private:
 		uintptr_t temp = m_ptr;
 
 		while( dereferences-- && safe( temp ) )
-			temp = *( uintptr_t* )temp;
+			temp = *reinterpret_cast< uintptr_t* >( temp );
 
 		return temp;
 	}

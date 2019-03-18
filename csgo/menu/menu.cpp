@@ -104,17 +104,17 @@ void c_main_form::playerlist_tab() {
 	
 }
 void c_main_form::ragebot_tab() {
-	OSHGui::TabControl *aimbot_tab = new OSHGui::TabControl();
+	auto *aimbot_tab = new OSHGui::TabControl();
 	aimbot_tab->SetSize( 241, 310 );
 	aimbot_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
 	aimbot_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
 	aimbot_tab->SetButtonWidth( 121 );
 
-	OSHGui::TabPage *aimbot_page = new OSHGui::TabPage();
+	auto *aimbot_page = new OSHGui::TabPage();
 	aimbot_page->SetText( "General" );
 	aimbot_page->SetBorder( false );
 
-	OSHGui::TabPage *target_page = new OSHGui::TabPage();
+	auto *target_page = new OSHGui::TabPage();
 	target_page->SetText( "Target" );
 	target_page->SetBorder( false );
 
@@ -164,19 +164,18 @@ void c_main_form::ragebot_tab() {
 	auto pointscame = new c_slider( "Multipoint scale", target_page, 0.f, 100.f, &g_vars.rage.pointscale, 0, 100.f, "%" );
 	auto hitchance = new c_slider( "Hitchance", target_page, 0, 100, &g_vars.rage.hitchance, 0, "%" );
 	auto min_dmg = new c_slider( "Minimum damage", target_page, 0, 100, &g_vars.rage.min_dmg, 0, "" );
-	
 
-	OSHGui::TabControl *antiaim_tab = new OSHGui::TabControl();
+	auto antiaim_tab = new OSHGui::TabControl();
 	antiaim_tab->SetSize( 241, 310 );
 	antiaim_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
 	antiaim_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
 	antiaim_tab->SetButtonWidth( 121 );
 
-	OSHGui::TabPage *antiaim_page = new OSHGui::TabPage();
+	auto *antiaim_page = new OSHGui::TabPage();
 	antiaim_page->SetText( "Anti-Aim" );
 	antiaim_page->SetBorder( false );
 
-	OSHGui::TabPage *fakelag_page = new OSHGui::TabPage();
+	auto *fakelag_page = new OSHGui::TabPage();
 	fakelag_page->SetText( "Fake Lag" );
 	fakelag_page->SetBorder( false );
 
@@ -437,7 +436,7 @@ void c_main_form::config_tab( ) {
 	static int index = 0;
 
 	// list view.
-	OSHGui::ListBox* list = new OSHGui::ListBox();
+	auto list = new OSHGui::ListBox();
 	list->SetSize( 234, 306 );
 	list->SetLocation( config_groupbox->GetWidth() / 2 - list->GetWidth() / 2 - 3, 7 );
 	//list->ExpandSizeToShowItems( 22 );
@@ -701,7 +700,7 @@ void c_colorpicker::init( int x, int y, Control *parent, float *col ) {
 	SetLocation( x, y );
 	parent->AddControl( this );
 
-	OSHGui::Timer *timer = new OSHGui::Timer();
+	auto timer = new OSHGui::Timer();
 	timer->SetInterval( 50 );
 	timer->Start();
 	parent->AddControl( timer );
@@ -735,7 +734,7 @@ void c_checkbox::init( const AnsiString &text, int x, int y, Control *parent, bo
 	SetText( text );
 	SetChecked( *cvar );
 
-	OSHGui::Timer *timer = new OSHGui::Timer();
+	auto timer = new OSHGui::Timer();
 	timer->SetInterval( 250 );
 	timer->Start();
 	parent->AddControl( timer );
@@ -915,7 +914,7 @@ void c_hotkey::init( const AnsiString &text, int x, int y, Control *parent, int 
 	SetLocation( x, y );
 	SetFont( g_renderer.get_font( FONT_VERDANA_7PX )  );
 
-	OSHGui::Label *label = new OSHGui::Label( );
+	auto label = new OSHGui::Label( );
 	label->SetForeColor( OSHColor::FromARGB( 255, 201, 201, 201 ) );
 	label->SetFont( g_renderer.get_font( FONT_VERDANA_7PX )  );
 	label->SetLocation( GetLeft(), GetTop() - 13 );
@@ -923,20 +922,20 @@ void c_hotkey::init( const AnsiString &text, int x, int y, Control *parent, int 
 	label->SetText( text );
 	parent->AddControl( label );
 
-	OSHGui::Timer *timer = new OSHGui::Timer();
+	auto timer = new OSHGui::Timer();
 	timer->SetInterval( 5 );
 	timer->Start();
 	parent->AddControl( timer );
 
 	timer->GetTickEvent() += OSHGui::TickEventHandler( [ this, cvar ]( Control *sender ) {
-		this->SetHotkey( (OSHGui::Key)*cvar );
+		this->SetHotkey( static_cast< OSHGui::Key >( *cvar ) );
 	});
 
 	parent->AddControl( this );
 
 	// click event.
 	this->GetHotkeyChangedEvent() += OSHGui::HotkeyChangedEventHandler( [ this, cvar ]( Control *sender ) {
-		*cvar = (int)GetHotkey();
+		*cvar = static_cast< int >( GetHotkey( ) );
 	});
 }
 

@@ -7,9 +7,9 @@ public:
 	vec3_t unpredicted_vel;
 
 	void bunnyhop( CUserCmd *cmd );
-	void automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd );
+	static void automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd );
 	void thirdperson( CViewSetup *setup );
-	void thirdperson( );
+	static void thirdperson( );
 	void strafe( CUserCmd *cmd );
 	void auto_zeus( CUserCmd *cmd );
 	void fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const;

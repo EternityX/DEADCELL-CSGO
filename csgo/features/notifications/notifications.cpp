@@ -7,13 +7,12 @@ void c_notifications::add( bool display, OSHColor color, const std::string messa
 	if( message.empty( ) )
 		return;
 
-	va_list     va;
-	int         str_len;
+	va_list va;
 	std::string buf;
 
 	va_start( va, message );
 
-	str_len = std::vsnprintf( nullptr, 0, message.c_str(), va );
+	const int str_len = std::vsnprintf( nullptr, 0, message.c_str( ), va );
 	if( str_len < 0 ) {
 		va_end( va );
 
@@ -22,41 +21,39 @@ void c_notifications::add( bool display, OSHColor color, const std::string messa
 
 	buf.resize( str_len );
 
-	std::vsnprintf( &buf[ 0 ], str_len + 1, message.c_str(), va );
+	std::vsnprintf( &buf[ 0 ], str_len + 1, message.c_str( ), va );
 
 	if( m_notifications.size( ) > 15 )
 		m_notifications.pop_front( );
 
-
 	g_csgo.m_convar->PrintToConsole( Color( 206, 115, 136 ), "[deadcell]" );
 	g_csgo.m_convar->PrintToConsole( Color( 255, 255, 255 ), " %s\n", buf.c_str( ) );
-		
-	if( display ){
+
+	if( display )
 		m_notifications.emplace_back( color, OSHGui::Drawing::Color::FromARGB( 125, 0, 0, 0 ), g_csgo.m_global_vars->m_cur_time, buf );
-	}
 }
 
 void c_notifications::clear( ) {
 	m_notifications.clear( );
 }
 
-void c_notifications::draw( ){
-
+void c_notifications::draw( ) {
 	int adjust_height = 5;
 
 	for( size_t i = 0; i < m_notifications.size( ); i++ ) {
 		auto &notification = m_notifications.at( i );
 
-		int alpha;
-		OSHGui::Drawing::Color &color        = notification.color;
+		OSHGui::Drawing::Color &color = notification.color;
 		OSHGui::Drawing::Color &shadow_color = notification.background_color;
-		float cur_time						 = notification.m_time;
-		std::string message					 = notification.m_buf;
+		const float cur_time = notification.m_time;
+		std::string message = notification.m_buf;
 
-		if(g_csgo.m_global_vars->m_cur_time - cur_time > m_text_duration ) {
-			alpha = (int)( color.GetAlpha() * 255.f - 255 / 1.f * std::max( g_csgo.m_global_vars->m_frametime, 0.01f ) );
-			if ( alpha > 255.f ) alpha = 255.f;
-			if ( alpha < 0.f )	alpha = 0.f;
+		if( g_csgo.m_global_vars->m_cur_time - cur_time > m_text_duration ) {
+			int alpha = static_cast< int >( color.GetAlpha( ) * 255.f - 255 / 1.f * std::max( g_csgo.m_global_vars->m_frametime, 0.01f ) );
+			if( alpha > 255 )
+				alpha = 255;
+			if( alpha < 0 )
+				alpha = 0;
 
 			if( !alpha ) {
 				m_notifications.erase( m_notifications.begin( ) + i );
@@ -64,10 +61,10 @@ void c_notifications::draw( ){
 			}
 
 			OSHGui::Drawing::Color col = color;
-			color = OSHGui::Drawing::Color::FromARGB( alpha, col.GetRed() * 255.f, col.GetGreen() * 255.f, col.GetBlue() * 255.f );
+			color = OSHGui::Drawing::Color::FromARGB( alpha, col.GetRed( ) * 255.f, col.GetGreen( ) * 255.f, col.GetBlue( ) * 255.f );
 
 			OSHGui::Drawing::Color shadow_col = shadow_color;
-			shadow_color = OSHGui::Drawing::Color::FromARGB( alpha, shadow_col.GetRed() * 255.f, shadow_col.GetGreen() * 255.f, shadow_col.GetBlue() * 255.f );
+			shadow_color = OSHGui::Drawing::Color::FromARGB( alpha, shadow_col.GetRed( ) * 255.f, shadow_col.GetGreen( ) * 255.f, shadow_col.GetBlue( ) * 255.f );
 		}
 
 		OSHGui::Misc::TextHelper text_helper( g_renderer.get_font( FONT_VERDANA_7PX ) );

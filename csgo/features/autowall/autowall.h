@@ -2,12 +2,13 @@
 #include "../../inc.hpp"
 
 struct autowall_info_t {
-	autowall_info_t( vec3_t start, vec3_t end, C_CSPlayer*to, C_CSPlayer*from ){
+	autowall_info_t( const vec3_t start, const vec3_t end, C_CSPlayer *to, C_CSPlayer *from ){
 		m_start = start;
 		m_end = end;
 		m_to = to;
 		m_from = from;
 	}
+
 	vec3_t m_start;
 	vec3_t m_end;
 	C_CSPlayer* m_to;
@@ -20,6 +21,7 @@ private:
 	bool is_breakable( C_BaseEntity *entity ) const;
 	bool trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &dir, trace_t *enter_trace, trace_t *exit_trace ) const;
 	bool handle_bullet_pen( SurfaceData_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage );
+
 public:
 	std::string m_enter_material_name;
 	std::string m_exit_material_name;

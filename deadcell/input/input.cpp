@@ -21,7 +21,7 @@ bool c_input::init( const std::string &window_name, OSHGui::Application *instanc
 
 	m_instance = instance;
 	m_window_handle = FindWindowA( window_name.c_str(), nullptr );
-	m_original_wndproc = (WNDPROC)SetWindowLongA( m_window_handle, GWLP_WNDPROC, (LONG_PTR)hook );
+	m_original_wndproc = reinterpret_cast< WNDPROC >( SetWindowLongA( m_window_handle, GWLP_WNDPROC, reinterpret_cast< LONG_PTR >( hook ) ) );
 
 	return m_original_wndproc != nullptr;
 }
@@ -142,7 +142,7 @@ bool c_input::remove() {
 	if( !m_window_handle || !m_original_wndproc )
 		return false;
 
-	SetWindowLongA( m_window_handle, GWLP_WNDPROC, (LONG_PTR)m_original_wndproc );
+	SetWindowLongA( m_window_handle, GWLP_WNDPROC, reinterpret_cast< LONG_PTR >( m_original_wndproc ) );
 
 	return true;
 }

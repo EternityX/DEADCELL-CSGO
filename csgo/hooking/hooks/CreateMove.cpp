@@ -70,7 +70,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	if( g_cl.m_sendpacket && g_cl.m_local )
 		g_cl.m_last_sent_origin = g_cl.m_local->origin( );
 
-	g_antiaim._real = cmd->m_viewangles;
+	g_antiaim.m_real = cmd->m_viewangles;
 
 	uintptr_t* framePointer;
 	__asm mov framePointer, ebp;

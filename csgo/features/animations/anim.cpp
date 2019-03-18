@@ -4,11 +4,11 @@ c_animations g_anim;
 
 // never finished.
 
-void c_animations::Init( ) {
+void c_animations::init( ) {
 	g_csgo.m_entity_list->AddListenerEntity( this );
 }
 
-void c_animations::Remove( ) {
+void c_animations::remove( ) {
 	g_csgo.m_entity_list->RemoveListenerEntity( this );
 }
 
@@ -49,7 +49,7 @@ void c_animations::OnEntityDeleted( C_BaseEntity *ent ) {
 	if( index < 0 )
 		return;
 
-	auto it = std::find_if( m_track.begin( ), m_track.end( ), [ & ]( const Container &data ) {
+	auto it = std::find_if( m_track.begin( ), m_track.end( ), [ & ]( const container_t &data ) {
 		return data.m_index == index;
 	} );
 

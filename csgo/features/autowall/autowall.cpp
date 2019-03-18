@@ -4,21 +4,21 @@ c_autowall g_autowall;
 
 float c_autowall::hitgroup_dmg( int hitgroup ) {
 	switch( hitgroup ) {
-	case HITGROUP_HEAD:
-		return 4.f;
-	case HITGROUP_STOMACH:
-		return 1.25f;
-	case HITGROUP_LEFTLEG:
-	case HITGROUP_RIGHTLEG:
-		return 0.75f;
-	default:
-		return 1.f;
+		case HITGROUP_HEAD:
+			return 4.f;
+		case HITGROUP_STOMACH:
+			return 1.25f;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			return 0.75f;
+		default:
+			return 1.f;
 	}
 }
 
 // note: not 100%.
-void c_autowall::scale_damage( int hitgroup, C_CSPlayer *ent, float weapon_armor_ratio, float &current_damage ) {
-	auto armor = static_cast< float >( ent->armor( ) );
+void c_autowall::scale_damage( const int hitgroup, C_CSPlayer *ent, const float weapon_armor_ratio, float &current_damage ) {
+	const float armor = static_cast< float >( ent->armor( ) );
 	current_damage *= hitgroup_dmg( hitgroup );
 
 	if( armor > 0.f && hitgroup < HITGROUP_LEFTLEG ) {
@@ -39,9 +39,9 @@ bool c_autowall::is_breakable( C_BaseEntity *entity ) const {
 		return false;
 
 	// backup original take_damage value.
-	int take_damage = entity->get_take_damage( );
+	const int take_damage = entity->get_take_damage( );
 
-	auto client_class = entity->GetClientClass( );
+	const ClientClass *client_class = entity->GetClientClass( );
 
 	if( client_class->m_pNetworkName[ 1 ] == 'B' && client_class->m_pNetworkName[ 9 ] == 'e' && client_class->m_pNetworkName[ 10 ] == 'S' && client_class->m_pNetworkName[ 16 ] == 'e' )
 		entity->get_take_damage( ) = 2;
@@ -56,7 +56,7 @@ bool c_autowall::is_breakable( C_BaseEntity *entity ) const {
 	static IsBreakableEntity_t IsBreakableEntityEx = nullptr;
 
 	if( !IsBreakableEntityEx )
-		IsBreakableEntityEx = (IsBreakableEntity_t)pattern::find( g_csgo.m_client_dll, "55 8B EC 51 56 8B F1 85 F6 74 68" ); // move this somewhere else.
+		IsBreakableEntityEx = reinterpret_cast< IsBreakableEntity_t >( pattern::find( g_csgo.m_client_dll, "55 8B EC 51 56 8B F1 85 F6 74 68" ) ); // move this somewhere else.
 
 	entity->get_take_damage( ) = take_damage;
 
@@ -70,7 +70,7 @@ bool c_autowall::trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &
 		dist += 4.f;
 		end = start + dir * dist;
 
-		int point_contents = g_csgo.m_engine_trace->GetPointContents( end, MASK_SHOT_HULL | CONTENTS_HITBOX, nullptr );
+		const int point_contents = g_csgo.m_engine_trace->GetPointContents( end, MASK_SHOT_HULL | CONTENTS_HITBOX, nullptr );
 		if( point_contents & MASK_SHOT_HULL && !( point_contents & CONTENTS_HITBOX ) )
 			continue;
 
@@ -100,7 +100,7 @@ bool c_autowall::trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &
 		}
 
 		if( !exit_trace->DidHit( ) || exit_trace->startsolid ) {
-			if( enter_trace->hit_entity != nullptr && !enter_trace->hit_entity->GetIndex( ) == 0 && is_breakable( (C_BaseEntity*)enter_trace->hit_entity ) ) {
+			if( enter_trace->hit_entity != nullptr && !enter_trace->hit_entity->GetIndex( ) == 0 && is_breakable( static_cast< C_BaseEntity* >( enter_trace->hit_entity ) ) ) {
 				*exit_trace = *enter_trace;
 				exit_trace->endpos = start + dir;
 				return true;
@@ -148,7 +148,7 @@ bool c_autowall::handle_bullet_pen( SurfaceData_t *enter_surface, trace_t *enter
 	float damage_modifier = 0.16f;
 	float average_penetration_modifier = ( enter_surface->game.penetrationmodifier + exit_surface_data->game.penetrationmodifier ) / 2;
 
-	unsigned short enter_material = enter_surface->game.material;
+	const unsigned short enter_material = enter_surface->game.material;
 	if( enter_material == CHAR_TEX_GRATE || enter_material == CHAR_TEX_GLASS ) {
 		damage_modifier = 0.05f;
 		average_penetration_modifier = 3.f;
@@ -168,9 +168,9 @@ bool c_autowall::handle_bullet_pen( SurfaceData_t *enter_surface, trace_t *enter
 	m_dmg_mod = damage_modifier;
 	m_avg_pen = average_penetration_modifier;
 
-	float modifier = std::fmaxf( 0.f, 1.f / average_penetration_modifier );
-	float pen_len = ( exit_trace.endpos - enter_trace->endpos ).Length( );
-	float lost_dmg = modifier * 3.f * std::fmaxf( 0.f, 3.f / penetration * 1.25f ) + current_damage * damage_modifier + pen_len * pen_len * modifier / 24.f;
+	const float modifier = std::fmaxf( 0.f, 1.f / average_penetration_modifier );
+	const float pen_len = ( exit_trace.endpos - enter_trace->endpos ).Length( );
+	const float lost_dmg = modifier * 3.f * std::fmaxf( 0.f, 3.f / penetration * 1.25f ) + current_damage * damage_modifier + pen_len * pen_len * modifier / 24.f;
 
 	m_pen_len = pen_len;
 	m_lost_dmg = lost_dmg;
@@ -189,16 +189,17 @@ void c_autowall::clip_trace( const vec3_t &src, vec3_t &end, trace_t *tr, C_Base
 	if( !target )
 		return;
 
-	vec3_t mins = target->mins( ), maxs = target->maxs( );
+	const vec3_t mins = target->mins( );
+	const vec3_t maxs = target->maxs( );
 
 	vec3_t dir( end - src );
 	dir.Normalize( );
 
-	vec3_t center = ( maxs + mins ) / 2;
-	vec3_t pos( center + target->origin( ) );
+	const vec3_t center = ( maxs + mins ) / 2;
+	const vec3_t pos( center + target->origin( ) );
 
 	vec3_t to = pos - src;
-	float range_along = dir.Dot( to );
+	const float range_along = dir.Dot( to );
 
 	float range;
 	if( range_along < 0.f ) {
@@ -220,7 +221,7 @@ void c_autowall::clip_trace( const vec3_t &src, vec3_t &end, trace_t *tr, C_Base
 	}
 }
 
-bool c_autowall::think( const vec3_t &position, C_CSPlayer *entity, int mindmg, bool run_bullet_pen ) {
+bool c_autowall::think( const vec3_t &position, C_CSPlayer *entity, const int mindmg, const bool run_bullet_pen ) {
 	auto local = C_CSPlayer::get_local( );
 	if( !entity || !local )
 		return false;
@@ -232,7 +233,7 @@ bool c_autowall::think( const vec3_t &position, C_CSPlayer *entity, int mindmg, 
 	if( !weapon )
 		return false;
 
-	auto weapon_info = weapon->get_weapon_info( );
+	const WeaponInfo_t *weapon_info = weapon->get_weapon_info( );
 	if( !weapon_info )
 		return false;
 
@@ -249,7 +250,7 @@ bool c_autowall::think( const vec3_t &position, C_CSPlayer *entity, int mindmg, 
 	CTraceFilterSkipEntity filter( local );
 
 	while( m_autowall_dmg > 0.f ) {
-		float trace_length_remaining = weapon_info->range - trace_length;
+		const float trace_length_remaining = weapon_info->range - trace_length;
 		vec3_t end = start + direction * trace_length_remaining;
 
 		g_csgo.m_engine_trace->TraceRay( Ray_t{ start, end }, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &trace );
@@ -267,7 +268,7 @@ bool c_autowall::think( const vec3_t &position, C_CSPlayer *entity, int mindmg, 
 		}
 
 		if( run_bullet_pen ) {
-			auto enter_surface_data = g_csgo.m_physics_surface->GetSurfaceData( trace.surface.m_surface_props );
+			const auto enter_surface_data = g_csgo.m_physics_surface->GetSurfaceData( trace.surface.m_surface_props );
 
 			if( trace_length > 3000.f || enter_surface_data->game.penetrationmodifier < 0.1f )
 				hits_left = 0;

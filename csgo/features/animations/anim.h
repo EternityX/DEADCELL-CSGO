@@ -12,7 +12,7 @@ namespace animations {
 	}
 }
 
-struct Container {
+struct container_t {
 	std::unique_ptr< c_vmt > m_vmt;
 	int m_index;
 	bool m_hooked;
@@ -23,10 +23,10 @@ public:
 	void OnEntityCreated( C_BaseEntity *ent ) override;
 	void OnEntityDeleted( C_BaseEntity *ent ) override;
 
-	void Init( );
-	void Remove( );
+	void init( );
+	void remove( );
 
-	std::array< Container, 64 > m_track;
+	std::array< container_t, 64 > m_track;
 };
 
 extern c_animations g_anim;

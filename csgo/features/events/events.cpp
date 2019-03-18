@@ -25,9 +25,9 @@ void c_event_listener::setup( ) {
 	g_csgo.m_game_event->AddListener( this, "bullet_impact", false );
 }
 
-void c_event_listener::remove( ) const { }
+void c_event_listener::remove( ) { }
 
-char *hitgroup_to_name( int hitgroup ) {
+char *hitgroup_to_name( const int hitgroup ) {
 	switch( hitgroup ) {
 		case HITGROUP_HEAD:
 			return "head";
@@ -49,7 +49,7 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 	if( !strcmp( m_event->GetName( ), "bullet_impact" ) ) {
 		int user_id = m_event->GetInt( "userid" );
 
-		C_CSPlayer *ent = (C_CSPlayer *)g_csgo.m_entity_list->GetClientEntity( g_csgo.m_engine->GetPlayerForUserID( user_id ) );
+		auto ent = static_cast< C_CSPlayer * >( g_csgo.m_entity_list->GetClientEntity( g_csgo.m_engine->GetPlayerForUserID( user_id ) ) );
 		if( !ent )
 			return;
 
@@ -96,7 +96,7 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		int target = g_csgo.m_engine->GetPlayerForUserID( m_event->GetInt( "userid" ) );
 		if( attacker ==  g_csgo.m_engine->GetLocalPlayer( ) && target != g_csgo.m_engine->GetLocalPlayer( ) ) {
 
-			C_CSPlayer *ent = (C_CSPlayer *)g_csgo.m_entity_list->GetClientEntity( g_csgo.m_engine->GetPlayerForUserID( target ) );
+			auto *ent = static_cast< C_CSPlayer * >( g_csgo.m_entity_list->GetClientEntity( g_csgo.m_engine->GetPlayerForUserID( target ) ) );
 
 			player_info_t info;
 			if( g_csgo.m_engine->GetPlayerInfo( target, &info ) && ent ){
