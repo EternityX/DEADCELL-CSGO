@@ -24,10 +24,10 @@ private:
 	void draw_spectators( );
 
 	void world( C_BaseEntity * entity );
-	void draw_scope( );
-	void draw_crosshair( );
-	void draw_hitmarker( );
-	void draw_bomb_timer( float time_left );
+	void draw_scope( ) const;
+	void draw_crosshair( ) const;
+	static void draw_hitmarker( );
+	void draw_bomb_timer( float time_left ) const;
 	void draw_pen_data( );
 
 	std::array< float, 64 > m_alpha;
@@ -35,7 +35,7 @@ public:
 	void penetration_data( );
 	bool world_to_screen( const vec3_t &origin, vec3_t &screen );
 	void run( );
-	void watermark( );
+	void watermark( ) const;
 };
 
 extern c_visuals g_visuals;

@@ -443,12 +443,12 @@ void c_visuals::world( C_BaseEntity *entity ) {
 	if( !calculate_bbox( entity, box ) )
 		return;
 
-	C_BaseEntity *owner = ( C_BaseEntity * )g_csgo.m_entity_list->GetClientEntityFromHandle( entity->owner( ) );
+	auto owner = static_cast< C_BaseEntity * >( g_csgo.m_entity_list->GetClientEntityFromHandle( entity->owner( ) ) );
 
 	if( !owner && ( client_class->m_ClassID != CBaseWeaponWorldModel && ( std::strstr( client_class->m_pNetworkName, "Weapon" )
 		|| client_class->m_ClassID == CDEagle || client_class->m_ClassID == CAK47 ) ) ) {
 
-		C_BaseCombatWeapon *weapon = ( C_BaseCombatWeapon * )entity;
+		auto weapon = static_cast< C_BaseCombatWeapon * >( entity );
 		if( !weapon )
 			return;
 
@@ -674,7 +674,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 	}
 }
 
-void c_visuals::draw_bomb_timer( float time_left ) {
+void c_visuals::draw_bomb_timer( float time_left ) const {
 	auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
 
 	ConVar *max_c4_timer = g_csgo.m_convar->FindVar( "mp_c4timer" );
@@ -685,10 +685,10 @@ void c_visuals::draw_bomb_timer( float time_left ) {
 	g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::White( ), OSHColor::Black( ), x - 1, -1, DROPSHADOW, "%2.1f", time_left );
 }
 
-void c_visuals::watermark( ) {
-	bool connected = g_csgo.m_engine->IsConnected( );
+void c_visuals::watermark( ) const {
+	const bool connected = g_csgo.m_engine->IsConnected( );
 
-	auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
 
 	g_renderer.filled_rect_gradient(
 		OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ),
@@ -712,18 +712,18 @@ void c_visuals::watermark( ) {
 		                      "deadcell | unconnected | %s", time.c_str( ) );
 }
 
-void c_visuals::draw_scope( ) {
+void c_visuals::draw_scope( ) const {
 	auto local = C_CSPlayer::get_local( );
 	if( !local || !local->is_scoped( ) || !local->get_active_weapon( )->has_sniper_scope( ) )
 		return;
 
-	auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
 
 	g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), 0, size.Height * 0.5f, size.Width, 1 );
 	g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), size.Width * 0.5f, 0, 1, size.Height );
 }
 
-void c_visuals::draw_crosshair( ) {
+void c_visuals::draw_crosshair( ) const {
 	auto local = C_CSPlayer::get_local( );
 	if( !local )
 		return;

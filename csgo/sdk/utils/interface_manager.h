@@ -37,7 +37,7 @@ protected:
 				continue;
 
 			// ensure 4th byte is actually a jmp instruction.
-			if( *(uint8_t *)( createinterface + 4 ) != 0xE9 )
+			if( *reinterpret_cast< uint8_t * >( createinterface + 4 ) != 0xE9 )
 				continue;
 
 			// 5th byte is the jmp's rel32.
@@ -49,13 +49,13 @@ protected:
 			// now we need to get s_pInterfaceRegs.
 			// in csgo, its generally the first "mov, esi imm32" instruction.
 			// we're just going to use the hardcoded offset to it here.
-			reg = **(InterfaceReg ***)( createinterface + 6 );
+			reg = **reinterpret_cast< InterfaceReg *** >( createinterface + 6 );
 			if( !reg )
 				continue;
 
 			// iterate s_pInterfaceRegs linked list and store off needed data.
 			for( reg; reg != nullptr; reg = reg->m_next ) {
-				m_interfaces.push_back( { reg->m_name, (uintptr_t)reg->m_create_fn(), m.get_module_nameA() } );
+				m_interfaces.push_back( { reg->m_name, reinterpret_cast< uintptr_t >( reg->m_create_fn( ) ), m.get_module_nameA() } );
 			}
 		}
 	}
@@ -80,7 +80,7 @@ protected:
 					--skip;
 					continue;
 				}
-				return (t *)i.m_ptr;
+				return reinterpret_cast< t * >( i.m_ptr );
 			}
 		}
 

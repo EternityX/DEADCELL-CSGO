@@ -2,11 +2,9 @@
 
 class Address {
 protected:
-
 	uintptr_t m_ptr;
 
 public:
-
 	// default c/dtor
 	__forceinline Address( ) : m_ptr{} { };
 	__forceinline ~Address( ) = default;
@@ -32,50 +30,51 @@ public:
 	// to is like as but dereferences.
 	template< typename t = Address >
 	__forceinline t to( ) const {
-		return *static_cast< t* >( m_ptr );
+		return *reinterpret_cast< t* >( m_ptr );
 	}
 
 	template< typename t = Address >
 	__forceinline t as( ) const {
-		return static_cast< t >( m_ptr );
+		return reinterpret_cast< t >( m_ptr );
 	}
 
 	template< typename t = Address >
 	__forceinline t at( ptrdiff_t offset ) const {
-		return *static_cast< t* >( m_ptr + offset );
+		return *reinterpret_cast< t* >( m_ptr + offset );
 	}
 
 	template< typename t = Address >
 	__forceinline t add( ptrdiff_t offset ) const {
-		return static_cast< t >( m_ptr + offset );
+		return reinterpret_cast< t >( m_ptr + offset );
 	}
 
 	template< typename t = Address >
 	__forceinline t sub( ptrdiff_t offset ) const {
-		return static_cast< t >( m_ptr - offset );
+		return reinterpret_cast< t >( m_ptr - offset );
 	}
 
 	template< typename t = Address >
 	__forceinline t get( size_t dereferences = 1 ) {
-		return static_cast< t >( get_( dereferences ) );
+		return reinterpret_cast< t >( get_( dereferences ) );
 	}
 
 	template< typename t = Address >
 	__forceinline void set( t val ) {
-		*static_cast< t* >( m_ptr ) = val;
+		*reinterpret_cast< t* >( m_ptr ) = val;
 	}
 
 	template< typename t = Address >
 	__forceinline t rel( size_t offset = 0 ) {
+
 		uintptr_t out = m_ptr + offset;
 
-		const uint32_t rel = *reinterpret_cast< uint32_t * >( out );
+		uint32_t rel = *reinterpret_cast< uint32_t * >( out );
 		if( !rel )
 			return t{};
 
 		out = ( out + 0x4 ) + rel;
 
-		return static_cast< t >( out );
+		return reinterpret_cast< t >( out );
 	}
 
 	__forceinline static bool safe( Address to_check ) {

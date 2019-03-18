@@ -55,7 +55,7 @@ public:
 
 		// misc ptrs.
 		m_d3d9_vmt = pattern::find( CT_HASH32( "shaderapidx9.dll" ), "A1 ? ? ? ? 50 8B 08 FF 51 0C" );
-		m_d3d9_vmt = **(uintptr_t **)( m_d3d9_vmt + 1 );
+		m_d3d9_vmt = **reinterpret_cast< uintptr_t ** >( m_d3d9_vmt + 1 );
 
 		m_memalloc = *pe::get_export< IMemAlloc** >( pe::get_module( "tier0.dll" ), "g_pMemAlloc" );
 
@@ -98,7 +98,7 @@ public:
 
 		m_viewrender = *c_vmt::get_method( m_client, 28 ).at< IViewRender ** >( 8 );
 
-		m_movehelper = **(IMoveHelper ***)( pattern::find( m_client_dll, "8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01" ) + 2 );
+		m_movehelper = **reinterpret_cast< IMoveHelper *** >( pattern::find( m_client_dll, "8B 0D ? ? ? ? 8B 45 ? 51 8B D4 89 02 8B 01" ) + 2 );
 
 		m_game_event = get_interface< IGameEventManager2 >( CT_HASH32( "GAMEEVENTSMANAGER002" ), 0, false );
 
