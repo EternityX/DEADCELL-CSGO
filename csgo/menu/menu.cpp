@@ -189,7 +189,7 @@ void c_main_form::ragebot_tab() {
 	//auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
 	//auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
 	//auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
+	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"Â°" );
 
 	g_menu.set_y_pos( 10 );
 	auto *fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
@@ -311,6 +311,7 @@ void c_main_form::visuals_tab() {
 
 	auto activation_type_combo = new c_combo( "Activation type", { "Always", "On-key", "Toggle" }, generic_esp_page, 3, &g_vars.visuals.activation_type, player_esp_groupbox->GetWidth() - 15 );
 	auto activation_hotkey = new c_hotkey( "Activation key", generic_esp_page, &g_vars.visuals.activation_key, player_esp_groupbox->GetWidth() - 15 );
+	auto teammates = new c_checkbox("Show Teammates", generic_esp_page, &g_vars.visuals.teammates );
 	auto dormacy = new c_checkbox( "Dormant", generic_esp_page, &g_vars.visuals.dormancy_fade );	
 	auto bbox_check = new c_checkbox( "Bounding box", generic_esp_page, &g_vars.visuals.bbox );	
 	auto name_check = new c_checkbox( "Name", generic_esp_page, &g_vars.visuals.name );	
