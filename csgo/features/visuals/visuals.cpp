@@ -155,7 +155,10 @@ void c_visuals::player( C_CSPlayer *e ) {
 
 	if( e->IsDormant( ) )
 		return;
-
+	if (g_vars.visuals.teammates) {
+		if (local->team() == e->team())
+			return;
+	}
 	auto index = e->GetIndex( );
 	float step = 255.f * ( 20.f / 15.f ) * g_csgo.m_global_vars->m_frametime;
 
