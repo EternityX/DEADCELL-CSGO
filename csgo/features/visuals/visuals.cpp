@@ -155,8 +155,8 @@ void c_visuals::player( C_CSPlayer *e ) {
 
 	if( e->IsDormant( ) )
 		return;
-	if (g_vars.visuals.teammates) {
-		if (local->team() == e->team())
+	if ( !g_vars.visuals.teammates ) {
+		if ( local->team( ) == e->team( ) )
 			return;
 	}
 	auto index = e->GetIndex( );
