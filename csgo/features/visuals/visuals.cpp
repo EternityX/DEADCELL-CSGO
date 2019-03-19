@@ -714,7 +714,7 @@ void c_visuals::watermark( ) const {
 
 void c_visuals::draw_scope( ) const {
 	auto local = C_CSPlayer::get_local( );
-	if( !local || !local->is_scoped( ) || !local->get_active_weapon( )->has_sniper_scope( ) )
+	if( !local || !local->is_scoped( ) || !local->get_active_weapon( ) || !local->get_active_weapon( )->has_sniper_scope( ) )
 		return;
 
 	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
