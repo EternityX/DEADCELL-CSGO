@@ -41,7 +41,7 @@ Press `END`.
 - eternity
 
 ### Extra
-- dex and maddie for their address, vmt, module, hash, and pe classes
+- dex and maddie for their address, hash, module, netvar, pattern, pe, and vmt classes
 - kn4ck3r for OSHGui
 - nlohmann for a modern C++ implementation of JSON
 
