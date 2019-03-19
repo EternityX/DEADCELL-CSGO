@@ -63,6 +63,8 @@ const void c_config::init( ) {
 	item( g_vars.visuals.money_color, "g_vars.visuals.money_color", m_items );
 	item( g_vars.visuals.flash_bar, "g_vars.visuals.flash_bar", m_items );
 	item( g_vars.visuals.flash_bar_color, "g_vars.visuals.flash_bar_color", m_items );
+	item( g_vars.visuals.glow, "g_vars.visuals.glow", m_items );
+	item( g_vars.visuals.glow_color, "g_vars.visuals.glow_color", m_items );
 	item( g_vars.visuals.filter, "g_vars.visuals.filter", m_items );
 	item( g_vars.visuals.chicken, "g_vars.visuals.chicken", m_items );
 	item( g_vars.visuals.projectiles, "g_vars.visuals.projectiles", m_items );
