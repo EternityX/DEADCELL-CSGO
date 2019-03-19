@@ -55,6 +55,7 @@ public:
 		bool projectiles;
 		bool objectives;
 		bool dormancy_fade;
+		bool teammates;
 		bool grenade_pred;
 		bool spread_circle;
 		bool hitmarker;
