@@ -5,9 +5,6 @@ Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui
 
 If you want a clean base without any features, please see the [deadcell SDK](https://github.com/alpine971/DEADCELL-SDK).
 
-For more information on how to utilize OSHGui's renderer for your own drawing you can refer to:   
-https://github.com/alpine971/osh_sdk
-
 ## Known issues
 - Crashes and lots of them.
 - Game will crash when using -d3d9ex as a launch option.
@@ -23,7 +20,7 @@ Create a **hitsounds** folder inside the **base** Counter-Strike Global Offensiv
 Place as many **.wav** sound files as you want inside of it. Load the cheat and they will be under the hitsounds combobox.
 
 ### Where are config files stored?
-**Profiles** are stored inside the **base** Counter-Strike Global Offensive directory under a folder named **profiles**.
+Profiles are stored inside the **base** Counter-Strike Global Offensive directory under a folder named **profiles**.
 
 You can share profiles with friends by navigating to the configuration tab inside the cheat and selecting **Export**. This will copy all profile data to the clipboard which you can then paste to a friend.
 
@@ -35,18 +32,13 @@ Press `INSERT`.
 ### How do I unload the cheat?
 Press `END`.
 
-## Credits
-### Main contributors
-- alpine971
-- eternity
-
-### Extra
+## Credits 
 - dex and maddie for their address, hash, module, netvar, pattern, pe, and vmt classes
 - kn4ck3r for OSHGui
 - nlohmann for a modern C++ implementation of JSON
 
 ## License
-See LICENSE.
+Licensed under the MIT License. See **LICENSE** for more details.
 
 ## Media
 ![image](https://i.imgur.com/DdAL0kC.png)
