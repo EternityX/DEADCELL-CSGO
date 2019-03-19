@@ -11,6 +11,8 @@ https://github.com/alpine971/osh_sdk
 ## Known issues
 - Crashes and lots of them.
 - Game will crash when using -d3d9ex as a launch option.
+- Lots of code is unoptimized.
+- Visuals will not rescale if you change resolution while injected.
 - If you come across any more issues, please notify us via the issue tracker.
 
 We are accepting any pull requests that fix any of the aforementioned issues.
