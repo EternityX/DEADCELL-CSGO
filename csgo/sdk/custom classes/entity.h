@@ -330,7 +330,7 @@ public:
 	}
 
 	C_BaseCombatWeapon *get_active_weapon( ) {
-		return static_cast< C_BaseCombatWeapon * >( g_csgo.m_entity_list->GetClientEntityFromHandle( weapon_handle( ) ) );
+		return g_csgo.m_entity_list->Get< C_BaseCombatWeapon >( weapon_handle( ) );
 	}
 
 	vec3_t eye_pos( ) {

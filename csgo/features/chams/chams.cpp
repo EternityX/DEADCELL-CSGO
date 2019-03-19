@@ -58,7 +58,7 @@ void c_chams::on_sceneend( ) {
 }
 
 bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld ) {
-	auto player = reinterpret_cast< C_CSPlayer* >( g_csgo.m_entity_list->GetClientEntity( pInfo.m_entity_index ) );
+	auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( pInfo.m_entity_index );
 	auto local = C_CSPlayer::get_local( );
 	if( !local || !player || !pInfo.m_model )
 		return true;
@@ -92,7 +92,7 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const ModelRenderInfo
 
 void c_chams::push_players( ) {
 	for( int index = 1; index <= g_csgo.m_global_vars->m_max_clients; index++ ) {
-		auto player = reinterpret_cast< C_CSPlayer* >( g_csgo.m_entity_list->GetClientEntity( index ) );
+		auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( index );
 
 		if( !player || !player->alive( ) || player->IsDormant( ) || ( ( player->team( ) == C_CSPlayer::get_local( )->team( ) ) && !g_vars.visuals.chams.teammates ) )
 			continue;

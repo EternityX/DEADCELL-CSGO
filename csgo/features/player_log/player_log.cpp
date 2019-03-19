@@ -43,7 +43,7 @@ bool lag_record_t::is_valid( ) const{
 
 void c_player_log::log( ){
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; i++ ) {
-		auto ent = static_cast< C_CSPlayer * >( g_csgo.m_entity_list->GetClientEntity( i ) );
+		auto ent = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
 		if( !ent || !g_cl.m_local || ent == g_cl.m_local )
 			continue;
 

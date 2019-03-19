@@ -21,10 +21,6 @@ void c_visuals::run( ) {
 		world( entity );
 	}
 
-	// glow should be called inside do_post_screen_effects, but this works for now... i guess...
-	if( g_vars.visuals.glow )
-		handle_glow( !ctx.m_enabled );
-
 	if( g_vars.visuals.extra.speclist )
 		draw_spectators( );
 
@@ -251,7 +247,11 @@ void c_visuals::player( C_CSPlayer *e ) {
 		draw_flags( e, flag_color, box.x, box.y, box.w, box.h );
 }
 
-void c_visuals::handle_glow( bool remove ) {
+void c_visuals::handle_glow( ) {
+
+	if( !ctx.m_enabled )
+		return;
+
 	auto local = C_CSPlayer::get_local( );
 	if( !local )
 		return;
@@ -374,7 +374,7 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 
 	// ammo bar
 	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 220, 10, 10, 10 ),
-	                                                                  color,
+																	  OSHColor::FromARGB( 220, 10, 10, 10 ),
 	                                                                  color,
 	                                                                  color ),
 																	  x, y + h + 3 + ctx.offset, width, 2 );
@@ -491,7 +491,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 	if( !calculate_bbox( entity, box ) )
 		return;
 
-	auto owner = static_cast< C_BaseEntity * >( g_csgo.m_entity_list->GetClientEntityFromHandle( entity->owner( ) ) );
+	auto owner = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->owner( ) );
 
 	if( !owner && ( client_class->m_ClassID != CBaseWeaponWorldModel && ( std::strstr( client_class->m_pNetworkName, "Weapon" )
 		|| client_class->m_ClassID == CDEagle || client_class->m_ClassID == CAK47 ) ) ) {

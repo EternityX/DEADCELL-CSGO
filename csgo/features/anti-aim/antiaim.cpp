@@ -17,7 +17,7 @@ float at_target( ) {
 	vec3_t best_angles = vec3_t( 0.0f, 0.f, 0.0f );
 
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
-		auto player = static_cast< C_CSPlayer * >( g_csgo.m_entity_list->GetClientEntity( i ) );
+		auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
 
 		if( !player || player == local ) {
 			continue;

@@ -62,7 +62,7 @@
 #include "interfaces\ilocalize.h"
 #include "interfaces\steam.h"
 
-#include "../sdk/utils/interface_manager.h"
+#include "..\sdk\utils\interface_manager.h"
 #include "csgo\csgo.h"
 
 #include "utils\netvars.h"

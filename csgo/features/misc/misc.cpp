@@ -138,7 +138,7 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 
 		auto spechandle = local->observer_handle( );
 
-		auto spec = reinterpret_cast< C_CSPlayer* >( g_csgo.m_entity_list->GetClientEntityFromHandle( spechandle ) );
+		auto spec = g_csgo.m_entity_list->Get< C_CSPlayer >( spechandle );
 		if ( !spec )
 			return;
 

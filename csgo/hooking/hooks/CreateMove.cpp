@@ -13,9 +13,6 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	g_cl.m_local = C_CSPlayer::get_local( );
 
-	/*if ( g_misc.halftime_fix( cmd ) )
-		return true;*/
-
 	if( !cmd->m_command_number )
 		return ret;
 

@@ -56,7 +56,7 @@ bool c_autowall::is_breakable( C_BaseEntity *entity ) const {
 	static IsBreakableEntity_t IsBreakableEntityEx = nullptr;
 
 	if( !IsBreakableEntityEx )
-		IsBreakableEntityEx = reinterpret_cast< IsBreakableEntity_t >( pattern::find( g_csgo.m_client_dll, "55 8B EC 51 56 8B F1 85 F6 74 68" ) ); // move this somewhere else.
+		IsBreakableEntityEx = pattern::find< IsBreakableEntity_t >( g_csgo.m_client_dll, "55 8B EC 51 56 8B F1 85 F6 74 68" );
 
 	entity->get_take_damage( ) = take_damage;
 
