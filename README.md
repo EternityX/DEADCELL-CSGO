@@ -49,7 +49,8 @@ Press `END`.
 See LICENSE.
 
 ## Media
-![image](https://i.imgur.com/JGFgqbA.png)
-![image](https://i.imgur.com/rlRbnEg.png)
-![image](https://i.imgur.com/PvUF34F.png)
-![image](https://i.imgur.com/ne9eXmB.png)
+![image](https://i.imgur.com/DdAL0kC.png)
+![image](https://i.imgur.com/0wAOPPj.png)
+![image](https://i.imgur.com/b76kQH2.png)
+![image](https://i.imgur.com/4ucjwAg.png)
+![image](https://i.imgur.com/q5M8Qx4.png)
