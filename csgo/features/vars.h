@@ -45,6 +45,8 @@ public:
 		float flag_color[ 4 ] = { 200, 255, 255, 255 };
 		bool flash_bar;
 		float flash_bar_color[ 4 ] = { 220, 255, 255, 255 };
+		bool glow;
+		float glow_color[4] = { 155, 206, 115, 136 };
 		int filter;
 		bool dropped_weapons;
 		bool dropped_ammo;

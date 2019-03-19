@@ -21,6 +21,10 @@ void c_visuals::run( ) {
 		world( entity );
 	}
 
+	// glow should be called inside do_post_screen_effects, but this works for now... i guess...
+	if ( g_vars.visuals.glow )
+		handle_glow( !ctx.m_enabled );
+
 	if( g_vars.visuals.extra.speclist )
 		draw_spectators( );
 
@@ -249,6 +253,36 @@ void c_visuals::player( C_CSPlayer *e ) {
 
 	if( g_vars.visuals.flags )
 		draw_flags( e, flag_color, box.x, box.y, box.w, box.h );
+}
+
+void c_visuals::handle_glow( bool remove ) {
+	auto local = C_CSPlayer::get_local( );
+	if ( !local )
+		return;
+
+	for ( auto i = 0; i < g_csgo.m_global_vars->m_max_clients; i++ ) {
+		auto& glow_object = g_csgo.m_glow_obj_manager->m_glow_object_definitions[i];
+		auto entity = reinterpret_cast< C_CSPlayer* >( glow_object.m_ent );
+
+		if ( glow_object.is_unused( ) )
+			continue;
+
+		if ( !entity || !entity->is_valid_player( false, true ) )
+			continue;
+
+		if ( g_vars.visuals.filter == 1 && entity->team( ) == local->team( ) )
+			continue;
+
+		glow_object.m_glow_color = vec3_t(
+			g_vars.visuals.glow_color[1] / 255.f, 
+			g_vars.visuals.glow_color[2] / 255.f, 
+			g_vars.visuals.glow_color[3] / 255.f
+		);
+
+		glow_object.m_glow_alpha = remove ? 0.f : g_vars.visuals.glow_color[0] / 255.f;
+		glow_object.m_render_when_occluded = true;
+		glow_object.m_render_when_unoccluded = false;
+	}
 }
 
 void c_visuals::draw_healthbar( C_CSPlayer *entity, float x, float y, float w, float h ) {

@@ -42,6 +42,7 @@ public:
 	IMemAlloc *m_memalloc;
 	IMDLCache *m_modelcache;
 	IViewRender *m_viewrender;
+	CGlowObjectManager *m_glow_obj_manager;
 	// functions.
 
 	c_csgo() : m_d3d9_vmt{ } { }
@@ -115,6 +116,8 @@ public:
 		m_localize = get_interface< ILocalize >( CT_HASH32( "Localize_001" ), 0, false );
 
 		m_modelcache = get_interface< IMDLCache >( CT_HASH32( "MDLCache" ) );
+
+		m_glow_obj_manager = *pattern::find< CGlowObjectManager ** >( m_client_dll, "0F 11 05 ? ? ? ? 83 C8 01", 3 );
 
 		return true;
 	}

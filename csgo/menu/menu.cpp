@@ -320,6 +320,7 @@ void c_main_form::visuals_tab() {
 	auto flag_check = new c_checkbox( "Flags", generic_esp_page, &g_vars.visuals.flags );
 	auto money_check = new c_checkbox( "Money", generic_esp_page, &g_vars.visuals.money );
 	auto flashed_check = new c_checkbox( "Flashed", generic_esp_page, &g_vars.visuals.flash_bar );
+	auto glow_check = new c_checkbox( "Glow", generic_esp_page, &g_vars.visuals.glow );
 
 	g_menu.set_y_pos( 10 );
 	auto enabled_chams = new c_checkbox( "Enabled", player_chams_page, &g_vars.visuals.chams.enabled );
@@ -339,6 +340,7 @@ void c_main_form::visuals_tab() {
 	auto aa_manual = new c_checkbox( "Anti-aim manual direction", extra_esp_page, &g_vars.visuals.extra.antiaim_direction );
 	auto points_check = new c_checkbox( "Scan points", extra_esp_page, &g_vars.visuals.extra.points );
 
+	auto glow_color = new c_colorpicker( generic_esp_page, glow_check, g_vars.visuals.glow_color );
 	auto flashed_color = new c_colorpicker( generic_esp_page, flashed_check, g_vars.visuals.flash_bar_color );
 	auto money_color = new c_colorpicker( generic_esp_page, money_check, g_vars.visuals.money_color );
 	auto flag_color = new c_colorpicker( generic_esp_page, flag_check, g_vars.visuals.flag_color );
