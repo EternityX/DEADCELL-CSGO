@@ -13,7 +13,8 @@ private:
 	} ctx;
 
 	void player( C_CSPlayer *pl );
-	void draw_healthbar(C_CSPlayer * entity, float x, float y, float w, float h );
+	void handle_glow( bool remove );
+	void draw_healthbar( C_CSPlayer * entity, float x, float y, float w, float h );
 	bool calculate_bbox( C_BaseEntity *entity, bbox_t &box );
 	void activation_type();
 	void draw_box( OSHColor color, int index, float x, float y, float w, float h );

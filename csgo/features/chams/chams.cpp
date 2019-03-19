@@ -75,7 +75,7 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const ModelRenderInfo
 			g_csgo.m_render_view->set_blend( 0.4f );
 	}
 
-	if( g_vars.visuals.chams.enabled && model_name.find( "models/player" ) != std::string::npos ) {
+	/*if( g_vars.visuals.chams.enabled && model_name.find( "models/player" ) != std::string::npos ) {
 		if( model_name.find( "shadow" ) != std::string::npos )
 			return true;
 
@@ -85,7 +85,7 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const ModelRenderInfo
 			return false;
 		if( ( player->team( ) == local->team( ) ) && g_vars.visuals.chams.teammates && player != C_CSPlayer::get_local( ) )
 			return false;
-	}
+	}*/
 
 	return true;
 }
