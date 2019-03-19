@@ -20,7 +20,9 @@ private:
 
 public:
 	// ctor.
-	c_netvars() : m_offsets{ } { }
+	c_netvars() {
+		
+	}
 
 	// dtor.
 	~c_netvars() {
@@ -28,14 +30,13 @@ public:
 	}
 
 	void init( ) {
-		ClientClass *list;
 
 		// sanity check on client->
 		if( !g_csgo.m_client )
 			return;
 
 		// grab linked list.
-		list = g_csgo.m_client->GetAllClasses();
+		ClientClass *list = g_csgo.m_client->GetAllClasses( );
 		if( !list )
 			return;
 
@@ -49,30 +50,28 @@ public:
 	void store_table( const std::string &name, RecvTable *table, size_t offset = 0 ) {
 		std::ofstream fs( "vars.txt", std::ios::out | std::ios::app );
 
-		hash32_t var, base{ util::hash::fnv1a_32( name ) };
-		RecvProp *prop;
-		RecvTable *child;
+		const hash32_t base{ util::hash::fnv1a_32( name ) };
 
 		// iterate props
 		for( int i{ }; i < table->m_nProps; ++i ) {
-			prop = &table->m_pProps[ i ];
-			child = prop->m_pDataTable;
+			RecvProp *prop = &table->m_pProps[ i ];
+			RecvTable *child = prop->m_pDataTable;
 
 			// we have a child table, that contains props.
 			if( child && child->m_nProps > 0 )
 				store_table( name, child, prop->m_Offset + offset );
 
 			// hash var name.
-			var = util::hash::fnv1a_32( prop->m_pVarName );
+			hash32_t var = util::hash::fnv1a_32( prop->m_pVarName );
 
 			// insert if not present.
 			if( !m_offsets[ base ][ var ].m_offset ) {
 				fs << "> " << prop->m_pVarName << ": ";
-				fs << "0x" << std::setprecision( 4 ) << std::hex << std::uppercase << (size_t)( prop->m_Offset + offset ) << std::endl;
+				fs << "0x" << std::setprecision( 4 ) << std::hex << std::uppercase << static_cast< size_t >( prop->m_Offset + offset ) << std::endl;
 
 				m_offsets[ base ][ var ].m_datamap_var = false;
 				m_offsets[ base ][ var ].m_prop_ptr = prop;
-				m_offsets[ base ][ var ].m_offset = (size_t)( prop->m_Offset + offset );
+				m_offsets[ base ][ var ].m_offset = static_cast< size_t >( prop->m_Offset + offset );
 			}
 		}
 	}

@@ -97,7 +97,7 @@ public:
 		struct fakelag {
 			bool enabled;
 			int type;
-			int amount;
+			int amount = 6;
 			int lagjump;
 		} fakelag;
 		bool bhop;
@@ -115,7 +115,7 @@ public:
 		bool dangerzone_menu;
 		int hitmarker_sound;
 		bool clienthitboxes;
-		float duration;
+		float duration = 2.f;
 	} misc;
 	struct antiaim{
 		bool enabled;

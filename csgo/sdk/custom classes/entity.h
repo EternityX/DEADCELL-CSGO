@@ -2,11 +2,11 @@
 
 class CBoneAccessor {
 public:
-	inline matrix3x4_t *GetBoneArrayForWrite( void ) const {
+	matrix3x4_t *GetBoneArrayForWrite( void ) const {
 		return m_pBones;
 	}
 
-	inline void SetBoneArrayForWrite( matrix3x4_t *bonearray ) {
+	void SetBoneArrayForWrite( matrix3x4_t *bonearray ) {
 		for( int bones = 0; bones < 128; bones++ )
 			m_pBones[ bones ] = bonearray[ bones ];
 	}
@@ -17,8 +17,7 @@ public:
 	int m_WritableBones; // Which bones can be written.
 };
 
-enum LifeState
-{
+enum LifeState {
 	ALIVE = 0,
 	DYING,
 	DEAD,
@@ -331,7 +330,7 @@ public:
 	}
 
 	C_BaseCombatWeapon *get_active_weapon( ) {
-		return (C_BaseCombatWeapon *)g_csgo.m_entity_list->GetClientEntityFromHandle( weapon_handle( ) );
+		return static_cast< C_BaseCombatWeapon * >( g_csgo.m_entity_list->GetClientEntityFromHandle( weapon_handle( ) ) );
 	}
 
 	vec3_t eye_pos( ) {
@@ -350,7 +349,7 @@ public:
 			return -1;
 		}
 		using func_t = int( __fastcall *)( void *, void *, int );
-		static auto m_function = ( func_t )( pattern::find(
+		static auto m_function = reinterpret_cast< func_t >( pattern::find(
 			g_csgo.m_client_dll,
 			"55 8B EC 53 8B 5D 08 56 8B F1 83"
 		) );

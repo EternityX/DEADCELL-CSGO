@@ -28,53 +28,53 @@ public:
 	}
 
 	// to is like as but dereferences.
-	template< typename t = Address >
-	__forceinline t to( ) const {
-		return *reinterpret_cast< t* >( m_ptr );
+	template< typename T = Address >
+	__forceinline T to( ) const {
+		return *reinterpret_cast< T* >( m_ptr );
 	}
 
-	template< typename t = Address >
-	__forceinline t as( ) const {
-		return reinterpret_cast< t >( m_ptr );
+	template< typename T = Address >
+	__forceinline T as( ) const {
+		return reinterpret_cast< T >( m_ptr );
 	}
 
-	template< typename t = Address >
-	__forceinline t at( ptrdiff_t offset ) const {
-		return *reinterpret_cast< t* >( m_ptr + offset );
+	template< typename T = Address >
+	__forceinline T at( ptrdiff_t offset ) const {
+		return *reinterpret_cast< T* >( m_ptr + offset );
 	}
 
-	template< typename t = Address >
-	__forceinline t add( ptrdiff_t offset ) const {
-		return reinterpret_cast< t >( m_ptr + offset );
+	template< typename T = Address >
+	__forceinline T add( ptrdiff_t offset ) const {
+		return reinterpret_cast< T >( m_ptr + offset );
 	}
 
-	template< typename t = Address >
-	__forceinline t sub( ptrdiff_t offset ) const {
-		return reinterpret_cast< t >( m_ptr - offset );
+	template< typename T = Address >
+	__forceinline T sub( ptrdiff_t offset ) const {
+		return reinterpret_cast< T >( m_ptr - offset );
 	}
 
-	template< typename t = Address >
-	__forceinline t get( size_t dereferences = 1 ) {
-		return reinterpret_cast< t >( get_( dereferences ) );
+	template< typename T = Address >
+	__forceinline T get( size_t dereferences = 1 ) {
+		return reinterpret_cast< T >( get_( dereferences ) );
 	}
 
-	template< typename t = Address >
-	__forceinline void set( t val ) {
-		*reinterpret_cast< t* >( m_ptr ) = val;
+	template< typename T = Address >
+	__forceinline void set( T val ) {
+		*reinterpret_cast< T* >( m_ptr ) = val;
 	}
 
-	template< typename t = Address >
-	__forceinline t rel( size_t offset = 0 ) {
+	template< typename T = Address >
+	__forceinline T rel( size_t offset = 0 ) {
 
 		uintptr_t out = m_ptr + offset;
 
 		uint32_t rel = *reinterpret_cast< uint32_t * >( out );
 		if( !rel )
-			return t{};
+			return T{};
 
 		out = ( out + 0x4 ) + rel;
 
-		return reinterpret_cast< t >( out );
+		return reinterpret_cast< T >( out );
 	}
 
 	__forceinline static bool safe( Address to_check ) {

@@ -22,7 +22,7 @@ void c_visuals::run( ) {
 	}
 
 	// glow should be called inside do_post_screen_effects, but this works for now... i guess...
-	if ( g_vars.visuals.glow )
+	if( g_vars.visuals.glow )
 		handle_glow( !ctx.m_enabled );
 
 	if( g_vars.visuals.extra.speclist )
@@ -44,6 +44,7 @@ bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
 	if( width > 0.01f ) {
 		float inverse = 1.f / width;
 
+		// todo: only grab display_size once.
 		OSHGui::Drawing::SizeF display_size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
 
 		screen.x = static_cast< float >( display_size.Width / 2 + ( 0.5 * ( ( matrix.m[ 0 ][ 0 ] * origin.x + matrix.m[ 0 ][ 1 ] * origin.y + matrix.m[ 0 ][ 2 ] * origin.z + matrix.m[ 0 ][ 3 ] ) * inverse ) * display_size.Width + 0.5 ) );
@@ -106,10 +107,10 @@ bool c_visuals::calculate_bbox( C_BaseEntity *entity, bbox_t &box ) {
 			top = box_array[ i ].y;
 	}
 
-	box.x = ( int )left;
-	box.y = ( int )top;
-	box.w = ( int )right - left;
-	box.h = ( int )bottom - top;
+	box.x = static_cast< int >( left );
+	box.y = static_cast< int >( top );
+	box.w = static_cast< int >( right ) - left;
+	box.h = static_cast< int >( bottom ) - top;
 
 	return true;
 }
@@ -157,13 +158,11 @@ void c_visuals::player( C_CSPlayer *e ) {
 
 	auto index = e->GetIndex( );
 	float step = 255.f * ( 20.f / 15.f ) * g_csgo.m_global_vars->m_frametime;
-	g_vars.visuals.dormancy_fade
-		? e->IsDormant( )
-			  ? m_alpha[ index ] -= step
-			  : m_alpha[ index ] += step * 5.f
-		: e->IsDormant( )
-		? m_alpha[ index ] = 0.f
-		: m_alpha[ index ] = 220.f;
+
+	g_vars.visuals.dormancy_fade ? e->IsDormant( ) 
+		? m_alpha[ index ] -= step : m_alpha[ index ] += step * 5.f : e->IsDormant( )
+		? m_alpha[ index ] = 0.f : m_alpha[ index ] = 220.f;
+
 	if( m_alpha[ index ] > 220.f )
 		m_alpha[ index ] = 220.f;
 	if( m_alpha[ index ] < 0.f )
@@ -172,9 +171,8 @@ void c_visuals::player( C_CSPlayer *e ) {
 	if( m_alpha[ index ] == 0.f )
 		return;
 
-	if( !ctx.m_enabled ) {
+	if( !ctx.m_enabled )
 		return;
-	}
 
 	if( !local->alive( ) ) {
 		const auto spec_handle = local->observer_handle( );
@@ -228,9 +226,7 @@ void c_visuals::player( C_CSPlayer *e ) {
 		                      name_color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
 		                      box.x + box.w * 0.5f, box.y - 12, CENTERED_X | DROPSHADOW,
-		                      e->get_info( ).xuid_low == 0
-			                      ? name.append( " ( BOT ) " )
-			                      : name );
+		                      e->get_info( ).xuid_low == 0 ? name.append( " ( BOT ) " ) : name );
 	}
 
 	if( g_vars.visuals.healthbar )
@@ -257,39 +253,57 @@ void c_visuals::player( C_CSPlayer *e ) {
 
 void c_visuals::handle_glow( bool remove ) {
 	auto local = C_CSPlayer::get_local( );
-	if ( !local )
+	if( !local )
 		return;
 
-	for ( auto i = 0; i < g_csgo.m_global_vars->m_max_clients; i++ ) {
-		auto& glow_object = g_csgo.m_glow_obj_manager->m_glow_object_definitions[i];
+	for( int i = 0; i < g_csgo.m_glow_obj_manager->m_size; i++ ) {
+		if( g_csgo.m_glow_obj_manager->m_glow_object_definitions[ i ].is_unused( ) || !g_csgo.m_glow_obj_manager->m_glow_object_definitions[ i ].get_entity( ) )
+			continue;
+
+		auto &glow_object = g_csgo.m_glow_obj_manager->m_glow_object_definitions[ i ];
 		auto entity = reinterpret_cast< C_CSPlayer* >( glow_object.m_ent );
 
-		if ( glow_object.is_unused( ) )
+		if( !entity )
 			continue;
 
-		if ( !entity || !entity->is_valid_player( false, true ) )
+		const auto client_class = entity->GetClientClass( );
+		if( !client_class )
 			continue;
 
-		if ( g_vars.visuals.filter == 1 && entity->team( ) == local->team( ) )
-			continue;
+		switch( client_class->m_ClassID ) {
+			case CCSPlayer: {
+				if( !entity->is_valid_player( false, true ) )
+					continue;
 
-		glow_object.m_glow_color = vec3_t(
-			g_vars.visuals.glow_color[1] / 255.f, 
-			g_vars.visuals.glow_color[2] / 255.f, 
-			g_vars.visuals.glow_color[3] / 255.f
-		);
+				if( g_vars.visuals.filter == 1 && entity->team( ) == local->team( ) )
+					continue;
 
-		glow_object.m_glow_alpha = remove ? 0.f : g_vars.visuals.glow_color[0] / 255.f;
-		glow_object.m_render_when_occluded = true;
-		glow_object.m_render_when_unoccluded = false;
+				const float flash_alpha = entity->get_flashed( );
+
+				// if player is flashed, display their flashed opacity instead of default glow color.
+				flash_alpha > 50.f ? 
+					glow_object.set( 1.f, 1.f, 1.f, flash_alpha / 255.f, 0 ) : 
+					glow_object.set( g_vars.visuals.glow_color[ 1 ] / 255.f, g_vars.visuals.glow_color[ 2 ] / 255.f, g_vars.visuals.glow_color[ 3 ] / 255.f, 0.65f, 0 );
+
+				break;
+			}
+				// vc++ doesn't support ranged switch cases...
+				// todo: clean this up and glow weapons more efficiently.
+			case CAK47: {
+				glow_object.set( 1.f, 1.f, 1.f, 0.65f, 0 );
+				break;
+			}
+			default:
+				break;
+		}
 	}
 }
 
 void c_visuals::draw_healthbar( C_CSPlayer *entity, float x, float y, float w, float h ) {
 	int hp = std::clamp( entity->health( ), 0, 100 );
-	OSHColor health_color = OSHColor::FromARGB( 220, 255 - hp * 2.55, hp * 2.55, 0 );
+	const OSHColor health_color = OSHColor::FromARGB( 220, 255 - hp * 2.55, hp * 2.55, 0 );
 
-	int height = hp * ( int )h / 100;
+	const int height = hp * static_cast< int >( h ) / 100;
 
 	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 6, y - 1, 4, h + 2 );
 	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 50, 50, 0 ) ), x - 5, y + h - height, 2, height );
@@ -363,7 +377,7 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 	                                                                  color,
 	                                                                  color,
 	                                                                  color ),
-	                                 x, y + h + 3 + ctx.offset, width, 2 );
+																	  x, y + h + 3 + ctx.offset, width, 2 );
 
 	if( ammo < 5 && ammo != 0 )
 		g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
@@ -493,7 +507,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 		if( !info )
 			return;
 
-		auto wpn_index = weapon->item_index( );
+		const auto wpn_index = weapon->item_index( );
 
 		if( info->type == WEAPONTYPE_KNIFE
 			|| info->type == WEAPONTYPE_GRENADE
@@ -558,7 +572,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 			                      OSHColor::FromARGB( 200, 10, 10, 10 ),
 			                      box.x + box.w * 0.5f, box.y - 15.f, CENTERED_X | OUTLINED, text );
 
-			float bomb_duration = entity->blow_time( ) - g_csgo.m_global_vars->m_cur_time;
+			const float bomb_duration = entity->blow_time( ) - g_csgo.m_global_vars->m_cur_time;
 			if( bomb_duration > 0.f ) {
 				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
 				                      OSHColor::FromARGB( 240, 255, 255, 255 ),
@@ -625,7 +639,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 			if( !owner )
 				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Drone" );
 
-			auto drone_owner = ( C_CSPlayer * )owner;
+			const auto drone_owner = static_cast< C_CSPlayer * >( owner );
 			if( drone_owner )
 				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Drone - %s", drone_owner->get_info( ).m_szPlayerName );
 		}
@@ -709,8 +723,9 @@ void c_visuals::world( C_BaseEntity *entity ) {
 }
 
 void c_visuals::draw_bomb_timer( float time_left ) const {
-	auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
 
+	// todo: only grab this once on map load.
 	ConVar *max_c4_timer = g_csgo.m_convar->FindVar( "mp_c4timer" );
 	float x = time_left * size.Width / max_c4_timer->GetFloat( );
 

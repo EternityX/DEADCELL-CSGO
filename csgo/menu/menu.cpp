@@ -186,10 +186,10 @@ void c_main_form::ragebot_tab() {
 	antiaim_groupbox->AddControl( antiaim_tab );
 	g_menu.set_x_pos( 19 );
 
-	auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
-	auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
-	auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
+	//auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
+	//auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
+	//auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
+	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
 
 	g_menu.set_y_pos( 10 );
 	auto *fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
@@ -203,26 +203,26 @@ void c_main_form::ragebot_tab() {
 void c_main_form::misc_tab() {
 	auto *general_groupbox = new c_groupbox( "General", 17, 6, 260, 334 );
 
-	auto *thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
-	auto *activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
-	auto *thirdpersondead = new c_checkbox( "Force Thirdperson when spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
-	auto *thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", general_groupbox, &g_vars.misc.thirdperson_grenade );
-	auto *bhop = new c_checkbox( "Bunny hop", general_groupbox, &g_vars.misc.bhop );
+	auto thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
+	auto activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
+	auto thirdpersondead = new c_checkbox( "Force Thirdperson when spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
+	auto thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", general_groupbox, &g_vars.misc.thirdperson_grenade );
+	auto bhop = new c_checkbox( "Bunny hop", general_groupbox, &g_vars.misc.bhop );
 	auto air_strafe = new c_checkbox( "Air strafe", general_groupbox, &g_vars.misc.air_strafe );
-	auto *autozeus = new c_checkbox( "Automatic zeus", general_groupbox, &g_vars.misc.autozeus );
-	auto *radar = new c_checkbox( "Radar", general_groupbox, &g_vars.visuals.radar );
+	auto autozeus = new c_checkbox( "Automatic zeus", general_groupbox, &g_vars.misc.autozeus );
+	auto radar = new c_checkbox( "Radar", general_groupbox, &g_vars.visuals.radar );
 
-	auto *nightmode = new c_slider( "World Brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
+	auto nightmode = new c_slider( "World Brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
 	nightmode->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
 		g_misc.nightmode( );
 	} );
 
-	auto *translucent_props = new c_slider( "Prop transparency", general_groupbox, 0, 100, &g_vars.misc.prop_transparency, 100, "%" );
+	auto translucent_props = new c_slider( "Prop transparency", general_groupbox, 0, 100, &g_vars.misc.prop_transparency, 100, "%" );
 	translucent_props->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
 		g_misc.transparent_props( );
 	} );
 
-	auto *fast_duck = new c_checkbox( "Fast duck", general_groupbox, &g_vars.misc.fast_duck );
+	auto fast_duck = new c_checkbox( "Fast duck", general_groupbox, &g_vars.misc.fast_duck );
 
 	auto dangerzone_check = new c_checkbox( "Danger Zone menu", general_groupbox, &g_vars.misc.dangerzone_menu );
 
@@ -230,9 +230,9 @@ void c_main_form::misc_tab() {
 		g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
 	});
 
-	auto *sounds = new c_sound_combo( "Hitsound", { "None" }, general_groupbox, 5, &g_vars.misc.hitmarker_sound );
+	auto sounds = new c_sound_combo( "Hitsound", { "None" }, general_groupbox, 5, &g_vars.misc.hitmarker_sound );
 
-	auto get_sound_files = [ & ] ( ) {
+	const auto get_sound_files = [ & ] ( ) {
 		std::vector<std::string> names = {};
 		std::string dir = "hitsounds";
 
@@ -251,7 +251,7 @@ void c_main_form::misc_tab() {
 
 			// reinit list view items.
 			for( int i = 0; i < sounds->GetItemsCount(); i++ ) {
-				auto list_item = sounds->GetItem( i );
+				const OSHGui::ListItem *list_item = sounds->GetItem( i );
 				if( !list_item )
 					continue;
 
@@ -267,13 +267,13 @@ void c_main_form::misc_tab() {
 
 	g_menu.push_y_pos( 40 );
 
-	auto *log_groupbox = new c_groupbox( "Logging", general_groupbox->GetRight( ) + 19, 6, 259, 82 );
-	auto *log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
-	auto *log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
+	auto log_groupbox = new c_groupbox( "Logging", general_groupbox->GetRight( ) + 19, 6, 259, 82 );
+	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
+	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
 
-	auto *other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 82 );
-	auto *client_hitbox = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.clienthitboxes );
-	auto *duraction_hitbox = new c_slider( "Duration", other_groupbox, 0.f, 5.f, &g_vars.misc.duration, 0, 0.f, "s" );
+	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 82 );
+	auto client_hitbox = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.clienthitboxes );
+	auto duraction_hitbox = new c_slider( "Duration", other_groupbox, 0.f, 5.f, &g_vars.misc.duration, 0, 0.f, "s" );
 
 	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
 	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
@@ -320,7 +320,6 @@ void c_main_form::visuals_tab() {
 	auto flag_check = new c_checkbox( "Flags", generic_esp_page, &g_vars.visuals.flags );
 	auto money_check = new c_checkbox( "Money", generic_esp_page, &g_vars.visuals.money );
 	auto flashed_check = new c_checkbox( "Flashed", generic_esp_page, &g_vars.visuals.flash_bar );
-	auto glow_check = new c_checkbox( "Glow", generic_esp_page, &g_vars.visuals.glow );
 
 	g_menu.set_y_pos( 10 );
 	auto enabled_chams = new c_checkbox( "Enabled", player_chams_page, &g_vars.visuals.chams.enabled );
@@ -337,10 +336,10 @@ void c_main_form::visuals_tab() {
 	g_menu.set_y_pos( 10 );
 	auto filter_combo = new c_combo( "Filter", { "Everyone", "Enemy only" }, extra_esp_page, 3, &g_vars.visuals.filter, player_esp_groupbox->GetWidth() - 15 );
 	auto speclist_check = new c_checkbox( "Spectator list", extra_esp_page, &g_vars.visuals.extra.speclist );
-	auto aa_manual = new c_checkbox( "Anti-aim manual direction", extra_esp_page, &g_vars.visuals.extra.antiaim_direction );
+	auto glow_check = new c_checkbox( "Glow", extra_esp_page, &g_vars.visuals.glow );
+	//auto aa_manual = new c_checkbox( "Anti-aim manual direction", extra_esp_page, &g_vars.visuals.extra.antiaim_direction );
 	auto points_check = new c_checkbox( "Scan points", extra_esp_page, &g_vars.visuals.extra.points );
 
-	auto glow_color = new c_colorpicker( generic_esp_page, glow_check, g_vars.visuals.glow_color );
 	auto flashed_color = new c_colorpicker( generic_esp_page, flashed_check, g_vars.visuals.flash_bar_color );
 	auto money_color = new c_colorpicker( generic_esp_page, money_check, g_vars.visuals.money_color );
 	auto flag_color = new c_colorpicker( generic_esp_page, flag_check, g_vars.visuals.flag_color );
@@ -349,7 +348,9 @@ void c_main_form::visuals_tab() {
 	auto name_color = new c_colorpicker( generic_esp_page, name_check, g_vars.visuals.name_color );
 	auto box_color = new c_colorpicker( generic_esp_page, bbox_check, g_vars.visuals.box_color );
 
-	auto manualdirection_color = new c_colorpicker( extra_esp_page, aa_manual, g_vars.visuals.extra.antiaim_direction_color );
+	auto glow_color = new c_colorpicker( extra_esp_page, glow_check, g_vars.visuals.glow_color );
+
+	//auto manualdirection_color = new c_colorpicker( extra_esp_page, aa_manual, g_vars.visuals.extra.antiaim_direction_color );
 
 	g_menu.set_x_pos( default_x_pos );
 
