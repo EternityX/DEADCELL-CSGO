@@ -85,6 +85,7 @@ const void c_config::init( ) {
 	item( g_vars.visuals.misc.fog, "g_vars.visuals.misc.fog", m_items );
 	item( g_vars.visuals.misc.no_flash, "g_vars.visuals.visuals.misc.no_flash", m_items );
 	item( g_vars.visuals.dormancy_fade, "g_vars.visuals.dormancy_fade", m_items );
+	item( g_vars.visuals.teammates, "g_vars.visuals.teammates", m_items );
 	item( g_vars.visuals.effects.camera_fov, "g_vars.visuals.effects.camera_fov", m_items );
 	item( g_vars.visuals.effects.weapon_fov, "g_vars.visuals.effects.weapon_fov", m_items );
 	item( g_vars.visuals.extra.speclist, "g_vars.visuals.extra.speclist", m_items );
