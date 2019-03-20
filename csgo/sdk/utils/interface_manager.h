@@ -75,7 +75,7 @@ protected:
 				interface_name.resize( interface_name.size( ) - 3 );
 
 			if( util::hash::fnv1a_32( interface_name ) == name ) {
-				console::print( "found %s at 0x%p in %s.", i.m_name.c_str( ), i.m_ptr, i.dll_name.c_str( ) );
+				console::print( "found % at 0x% in %.\n", i.m_name.c_str( ), i.m_ptr, i.dll_name.c_str( ) );
 				if( skip > 0 ) {
 					--skip;
 					continue;
