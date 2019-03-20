@@ -16,6 +16,8 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	if( !cmd->m_command_number )
 		return ret;
 
+	g_csgo.m_prediction->SetLocalViewangles( cmd->m_viewangles );
+
 	INetChannelInfo *channel_info = g_csgo.m_engine->GetNetChannelInfo( );
 	if( channel_info ) {
 		float latency = channel_info->GetLatency( FLOW_INCOMING ) + channel_info->GetLatency( FLOW_OUTGOING );
