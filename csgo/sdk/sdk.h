@@ -69,4 +69,6 @@
 
 #include "custom classes\entity.h"
 
+#include "custom classes\keyvalues.h"
+
 #include "features\client.h"

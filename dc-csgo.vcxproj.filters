@@ -426,5 +426,8 @@
     <ClInclude Include="csgo\sdk\address.h">
       <Filter>dc-csgo\sdk</Filter>
     </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\keyvalues.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

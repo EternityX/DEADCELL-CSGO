@@ -146,7 +146,7 @@ void c_ragebot::select_target( ) {
 
 bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 	int traces_hit = 0;
-	auto local = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetLocalPlayer( ) );
+	auto local = C_CSPlayer::get_local( );
 	if( !local )
 		return false;
 
@@ -281,14 +281,12 @@ void c_ragebot::choose_angles( ){
 	
 	const WeaponInfo_t *wep_info = weapon->get_weapon_info( );
 	if( wep_info->type == WEAPONTYPE_PISTOL && !wep_info->full_auto ){
-		static auto firing = false;
-		if( m_cmd->m_buttons & IN_ATTACK ) {
-			if( firing ) {
-				m_cmd->m_buttons &= ~IN_ATTACK;
-			}
-		}
-
-		firing = ( m_cmd->m_buttons & IN_ATTACK ) != 0;
+		float next_wep_attack = weapon->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+		float next_local_attack = local->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+		if ( next_wep_attack >= 0.f || next_local_attack >= 0.f )
+			m_cmd->m_buttons &= ~IN_ATTACK;
+		else
+			m_cmd->m_buttons |= IN_ATTACK;
 	}
 
 	if( m_cmd->m_buttons & IN_ATTACK ){

@@ -306,7 +306,7 @@ void c_visuals::draw_healthbar( C_CSPlayer *entity, float x, float y, float w, f
 	const int height = hp * static_cast< int >( h ) / 100;
 
 	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 6, y - 1, 4, h + 2 );
-	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 50, 50, 0 ) ), x - 5, y + h - height, 2, height );
+	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 100, 100, 100 ) ), x - 5, y + h - height, 2, height );
 
 	if( hp >= 90 || hp <= 10 )
 		return;
@@ -374,8 +374,8 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 
 	// ammo bar
 	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 220, 10, 10, 10 ),
+																	  color,
 																	  OSHColor::FromARGB( 220, 10, 10, 10 ),
-	                                                                  color,
 	                                                                  color ),
 																	  x, y + h + 3 + ctx.offset, width, 2 );
 

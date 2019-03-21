@@ -85,6 +85,7 @@
     <ClInclude Include="csgo\sdk\custom classes\animstate.h" />
     <ClInclude Include="csgo\sdk\custom classes\color.h" />
     <ClInclude Include="csgo\sdk\custom classes\entity.h" />
+    <ClInclude Include="csgo\sdk\custom classes\keyvalues.h" />
     <ClInclude Include="csgo\sdk\custom classes\matrix.h" />
     <ClInclude Include="csgo\sdk\custom classes\vector.h" />
     <ClInclude Include="csgo\sdk\interfaces\cglobalvars.h" />
