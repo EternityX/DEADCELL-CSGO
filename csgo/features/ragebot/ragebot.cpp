@@ -123,7 +123,7 @@ void c_ragebot::select_target( ) {
 				}
 			}
 			float distance = e->abs_origin( ).DistTo( local->abs_origin( ) );
-			rage_t data = rage_t( e, i, player_best_damage, player_best_point, distance, _bones );
+			rage_t data = rage_t( e, i, static_cast< int >( player_best_damage ), player_best_point, distance, _bones );
 			m_players.push_back( data );
 		}
 
@@ -135,11 +135,12 @@ void c_ragebot::select_target( ) {
 					return a.distance < b.distance;
 				case 2:
 					return a.index < b.index;
+				default: break;
 			}
 		} );
 	}
 	catch( ... ) {
-		console::error( "caught exception in select_target( )" );
+		console::print( "caught exception in select_target( )" );
 	}
 }
 
@@ -328,7 +329,7 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 		return false;
 
 	try {
-		for( int idx = 0; idx < hitboxes.size( ); ++idx ) {
+		for( size_t idx = 0; idx < hitboxes.size( ); ++idx ) {
 			int h = hitboxes.at( idx );
 			auto *bbox = studiohdr->pHitbox( h, 0 );
 
@@ -439,7 +440,7 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 		}
 	}
 	catch( ... ) {
-		console::error( "caught exception in get_points_from_hitbox( )" );
+		console::print( "caught exception in get_points_from_hitbox( )" );
 	}
 
 	return true;

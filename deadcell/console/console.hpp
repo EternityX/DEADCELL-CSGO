@@ -1,6 +1,6 @@
 #pragma once
 
-enum class console_colour {
+enum class console_color {
 	BLACK,
 	DARKBLUE,
 	DARKGREEN,
@@ -20,9 +20,30 @@ enum class console_colour {
 };
 
 namespace console {
-	void allocate( const char *window_name );
+	bool allocate( const char *window_name );
 	void detach( );
-	void set_text_colour( console_colour colour );
-	void print( std::string str, ... );
-	void error( std::string text, ... );
+
+	template< class E, class T >
+	constexpr std::basic_ostream< E, T > &operator<<( std::basic_ostream< E, T > &os, console_color col ) {
+		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), static_cast< unsigned short >( col ) );
+		return os;
+	}
+
+	inline void print( const char *format ) {
+		std::cout << format;
+	}
+
+	// https://en.cppreference.com/w/cpp/language/parameter_pack
+	template< typename T, typename... Targs >
+	void print( const char *format, T value, Targs ... f_args ) {
+		for( ; *format != '\0'; format++ ) {
+			if( *format == '%' ) {
+				std::cout << value;
+				print( format + 1, f_args... ); // recursive call
+				return;
+			}
+
+			std::cout << *format;
+		}
+	}
 }

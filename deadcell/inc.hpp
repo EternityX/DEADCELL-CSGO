@@ -19,6 +19,7 @@ using ulong_t = unsigned long;
 #include <utility>
 #include <intrin.h>
 #include <chrono>
+#include <iostream>
 
 // oshgui.
 #include "../oshgui/OSHGui.hpp"

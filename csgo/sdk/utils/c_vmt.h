@@ -85,7 +85,7 @@ public:
 
 		m_new_vmt_start[ index ] = reinterpret_cast< uintptr_t >( func );
 
-		console::print( "hooking 0x%p ==> 0x%p.", m_old_vmt[ index ], func );
+		console::print( "hooking 0x% ==> 0x%.\n", m_old_vmt[ index ], func );
 		return true;
 	}
 
