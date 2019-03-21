@@ -23,6 +23,7 @@ void c_hooks::hook( ) {
 	m_clientmode.hook_method( 17, &hook::ShouldDrawFog );
 	m_clientmode.hook_method( 24, &hook::CreateMove );
 	m_clientmode.hook_method( 18, &hook::OverrideView );
+	m_clientmode.hook_method( 44, &hook::DoPostScreenSpaceEffects );
 	//m_clientmode.hook_method( 35, &hook::GetViewModelFOV );
 
 	m_client.hook_method( 7, &hook::LevelInitPostEntity );
