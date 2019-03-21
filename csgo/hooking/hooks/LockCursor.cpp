@@ -7,5 +7,5 @@ void __stdcall hook::LockCursor( ) {
 			return;
 		}
 	}
-	g_hooks.m_surface.get_old_method< fn::LockCursor_t >( 67 )( g_csgo.m_surface );
+	g_hooks.m_surface.get_old_method< fn::LockCursor_t >( hook::idx::LOCK_CURSOR )( g_csgo.m_surface );
 }

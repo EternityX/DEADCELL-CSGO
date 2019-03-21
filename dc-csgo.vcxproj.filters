@@ -94,12 +94,6 @@
     <ClCompile Include="csgo\dllmain.cpp">
       <Filter>dc-csgo</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\present.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\reset.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
-    </ClCompile>
     <ClCompile Include="csgo\features\visuals\visuals.cpp">
       <Filter>dc-csgo\features\visuals</Filter>
     </ClCompile>
@@ -197,6 +191,12 @@
       <Filter>dc-csgo\hooking</Filter>
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\RenderSmokeOverlay.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\Reset.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\Present.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
   </ItemGroup>

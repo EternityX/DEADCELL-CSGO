@@ -10,7 +10,7 @@ void __fastcall animations::DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx
 		backup = animstate->on_ground;
 		animstate->on_ground = false;
 	}
-	g_anim.m_track[ e->GetIndex( ) ].m_vmt->get_old_method< fn::DoExtraBonesProcessing_t >( 193 )( ecx, hdr, pos, q, matrix, bone_list, context );
+	g_anim.m_track[ e->GetIndex( ) ].m_vmt->get_old_method< fn::DoExtraBonesProcessing_t >( hook::idx::DO_EXTRA_BONE_PROC )( ecx, hdr, pos, q, matrix, bone_list, context );
 	if( animstate ){
 		animstate->on_ground = backup;
 	}

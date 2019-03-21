@@ -46,9 +46,9 @@
     <ClCompile Include="csgo\hooking\hooks\LockCursor.cpp" />
     <ClCompile Include="csgo\hooking\hooks\OverrideView.cpp" />
     <ClCompile Include="csgo\hooking\hooks\PaintTraverse.cpp" />
-    <ClCompile Include="csgo\hooking\hooks\present.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\Present.cpp" />
     <ClCompile Include="csgo\hooking\hooks\RenderSmokeOverlay.cpp" />
-    <ClCompile Include="csgo\hooking\hooks\reset.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\Reset.cpp" />
     <ClCompile Include="csgo\hooking\hooks\SceneEnd.cpp" />
     <ClCompile Include="csgo\hooking\hooks\ShouldDrawFog.cpp" />
     <ClCompile Include="csgo\hooking\hooks\TestHitboxes.cpp" />

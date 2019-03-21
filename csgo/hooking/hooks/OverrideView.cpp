@@ -16,5 +16,5 @@ void __fastcall hook::OverrideView( uintptr_t ecx, uintptr_t edx, CViewSetup *pS
 
 	g_misc.thirdperson( );
 
-	g_hooks.m_clientmode.get_old_method< fn::OverrideView_t >( 18 )( ecx, pSetup );
+	g_hooks.m_clientmode.get_old_method< fn::OverrideView_t >( hook::idx::OVERRIDE_VIEW )( ecx, pSetup );
 }

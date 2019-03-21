@@ -17,29 +17,29 @@ void c_hooks::init( ) {
 }
 
 void c_hooks::hook( ) {
-	m_directx.hook_method( 17, &hook::Present );
-	m_directx.hook_method( 16, &hook::Reset );
+	m_directx.hook_method( hook::idx::PRESENT, &hook::Present );
+	m_directx.hook_method( hook::idx::RESET, &hook::Reset );
 
-	m_clientmode.hook_method( 17, &hook::ShouldDrawFog );
-	m_clientmode.hook_method( 24, &hook::CreateMove );
-	m_clientmode.hook_method( 18, &hook::OverrideView );
+	m_clientmode.hook_method( hook::idx::SHOULD_DRAW_FOG, &hook::ShouldDrawFog );
+	m_clientmode.hook_method( hook::idx::CREATE_MOVE, &hook::CreateMove );
+	m_clientmode.hook_method( hook::idx::OVERRIDE_VIEW, &hook::OverrideView );
 	//m_clientmode.hook_method( 35, &hook::GetViewModelFOV );
 
-	m_client.hook_method( 7, &hook::LevelInitPostEntity );
-	m_client.hook_method( 8, &hook::LevelShutdown );
-	m_client.hook_method( 37, &hook::FrameStageNotify );
+	m_client.hook_method( hook::idx::LEVEL_INIT_POST_ENTITY, &hook::LevelInitPostEntity );
+	m_client.hook_method( hook::idx::LEVEL_SHUTDOWN, &hook::LevelShutdown );
+	m_client.hook_method( hook::idx::FRAME_STAGE_NOTIFY, &hook::FrameStageNotify );
 
-	m_surface.hook_method( 67, &hook::LockCursor );
+	m_surface.hook_method( hook::idx::LOCK_CURSOR, &hook::LockCursor );
 
-	m_panel.hook_method( 41, &hook::PaintTraverse );
+	m_panel.hook_method( hook::idx::PAINT_TRAVERSE, &hook::PaintTraverse );
 
-	m_modelrender.hook_method( 21, &hook::DrawModelExecute );
+	m_modelrender.hook_method( hook::idx::DRAW_MODEL_EXECUTE, &hook::DrawModelExecute );
 
-	m_renderview.hook_method( 9, hook::SceneEnd );
+	m_renderview.hook_method( hook::idx::SCENE_END, hook::SceneEnd );
 
-	m_viewrender.hook_method( 41, hook::RenderSmokeOverlay );
+	m_viewrender.hook_method( hook::idx::RENDER_SMOKE_OVERLAY, hook::RenderSmokeOverlay );
 
-	m_materialsystem.hook_method( 84, hook::GetMaterial );
+	m_materialsystem.hook_method( hook::idx::GET_MATERIAL, hook::GetMaterial );
 }
 
 
