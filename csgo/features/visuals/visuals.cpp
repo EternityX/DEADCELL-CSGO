@@ -4,6 +4,9 @@
 c_visuals g_visuals;
 
 void c_visuals::run( ) {
+	if ( !g_renderer.get_instance(  ) )
+		return;
+
 	if( g_vars.visuals.misc.remove_scope )
 		draw_scope( );
 
@@ -146,10 +149,7 @@ void c_visuals::activation_type( ) {
 
 void c_visuals::player( C_CSPlayer *e ) {
 	auto local = C_CSPlayer::get_local( );
-	if( !e->is_valid_player( false, false ) || !local )
-		return;
-
-	if( e->IsDormant( ) )
+	if( !e->is_valid_player( false, true ) || !local )
 		return;
 
 	auto index = e->GetIndex( );
