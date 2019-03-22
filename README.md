@@ -36,8 +36,8 @@ Press `END`.
 
 ## Credits 
 - dex and maddie for their address, hash, module, netvar, pattern, pe, and vmt classes
-- kn4ck3r for OSHGui
-- nlohmann for a modern C++ implementation of JSON
+- [KN4CK3R for OSHGui](https://github.com/KN4CK3R/OSHGui)
+- [nlohmann for a modern C++ implementation of JSON](https://github.com/nlohmann/json)
 
 ## License
 Licensed under the MIT License. See [LICENSE](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE) for more details.
