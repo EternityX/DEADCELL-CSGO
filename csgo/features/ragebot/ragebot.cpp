@@ -27,7 +27,7 @@ void c_ragebot::select_target( ) {
 	if( !weapon )
 		return;
 
-	auto wpn_index = weapon->item_index( );
+	const short wpn_index = weapon->item_index( );
 
 	if( wpn_index == WEAPON_FISTS
 		|| wpn_index == WEAPON_SPANNER
@@ -184,7 +184,7 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 		return vec3_t ( forward + right * -spread.x + up * -spread.y ).Normalized( );
 	};
 
-	for ( int i = 1; i <= 256; i++ ) {
+	for( int i = 1; i <= 256; i++ ) {
 		vec3_t spread_angle;
 		vec3_t bullet_end;
 
@@ -196,10 +196,10 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 		ray.init( eye_position, eye_position + bullet_end * weapon->get_weapon_info( )->range );
 		g_csgo.m_engine_trace->ClipRayToEntity( ray, MASK_SHOT, ent, &trace );
 
-		if ( trace.hit_entity == ent )
+		if( trace.hit_entity == ent )
 			++traces_hit;
 
-		if ( traces_hit >= static_cast< int >( g_vars.rage.hitchance * 2.56f ) )
+		if( traces_hit >= static_cast< int >( g_vars.rage.hitchance * 2.56f ) )
 			return true;
 	}
 
