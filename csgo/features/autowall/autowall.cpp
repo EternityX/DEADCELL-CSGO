@@ -4,15 +4,15 @@ c_autowall g_autowall;
 
 float c_autowall::hitgroup_dmg( int hitgroup ) {
 	switch( hitgroup ) {
-		case HITGROUP_HEAD:
-			return 4.f;
-		case HITGROUP_STOMACH:
-			return 1.25f;
-		case HITGROUP_LEFTLEG:
-		case HITGROUP_RIGHTLEG:
-			return 0.75f;
-		default:
-			return 1.f;
+	case HITGROUP_HEAD:
+		return 4.f;
+	case HITGROUP_STOMACH:
+		return 1.25f;
+	case HITGROUP_LEFTLEG:
+	case HITGROUP_RIGHTLEG:
+		return 0.75f;
+	default:
+		return 1.f;
 	}
 }
 

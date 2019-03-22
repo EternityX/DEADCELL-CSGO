@@ -41,6 +41,6 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 
 	g_renderer.end_drawing( device );
 
-	return g_hooks.m_directx.get_old_method< fn::Present_t >( 17 )( device, pSourceRect, pDestRect, hDestWindowOverride,
+	return g_hooks.m_directx.get_old_method< fn::Present_t >( hook::idx::PRESENT )( device, pSourceRect, pDestRect, hDestWindowOverride,
 	                                                           pDirtyRegion );
 }

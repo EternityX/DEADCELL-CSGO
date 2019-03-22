@@ -34,7 +34,7 @@ void c_animations::OnEntityCreated( C_BaseEntity *ent ) {
 
 			m_track[ index ].m_index = index;
 			m_track[ index ].m_vmt = std::make_unique< c_vmt >( ent );
-			m_track[ index ].m_vmt->hook_method( 193, animations::DoExtraBonesProcessing );
+			m_track[ index ].m_vmt->hook_method( hook::idx::DO_EXTRA_BONE_PROC, animations::DoExtraBonesProcessing );
 			m_track[ index ].m_hooked = true;
 
 			break;

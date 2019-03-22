@@ -6,8 +6,6 @@
 #include "../../features/visuals/visuals.h"
 
 void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFrameStage_t curstage ) {
-
-
 	g_misc.no_smoke( curstage );
 
 	if( g_cl.m_should_update_materials ) {
@@ -16,7 +14,6 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 	}
 
 	auto in_thirdperson = g_csgo.m_input->m_fCameraInThirdPerson;
-
 	if( in_thirdperson && g_vars.antiaim.enabled && curstage == FRAME_RENDER_START )
 		g_csgo.m_prediction->SetLocalViewangles( g_antiaim.m_real );
 
@@ -24,11 +21,7 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 
 	if( curstage == FRAME_NET_UPDATE_POSTDATAUPDATE_START ) {
 		auto local = C_CSPlayer::get_local( );
-		if( local ) {
-			if( g_vars.visuals.misc.no_flash )
-				local->flash_alpha( ) = 0.f;
-			else
-				local->flash_alpha( ) = 255.f;
-		}
+		if( local )
+			local->flash_alpha( ) = g_vars.visuals.misc.no_flash ? 0.f : 255.f;
 	}
 }
