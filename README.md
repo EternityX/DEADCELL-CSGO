@@ -13,6 +13,9 @@ If you want a clean base without any features, please see the [deadcell SDK](htt
 
 We are accepting any pull requests that fix any of the aforementioned issues.
 
+## Contributing
+See [CONTRIBUTING.md](https://github.com/EternityX/DEADCELL-CSGO/blob/master/CONTRIBUTING.md).
+
 ## FAQ
 ### How do I add a hitmarker sound?
 Create a **hitsounds** folder inside the **base** Counter-Strike Global Offensive directory.
@@ -37,7 +40,7 @@ Press `END`.
 - nlohmann for a modern C++ implementation of JSON
 
 ## License
-Licensed under the MIT License. See **LICENSE** for more details.
+Licensed under the MIT License. See [LICENSE](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE) for more details.
 
 ## Media
 ![image](https://i.imgur.com/DdAL0kC.png)
