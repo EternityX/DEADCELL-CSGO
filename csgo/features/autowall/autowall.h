@@ -34,7 +34,7 @@ public:
 
 	static float hitgroup_dmg( int hitgroup );
 	static void scale_damage( int hitgroup, C_CSPlayer *ent, float weapon_armor_ratio, float &current_damage );
-	bool think( C_CSPlayer *from_ent, C_CSPlayer *to_ent, const vec3_t &position, int mindmg, bool run_bullet_pen );
+	bool think( const vec3_t &position, C_CSPlayer *entity, int mindmg, bool run_bullet_pen );
 };
 
 extern c_autowall g_autowall;

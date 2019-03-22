@@ -4,15 +4,15 @@ c_autowall g_autowall;
 
 float c_autowall::hitgroup_dmg( int hitgroup ) {
 	switch( hitgroup ) {
-		case HITGROUP_HEAD:
-			return 4.f;
-		case HITGROUP_STOMACH:
-			return 1.25f;
-		case HITGROUP_LEFTLEG:
-		case HITGROUP_RIGHTLEG:
-			return 0.75f;
-		default:
-			return 1.f;
+	case HITGROUP_HEAD:
+		return 4.f;
+	case HITGROUP_STOMACH:
+		return 1.25f;
+	case HITGROUP_LEFTLEG:
+	case HITGROUP_RIGHTLEG:
+		return 0.75f;
+	default:
+		return 1.f;
 	}
 }
 
@@ -221,16 +221,15 @@ void c_autowall::clip_trace( const vec3_t &src, vec3_t &end, trace_t *tr, C_Base
 	}
 }
 
-bool c_autowall::think( C_CSPlayer *from_ent, C_CSPlayer *to_ent, const vec3_t &position, int mindmg, bool run_bullet_pen ) {
-	if( !from_ent )
-		from_ent = C_CSPlayer::get_local( );
-	if ( !from_ent )
+bool c_autowall::think( const vec3_t &position, C_CSPlayer *entity, const int mindmg, const bool run_bullet_pen ) {
+	auto local = C_CSPlayer::get_local( );
+	if( !entity || !local )
 		return false;
 
-	if( to_ent->IsDormant( ) )
+	if( entity->IsDormant( ) )
 		return false;
 
-	C_BaseCombatWeapon *weapon = from_ent->get_active_weapon( );
+	C_BaseCombatWeapon *weapon = local->get_active_weapon( );
 	if( !weapon )
 		return false;
 
@@ -240,7 +239,7 @@ bool c_autowall::think( C_CSPlayer *from_ent, C_CSPlayer *to_ent, const vec3_t &
 
 	m_autowall_dmg = static_cast< float >( weapon_info->damage );
 
-	vec3_t start = from_ent->eye_pos( );
+	vec3_t start = local->eye_pos( );
 	vec3_t direction( position - start );
 	direction.Normalize( );
 
@@ -248,14 +247,14 @@ bool c_autowall::think( C_CSPlayer *from_ent, C_CSPlayer *to_ent, const vec3_t &
 	float trace_length = 0.f;
 
 	trace_t trace;
-	CTraceFilterSkipEntity filter( from_ent );
+	CTraceFilterSkipEntity filter( local );
 
 	while( m_autowall_dmg > 0.f ) {
 		const float trace_length_remaining = weapon_info->range - trace_length;
 		vec3_t end = start + direction * trace_length_remaining;
 
 		g_csgo.m_engine_trace->TraceRay( Ray_t{ start, end }, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &trace );
-		clip_trace( end + direction * 40.f, start, &trace, to_ent );
+		clip_trace( end + direction * 40.f, start, &trace, entity );
 
 		if( trace.fraction == 1.f )
 			break;
@@ -263,8 +262,8 @@ bool c_autowall::think( C_CSPlayer *from_ent, C_CSPlayer *to_ent, const vec3_t &
 		trace_length += trace.fraction * trace_length_remaining;
 		m_autowall_dmg *= std::pow( weapon_info->range_modifier, trace_length / 500 );
 
-		if( trace.hitgroup > HITGROUP_GENERIC && trace.hitgroup <= HITGROUP_RIGHTLEG && trace.hit_entity != nullptr && to_ent == trace.hit_entity ) {
-			scale_damage( trace.hitgroup, to_ent, weapon_info->armor_ratio, m_autowall_dmg );
+		if( trace.hitgroup > HITGROUP_GENERIC && trace.hitgroup <= HITGROUP_RIGHTLEG && trace.hit_entity != nullptr && entity == trace.hit_entity ) {
+			scale_damage( trace.hitgroup, entity, weapon_info->armor_ratio, m_autowall_dmg );
 			return m_autowall_dmg >= mindmg;
 		}
 

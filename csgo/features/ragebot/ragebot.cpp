@@ -115,7 +115,7 @@ void c_ragebot::select_target( ) {
 				if( g_vars.visuals.extra.points )
 					g_csgo.m_debug_overlay->AddBoxOverlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-				if ( g_autowall.think( C_CSPlayer::get_local( ), e, p, g_vars.rage.min_dmg, true ) ) {
+				if ( g_autowall.think( p, e, g_vars.rage.min_dmg, true ) ) {
 					if( g_autowall.m_autowall_dmg > player_best_damage ) {
 						player_best_damage = g_autowall.m_autowall_dmg;
 						player_best_point = p;
