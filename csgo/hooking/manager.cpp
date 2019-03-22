@@ -23,8 +23,7 @@ void c_hooks::hook( ) {
 	m_clientmode.hook_method( hook::idx::SHOULD_DRAW_FOG, &hook::ShouldDrawFog );
 	m_clientmode.hook_method( hook::idx::CREATE_MOVE, &hook::CreateMove );
 	m_clientmode.hook_method( hook::idx::OVERRIDE_VIEW, &hook::OverrideView );
-	//m_clientmode.hook_method( 35, &hook::GetViewModelFOV );
-	m_clientmode.hook_method( 35, &hook::GetViewModelFOV );
+	m_clientmode.hook_method( hook::idx::GET_VIEWMODEL_FOV, &hook::GetViewModelFOV );
 
 	m_client.hook_method( hook::idx::LEVEL_INIT_POST_ENTITY, &hook::LevelInitPostEntity );
 	m_client.hook_method( hook::idx::LEVEL_SHUTDOWN, &hook::LevelShutdown );
