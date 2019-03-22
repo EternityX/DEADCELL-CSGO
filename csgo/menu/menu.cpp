@@ -182,7 +182,7 @@ void c_main_form::ragebot_tab() {
 	antiaim_tab->AddTabPage( antiaim_page );
 	antiaim_tab->AddTabPage( fakelag_page );
 
-	auto *antiaim_groupbox = new c_groupbox( "Anti-Aim", aimbot_groupbox->GetRight( ) + 19, 6, 259, 334 );
+	auto *antiaim_groupbox = new c_groupbox( "Anti-Aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
 	antiaim_groupbox->AddControl( antiaim_tab );
 	g_menu.set_x_pos( 19 );
 
