@@ -329,9 +329,9 @@ void c_visuals::weapon_name( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSH
 		return;
 
 	const char *name = info->hud_name;
-	wchar_t *localised_name = g_csgo.m_localize->find( name );
+	std::wstring localised_name = g_csgo.m_localize->find( name );
 
-	std::string print = util::misc::unicode_to_ascii( std::wstring( localised_name ) );
+	std::string print = util::misc::unicode_to_ascii( localised_name );
 	std::transform( print.begin( ), print.end( ), print.begin( ), std::toupper );
 
 	g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
@@ -445,7 +445,7 @@ void c_visuals::draw_spectators( ) {
 		if( !entity || entity->alive( ) || entity == local )
 			continue;
 
-		auto *spectator = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->observer_handle( ) );
+		auto spectator = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->observer_handle( ) );
 		if( !spectator )
 			continue;
 

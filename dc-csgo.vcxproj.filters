@@ -199,6 +199,9 @@
     <ClCompile Include="csgo\hooking\hooks\RenderSmokeOverlay.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\DoPostScreenSpaceEffects.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\inc.hpp">

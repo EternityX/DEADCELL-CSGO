@@ -169,7 +169,7 @@ namespace OSHGui
 			if( value > maximum_ - minimum_ )
 				value = maximum_ - minimum_;
 
-			string_stream << std::fixed << std::setprecision( precision_ ) << value + minimum_ << appendText_;
+			string_stream << std::fixed << std::setprecision( precision_ ) << value + minimum_ << appendText_.c_str( );
 			label_value_->SetText( string_stream.str() );
 
 			if( value_ != value ) {
