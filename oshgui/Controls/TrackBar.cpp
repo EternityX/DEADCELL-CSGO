@@ -159,7 +159,7 @@ namespace OSHGui
 	void TrackBar::SetValueInternal( float value )
 	{
 		try { // epic bandaid fix.
-			std::stringstream string_stream;
+			std::ostringstream string_stream;
 
 			pixelsPerTick_ = (float)( GetWidth() - SliderSize.Width ) / ( ( maximum_ - minimum_ ) / tickFrequency_ );
 
@@ -170,7 +170,7 @@ namespace OSHGui
 				value = maximum_ - minimum_;
 
 			string_stream << std::fixed << std::setprecision( precision_ ) << value + minimum_ << appendText_.c_str( );
-			label_value_->SetText( string_stream.str() );
+			label_value_->SetText( string_stream.str( ) );
 
 			if( value_ != value ) {
 				value_ = value;

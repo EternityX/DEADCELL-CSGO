@@ -234,11 +234,7 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 		if( !target->SetupBones( matrix.data( ), 128, 0x100, target->simtime( ) ) )
 			continue;
 
-		const auto *model = target->GetModel();
-		if ( !model )
-			continue;
-
-		auto *studiohdr = g_csgo.m_model_info->GetStudioModel( model );
+		auto studiohdr = target->studio_hdr( );
 		if ( !studiohdr )
 			continue;
 
@@ -417,7 +413,7 @@ void c_misc::capsule_overlay( C_CSPlayer* e, float duration, std::array< matrix3
 	if ( !e )
 		return;
 
-	studiohdr_t* studio_model = g_csgo.m_model_info->GetStudioModel( e->GetModel( ) );
+	studiohdr_t* studio_model = e->studio_hdr( );
 	if ( !studio_model )
 		return;
 
