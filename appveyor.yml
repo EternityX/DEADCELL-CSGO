@@ -1,0 +1,11 @@
+version: 0.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2017
+configuration:
+- Release
+- Debug
+platform: x86
+build:
+  project: dc-csgo.vcxproj
+  verbosity: minimal
