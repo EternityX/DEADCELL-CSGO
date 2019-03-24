@@ -4,6 +4,9 @@
 c_visuals g_visuals;
 
 void c_visuals::run( ) {
+	if ( !g_renderer.get_instance(  ) )
+		return;
+
 	if( g_vars.visuals.misc.remove_scope )
 		draw_scope( );
 
@@ -146,10 +149,7 @@ void c_visuals::activation_type( ) {
 
 void c_visuals::player( C_CSPlayer *e ) {
 	auto local = C_CSPlayer::get_local( );
-	if( !e->is_valid_player( false, false ) || !local )
-		return;
-
-	if( e->IsDormant( ) )
+	if( !e->is_valid_player( false, true ) || !local )
 		return;
 
 	auto index = e->GetIndex( );
@@ -306,7 +306,7 @@ void c_visuals::draw_healthbar( C_CSPlayer *entity, float x, float y, float w, f
 	const int height = hp * static_cast< int >( h ) / 100;
 
 	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 6, y - 1, 4, h + 2 );
-	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 50, 50, 0 ) ), x - 5, y + h - height, 2, height );
+	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 100, 100, 100 ) ), x - 5, y + h - height, 2, height );
 
 	if( hp >= 90 || hp <= 10 )
 		return;
@@ -329,9 +329,9 @@ void c_visuals::weapon_name( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSH
 		return;
 
 	const char *name = info->hud_name;
-	wchar_t *localised_name = g_csgo.m_localize->find( name );
+	std::wstring localised_name = g_csgo.m_localize->find( name );
 
-	std::string print = util::misc::unicode_to_ascii( std::wstring( localised_name ) );
+	std::string print = util::misc::unicode_to_ascii( localised_name );
 	std::transform( print.begin( ), print.end( ), print.begin( ), std::toupper );
 
 	g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
@@ -374,8 +374,8 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 
 	// ammo bar
 	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 220, 10, 10, 10 ),
+																	  color,
 																	  OSHColor::FromARGB( 220, 10, 10, 10 ),
-	                                                                  color,
 	                                                                  color ),
 																	  x, y + h + 3 + ctx.offset, width, 2 );
 
@@ -445,7 +445,7 @@ void c_visuals::draw_spectators( ) {
 		if( !entity || entity->alive( ) || entity == local )
 			continue;
 
-		auto *spectator = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->observer_handle( ) );
+		auto spectator = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->observer_handle( ) );
 		if( !spectator )
 			continue;
 

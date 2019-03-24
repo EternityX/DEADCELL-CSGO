@@ -37,6 +37,7 @@
     <ClCompile Include="csgo\features\visuals\visuals.cpp" />
     <ClCompile Include="csgo\hooking\hooks\CreateMove.cpp" />
     <ClCompile Include="csgo\hooking\hooks\DoExtraBonesProcessing.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\DoPostScreenSpaceEffects.cpp" />
     <ClCompile Include="csgo\hooking\hooks\DrawModelExecute.cpp" />
     <ClCompile Include="csgo\hooking\hooks\GetMaterial.cpp" />
     <ClCompile Include="csgo\hooking\hooks\FrameStageNotify.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="csgo\sdk\custom classes\animstate.h" />
     <ClInclude Include="csgo\sdk\custom classes\color.h" />
     <ClInclude Include="csgo\sdk\custom classes\entity.h" />
+    <ClInclude Include="csgo\sdk\custom classes\keyvalues.h" />
     <ClInclude Include="csgo\sdk\custom classes\matrix.h" />
     <ClInclude Include="csgo\sdk\custom classes\vector.h" />
     <ClInclude Include="csgo\sdk\interfaces\cglobalvars.h" />

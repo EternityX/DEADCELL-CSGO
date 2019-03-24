@@ -208,52 +208,57 @@ namespace OSHGui {
 
 	//---------------------------------------------------------------------------
 	bool Application::ProcessMouseMessage( const MouseMessage &message ) {
-		if( !isEnabled_ ) {
-			return false;
-		}
-
-		mouse_.Location = message.GetLocation();
-
-		if( CaptureControl != nullptr ) {
-			CaptureControl->ProcessMouseMessage( message );
-			return true;
-		}
-		if( FocusedControl != nullptr ) {
-			if( FocusedControl->ProcessMouseMessage( message ) ) {
-				return true;
-			}
-		}
-
-		if( formManager_.GetFormCount() > 0 ) {
-			auto foreMost = formManager_.GetForeMost();
-			if( foreMost != nullptr && foreMost->IsModal() ) {
-				for( auto it = foreMost->GetPostOrderEnumerator(); it(); ++it ) {
-					auto control = *it;
-					if( control->ProcessMouseMessage( message ) ) {
-						return true;
-					}
-				}
+		try {
+			if( !isEnabled_ ) {
 				return false;
 			}
 
-			for( auto it = formManager_.GetEnumerator(); it(); ++it ) {
-				auto &form = *it;
+			mouse_.Location = message.GetLocation();
 
-				for( auto it2 = form->GetPostOrderEnumerator(); it2(); ++it2 ) {
-					auto control = *it2;
-					if( control->ProcessMouseMessage( message ) ) {
-						if( form != foreMost ) {
-							formManager_.BringToFront( form );
-						}
-
-						return true;
-					}
+			if( CaptureControl != nullptr ) {
+				CaptureControl->ProcessMouseMessage( message );
+				return true;
+			}
+			if( FocusedControl != nullptr ) {
+				if( FocusedControl->ProcessMouseMessage( message ) ) {
+					return true;
 				}
 			}
 
-			if( MouseEnteredControl ) {
-				MouseEnteredControl->OnMouseLeave( message );
+			if( formManager_.GetFormCount() > 0 ) {
+				auto foreMost = formManager_.GetForeMost();
+				if( foreMost != nullptr && foreMost->IsModal() ) {
+					for( auto it = foreMost->GetPostOrderEnumerator(); it(); ++it ) {
+						auto control = *it;
+						if( control->ProcessMouseMessage( message ) ) {
+							return true;
+						}
+					}
+					return false;
+				}
+
+				for( auto it = formManager_.GetEnumerator(); it(); ++it ) {
+					auto &form = *it;
+
+					for( auto it2 = form->GetPostOrderEnumerator(); it2(); ++it2 ) {
+						auto control = *it2;
+						if( control->ProcessMouseMessage( message ) ) {
+							if( form != foreMost ) {
+								formManager_.BringToFront( form );
+							}
+
+							return true;
+						}
+					}
+				}
+
+				if( MouseEnteredControl ) {
+					MouseEnteredControl->OnMouseLeave( message );
+				}
 			}
+		}
+		catch( const std::exception &ex ) {
+			throw Misc::InvalidOperationException("ProcessMouseMessage");
 		}
 
 		return false;
@@ -261,24 +266,29 @@ namespace OSHGui {
 
 	//---------------------------------------------------------------------------
 	bool Application::ProcessKeyboardMessage( const KeyboardMessage &keyboard ) {
-		if( keyboard.GetState() == KeyboardState::KeyDown ) {
-			auto hotkeyFired = false;
-			for( auto &hotkey : hotkeys_ ) {
-				if( hotkey.GetKey() == keyboard.GetKeyCode() && hotkey.GetModifier() == keyboard.GetModifier() ) {
-					hotkeyFired = true;
-					hotkey();
+		try {
+			if( keyboard.GetState() == KeyboardState::KeyDown ) {
+				auto hotkeyFired = false;
+				for( auto &hotkey : hotkeys_ ) {
+					if( hotkey.GetKey() == keyboard.GetKeyCode() && hotkey.GetModifier() == keyboard.GetModifier() ) {
+						hotkeyFired = true;
+						hotkey();
+					}
+				}
+
+				if( hotkeyFired ) {
+					return true;
 				}
 			}
 
-			if( hotkeyFired ) {
-				return true;
+			if( isEnabled_ ) {
+				if( FocusedControl != nullptr ) {
+					return FocusedControl->ProcessKeyboardMessage( keyboard );
+				}
 			}
 		}
-
-		if( isEnabled_ ) {
-			if( FocusedControl != nullptr ) {
-				return FocusedControl->ProcessKeyboardMessage( keyboard );
-			}
+		catch( const std::exception &ex ) {
+			throw Misc::InvalidOperationException("ProcessKeyboardMessage");
 		}
 
 		return false;

@@ -94,6 +94,12 @@
     <ClCompile Include="csgo\dllmain.cpp">
       <Filter>dc-csgo</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\Present.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\Reset.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
     <ClCompile Include="csgo\features\visuals\visuals.cpp">
       <Filter>dc-csgo\features\visuals</Filter>
     </ClCompile>
@@ -193,10 +199,7 @@
     <ClCompile Include="csgo\hooking\hooks\RenderSmokeOverlay.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\Reset.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\Present.cpp">
+    <ClCompile Include="csgo\hooking\hooks\DoPostScreenSpaceEffects.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
   </ItemGroup>
@@ -422,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="csgo\sdk\address.h">
       <Filter>dc-csgo\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\sdk\custom classes\keyvalues.h">
+      <Filter>dc-csgo\sdk\custom classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

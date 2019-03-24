@@ -10,6 +10,11 @@ void c_animations::init( ) {
 
 void c_animations::remove( ) {
 	g_csgo.m_entity_list->RemoveListenerEntity( this );
+
+	for( int i = 0; i < 64; i++ ) {
+		if( m_track[ i ].m_hooked )
+			m_track[ i ].m_vmt->unhook_all( );
+	}
 }
 
 void c_animations::OnEntityCreated( C_BaseEntity *ent ) {

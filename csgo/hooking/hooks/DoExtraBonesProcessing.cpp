@@ -2,7 +2,7 @@
 #include "../../features/animations/anim.h"
 
 void __fastcall animations::DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx, CStudioHdr *hdr, vec3_t *pos, Quaternion *q, matrix3x4_t *matrix, CBoneBitList &bone_list, CIKContext *context ) {
-	auto e = (C_CSPlayer*)ecx;
+	auto e = reinterpret_cast<C_CSPlayer *>( ecx );
 
 	bool backup;
 	auto animstate = e->animstate( );

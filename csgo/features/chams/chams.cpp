@@ -132,28 +132,9 @@ IMaterial *c_chams::create_material( bool shade, bool wireframe, bool ignorez, i
 	material_data += "\t\"$ignorez\" \"" + std::to_string( ignorez ) + "\"\n";
 	material_data += "}\n";
 
-	auto init_key_values = [ ]( KeyValues *keyvalues, const char *key_name ) -> void {
-		using InitKeyValues_t = void(__thiscall *)( void *, const char * );
-		static InitKeyValues_t InitKeyValuesEx = nullptr;
+	auto kv = static_cast<KeyValues*>( g_csgo.m_memalloc->Alloc( 36 ) );
+	kv->init_key_values( material_type.c_str( ) );
+	kv->load_from_buffer( material_name.c_str( ), material_data.c_str( ) );
 
-		if( !InitKeyValuesEx )
-			InitKeyValuesEx = pattern::find< InitKeyValues_t >( g_csgo.m_client_dll, "55 8B EC 51 33 C0 C7 45" );
-
-		InitKeyValuesEx( keyvalues, key_name );
-	};
-	auto load_from_buffer = [ ]( KeyValues *key_values, const char *resource_name, const char *buf, void *file_sys = nullptr, const char *path_id = nullptr, void *eval_sym_proc = nullptr, void *unk = nullptr ) -> void {
-		using LoadFromBuffer_t = void(__thiscall *)( void *, const char *, const char *, void *, const char *, void *, void * );
-		static LoadFromBuffer_t LoadFromBufferEx = nullptr;
-
-		if( !LoadFromBufferEx )
-			LoadFromBufferEx = pattern::find< LoadFromBuffer_t >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 83 EC 34 53 8B 5D 0C 89" );
-
-		LoadFromBufferEx( key_values, resource_name, buf, file_sys, path_id, eval_sym_proc, unk );
-	};
-
-	auto *key_values = new KeyValues( );
-	init_key_values( key_values, material_type.c_str( ) );
-	load_from_buffer( key_values, material_name.c_str( ), material_data.c_str( ) );
-
-	return g_csgo.m_material_system->CreateMaterial( material_name.c_str( ), key_values );
+	return g_csgo.m_material_system->CreateMaterial( material_name.c_str( ), kv );
 }

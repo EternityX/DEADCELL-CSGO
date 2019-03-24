@@ -27,7 +27,7 @@ void c_ragebot::select_target( ) {
 	if( !weapon )
 		return;
 
-	auto wpn_index = weapon->item_index( );
+	const short wpn_index = weapon->item_index( );
 
 	if( wpn_index == WEAPON_FISTS
 		|| wpn_index == WEAPON_SPANNER
@@ -115,7 +115,7 @@ void c_ragebot::select_target( ) {
 				if( g_vars.visuals.extra.points )
 					g_csgo.m_debug_overlay->AddBoxOverlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-				if ( g_autowall.think( C_CSPlayer::get_local( ), e, p, g_vars.rage.min_dmg, true ) ) {
+				if ( g_autowall.think( p, e, g_vars.rage.min_dmg, true ) ) {
 					if( g_autowall.m_autowall_dmg > player_best_damage ) {
 						player_best_damage = g_autowall.m_autowall_dmg;
 						player_best_point = p;
@@ -146,7 +146,7 @@ void c_ragebot::select_target( ) {
 
 bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 	int traces_hit = 0;
-	auto local = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetLocalPlayer( ) );
+	auto local = C_CSPlayer::get_local( );
 	if( !local )
 		return false;
 
@@ -184,7 +184,7 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 		return vec3_t ( forward + right * -spread.x + up * -spread.y ).Normalized( );
 	};
 
-	for ( int i = 1; i <= 256; i++ ) {
+	for( int i = 1; i <= 256; i++ ) {
 		vec3_t spread_angle;
 		vec3_t bullet_end;
 
@@ -196,10 +196,10 @@ bool c_ragebot::hitchance( vec3_t &angle, C_CSPlayer *ent ) {
 		ray.init( eye_position, eye_position + bullet_end * weapon->get_weapon_info( )->range );
 		g_csgo.m_engine_trace->ClipRayToEntity( ray, MASK_SHOT, ent, &trace );
 
-		if ( trace.hit_entity == ent )
+		if( trace.hit_entity == ent )
 			++traces_hit;
 
-		if ( traces_hit >= static_cast< int >( g_vars.rage.hitchance * 2.56f ) )
+		if( traces_hit >= static_cast< int >( g_vars.rage.hitchance * 2.56f ) )
 			return true;
 	}
 
@@ -281,14 +281,12 @@ void c_ragebot::choose_angles( ){
 	
 	const WeaponInfo_t *wep_info = weapon->get_weapon_info( );
 	if( wep_info->type == WEAPONTYPE_PISTOL && !wep_info->full_auto ){
-		static auto firing = false;
-		if( m_cmd->m_buttons & IN_ATTACK ) {
-			if( firing ) {
-				m_cmd->m_buttons &= ~IN_ATTACK;
-			}
-		}
-
-		firing = ( m_cmd->m_buttons & IN_ATTACK ) != 0;
+		float next_wep_attack = weapon->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+		float next_local_attack = local->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+		if ( next_wep_attack >= 0.f || next_local_attack >= 0.f )
+			m_cmd->m_buttons &= ~IN_ATTACK;
+		else
+			m_cmd->m_buttons |= IN_ATTACK;
 	}
 
 	if( m_cmd->m_buttons & IN_ATTACK ){

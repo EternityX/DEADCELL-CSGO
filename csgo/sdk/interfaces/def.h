@@ -1240,11 +1240,6 @@ public:
 	char m_szTextureName[64]; //0x1559888 
 }; //Size=0x006C
 
-class KeyValues {
-public:
-	PAD( 32 )
-};
-
 class AnimationLayer_t {
 public:
 	PAD( 20 )

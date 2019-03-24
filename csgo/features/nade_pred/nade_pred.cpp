@@ -14,7 +14,7 @@ void c_nade_prediction::predict( CUserCmd *ucmd ) {
 	vec3_t angles, thrown;
 
 	//	first time setup
-	static auto *sv_gravity = g_csgo.m_convar->FindVar( "sv_gravity" );
+	static auto sv_gravity = g_csgo.m_convar->FindVar( "sv_gravity" );
 
 	//	calculate step and actual gravity value
 	gravity = sv_gravity->GetFloat( ) / 8.0f;
@@ -159,7 +159,7 @@ void c_nade_prediction::trace( CUserCmd *ucmd ) {
 	};
 
 	//	grab local weapon
-	auto *weapon = g_cl.m_local->get_active_weapon( );
+	auto weapon = g_cl.m_local->get_active_weapon( );
 
 	if( !weapon ) {
 		return;

@@ -994,9 +994,8 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
 	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
-
 	if( text.empty( ) ){
-		SetLocation( x - 1, y - 15 );
+		SetLocation( x - 1, y - 20 );
 	}
 	else
 		SetLocation( x - 1, y );

@@ -90,9 +90,6 @@ namespace hook {
 	void __fastcall DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRenderContext *ctx, void *state,
 	                                  const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld );
 	void __fastcall FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFrameStage_t curstage );
-	void __fastcall DrawModel( uintptr_t ecx, uintptr_t edx, uintptr_t results, DrawModelInfo_t &info,
-	                           matrix3x4_t *pBoneToWorld, float *pFlexWeights, float *pFlexDelayedWeights, vec3_t &origin,
-	                           int drawFlags );
 	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const CViewSetup *pSetup );
 	void __fastcall RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 );
 };

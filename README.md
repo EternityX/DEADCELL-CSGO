@@ -9,10 +9,12 @@ If you want a clean base without any features, please see the [deadcell SDK](htt
 - Crashes and lots of them.
 - Game will crash when using -d3d9ex as a launch option.
 - Lots of code is unoptimized.
-- Visuals will not rescale if you change resolution while injected.
 - If you come across any more issues, please notify us via the issue tracker.
 
 We are accepting any pull requests that fix any of the aforementioned issues.
+
+## Contributing
+See [CONTRIBUTING.md](https://github.com/EternityX/DEADCELL-CSGO/blob/master/CONTRIBUTING.md).
 
 ## FAQ
 ### How do I add a hitmarker sound?
@@ -34,14 +36,14 @@ Press `END`.
 
 ## Credits 
 - dex and maddie for their address, hash, module, netvar, pattern, pe, and vmt classes
-- kn4ck3r for OSHGui
-- nlohmann for a modern C++ implementation of JSON
+- [KN4CK3R for OSHGui](https://github.com/KN4CK3R/OSHGui)
+- [nlohmann for a modern C++ implementation of JSON](https://github.com/nlohmann/json)
 
 ## License
-Licensed under the MIT License. See **LICENSE** for more details.
+Licensed under the MIT License. See [LICENSE](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE) for more details.
 
 ## Media
-![image](https://i.imgur.com/DdAL0kC.png)
+![image](https://i.imgur.com/JcksnA7.png)
 ![image](https://i.imgur.com/0wAOPPj.png)
 ![image](https://i.imgur.com/b76kQH2.png)
 ![image](https://i.imgur.com/4ucjwAg.png)
