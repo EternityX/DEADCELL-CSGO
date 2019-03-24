@@ -2,30 +2,24 @@
 
 c_antiaim g_antiaim;
 
-// removed most of the code here due to spaghetti.
-
-void c_antiaim::ensure_sanity( CUserCmd *ucmd ) {
-	
-}
-
 float at_target( ) {
 	auto local = C_CSPlayer::get_local( );
-	if( !local )
+	if ( !local )
 		return 0.f;
 
 	float best_fov = 360.f;
 	vec3_t best_angles = vec3_t( 0.0f, 0.f, 0.0f );
 
-	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
+	for ( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
 		auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
 
-		if( !player || player == local ) {
+		if ( !player || player == local ) {
 			continue;
 		}
-		if( !player->is_valid_player( false, true ) ) {
+		if ( !player->is_valid_player( false, true ) ) {
 			continue;
 		}
-		if( player->team( ) == local->team( ) ) {
+		if ( player->team( ) == local->team( ) ) {
 			continue;
 		}
 
@@ -37,11 +31,11 @@ float at_target( ) {
 
 		const float fov = math::get_fov( viewangle, math::calc_angle( local->eye_pos( ), player->eye_pos( ) ) );
 
-		if( fov < best_fov ) {
+		if ( fov < best_fov ) {
 			best_fov = fov;
 			best_angles = math::to_angle( target_position - local_position );
 
-			if( !math::normalize_angles( best_angles ) )
+			if ( !math::normalize_angles( best_angles ) )
 				return 0.f;
 		}
 	}
@@ -49,28 +43,25 @@ float at_target( ) {
 	return best_angles.y;
 }
 
-float c_antiaim::calculate_max_desync_angle( C_CSPlayer *local, CCSGOPlayerAnimState *anim_state ) {
-	return 0.f;
-}
-
 void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
-
+	if ( g_cl.m_sendpacket ) {
+		ucmd->m_viewangles.y = m_real.y + g_cl.m_local->max_desync( );
+	}
+	else {
+		ucmd->m_viewangles.y += 180.f;
+	}
 }
 
 void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
-
+	ucmd->m_viewangles.x = 89.98f;
 }
 
 void c_antiaim::set_angles( CUserCmd *ucmd ) {
+	if ( !g_cl.m_local || !g_cl.m_local->alive( ) || !g_vars.antiaim.enabled || ( ucmd->m_buttons & IN_ATTACK ) != 0 )
+		return;
 
-}
-
-void c_antiaim::manual( CUserCmd *ucmd ) {
-
-}
-
-void c_antiaim::modify_packets( CUserCmd *ucmd ) {
-	
+	adjust_pitch( ucmd );
+	adjust_yaw( ucmd );
 }
 
 float c_antiaim::best_head_yaw( ) {

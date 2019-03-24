@@ -89,6 +89,9 @@
     <Filter Include="dc-csgo\features\resolver">
       <UniqueIdentifier>{60be97db-4b50-4ec9-9b78-0cf11fe5f44c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dc-csgo\features\fakelag">
+      <UniqueIdentifier>{02ace5ad-1b5c-45fa-bea0-243b2d37878f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="csgo\dllmain.cpp">
@@ -201,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\DoPostScreenSpaceEffects.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\fakelag\fakelag.cpp">
+      <Filter>dc-csgo\features\fakelag</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="csgo\sdk\custom classes\keyvalues.h">
       <Filter>dc-csgo\sdk\custom classes</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\fakelag\fakelag.h">
+      <Filter>dc-csgo\features\fakelag</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

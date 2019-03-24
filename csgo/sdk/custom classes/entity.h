@@ -407,4 +407,22 @@ public:
 
 		return true;
 	}
+
+	float max_desync( ) {
+		auto anim_state = this->animstate( );
+		if ( !anim_state )
+			return 0.f;
+
+		float duck_amount = anim_state->m_fDuckAmount;
+		float speed_fraction = math::max< float >( 0, math::min< float >( anim_state->m_flFeetSpeedForwardsOrSideWays, 1 ) );
+		float speed_factor = math::max< float >( 0, math::min< float >( 1, anim_state->m_flFeetSpeedUnknownForwardOrSideways ) );
+
+		float yaw_modifier = ( ( ( anim_state->m_flStopToFullRunningFraction * -0.3f ) - 0.2f ) * speed_fraction ) + 1.0f;
+
+		if ( duck_amount > 0.f ) {
+			yaw_modifier += ( ( duck_amount * speed_factor ) * ( 0.5f - yaw_modifier ) );
+		}
+
+		return anim_state->velocity_subtract_y * yaw_modifier;
+	}
 };
