@@ -19,6 +19,9 @@ We are accepting any pull requests that fix any of the aforementioned issues.
 See [CONTRIBUTING.md](https://github.com/EternityX/DEADCELL-CSGO/blob/master/CONTRIBUTING.md).
 
 ## FAQ
+### Where's the DLL?
+Build it yourself. We will not provide a binary.
+
 ### How do I add a hitmarker sound?
 Create a **hitsounds** folder inside the **base** Counter-Strike Global Offensive directory.
 Place as many **.wav** sound files as you want inside of it. Load the cheat and they will be under the hitsounds combobox.
