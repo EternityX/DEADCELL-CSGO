@@ -2,52 +2,51 @@
 
 class c_csgo : protected c_interface_mgr {
 private:
-	// todo - dex; func prototypes go here.
-
 public:
+	bool m_interfaces_successful = false;
+
 	// modules.
 	pe::Module m_client_dll;
 	pe::Module m_engine_dll;
 
 	// misc ptrs;
-	uintptr_t m_d3d9_vmt;
+	uintptr_t m_d3d9_vmt = 0;
 
 	// interfaces.
-	CHLClient *m_client;
-	IEngineClient *m_engine;
-	IClientModeShared *m_client_mode;
-	IClientEntityList *m_entity_list;
-	CInput *m_input;
-	CGlobalVars *m_global_vars;
-	ICVar *m_convar;
-	IVModelInfo *m_model_info;
-	IMaterialSystem *m_material_system;
-	IVRenderView *m_render_view;
-	IVModelRender *m_model_render;
-	ISurface *m_surface;
-	IVDebugOverlay *m_debug_overlay;
-	IPanel *m_panel;
-	IStudioRender *m_studio_render;
-	IEngineTrace *m_engine_trace;
-	IGameMovement *m_game_movement;
-	IPrediction *m_prediction;
-	IMoveHelper *m_movehelper;
-	IGameEventManager2 *m_game_event;
-	IViewRenderBeams *m_render_beams;
-	IWeaponSystem *m_weapon_system;
-	IVEfx *m_effects;
-	ClientState *m_clientstate;
-	CPhysicsSurface *m_physics_surface;
-	ILocalize *m_localize;
-	IMemAlloc *m_memalloc;
-	IMDLCache *m_modelcache;
-	IViewRender *m_viewrender;
-	CGlowObjectManager *m_glow_obj_manager;
-	// functions.
+	CHLClient *m_client                    = nullptr;
+	IEngineClient *m_engine                = nullptr;
+	IClientModeShared *m_client_mode       = nullptr;
+	IClientEntityList *m_entity_list       = nullptr;
+	CInput *m_input                        = nullptr;
+	CGlobalVars *m_global_vars             = nullptr;
+	ICVar *m_convar                        = nullptr;
+	IVModelInfo *m_model_info              = nullptr;
+	IMaterialSystem *m_material_system     = nullptr;
+	IVRenderView *m_render_view            = nullptr;
+	IVModelRender *m_model_render          = nullptr;
+	ISurface *m_surface                    = nullptr;
+	IVDebugOverlay *m_debug_overlay        = nullptr;
+	IPanel *m_panel                        = nullptr;
+	IStudioRender *m_studio_render         = nullptr;
+	IEngineTrace *m_engine_trace           = nullptr;
+	IGameMovement *m_game_movement         = nullptr;
+	IPrediction *m_prediction              = nullptr;
+	IMoveHelper *m_movehelper              = nullptr;
+	IGameEventManager2 *m_game_event       = nullptr;
+	IViewRenderBeams *m_render_beams       = nullptr;
+	IWeaponSystem *m_weapon_system         = nullptr;
+	IVEfx *m_effects                       = nullptr;
+	ClientState *m_clientstate             = nullptr;
+	CPhysicsSurface *m_physics_surface     = nullptr;
+	ILocalize *m_localize                  = nullptr;
+	IMemAlloc *m_memalloc                  = nullptr;
+	IMDLCache *m_modelcache                = nullptr;
+	IViewRender *m_viewrender              = nullptr;
+	CGlowObjectManager *m_glow_obj_manager = nullptr;
 
-	c_csgo() : m_d3d9_vmt{ } { }
+	c_csgo() { }
 
-	bool init( ) {
+	bool init( ) { // todo: check if interfaces are valid.
 		// modules.
 		m_client_dll = pe::get_module( CT_HASH32( "client_panorama.dll" ) );
 		m_engine_dll = pe::get_module( CT_HASH32( "engine.dll" ) );
@@ -118,6 +117,8 @@ public:
 		m_modelcache = get_interface< IMDLCache >( CT_HASH32( "MDLCache" ) );
 
 		m_glow_obj_manager = *pattern::find< CGlowObjectManager ** >( m_client_dll, "0F 11 05 ? ? ? ? 83 C8 01", 3 );
+
+		m_interfaces_successful = true;
 
 		return true;
 	}

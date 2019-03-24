@@ -1,0 +1,18 @@
+version: 0.0.{build}
+only_commits:
+  files:
+    - csgo/
+    - deadcell/
+    - oshgui/
+pull_requests:
+  do_not_increment_build_number: true
+image: Visual Studio 2017
+configuration:
+- Release
+- Debug
+platform: x86
+environment:
+  matrix:
+  - proj: dc-csgo.sln
+build_script:
+- cmd: msbuild %oshgui%

@@ -23,7 +23,7 @@ public:
 	void OnEntityCreated( C_BaseEntity *ent ) override;
 	void OnEntityDeleted( C_BaseEntity *ent ) override;
 
-	void init( );
+	bool init( );
 	void remove( );
 
 	std::array< container_t, 64 > m_track;

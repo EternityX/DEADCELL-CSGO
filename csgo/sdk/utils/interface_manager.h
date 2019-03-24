@@ -23,16 +23,14 @@ private:
 	std::vector< interface_t > m_interfaces;
 
 protected:
-	c_interface_mgr( ) : m_interfaces{ } {
+	c_interface_mgr( ) {
 		pe::modules_t modules;
-		uintptr_t createinterface;
-		InterfaceReg *reg;
 
 		if( !pe::get_all_modules( modules ) )
 			return;
 
 		for( const auto &m : modules ) {
-			createinterface = pe::get_export( m, CT_HASH32( "CreateInterface" ) );
+			uintptr_t createinterface = pe::get_export( m, CT_HASH32( "CreateInterface" ) );
 			if( !util::misc::valid_code_ptr( createinterface ) )
 				continue;
 
@@ -49,7 +47,7 @@ protected:
 			// now we need to get s_pInterfaceRegs.
 			// in csgo, its generally the first "mov, esi imm32" instruction.
 			// we're just going to use the hardcoded offset to it here.
-			reg = **reinterpret_cast< InterfaceReg *** >( createinterface + 6 );
+			InterfaceReg *reg = **reinterpret_cast< InterfaceReg *** >( createinterface + 6 );
 			if( !reg )
 				continue;
 
@@ -63,13 +61,12 @@ protected:
 	// get interface by hash.
 	template< typename t >
 	t *get_interface( hash32_t name, size_t skip = 0, bool truncate = true ) {
-		std::string interface_name;
 
 		if( m_interfaces.empty( ) )
 			return nullptr;
 
 		for( const auto &i : m_interfaces ) {
-			interface_name = i.m_name;
+			std::string interface_name = i.m_name;
 
 			if( truncate )
 				interface_name.resize( interface_name.size( ) - 3 );

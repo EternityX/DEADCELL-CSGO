@@ -29,22 +29,21 @@ public:
 		m_offsets.clear();
 	}
 
-	void init( ) {
-
+	bool init( ) {
 		// sanity check on client->
 		if( !g_csgo.m_client )
-			return;
+			return false;
 
 		// grab linked list.
 		ClientClass *list = g_csgo.m_client->GetAllClasses( );
 		if( !list )
-			return;
+			return false;
 
 		// iterate list of netvars.
-		for( ; list != nullptr; list = list->m_pNext ) {
+		for( ; list != nullptr; list = list->m_pNext )
 			store_table( list->m_pRecvTable->m_pNetTableName, list->m_pRecvTable );
-		}
-			
+
+		return true;
 	}
 
 	void store_table( const std::string &name, RecvTable *table, size_t offset = 0 ) {

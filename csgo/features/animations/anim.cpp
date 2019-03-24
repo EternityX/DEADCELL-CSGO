@@ -4,8 +4,13 @@ c_animations g_anim;
 
 // never finished.
 
-void c_animations::init( ) {
+bool c_animations::init( ) {
+	if( !g_csgo.m_entity_list ) // should probably check for validity in interface_manager.h instead
+		return false;
+
 	g_csgo.m_entity_list->AddListenerEntity( this );
+
+	return true;
 }
 
 void c_animations::remove( ) {

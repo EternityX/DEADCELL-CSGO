@@ -22,10 +22,10 @@ using ulong_t = unsigned long;
 #include <iostream>
 
 // oshgui.
-#include "../oshgui/OSHGui.hpp"
-#include "../oshgui/Drawing/Direct3D9/Direct3D9Renderer.hpp"
-#include "../oshgui/Drawing/RenderTarget.hpp"
-#include "../oshgui/Input/Input.hpp"
+#include <OSHGui.hpp>
+#include <Drawing/Direct3D9/Direct3D9Renderer.hpp>
+#include <Drawing/RenderTarget.hpp>
+#include <Input/Input.hpp>
 
 #include "hash/hash.hpp"
 #include "pe/types.hpp"

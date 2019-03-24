@@ -238,6 +238,9 @@ namespace OSHGui {
 
 		//---------------------------------------------------------------------------
 		void Direct3D9Renderer::EndRendering() {
+			if( !stateBlock )
+				return;
+
 			stateBlock->Apply();
 		}
 

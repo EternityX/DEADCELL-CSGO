@@ -42,9 +42,13 @@ void reset_item( item &item ) {
 	json[ item.name.c_str( ) ].clear( );
 }
 
-const void c_config::init( ) {
-	if( !std::experimental::filesystem::exists( m_directory ) )
-		std::experimental::filesystem::create_directory( m_directory );
+bool c_config::init( ) {
+	if( !std::experimental::filesystem::exists( m_directory ) ) {
+		if( !std::experimental::filesystem::create_directory( m_directory ) ) {
+			_RPT1( _CRT_WARN, "Failed to create profile directory. Ignoring this error will result in not being able to create or save profiles.\n\n%s", m_directory );
+			return false;
+		}
+	}
 
 	item( g_vars.visuals.activation_type,"g_vars.visuals.activation_type", m_items );
 	item( g_vars.visuals.activation_key,"g_vars.visuals.activation_key", m_items );
@@ -168,33 +172,39 @@ const void c_config::init( ) {
 	item( g_vars.dz.jammer, "g_vars.dz.jammer", m_items );
 	item( g_vars.dz.melee_weapon, "g_vars.dz.melee_weapon", m_items );
 	item( g_vars.dz.breach_charge, "g_vars.dz.breach_charge", m_items );
-}
-
-const bool c_config::save( std::string file ) {
-	std::ofstream output_file = std::ofstream( m_directory + "/" + file );
-
-	if( !output_file.good( ) )
-		return false;
-
-	for( auto &item : m_items ) {
-		save_item( item );
-	}
-
-	output_file << std::setw( 4 ) << json << std::endl;
-	output_file.close( );
 
 	return true;
 }
 
-const bool c_config::reset( std::string file ) {
+bool c_config::save( const std::string &file ) {
+	try {
+		std::ofstream output_file = std::ofstream( m_directory + "/" + file );
+
+		if( !output_file.good() )
+			return false;
+
+		for( auto &item : m_items )
+			save_item( item );
+
+		output_file << std::setw( 4 ) << json << std::endl;
+		output_file.close();
+
+		return true;
+	} 
+	catch( std::ofstream::failure &ex ) {
+		_RPT1( _CRT_WARN, "Failed to save the default profile. Ignoring this warning will most likely result in future profiles not being saved correctly.\n\n%s", ex.what( ) );
+		return false;
+	}
+}
+
+bool c_config::reset( const std::string &file ) {
 	std::ofstream output_file = std::ofstream( m_directory + "/" + file );
 
 	if( !output_file.good( ) )
 		return false;
 
-	for( auto &item : m_items ) {
+	for( auto &item : m_items )
 		reset_item( item );
-	}
 
 	output_file << std::setw( 4 ) << json << std::endl;
 	output_file.close( );
@@ -202,7 +212,7 @@ const bool c_config::reset( std::string file ) {
 	return true;
 }
 
-const bool c_config::load( std::string file ) {
+bool c_config::load( const std::string &file ) {
 	std::ifstream input_file = std::ifstream( m_directory + "/" + file );
 	if( !input_file.good( ) )
 		return false;
@@ -210,26 +220,28 @@ const bool c_config::load( std::string file ) {
 	try {
 		json << input_file;
 	}
-	catch( ... ) {
+	catch( const std::exception &ex ) {
+		UNREFERENCED_PARAMETER( ex );
+		_RPT2( _CRT_ERROR, "Failed to %s profile. Ignoring this error may prevent you from loading profiles.\n\n%s", file.c_str( ), ex.what( ) );
+
 		input_file.close( );
 		return false;
 	}
 
-	for( auto &item : m_items ) {
+	for( auto &item : m_items )
 		assign_item( item );
-	}
 
 	input_file.close( );
 
 	return true;
 }
 
-const void c_config::remove( std::string file ){
+void c_config::remove( const std::string &file ) const {
 	std::string path = m_directory  + "/" + file;
 	std::remove( path.c_str( ) );
 }
 
-std::vector< std::string > c_config::get_configs( ){
+std::vector< std::string > c_config::get_configs( ) const {
 	std::vector< std::string > output{ };
 
 	for( auto &file_path : std::experimental::filesystem::directory_iterator( m_directory ) ) {
@@ -245,19 +257,21 @@ std::vector< std::string > c_config::get_configs( ){
 	return output;
 }
 
-bool c_config::import_from_clipboard( std::string file ) {
+bool c_config::import_from_clipboard( const std::string &file ) {
 	const auto get_clipboard_data = [ ]( ) -> std::string {
-		OpenClipboard( 0 );
-		HANDLE hData = GetClipboardData( CF_TEXT );
-		char *data = static_cast< char* >( GlobalLock( hData ) );
+		OpenClipboard( nullptr );
+
+		HANDLE handle = GetClipboardData( CF_TEXT );
+		const auto data = static_cast< char* >( GlobalLock( handle ) );
+
 		std::string text( data );
-		GlobalUnlock( hData );
+		GlobalUnlock( handle );
 		CloseClipboard( );
 
 		return text;
 	};
 
-	std::string clipboard = get_clipboard_data( );
+	const std::string clipboard = get_clipboard_data( );
 
 	std::ofstream output = std::ofstream( m_directory + "/" + file );
 	if( !output.good( ) )
@@ -269,7 +283,6 @@ bool c_config::import_from_clipboard( std::string file ) {
 	// write clipboard data to the file
 	output << clipboard;
 
-
 	// close the file after writing
 	output.close( );
 
@@ -279,7 +292,7 @@ bool c_config::import_from_clipboard( std::string file ) {
 	return true;
 }
 
-void c_config::export_to_clipboard( std::string file ) {
+void c_config::export_to_clipboard( const std::string &file ) const {
 	std::ifstream input_file = std::ifstream( m_directory + "/" + file );
 	std::string str( ( std::istreambuf_iterator< char >( input_file ) ), std::istreambuf_iterator< char >( ) );
 
@@ -290,7 +303,7 @@ void c_config::export_to_clipboard( std::string file ) {
 	memcpy( GlobalLock( mem ), output, len );
 
 	GlobalUnlock( mem );
-	OpenClipboard( 0 );
+	OpenClipboard( nullptr );
 	EmptyClipboard( );
 	SetClipboardData( CF_TEXT, mem );
 	CloseClipboard( );

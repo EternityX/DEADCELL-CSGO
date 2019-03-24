@@ -135,12 +135,13 @@ void c_ragebot::select_target( ) {
 					return a.distance < b.distance;
 				case 2:
 					return a.index < b.index;
-				default: break;
+				default: return false;
 			}
 		} );
 	}
-	catch( ... ) {
-		console::print( "caught exception in select_target( )" );
+	catch( const std::exception &ex ) {
+		UNREFERENCED_PARAMETER( ex );
+		_RPT0( _CRT_ERROR, ex.what( ) );
 	}
 }
 
@@ -437,8 +438,9 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 			}
 		}
 	}
-	catch( ... ) {
-		console::print( "caught exception in get_points_from_hitbox( )" );
+	catch( const std::exception &ex ) {
+		UNREFERENCED_PARAMETER( ex );
+		_RPTF0( _CRT_ERROR, ex.what( ) );
 	}
 
 	return true;

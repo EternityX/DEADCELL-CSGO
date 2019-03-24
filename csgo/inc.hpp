@@ -7,6 +7,7 @@
 #define NOMINMAX
 
 #include <windows.h>
+#include <winuser.h>
 #include <intrin.h>
 #include <cstdint>
 #include <string>
@@ -52,8 +53,8 @@ typedef OSHGui::Drawing::Color OSHColor;
 // used for compile-time FNV-1a 32bit hashes when above macro cant be used for constexpr variables.
 #define CT_CONSTHASH32( str ) util::hash::fnv1a_32( str )
 
-#define GenDefineVFunc(...) ( this, __VA_ARGS__ ); }
-#define VFUNC( index, func, sig ) auto func { return util::misc::vfunc< sig >( this, index ) GenDefineVFunc
+#define DEFINE_VFUNC(...) ( this, __VA_ARGS__ ); }
+#define VFUNC( index, func, sig ) auto func { return util::misc::vfunc< sig >( this, index ) DEFINE_VFUNC
 
 //sdk 
 #include "features/vars.h"
