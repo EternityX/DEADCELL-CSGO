@@ -1,4 +1,9 @@
 version: 0.0.{build}
+skip_commits:
+  files:
+    - CONTRIBUTING.md
+    - README.md
+    - LICENSE
 pull_requests:
   do_not_increment_build_number: true
 image: Visual Studio 2017
