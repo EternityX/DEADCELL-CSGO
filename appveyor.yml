@@ -6,6 +6,10 @@ configuration:
 - Release
 - Debug
 platform: x86
+environment:
+  oshgui: oshgui/Projects/VS2017/OSHGui_StaticLibrary.vcxproj
+  deadcell: deadcell/deadcell.vcxproj
+  dc-csgo: dc-csgo.vcxproj
 build:
   project: dc-csgo.vcxproj
   verbosity: minimal
