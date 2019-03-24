@@ -5,11 +5,10 @@
 #include "../../features/anti-aim/antiaim.h"
 #include "../../features/nade_pred/nade_pred.h"
 #include "../../features/engine_pred/engine_pred.h"
+#include "../../features/fakelag/fakelag.h"
 
 bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, CUserCmd *cmd ) {
 	static bool ret = g_hooks.m_clientmode.get_old_method< fn::CreateMove_t >( hook::idx::CREATE_MOVE )( ecx, flInputSampleTime, cmd );
-
-	g_cl.m_sendpacket = true;
 
 	g_cl.m_local = C_CSPlayer::get_local( );
 
@@ -18,6 +17,8 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	if( ret )
 		g_csgo.m_prediction->SetLocalViewangles( cmd->m_viewangles );
+
+	g_fakelag.think( cmd );
 
 	INetChannelInfo *channel_info = g_csgo.m_engine->GetNetChannelInfo( );
 	if( channel_info ) {
@@ -49,28 +50,33 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	g_nadepred.trace( cmd );
 
 	g_engine_pred.pre_start( );
-	g_engine_pred.start( cmd ) ;
+	g_engine_pred.start( cmd ); {
+		g_misc.automatic_fire( g_cl.m_local->get_active_weapon( ), cmd );
 
-	g_misc.automatic_fire( g_cl.m_local->get_active_weapon( ), cmd );
+		if ( g_vars.misc.autozeus )
+			g_misc.auto_zeus( cmd );
 
-	if( g_vars.misc.autozeus )
-		g_misc.auto_zeus( cmd );
+		g_ragebot.work( cmd );
 
-	g_ragebot.work( cmd );
-
-	g_antiaim.set_angles( cmd );
-
-	g_engine_pred.end( );
+		g_antiaim.set_angles( cmd );
+	} g_engine_pred.end( );
 
 	g_misc.fix_movement( cmd, wish_angle );
 
 	math::normalize_angles( cmd->m_viewangles );
 	math::clamp_angles( cmd->m_viewangles );
 
-	if( g_cl.m_sendpacket && g_cl.m_local )
-		g_cl.m_last_sent_origin = g_cl.m_local->origin( );
+	if ( g_cl.m_local ) {
+		if ( g_cl.m_sendpacket ) {
+			g_cl.m_last_sent_origin = g_cl.m_local->origin( );
+			g_antiaim.m_fake = cmd->m_viewangles;
+		}
+		else {
+			g_antiaim.m_real = cmd->m_viewangles;
+		}
+	}
 
-	g_antiaim.m_real = cmd->m_viewangles;
+	g_cl.m_local->GetRenderAngles( ) = g_antiaim.m_real;
 
 	uintptr_t* framePointer;
 	__asm mov framePointer, ebp;

@@ -27,6 +27,7 @@
     <ClCompile Include="csgo\features\chams\chams.cpp" />
     <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp" />
     <ClCompile Include="csgo\features\events\events.cpp" />
+    <ClCompile Include="csgo\features\fakelag\fakelag.cpp" />
     <ClCompile Include="csgo\features\misc\misc.cpp" />
     <ClCompile Include="csgo\features\nade_pred\nade_pred.cpp" />
     <ClCompile Include="csgo\features\notifications\notifications.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="csgo\features\client.h" />
     <ClInclude Include="csgo\features\engine_pred\engine_pred.h" />
     <ClInclude Include="csgo\features\events\events.h" />
+    <ClInclude Include="csgo\features\fakelag\fakelag.h" />
     <ClInclude Include="csgo\features\misc\misc.h" />
     <ClInclude Include="csgo\features\nade_pred\nade_pred.h" />
     <ClInclude Include="csgo\features\notifications\notifications.h" />
