@@ -12,7 +12,7 @@ c_event_listener::~c_event_listener( ) {
 	if( !m_eventlistener )
 		return;
 
-	g_csgo.m_game_event->RemoveListener( this );
+	//g_csgo.m_game_event->RemoveListener( this );
 }
 
 void c_event_listener::setup( ) {
@@ -25,7 +25,9 @@ void c_event_listener::setup( ) {
 	g_csgo.m_game_event->AddListener( this, "bullet_impact", false );
 }
 
-void c_event_listener::remove( ) { }
+void c_event_listener::remove( ) {
+	g_csgo.m_game_event->RemoveListener( this );
+}
 
 char *hitgroup_to_name( const int hitgroup ) {
 	switch( hitgroup ) {

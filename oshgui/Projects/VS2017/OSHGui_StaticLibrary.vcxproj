@@ -630,9 +630,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>oshgui_d</TargetName>
-    <OutDir>$(SolutionDir)Bin\Lib\$(PlatformTarget)\</OutDir>
-    <IntDir>$(Configuration)\$(PlatformTarget)\Lib\</IntDir>
+    <TargetName>oshgui_debug</TargetName>
+    <OutDir>$(SolutionDir)build\bin\lib_debug\</OutDir>
+    <IntDir>$(SolutionDir)\build\oshgui-obj-debug\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>oshgui_d</TargetName>
@@ -658,16 +658,17 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;NOMINMAX;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..;..\..\Dependencies\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244;4018;4351</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>jsoncpp_d.lib;freetype_d.lib;simpleimageloader_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype_d.lib;simpleimageloader_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>..\..\Dependencies\Lib\$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\Dependencies\Lib\$(PlatformTarget);..\..\Dependencies\Source\FreeType\Debug\x86;..\..\Dependencies\source\SimpleImageLoader\Debug\x86</AdditionalLibraryDirectories>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
