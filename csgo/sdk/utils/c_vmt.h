@@ -18,21 +18,18 @@ private:
 	}
 
 public:
-	c_vmt( ) : m_vmt_base{ 0 }, m_old_vmt{ nullptr }, m_total_methods{ 0 }, m_new_vmt{ nullptr },
-	           m_new_vmt_start{ nullptr } { }
+	c_vmt( ) : m_vmt_base{ 0 }, m_old_vmt{ nullptr }, m_total_methods{ 0 }, m_new_vmt{ nullptr }, m_new_vmt_start{ nullptr } { }
 
-	c_vmt( void *base ) : m_vmt_base{ 0 }, m_old_vmt{ nullptr }, m_total_methods{ 0 }, m_new_vmt{ nullptr },
-	                      m_new_vmt_start{ nullptr } {
+	explicit c_vmt( void *base ) : m_vmt_base{ 0 }, m_old_vmt{ nullptr }, m_total_methods{ 0 }, m_new_vmt{ nullptr }, m_new_vmt_start{ nullptr } {
 		init( base );
 	}
 
-	explicit c_vmt( uintptr_t base ) : m_vmt_base{ 0 }, m_old_vmt{ nullptr }, m_total_methods{ 0 }, m_new_vmt{ nullptr },
-									   m_new_vmt_start{ nullptr } {
+	explicit c_vmt( const uintptr_t base ) : m_vmt_base{ 0 }, m_old_vmt{ nullptr }, m_total_methods{ 0 }, m_new_vmt{ nullptr }, m_new_vmt_start{ nullptr } {
 		init( base );
 	}
 
 	~c_vmt( ) {
-		// todo - dex; what to do here?
+
 	}
 
 	bool init( void *base ) {
@@ -40,7 +37,6 @@ public:
 	}
 
 	bool init( uintptr_t base ) {
-
 		if( !base )
 			return false;
 

@@ -96,6 +96,8 @@ namespace hook {
 
 class c_hooks {
 public:
+	bool m_hooked_successful = false;
+
 	c_vmt m_directx;
 	c_vmt m_clientmode;
 	c_vmt m_client;
@@ -106,9 +108,9 @@ public:
 	c_vmt m_materialsystem;
 	c_vmt m_viewrender;
 
-	void init( );
-	void hook( );
-	void release( );
+	bool init( );
+	bool hook( );
+	bool release( );
 };
 
 extern c_hooks g_hooks;

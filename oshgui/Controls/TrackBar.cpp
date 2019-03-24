@@ -187,8 +187,8 @@ namespace OSHGui
 
 			label_value_->SetLocation( Drawing::PointF( sliderLocation_.Left - label_value_->GetWidth() / 2 + 5, 8 ) );
 		}
-		catch ( ... ) {
-
+		catch( const std::exception &ex ) {
+			_RPTF0( _CRT_ERROR, ex.what( ) );
 		}
 	}
 	//---------------------------------------------------------------------------

@@ -15,14 +15,22 @@ c_event_listener::~c_event_listener( ) {
 	//g_csgo.m_game_event->RemoveListener( this );
 }
 
-void c_event_listener::setup( ) {
+bool c_event_listener::setup( ) {
 	m_eventlistener = new c_event_listener( );
 	if( !m_eventlistener )
-		return;
+		return false;
 
 	g_csgo.m_game_event->AddListener( this, "player_hurt", false );
 	g_csgo.m_game_event->AddListener( this, "item_purchase", false );
 	g_csgo.m_game_event->AddListener( this, "bullet_impact", false );
+
+	if( !g_csgo.m_game_event->FindListener( this, "player_hurt" ) || !g_csgo.m_game_event->FindListener( this, "item_purchase" )
+		|| !g_csgo.m_game_event->FindListener( this, "bullet_impact" ) ) {
+		_RPT0( _CRT_ERROR, "Failed to setup event listener(s). Ignoring this message will result in instability or features not working." );
+		return false;
+	}
+
+	return true;
 }
 
 void c_event_listener::remove( ) {

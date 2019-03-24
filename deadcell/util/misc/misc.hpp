@@ -44,15 +44,15 @@ namespace util {
 				create_thread_ex(
 					&out,
 					THREAD_ALL_ACCESS,
-					0,
+					nullptr,
 					get_current_process(),
 					routine,
-					0,
+					nullptr,
 					0x4,
 					0,
 					0,
 					0,
-					0
+					nullptr
 				);
 			}
 
@@ -108,7 +108,7 @@ namespace util {
 				return 0;
 
 			// get rel32 offset.
-			uint32_t disp = *(uint32_t *)addr;
+			uint32_t disp = *reinterpret_cast< uint32_t * >( addr );
 			if( !disp )
 				return 0;
 
