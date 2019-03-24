@@ -897,6 +897,9 @@ namespace OSHGui {
 				return OnKeyUp( keyboard );
 			case KeyboardState::Character:
 				return OnKeyPress( keyboard );
+			case KeyboardState::Unknown: 
+				break;
+			default: break;
 			}
 		}
 

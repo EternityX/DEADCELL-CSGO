@@ -27,7 +27,7 @@ bool c_input::init( const std::string &window_name, OSHGui::Application *instanc
 }
 
 bool c_input::init( HWND wnd ) {
-	
+	return false;
 }
 
 bool c_input::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
@@ -299,5 +299,5 @@ bool c_input::key_pressed( int virtual_key ) {
 	if( !m_window_handle )
 		return false;
 
-	return m_key_pressed[ virtual_key ];
+	return m_key_pressed.at( virtual_key );
 }
