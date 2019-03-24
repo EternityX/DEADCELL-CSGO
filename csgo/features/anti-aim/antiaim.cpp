@@ -44,24 +44,15 @@ float at_target( ) {
 }
 
 void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
-	if ( g_cl.m_sendpacket ) {
-		ucmd->m_viewangles.y = m_real.y + g_cl.m_local->max_desync( );
-	}
-	else {
-		ucmd->m_viewangles.y += 180.f;
-	}
+	
 }
 
 void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
-	ucmd->m_viewangles.x = 89.98f;
+	
 }
 
 void c_antiaim::set_angles( CUserCmd *ucmd ) {
-	if ( !g_cl.m_local || !g_cl.m_local->alive( ) || !g_vars.antiaim.enabled || ( ucmd->m_buttons & IN_ATTACK ) != 0 )
-		return;
-
-	adjust_pitch( ucmd );
-	adjust_yaw( ucmd );
+	
 }
 
 float c_antiaim::best_head_yaw( ) {
