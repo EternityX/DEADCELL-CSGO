@@ -49,7 +49,7 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 }
 
 void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
-	if( !m_render_target || !m_instance )
+	if( !m_render_target || !m_instance || !m_geometry )
 		return;
 
 	m_render_target->Activate();
