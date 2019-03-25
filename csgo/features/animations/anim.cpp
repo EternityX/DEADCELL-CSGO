@@ -5,28 +5,35 @@ c_animations g_anim;
 // never finished.
 
 bool c_animations::init( ) {
-	if( !g_csgo.m_entity_list ) // should probably check for validity in interface_manager.h instead
-		return false;
-
 	g_csgo.m_entity_list->AddListenerEntity( this );
 
 	return true;
 }
 
-void c_animations::remove( ) {
-	g_csgo.m_entity_list->RemoveListenerEntity( this );
+bool c_animations::remove( ) {
+	try {
+		g_csgo.m_entity_list->RemoveListenerEntity( this );
 
-	for( int i = 0; i < 64; i++ ) {
-		if( m_track[ i ].m_hooked )
-			m_track[ i ].m_vmt->unhook_all( );
+		for( int i = 0; i < 64; i++ ) {
+			if( m_track.at( i ).m_hooked ) {
+				m_track.at( i ).m_vmt->unhook_all();
+			}
+		}
 	}
+	catch( const std::out_of_range &ex ) {
+		UNREFERENCED_PARAMETER( ex );
+		_RPT1( _CRT_ERROR, "Animation track exception.\n\n%s", ex.what( ) );
+		return false;
+	}
+
+	return true;
 }
 
 void c_animations::OnEntityCreated( C_BaseEntity *ent ) {
 	if( !ent )
 		return;
 
-	int index = ent->GetIndex( );
+	const int index = ent->GetIndex( );
 	if( index < 0 )
 		return;
 
@@ -44,9 +51,7 @@ void c_animations::OnEntityCreated( C_BaseEntity *ent ) {
 
 			break;
 		}
-		default: {
-			return;
-		}
+		default: break;
 	}
 
 }
@@ -59,7 +64,7 @@ void c_animations::OnEntityDeleted( C_BaseEntity *ent ) {
 	if( index < 0 )
 		return;
 
-	auto it = std::find_if( m_track.begin( ), m_track.end( ), [ & ]( const container_t &data ) {
+	const auto it = std::find_if( m_track.begin( ), m_track.end( ), [ & ]( const container_t &data ) {
 		return data.m_index == index;
 	} );
 

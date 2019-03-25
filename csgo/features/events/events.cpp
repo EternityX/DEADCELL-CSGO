@@ -33,8 +33,10 @@ bool c_event_listener::setup( ) {
 	return true;
 }
 
-void c_event_listener::remove( ) {
+bool c_event_listener::remove( ) {
 	g_csgo.m_game_event->RemoveListener( this );
+
+	return true;
 }
 
 char *hitgroup_to_name( const int hitgroup ) {

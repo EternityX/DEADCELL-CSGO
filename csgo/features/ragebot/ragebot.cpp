@@ -29,6 +29,7 @@ void c_ragebot::select_target( ) {
 
 	const short wpn_index = weapon->item_index( );
 
+	// this is really dirty.
 	if( wpn_index == WEAPON_FISTS
 		|| wpn_index == WEAPON_SPANNER
 		|| wpn_index == WEAPON_HAMMER
@@ -122,9 +123,8 @@ void c_ragebot::select_target( ) {
 					}
 				}
 			}
-			float distance = e->abs_origin( ).DistTo( local->abs_origin( ) );
-			rage_t data = rage_t( e, i, static_cast< int >( player_best_damage ), player_best_point, distance, _bones );
-			m_players.push_back( data );
+
+			m_players.push_back( rage_t( e, i, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones ) );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
@@ -139,7 +139,7 @@ void c_ragebot::select_target( ) {
 			}
 		} );
 	}
-	catch( const std::exception &ex ) {
+	catch( const std::out_of_range &ex ) {
 		UNREFERENCED_PARAMETER( ex );
 		_RPT0( _CRT_ERROR, ex.what( ) );
 	}
@@ -222,7 +222,7 @@ void c_ragebot::choose_angles( ){
 
 	std::array< matrix3x4_t, 128 > mat;
 
-	for ( auto &data : m_players ) {
+	for( auto &data : m_players ) {
 		auto target = data.m_player;
 
 		auto calc_damage = [ & ] (  ) {
@@ -245,10 +245,8 @@ void c_ragebot::choose_angles( ){
 			return false;
 		};
 		
-		if( calc_damage( ) ) {
-			break;
-		}
-		
+		if( calc_damage( ) )
+			break;		
 	}
 	if ( !selected_target )
 		return;
@@ -420,7 +418,7 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 				points.push_back( vec3_t( bbox->bb_max.x, bbox->bb_min.y, bbox->bb_min.z ) * scale );*/
 			}
 			else if( bbox->m_flRadius > 0.f ) { // pill.
-				float length = ( bbox->bb_min - bbox->bb_max ).Length( ) + bbox->m_flRadius * 2.f;
+				const float length = ( bbox->bb_min - bbox->bb_max ).Length( ) + bbox->m_flRadius * 2.f;
 
 				if( h != l_upperarm && h != r_upperarm && h != l_thigh && h != r_thigh ) {
 					points.push_back( center + vec3_t( length / 3.f, 0.f, 0.f ) );

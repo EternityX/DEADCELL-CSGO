@@ -24,7 +24,7 @@ public:
 	void OnEntityDeleted( C_BaseEntity *ent ) override;
 
 	bool init( );
-	void remove( );
+	bool remove( );
 
 	std::array< container_t, 64 > m_track;
 };

@@ -626,7 +626,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 	}
 
 	if( g_vars.misc.dangerzone_menu ) {
-		if( entity->origin( ).DistTo( local->origin( ) ) > g_vars.dz.max_item_distance )
+		if( entity->origin( ).distance( local->origin( ) ) > g_vars.dz.max_item_distance )
 			return;
 
 		if( client_class->m_ClassID == CItemCash && g_vars.dz.cash )

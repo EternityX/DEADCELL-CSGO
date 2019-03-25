@@ -100,7 +100,7 @@ void c_chams::push_players( ) {
 		if( player->immune( ) )
 			continue;
 
-		float dist = player->abs_origin( ).DistTo( C_CSPlayer::get_local( )->abs_origin( ) );
+		float dist = player->abs_origin( ).distance( C_CSPlayer::get_local( )->abs_origin( ) );
 		m_players.emplace_back( player, dist );
 	}
 

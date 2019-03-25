@@ -5,8 +5,8 @@
 
 using namespace renderer;
 
-c_renderer::c_renderer()
-	: m_renderer{ }, m_instance{ nullptr } { }
+c_renderer::c_renderer( )
+	: m_instance{ nullptr } { }
 
 void c_renderer::init( IDirect3DDevice9 *device ) {
 	m_renderer = std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device );
@@ -37,30 +37,30 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 	device->GetRenderState( D3DRS_COLORWRITEENABLE, &m_old_color_write_enable );
 	device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 
-	m_geometry = m_instance->GetRenderer().CreateGeometryBuffer();
+	m_geometry = m_instance->GetRenderer( ).CreateGeometryBuffer( );
 	if( !m_geometry )
 		return;
 
-	m_render_target = m_instance->GetRenderer().GetDefaultRenderTarget();
+	m_render_target = m_instance->GetRenderer( ).GetDefaultRenderTarget( );
 	if( !m_render_target )
 		return;
 
-	m_instance->GetRenderer().BeginRendering();
+	m_instance->GetRenderer( ).BeginRendering( );
 }
 
 void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
 	if( !m_render_target || !m_instance || !m_geometry )
 		return;
 
-	m_render_target->Activate();
+	m_render_target->Activate( );
 
 	m_render_target->Draw( *m_geometry );
 
-	m_render_target->Deactivate();
+	m_render_target->Deactivate( );
 
-	m_instance->Render();
+	m_instance->Render( );
 
-	m_instance->GetRenderer().EndRendering();
+	m_instance->GetRenderer( ).EndRendering( );
 
 	if( !m_old_color_write_enable )
 		return;
@@ -82,7 +82,6 @@ void c_renderer::filled_rect( const OSHGui::Drawing::Color &color, int x, int y,
 
 void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::Drawing::Color &color, const OSHGui::Drawing::Color &shadow_color, int x, int y, int flags, const std::string str, ... ) const {
 	va_list va;
-	int str_len;
 	std::string buf;
 
 	if( str.empty( ) )
@@ -90,7 +89,7 @@ void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::
 
 	va_start( va, str );
 
-	str_len = std::vsnprintf( nullptr, 0, str.c_str( ), va );
+	int str_len = std::vsnprintf( nullptr, 0, str.c_str( ), va );
 	if( str_len < 0 ) {
 		va_end( va );
 		return;
@@ -141,7 +140,7 @@ void c_renderer::line( const OSHGui::Drawing::Color &color, float x, float y, fl
 void c_renderer::circle( const OSHGui::Drawing::Color &color, int x, int y, int radius ) const {
 	OSHGui::Drawing::Graphics g( *m_geometry );
 
-	g.FillCircle( color, OSHGui::Drawing::PointI( x, y ),radius );
+	g.FillCircle( color, OSHGui::Drawing::PointI( x, y ), radius );
 }
 
 OSHGui::Drawing::FontPtr c_renderer::get_font( int index ) {
