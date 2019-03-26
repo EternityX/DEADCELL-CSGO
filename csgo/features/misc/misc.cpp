@@ -371,7 +371,7 @@ void c_misc::nightmode( int override_brightness ) {
 		auto material = g_csgo.m_material_system->FindMaterial( i );
 		if( !material ) {
 			console::print( "Failed to retrieve material" );
-			return;
+			continue;
 		}
 
 		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
@@ -402,7 +402,7 @@ void c_misc::transparent_props( int override_transparency ) {
 		auto material = g_csgo.m_material_system->FindMaterial( i );
 		if( !material ) {
 			console::print( "Failed to retrieve material" );
-			return;
+			continue;
 		}
 
 		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
