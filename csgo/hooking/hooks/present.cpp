@@ -26,7 +26,7 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 		console::print( "exception caught inside visuals" );
 	}
 
-	g_nadepred.draw( );
+	g_nadepred.run( );
 
 	g_notify.draw( );
 

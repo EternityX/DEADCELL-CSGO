@@ -47,7 +47,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	g_misc.unpredicted_vel = g_cl.m_local->velocity( );
 
-	g_nadepred.trace( cmd );
+	g_nadepred.run( cmd );
 
 	g_engine_pred.pre_start( );
 	g_engine_pred.start( cmd ); {
