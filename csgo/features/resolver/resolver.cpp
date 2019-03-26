@@ -23,13 +23,6 @@ void c_resolver::frame_stage_notify( ) {
 void c_resolver::resolve_player( C_CSPlayer* e ) {
 	auto& data = m_resolver_data[ e->GetIndex( ) ];
 
-	if( e->velocity( ).Length2D( ) > 0.1 || e->flags( ) ^ FL_ONGROUND ) {
-		data.m_resolve_mode = RESOLVE_MODE_LBYT;
-		data.m_resolved_yaw = e->lby_t( );
-	} else {
-		data.m_resolve_mode = RESOLVE_MODE_NONE;
-	}
-
 	if( data.m_resolve_mode != RESOLVE_MODE_NONE )
 		e->angles( ).y = data.m_resolved_yaw;
 }
