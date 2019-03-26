@@ -38,17 +38,15 @@ void c_misc::automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd ) 
 
 	const WeaponInfo_t *wep_info = active_weapon->get_weapon_info();
 
-	if( wep_info->full_auto || !( wep_info->type == WEAPONTYPE_PISTOL ) ) 
+	if( wep_info->full_auto || !( wep_info->type == WEAPONTYPE_PISTOL ) || !( cmd->m_buttons & IN_ATTACK ) ) 
 		return;
 
-	static auto firing = false;
-	if( cmd->m_buttons & IN_ATTACK ) {
-		if( firing ) {
-			cmd->m_buttons &= ~IN_ATTACK;
-		}
-	}
-
-	firing = ( cmd->m_buttons & IN_ATTACK ) != 0;
+	float next_wep_attack = active_weapon->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+	float next_local_attack = g_cl.m_local->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+	if ( next_wep_attack >= 0.f || next_local_attack >= 0.f )
+		cmd->m_buttons &= ~IN_ATTACK;
+	else
+		cmd->m_buttons |= IN_ATTACK;
 }
 
 
