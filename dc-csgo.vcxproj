@@ -131,6 +131,7 @@
     <ClInclude Include="csgo\sdk\interfaces\iweaponsystem.h" />
     <ClInclude Include="csgo\sdk\interfaces\steam.h" />
     <ClInclude Include="csgo\sdk\sdk.h" />
+    <ClInclude Include="csgo\sdk\stack.h" />
     <ClInclude Include="csgo\sdk\utils\c_vmt.h" />
     <ClInclude Include="csgo\sdk\utils\interface_manager.h" />
     <ClInclude Include="csgo\sdk\utils\netvars.h" />

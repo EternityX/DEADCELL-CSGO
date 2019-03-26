@@ -438,5 +438,8 @@
     <ClInclude Include="csgo\features\fakelag\fakelag.h">
       <Filter>dc-csgo\features\fakelag</Filter>
     </ClInclude>
+    <ClInclude Include="csgo\sdk\stack.h">
+      <Filter>dc-csgo\sdk</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
