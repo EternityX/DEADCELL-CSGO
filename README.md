@@ -3,7 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/hed52wml7ovx3qxb?svg=true)](https://ci.appveyor.com/project/EternityX/deadcell-csgo) 
 ![image](https://img.shields.io/github/issues/EternityX/DEADCELL-CSGO.svg) 
 
-![image](https://img.shields.io/discord/559937792092667904.svg?label=discord)
+![image](https://img.shields.io/discord/559937792092667904.svg?label=discord&style=for-the-badge)
 
 
 
