@@ -3,14 +3,15 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/hed52wml7ovx3qxb?svg=true)](https://ci.appveyor.com/project/EternityX/deadcell-csgo) 
 ![image](https://img.shields.io/github/issues/EternityX/DEADCELL-CSGO.svg) 
 
-![image](https://img.shields.io/discord/559937792092667904.svg?label=discord&style=for-the-badge)
-
 
 
 ## Preface
 Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
 
 If you want a clean base without any features, please see the [deadcell SDK](https://github.com/alpine971/DEADCELL-SDK).
+
+## Discord
+![image](https://img.shields.io/discord/559937792092667904.svg?label=discord&style=for-the-badge)
 
 ## Known issues
 - Crashes and lots of them.
