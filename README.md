@@ -13,6 +13,9 @@ If you want a clean base without any features, please see the [deadcell SDK](htt
 ## Discord
 ![image](https://img.shields.io/discord/559937792092667904.svg?label=discord&style=for-the-badge)
 
+
+https://discord.gg/dEMgzUZ
+
 We invite anyone interested in supporting development to join our Discord.
 
 This is *not* for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
