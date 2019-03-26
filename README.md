@@ -1,6 +1,11 @@
-# deadcell 
+# deadcell ![image](https://img.shields.io/github/stars/EternityX/DEADCELL-CSGO.svg?style=social) 
 
-[![Build status](https://ci.appveyor.com/api/projects/status/hed52wml7ovx3qxb?svg=true)](https://ci.appveyor.com/project/EternityX/deadcell-csgo) ![image](https://img.shields.io/github/issues/EternityX/DEADCELL-CSGO.svg) 
+[![Build status](https://ci.appveyor.com/api/projects/status/hed52wml7ovx3qxb?svg=true)](https://ci.appveyor.com/project/EternityX/deadcell-csgo) 
+![image](https://img.shields.io/github/issues/EternityX/DEADCELL-CSGO.svg) 
+
+![image](https://img.shields.io/discord/559937792092667904.svg?label=discord)
+
+
 
 ## Preface
 Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
