@@ -369,8 +369,10 @@ void c_misc::nightmode( int override_brightness ) {
 
 	for( int i = g_csgo.m_material_system->FirstMaterial(); i != g_csgo.m_material_system->InvalidMaterial(); i = g_csgo.m_material_system->NextMaterial( i ) ) {
 		auto material = g_csgo.m_material_system->FindMaterial( i );
-		if( !material )
+		if( !material ) {
 			console::print( "Failed to retrieve material" );
+			continue;
+		}
 
 		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
 			material->ColorModulate( brightness, brightness, brightness + 0.05f );
@@ -398,8 +400,10 @@ void c_misc::transparent_props( int override_transparency ) {
 
 	for( int i = g_csgo.m_material_system->FirstMaterial(); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
 		auto material = g_csgo.m_material_system->FindMaterial( i );
-		if( !material )
+		if( !material ) {
 			console::print( "Failed to retrieve material" );
+			continue;
+		}
 
 		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
 			material->AlphaModulate( translucency );
