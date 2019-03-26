@@ -3,7 +3,7 @@
 c_resolver g_resolver;
 
 void c_resolver::frame_stage_notify( ) {
-	if( g_vars.rage.enabled )
+	if( !g_vars.rage.enabled )
 		return;
 
 	auto local = C_CSPlayer::get_local( );
