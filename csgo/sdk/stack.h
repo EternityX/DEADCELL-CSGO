@@ -4,7 +4,7 @@ class Stack : public Address
 {
 public:
 	// ctor.
-	__forceinline Stack() : Address{ *(uintptr_t *)(_AddressOfReturnAddress()) - sizeof(uintptr_t) } { }
+	__forceinline Stack() : Address{ *(uintptr_t *)((uintptr_t)_AddressOfReturnAddress() - sizeof(uintptr_t)) } { }
 
 	// get return address.
 	__forceinline Address get_return_address() {
