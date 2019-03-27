@@ -31,9 +31,6 @@
     <Filter Include="deadcell\oshgui">
       <UniqueIdentifier>{dc18e173-a715-43c6-835b-9487a0e0b137}</UniqueIdentifier>
     </Filter>
-    <Filter Include="deadcell\oshgui\d3d9">
-      <UniqueIdentifier>{8def3a69-d9b6-49c2-9f08-fa7e41201af4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="deadcell\input">
       <UniqueIdentifier>{d1347303-a56d-404d-9fcf-72db47d97c6e}</UniqueIdentifier>
     </Filter>
@@ -63,24 +60,6 @@
     <ClInclude Include="console\console.hpp">
       <Filter>deadcell\console</Filter>
     </ClInclude>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9GeometryBuffer.hpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9Renderer.hpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9RenderTarget.hpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9Texture.hpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9TextureTarget.hpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClInclude>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9ViewportTarget.hpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClInclude>
     <ClInclude Include="oshgui\renderer.hpp">
       <Filter>deadcell\oshgui</Filter>
     </ClInclude>
@@ -106,21 +85,6 @@
     </ClCompile>
     <ClCompile Include="console\console.cpp">
       <Filter>deadcell\console</Filter>
-    </ClCompile>
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9GeometryBuffer.cpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9Renderer.cpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9Texture.cpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9TextureTarget.cpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
-    </ClCompile>
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9ViewportTarget.cpp">
-      <Filter>deadcell\oshgui\d3d9</Filter>
     </ClCompile>
     <ClCompile Include="oshgui\renderer.cpp">
       <Filter>deadcell\oshgui</Filter>

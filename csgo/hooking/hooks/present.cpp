@@ -8,7 +8,7 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 	if( !once ) {
 		g_renderer.init( device );
 		g_menu.init( );
-		g_input.init( "Valve001", g_renderer.m_instance );
+		g_input.init( "Valve001", g_renderer.get_instance( ) );
 		once = true;
 	}
 

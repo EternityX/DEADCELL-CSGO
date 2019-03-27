@@ -5,16 +5,12 @@
 
 using namespace renderer;
 
-c_renderer::c_renderer( )
-	: m_instance{ nullptr } { }
+c_renderer::c_renderer( ){ }
 
 void c_renderer::init( IDirect3DDevice9 *device ) {
-	m_renderer = std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device );
 
 	// initialize oshgui with our renderer.
-	OSHGui::Application::Initialize( std::move( m_renderer ) );
-
-	m_instance = OSHGui::Application::InstancePtr( );
+	OSHGui::Application::Initialize( std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device ) );
 
 	m_fonts.resize( FONT_MAX );
 
@@ -25,7 +21,7 @@ void c_renderer::init( IDirect3DDevice9 *device ) {
 	m_fonts[ FONT_MARLETT_45PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( marlett_font ), 45.f, true );
 	m_fonts[ FONT_VERDANA_20PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( enhance_font ), 9.f, true );
 
-	m_instance->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
+	get_instance( )->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
 }
 
 void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
@@ -37,30 +33,26 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 	device->GetRenderState( D3DRS_COLORWRITEENABLE, &m_old_color_write_enable );
 	device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 
-	m_geometry = m_instance->GetRenderer( ).CreateGeometryBuffer( );
-	if( !m_geometry )
-		return;
+	get_renderer( ).BeginRendering( );
 
-	m_render_target = m_instance->GetRenderer( ).GetDefaultRenderTarget( );
-	if( !m_render_target )
-		return;
-
-	m_instance->GetRenderer( ).BeginRendering( );
+	m_geometry = get_renderer( ).CreateGeometryBuffer( );
 }
 
 void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
-	if( !m_render_target || !m_instance || !m_geometry )
+	if( !m_geometry )
 		return;
 
-	m_render_target->Activate( );
+	auto &render_target = get_renderer( ).GetDefaultRenderTarget( );
 
-	m_render_target->Draw( *m_geometry );
+	render_target->Activate( );
 
-	m_render_target->Deactivate( );
+	render_target->Draw( *m_geometry );
 
-	m_instance->Render( );
+	render_target->Deactivate( );
 
-	m_instance->GetRenderer( ).EndRendering( );
+	get_instance( )->Render( );
+
+	get_renderer( ).EndRendering( );
 
 	if( !m_old_color_write_enable )
 		return;
@@ -148,9 +140,9 @@ OSHGui::Drawing::FontPtr c_renderer::get_font( int index ) {
 }
 
 OSHGui::Application *c_renderer::get_instance( ) const {
-	return m_instance;
+	return OSHGui::Application::InstancePtr( );
 }
 
 OSHGui::Drawing::Renderer &c_renderer::get_renderer( ) const {
-	return m_instance->GetRenderer( );
+	return get_instance( )->GetRenderer( );
 }

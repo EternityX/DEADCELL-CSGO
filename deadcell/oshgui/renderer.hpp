@@ -26,9 +26,7 @@ namespace renderer {
 		ulong_t m_old_color_write_enable;
 
 	public:
-		OSHGui::Application *m_instance;
 		OSHGui::Drawing::GeometryBufferPtr m_geometry;
-		OSHGui::Drawing::RenderTargetPtr m_render_target;
 		std::vector< OSHGui::Drawing::FontPtr > m_fonts;
 
 		c_renderer();

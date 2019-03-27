@@ -18,12 +18,12 @@ c_menu::c_menu()
 
 void c_menu::init() {
 	m_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_main_form >() );
-	m_form->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_form->SetFont( g_renderer.get_instance( )->GetDefaultFont() );
 
 	m_dangerzone_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_dangerzone_form >( ) );
-	m_dangerzone_form->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_dangerzone_form->SetFont( g_renderer.get_instance( )->GetDefaultFont() );
 
-	g_renderer.m_instance->Run( m_form );
+	g_renderer.get_instance( )->Run( m_form );
 
 	m_dangerzone_form->SetEnabled( true );
 	m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
@@ -31,7 +31,7 @@ void c_menu::init() {
 
 	m_form->Show( m_dangerzone_form );
 
-	g_renderer.m_instance->Enable( );
+	g_renderer.get_instance( )->Enable( );
 }
 
 /* CONTROL PLACEMENT */
@@ -77,7 +77,7 @@ void c_main_form::init_tabs() {
 	for( int i = 0; i < PAGE_MAX; ++i )
 		m_pages.push_back( std::make_shared< OSHGui::TabPage >( ) );
 
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
 	// set page titles.
 	m_pages.at( PAGE_RAGEBOT )->SetText( "Ragebot" );
@@ -87,7 +87,7 @@ void c_main_form::init_tabs() {
 	m_pages.at( PAGE_PLAYERLIST )->SetText( "Skinchanger" );
 
 	// set tab style.
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	m_tab_control->SetSize( 576, 380 );
 	m_tab_control->SetBackColor( OSHGui::Drawing::Color::FromRGB( 32, 32, 38 ) );
 	m_tab_control->SetLocation( 6, -15 );
@@ -107,7 +107,7 @@ void c_main_form::ragebot_tab() {
 	auto *aimbot_tab = new OSHGui::TabControl();
 	aimbot_tab->SetSize( 241, 310 );
 	aimbot_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	aimbot_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	aimbot_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	aimbot_tab->SetButtonWidth( 121 );
 
 	auto *aimbot_page = new OSHGui::TabPage();
@@ -168,7 +168,7 @@ void c_main_form::ragebot_tab() {
 	auto antiaim_tab = new OSHGui::TabControl();
 	antiaim_tab->SetSize( 241, 310 );
 	antiaim_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	antiaim_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	antiaim_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	antiaim_tab->SetButtonWidth( 121 );
 
 	auto *antiaim_page = new OSHGui::TabPage();
@@ -284,7 +284,7 @@ void c_main_form::visuals_tab() {
 	auto player_tab = new OSHGui::TabControl();
 	player_tab->SetSize( 241, 310 );
 	player_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	player_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	player_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	player_tab->SetButtonWidth( 81 );
 
 	auto generic_esp_page = new OSHGui::TabPage();
@@ -358,7 +358,7 @@ void c_main_form::visuals_tab() {
 	auto world_tab = new OSHGui::TabControl();
 	world_tab->SetSize( 241, 100 );
 	world_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	world_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	world_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	world_tab->SetButtonWidth( 121 );
 
 	auto generic_world = new OSHGui::TabPage();
@@ -397,7 +397,7 @@ void c_main_form::visuals_tab() {
 	auto effects_tab = new OSHGui::TabControl();
 	effects_tab->SetSize( 241, 100 );
 	effects_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	effects_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	effects_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	effects_tab->SetButtonWidth( 121 );
 
 	auto general_effects_page = new OSHGui::TabPage();
@@ -641,14 +641,14 @@ void c_dangerzone_form::init_tabs( ) {
 	for( int i = 0; i < PAGE_MAX; ++i )
 		m_pages.push_back( std::make_shared< OSHGui::TabPage >( ) );
 
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
 	// set page titles.
 	m_pages.at( PAGE_VISUALS )->SetText( "Visuals" );
 	m_pages.at( PAGE_MISC )->SetText( "Miscellaneous" );
 
 	// set tab style.
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	m_tab_control->SetSize( 277, 360 );
 	m_tab_control->SetBackColor( OSHGui::Drawing::Color::FromRGB( 32, 32, 38 ) );
 	m_tab_control->SetLocation( 6, 5 );
@@ -731,7 +731,7 @@ c_colorpicker::c_colorpicker( Control *parent, Control *control, float *col ) {
 }
 
 void c_checkbox::init( const AnsiString &text, int x, int y, Control *parent, bool *cvar ) {
-	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
+	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
 	SetFont( g_renderer.m_fonts.at( FONT_VERDANA_7PX ) );
 	SetLocation( x, y );
 	SetText( text );
@@ -956,7 +956,7 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	} );
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
-	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
+	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
 	if( text.empty( ) ){
 		SetLocation( x - 1, y - 20 );
 	}
@@ -993,7 +993,7 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	} );
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
-	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
+	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
 	if( text.empty( ) ){
 		SetLocation( x - 1, y - 20 );
 	}
