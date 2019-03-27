@@ -578,6 +578,8 @@
     <TargetName>oshgui_debug</TargetName>
     <OutDir>$(SolutionDir)build\bin\lib_debug\</OutDir>
     <IntDir>$(SolutionDir)\build\oshgui-obj-debug\</IntDir>
+    <IncludePath>$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>oshgui_d</TargetName>

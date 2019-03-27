@@ -206,7 +206,7 @@ public:
 			|| weapon_index == WEAPON_SSG08;
 	}
 
-	const WeaponInfo_t *get_weapon_info( ) {
+	WeaponInfo_t *get_weapon_info( ) {
 		return g_csgo.m_weapon_system->GetWpnData( this->item_index( ) );
 	}
 
