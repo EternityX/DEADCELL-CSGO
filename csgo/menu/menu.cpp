@@ -103,6 +103,7 @@ void c_main_form::init_tabs() {
 void c_main_form::playerlist_tab() {
 	
 }
+
 void c_main_form::ragebot_tab() {
 	auto *aimbot_tab = new OSHGui::TabControl();
 	aimbot_tab->SetSize( 241, 310 );
