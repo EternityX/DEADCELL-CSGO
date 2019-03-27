@@ -17,6 +17,7 @@ public:
 	void transparent_props( int override_transparency = 0 );
 	void capsule_overlay( C_CSPlayer * e, float duration, std::array<matrix3x4_t, 128> mat );
 	void no_smoke( ClientFrameStage_t stage );
+	void disable_assert( );
 };
 
 extern c_misc g_misc;

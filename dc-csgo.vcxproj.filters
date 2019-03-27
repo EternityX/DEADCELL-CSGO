@@ -441,5 +441,8 @@
     <ClInclude Include="csgo\sdk\stack.h">
       <Filter>dc-csgo\sdk</Filter>
     </ClInclude>
+    <ClInclude Include="csgo\sdk\interfaces\icommandline.h">
+      <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

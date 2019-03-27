@@ -5,10 +5,9 @@
 
 using namespace renderer;
 
-c_renderer::c_renderer( ){ }
+c_renderer::c_renderer( ) { }
 
 void c_renderer::init( IDirect3DDevice9 *device ) {
-
 	// initialize oshgui with our renderer.
 	OSHGui::Application::Initialize( std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device ) );
 
@@ -33,15 +32,15 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 	device->GetRenderState( D3DRS_COLORWRITEENABLE, &m_old_color_write_enable );
 	device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 
-	m_geometry = get_renderer().CreateGeometryBuffer();
+	m_geometry = get_renderer( ).CreateGeometryBuffer( );
 	if( !m_geometry )
 		return;
 
-	m_render_target = get_renderer().GetDefaultRenderTarget();
+	m_render_target = get_renderer( ).GetDefaultRenderTarget( );
 	if( !m_render_target )
 		return;
 
-	get_renderer().BeginRendering();
+	get_renderer( ).BeginRendering( );
 }
 
 void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
@@ -56,15 +55,15 @@ void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
 
 	m_render_target->SetArea( OSHGui::Drawing::RectangleF( rect.left, rect.top, rect.right, rect.bottom ) );
 
-	m_render_target->Activate();
+	m_render_target->Activate( );
 
 	m_render_target->Draw( *m_geometry );
 
-	m_render_target->Deactivate();
+	m_render_target->Deactivate( );
 
-	get_instance( )->Render();
+	get_instance( )->Render( );
 
-	get_instance( )->GetRenderer().EndRendering();
+	get_instance( )->GetRenderer( ).EndRendering();
 
 	if( !m_old_color_write_enable )
 		return;

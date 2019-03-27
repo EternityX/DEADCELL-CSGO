@@ -2,6 +2,8 @@
 
 class c_csgo : protected c_interface_mgr {
 private:
+	using CommandLine_t = ICommandLine *( __stdcall * )( );
+
 public:
 	bool m_interfaces_successful = false;
 
@@ -43,6 +45,7 @@ public:
 	IMDLCache *m_modelcache                = nullptr;
 	IViewRender *m_viewrender              = nullptr;
 	CGlowObjectManager *m_glow_obj_manager = nullptr;
+	CommandLine_t m_command_line           = nullptr;
 
 	c_csgo() { }
 
@@ -59,8 +62,12 @@ public:
 		if( !m_d3d9_vmt )
 			return false;
 
-		m_memalloc = *pe::get_export< IMemAlloc** >( pe::get_module( "tier0.dll" ), "g_pMemAlloc" );
+		m_memalloc = *pe::get_export< IMemAlloc ** >( pe::get_module( "tier0.dll" ), "g_pMemAlloc" );
 		if( !m_memalloc )
+			return false;
+
+		m_command_line = pe::get_export< CommandLine_t >( pe::get_module( "tier0.dll" ), "CommandLine" );
+		if( !m_command_line )
 			return false;
 
 		// interfaces.
@@ -148,11 +155,11 @@ public:
 		if( !m_game_event )
 			return false;
 
-		m_render_beams = *pattern::find< IViewRenderBeams **>( m_client_dll, "B9 ? ? ? ? A1 ? ? ? ? FF 10 A1 ? ? ? ? B9", 1 );
+		m_render_beams = *pattern::find< IViewRenderBeams ** >( m_client_dll, "B9 ? ? ? ? A1 ? ? ? ? FF 10 A1 ? ? ? ? B9", 1 );
 		if( !m_render_beams )
 			return false;
 
-		m_weapon_system = *pattern::find< IWeaponSystem **>( m_client_dll, "8B 35 ? ? ? ? FF 10 0F B7 C0", 2 );
+		m_weapon_system = *pattern::find< IWeaponSystem ** >( m_client_dll, "8B 35 ? ? ? ? FF 10 0F B7 C0", 2 );
 		if( !m_weapon_system )
 			return false;
 

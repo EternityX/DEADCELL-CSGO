@@ -61,6 +61,7 @@
 #include "interfaces\cphysicssurface.h"
 #include "interfaces\ilocalize.h"
 #include "interfaces\steam.h"
+#include "interfaces\icommandline.h"
 
 #include "..\sdk\utils\interface_manager.h"
 #include "csgo\csgo.h"
