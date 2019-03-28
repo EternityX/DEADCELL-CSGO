@@ -107,7 +107,7 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		}
 	}
 
-	if ( !strcmp( m_event->GetName( ), "weapon_fire" ) ) {
+	if( !strcmp( m_event->GetName( ), "weapon_fire" ) ) {
 		int user_id = m_event->GetInt( "userid" );
 
 		if( !g_vars.misc.bullet_impacts )
