@@ -4,8 +4,18 @@
 #include "../autowall/autowall.h"
 
 class c_antiaim {
-	float best_head_yaw( );
+private:
+	enum pitch {
+		AA_PITCH_NONE,
+		AA_PITCH_DEFAULT
+	};
 
+	enum yaw {
+		AA_YAW_NONE,
+		AA_YAW_BACKWARDS
+	};
+
+	float best_head_yaw( );
 public:
 	void adjust_yaw( CUserCmd *ucmd );
 	void adjust_pitch( CUserCmd *ucmd );
