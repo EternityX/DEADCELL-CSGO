@@ -22,15 +22,16 @@
 #include "Exports.hpp"
 #include "FormManager.hpp"
 #include "Event/Hotkey.hpp"
+#include "../csgo/features/vars.h"
 
 namespace OSHGui {
 	class Control;
 	class Form;
 
 	/**
-	 * Stellt Methoden und Eigenschaften für die Verwaltung einer
-	 * Anwendung zur Verfügung, z.B. Methoden zum Starten und Beenden einer
-	 * Anwendung sowie für das Abrufen von Informationen zu einer Anwendung.
+	 * Stellt Methoden und Eigenschaften fÃ¼r die Verwaltung einer
+	 * Anwendung zur VerfÃ¼gung, z.B. Methoden zum Starten und Beenden einer
+	 * Anwendung sowie fÃ¼r das Abrufen von Informationen zu einer Anwendung.
 	 */
 	class OSHGUI_EXPORT Application {
 		friend Control;
@@ -72,20 +73,20 @@ namespace OSHGui {
 		 */
 		GuiRenderSurface &GetRenderSurface();
 		/**
-		 * Legt die Display-Größe fest.
+		 * Legt die Display-GrÃ¶ÃŸe fest.
 		 *
 		 * @param size
 		 */
 		void DisplaySizeChanged( const Drawing::SizeF &size );
 
 		/**
-		 * Legt die Standardschrift für das Gui fest.
+		 * Legt die Standardschrift fÃ¼r das Gui fest.
 		 *
 		 * \param font Standardschrift
 		 */
 		void SetDefaultFont( const Drawing::FontPtr &font );
 		/**
-		 * Ruft die Standardschrift für das Gui ab.
+		 * Ruft die Standardschrift fÃ¼r das Gui ab.
 		 *
 		 * \return Standardschrift
 		 */
@@ -119,13 +120,13 @@ namespace OSHGui {
 		OSHGui::Drawing::Color GetPrimaryColor();
 
 		/**
-		 * Legt den Style für das Gui fest.
+		 * Legt den Style fÃ¼r das Gui fest.
 		 *
 		 * \param style
 		 */
 		void SetStyle( const Drawing::Style &style );
 		/**
-		 * Ruft den Style für das Gui ab.
+		 * Ruft den Style fÃ¼r das Gui ab.
 		 *
 		 * \return style
 		 */
@@ -151,14 +152,14 @@ namespace OSHGui {
 		 */
 		void Run( const std::shared_ptr< Form > &mainForm );
 		/**
-		 * Gibt eine MouseMessage an die geöffneten Formen weiter.
+		 * Gibt eine MouseMessage an die geÃ¶ffneten Formen weiter.
 		 *
 		 * \param mouse
 		 * \return true, falls die Nachricht verarbeitet wurde
 		 */
 		bool ProcessMouseMessage( const MouseMessage &mouse );
 		/**
-		 * Gibt eine KeyboardMessage an die geöffneten Formen weiter.
+		 * Gibt eine KeyboardMessage an die geÃ¶ffneten Formen weiter.
 		 *
 		 * \param keyboard
 		 * \return true, falls die Nachricht verarbeitet wurde
@@ -166,7 +167,7 @@ namespace OSHGui {
 		bool ProcessKeyboardMessage( const KeyboardMessage &keyboard );
 
 		/**
-		 * Zeichnet die geöffneten Formen.
+		 * Zeichnet die geÃ¶ffneten Formen.
 		 */
 		void Render();
 
@@ -238,7 +239,7 @@ namespace OSHGui {
 		Control *FocusedControl;
 		Control *CaptureControl;
 		Control *MouseEnteredControl;
-		Drawing::Color primary_color_ = OSHGui::Drawing::Color::FromARGB( 255, 206, 115, 136 );
+		Drawing::Color primary_color_ = OSHGui::Drawing::Color::FromARGB(g_vars.misc.gui_menu_color);
 
 		bool isEnabled_;
 	};
