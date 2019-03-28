@@ -71,6 +71,9 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 
 		vec3_t position{ m_event->GetFloat( "x" ), m_event->GetFloat( "y" ), m_event->GetFloat( "z" ) };
 
+		if( g_vars.misc.bullet_impacts )
+			g_csgo.m_debug_overlay->AddBoxOverlay( position, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 255, 0, 0, 127, g_vars.misc.bullet_impacts_duration );
+
 		if( g_vars.visuals.impact ) {
 			BeamInfo_t beam_info;
 			beam_info.m_nType = TE_BEAMPOINTS;
@@ -101,6 +104,39 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 			if( beam )
 				g_csgo.m_render_beams->DrawBeam( beam );
 		}
+	}
+
+	// todo: look into this, weapon_fire isn't getting fired?
+	if ( !strcmp( m_event->GetName( ), "weapon_fire" ) ) {
+		auto local = C_CSPlayer::get_local( );
+		if( !local || !local->alive( ) )
+			return;
+
+		if( !g_vars.misc.bullet_impacts )
+			return;
+
+		int user_id = m_event->GetInt( "userid" );
+		if( user_id != g_csgo.m_engine->GetLocalPlayer( ) )
+			return;
+
+		trace_t trace;
+		Ray_t ray;
+		CTraceFilter filter;
+		filter.m_skip = local;
+
+		vec3_t rem, forward, right, up,
+			src = local->eye_pos( );
+
+		vec3_t view_angles = g_cl.m_cmd->m_viewangles;
+		view_angles += local->punch_angle( ) * 2.f;
+
+		math::angle_to_vectors( view_angles, &forward, &right, &up );
+
+		forward *= local->get_active_weapon( )->get_weapon_info( )->range;
+		rem = src + forward;
+
+		g_csgo.m_engine_trace->TraceRay( Ray_t{ src, rem }, 0x46004003, &filter, &trace );
+		g_csgo.m_debug_overlay->AddBoxOverlay( trace.endpos, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 0, 0, 255, 127, g_vars.misc.bullet_impacts_duration );
 	}
 
 	if( !strcmp( m_event->GetName( ), "player_hurt" ) ) {
