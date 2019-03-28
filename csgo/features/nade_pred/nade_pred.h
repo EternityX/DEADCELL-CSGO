@@ -2,25 +2,6 @@
 #include "../../inc.hpp"
 #include "../visuals/visuals.h"
 
-class c_nadepoint {
-public:
-	c_nadepoint( ) {
-		m_valid = false;
-	}
-
-	c_nadepoint( vec3_t start, vec3_t end, bool plane, bool valid, vec3_t normal, bool detonate ) {
-		m_start = start;
-		m_end = end;
-		m_plane = plane;
-		m_valid = valid;
-		m_normal = normal;
-		m_detonate = detonate;
-	}
-
-	vec3_t m_start, m_end, m_normal;
-	bool m_valid, m_plane, m_detonate;
-};
-
 enum nade_throw_act {
 	ACT_NONE,
 	ACT_THROW,
@@ -28,15 +9,30 @@ enum nade_throw_act {
 	ACT_DROP
 };
 
-class c_nade_prediction {
-	std::array< c_nadepoint, 500 >	_points { };
-	bool		 _predicted = false;
+class c_grenade_prediction {
+private:
+	std::vector<vec3_t> m_path;
+	std::vector<std::pair<vec3_t, QAngle>> m_others;
 
-	void predict( CUserCmd *ucmd );
-	bool detonated( C_BaseCombatWeapon*weapon, float time, trace_t &trace );
+	int m_type = 0;
+	int m_act = 0;
+
 public:
-	void trace( CUserCmd *ucmd );
-	void draw( );
+	void	setup(vec3_t& vecSrc, vec3_t& vecThrow, vec3_t viewangles);
+	void	simulate(CViewSetup* setup);
+
+	int		step(vec3_t& vecSrc, vec3_t& vecThrow, int tick, float interval);
+	bool	check_detonate(const vec3_t& vecThrow, const trace_t& tr, int tick, float interval);
+
+	void	trace_hull(vec3_t& src, vec3_t&, trace_t& tr);
+	void	add_gravity_move(vec3_t& move, vec3_t& vel, float frametime, bool onground);
+	void	push_entity(vec3_t& src, const vec3_t& move, trace_t& tr);
+	void	resolve_fly_collision_custom(trace_t& tr, vec3_t& vecVelocity, float interval);
+	int		physics_clip_velocity(const vec3_t& in, const vec3_t& normal, vec3_t& out, float overbounce);
+
+	void	run(CUserCmd* cmd);
+	void	run(CViewSetup* setup);
+	void	run();
 };
 
-extern c_nade_prediction g_nadepred;
+extern c_grenade_prediction g_nadepred;
