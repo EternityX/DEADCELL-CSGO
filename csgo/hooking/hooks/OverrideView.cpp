@@ -1,6 +1,5 @@
 #include "../../inc.hpp"
 #include "../../features/misc/misc.h"
-#include "../../features/nade_pred/nade_pred.h"
 
 void __fastcall hook::OverrideView( uintptr_t ecx, uintptr_t edx, CViewSetup *pSetup ) {
 
@@ -13,8 +12,6 @@ void __fastcall hook::OverrideView( uintptr_t ecx, uintptr_t edx, CViewSetup *pS
 				pSetup->m_fov = g_vars.visuals.effects.camera_fov;
 			}
 		}
-
-		g_nadepred.run(pSetup);
 	}
 
 	g_misc.thirdperson( );

@@ -277,12 +277,3 @@ public:
 
 	float w;
 };
-
-class QAngle : public vec3_t {
-public:
-	QAngle() { pitch = x, yaw = y, roll = z; }
-
-	float pitch;
-	float yaw;
-	float roll;
-};
