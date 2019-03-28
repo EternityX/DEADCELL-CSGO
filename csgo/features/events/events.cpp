@@ -23,9 +23,10 @@ bool c_event_listener::setup( ) {
 	g_csgo.m_game_event->AddListener( this, "player_hurt", false );
 	g_csgo.m_game_event->AddListener( this, "item_purchase", false );
 	g_csgo.m_game_event->AddListener( this, "bullet_impact", false );
+	g_csgo.m_game_event->AddListener( this, "weapon_fire", false );
 
 	if( !g_csgo.m_game_event->FindListener( this, "player_hurt" ) || !g_csgo.m_game_event->FindListener( this, "item_purchase" )
-		|| !g_csgo.m_game_event->FindListener( this, "bullet_impact" ) ) {
+		|| !g_csgo.m_game_event->FindListener( this, "bullet_impact" ) || !g_csgo.m_game_event->FindListener( this, "weapon_fire" ) ) {
 		_RPT0( _CRT_ERROR, "Failed to setup event listener(s). Ignoring this message will result in instability or features not working." );
 		return false;
 	}
@@ -72,7 +73,7 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		vec3_t position{ m_event->GetFloat( "x" ), m_event->GetFloat( "y" ), m_event->GetFloat( "z" ) };
 
 		if( g_vars.misc.bullet_impacts )
-			g_csgo.m_debug_overlay->AddBoxOverlay( position, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 255, 0, 0, 127, g_vars.misc.bullet_impacts_duration );
+			g_csgo.m_debug_overlay->AddBoxOverlay( position, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 0, 0, 255, 127, g_vars.misc.bullet_impacts_duration );
 
 		if( g_vars.visuals.impact ) {
 			BeamInfo_t beam_info;
@@ -106,17 +107,18 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		}
 	}
 
-	// todo: look into this, weapon_fire isn't getting fired?
 	if ( !strcmp( m_event->GetName( ), "weapon_fire" ) ) {
-		auto local = C_CSPlayer::get_local( );
-		if( !local || !local->alive( ) )
-			return;
+		int user_id = m_event->GetInt( "userid" );
 
 		if( !g_vars.misc.bullet_impacts )
 			return;
 
-		int user_id = m_event->GetInt( "userid" );
-		if( user_id != g_csgo.m_engine->GetLocalPlayer( ) )
+		auto local = C_CSPlayer::get_local( );
+		if( !local || !local->alive( ) )
+			return;
+
+		auto ent = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetPlayerForUserID( user_id ) );
+		if( !ent || local != ent )
 			return;
 
 		trace_t trace;
@@ -127,8 +129,10 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		vec3_t rem, forward, right, up,
 			src = local->eye_pos( );
 
+		static ConVar* weapon_recoil_scale = g_csgo.m_convar->FindVar("weapon_recoil_scale");
+
 		vec3_t view_angles = g_cl.m_cmd->m_viewangles;
-		view_angles += local->punch_angle( ) * 2.f;
+		view_angles += local->punch_angle( ) * weapon_recoil_scale->GetFloat();
 
 		math::angle_to_vectors( view_angles, &forward, &right, &up );
 
@@ -136,7 +140,7 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		rem = src + forward;
 
 		g_csgo.m_engine_trace->TraceRay( Ray_t{ src, rem }, 0x46004003, &filter, &trace );
-		g_csgo.m_debug_overlay->AddBoxOverlay( trace.endpos, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 0, 0, 255, 127, g_vars.misc.bullet_impacts_duration );
+		g_csgo.m_debug_overlay->AddBoxOverlay( trace.endpos, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 255, 0, 0, 127, g_vars.misc.bullet_impacts_duration );
 	}
 
 	if( !strcmp( m_event->GetName( ), "player_hurt" ) ) {
