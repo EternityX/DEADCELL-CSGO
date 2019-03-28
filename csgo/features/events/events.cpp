@@ -107,7 +107,6 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		}
 	}
 
-	// todo: look into this, weapon_fire isn't getting fired?
 	if ( !strcmp( m_event->GetName( ), "weapon_fire" ) ) {
 		int user_id = m_event->GetInt( "userid" );
 
