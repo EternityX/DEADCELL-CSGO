@@ -2,7 +2,80 @@
 
 c_antiaim g_antiaim;
 
-float at_target( ) {
+bool c_antiaim::allow( CUserCmd *ucmd ){
+	if( !g_vars.antiaim.enabled )
+		return false;
+
+	auto local = C_CSPlayer::get_local( );
+	if ( !local || local->flags( ) & FL_FROZEN || !local->alive( ) ) {
+		return false;
+	}
+
+	if( local->get_move_type( ) & ( MOVETYPE_LADDER || MOVETYPE_NOCLIP ) ){
+		return false;
+	}
+
+	auto weapon = local->get_active_weapon( );
+	if( !weapon ){
+		return false;
+	}
+
+	if( ucmd->m_buttons & IN_USE ){
+		return false;
+	}
+
+	if( weapon->get_weapon_info( )->type == WEAPONTYPE_KNIFE ){
+		float next_secondary_attack = weapon->next_sec_attack( ) - g_csgo.m_global_vars->m_cur_time;
+		float next_primary_attack = weapon->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
+		if( ( ucmd->m_buttons & IN_ATTACK && next_primary_attack <= 0.f ) || ( ucmd->m_buttons & IN_ATTACK2 && next_secondary_attack <= 0.f ) ){
+			return false;
+		}
+	}
+
+	if( ucmd->m_buttons & IN_ATTACK && local->can_shoot( weapon ) ){
+		return false;
+	}
+
+	if ( local->get_active_weapon( )->is_being_thrown( ) ) {
+		return false;
+	}
+
+	return true;
+}
+
+void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
+	switch( g_vars.antiaim.yaw ){
+		case 1:
+			at_target( ) != 0.f ? m_input.y = at_target( ) - 180.f + g_vars.antiaim.jitter : m_input.y += 180.f + g_vars.antiaim.jitter;
+			break;
+		default : break;
+	}
+}
+
+void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
+	switch( g_vars.antiaim.pitch ){
+		case 1:
+			m_input.x = 89.f;
+			break;
+		default : break;
+	}
+}
+
+void c_antiaim::set_angles( CUserCmd *ucmd ) {
+	if( !allow( ucmd ) )
+		return;
+
+	m_input = ucmd->m_viewangles;
+
+	adjust_yaw( ucmd );
+
+	adjust_pitch( ucmd );
+
+	ucmd->m_viewangles = m_input;
+}
+
+
+float c_antiaim::at_target( ) {
 	auto local = C_CSPlayer::get_local( );
 	if ( !local )
 		return 0.f;
@@ -41,20 +114,4 @@ float at_target( ) {
 	}
 
 	return best_angles.y;
-}
-
-void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
-	
-}
-
-void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
-	
-}
-
-void c_antiaim::set_angles( CUserCmd *ucmd ) {
-	
-}
-
-float c_antiaim::best_head_yaw( ) {
-	return 0.f;
 }

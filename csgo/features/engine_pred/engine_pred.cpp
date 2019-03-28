@@ -33,7 +33,7 @@ void c_engine_pred::pre_start( ) {
 
 	if( g_csgo.m_clientstate->m_nDeltaTick > 0 ) {
 		g_csgo.m_prediction->Update( g_csgo.m_clientstate->m_nDeltaTick, g_csgo.m_clientstate->m_nDeltaTick > 0,
-		                             g_csgo.m_clientstate->m_nLastAcknowledgedCommand, g_csgo.m_clientstate->m_nLastOutgoingCommand + g_csgo.m_clientstate->m_nChokedCommands );
+		                             g_csgo.m_clientstate->m_nLastCommandAck, g_csgo.m_clientstate->m_nLastOutgoingCommand + g_csgo.m_clientstate->m_nChokedCommands );
 	}
 }
 

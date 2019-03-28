@@ -18,8 +18,6 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	if( ret )
 		g_csgo.m_prediction->SetLocalViewangles( cmd->m_viewangles );
 
-	g_fakelag.think( cmd );
-
 	INetChannelInfo *channel_info = g_csgo.m_engine->GetNetChannelInfo( );
 	if( channel_info ) {
 		float latency = channel_info->GetLatency( FLOW_INCOMING ) + channel_info->GetLatency( FLOW_OUTGOING );
@@ -59,6 +57,9 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 		g_ragebot.work( cmd );
 
 		g_antiaim.set_angles( cmd );
+
+		g_fakelag.think( cmd );
+
 	} g_engine_pred.end( );
 
 	g_misc.fix_movement( cmd, wish_angle );

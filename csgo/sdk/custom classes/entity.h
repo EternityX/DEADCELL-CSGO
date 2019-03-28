@@ -282,11 +282,6 @@ public:
 		return **reinterpret_cast< studiohdr_t *** >( uintptr_t( this ) + 0x294C );
 	}
 
-	template< typename T >
-	T &get( uintptr_t offset ) {
-		return *reinterpret_cast< T* >( reinterpret_cast< uintptr_t >( this ) + offset );
-	}
-
 	CUtlVector< AnimationLayer_t >& animoverlays( ) {
 		return *reinterpret_cast< CUtlVector< AnimationLayer_t >* >( reinterpret_cast< uintptr_t >( this ) + 0x2980 );
 	}
