@@ -454,3 +454,11 @@ void c_misc::no_smoke( ClientFrameStage_t stage ) {
 		mat->SetMaterialVarFlag( MATERIAL_VAR_NO_DRAW, g_vars.visuals.misc.remove_smoke );
 	}
 }
+
+void c_misc::disable_assert( ) {
+	using SetAllAssertsDisabled_t = void( __stdcall * )( bool bAssertsEnabled );
+
+	const SetAllAssertsDisabled_t SetAllAssertsDisabled = pe::get_export< SetAllAssertsDisabled_t >( pe::get_module( "tier0.dll" ), "SetAllAssertsDisabled" );
+	if( SetAllAssertsDisabled )
+		SetAllAssertsDisabled( true );
+}

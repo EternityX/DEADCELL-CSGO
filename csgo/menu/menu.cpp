@@ -103,6 +103,7 @@ void c_main_form::init_tabs() {
 void c_main_form::playerlist_tab() {
 	
 }
+
 void c_main_form::ragebot_tab() {
 	auto *aimbot_tab = new OSHGui::TabControl();
 	aimbot_tab->SetSize( 241, 310 );
@@ -205,14 +206,14 @@ void c_main_form::misc_tab() {
 
 	auto thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
 	auto activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
-	auto thirdpersondead = new c_checkbox( "Force Thirdperson when spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
+	auto thirdpersondead = new c_checkbox( "Force thirdperson while spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
 	auto thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", general_groupbox, &g_vars.misc.thirdperson_grenade );
 	auto bhop = new c_checkbox( "Bunny hop", general_groupbox, &g_vars.misc.bhop );
 	auto air_strafe = new c_checkbox( "Air strafe", general_groupbox, &g_vars.misc.air_strafe );
 	auto autozeus = new c_checkbox( "Automatic zeus", general_groupbox, &g_vars.misc.autozeus );
 	auto radar = new c_checkbox( "Radar", general_groupbox, &g_vars.visuals.radar );
 
-	auto nightmode = new c_slider( "World Brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
+	auto nightmode = new c_slider( "World brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
 	nightmode->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
 		g_misc.nightmode( );
 	} );
@@ -271,9 +272,11 @@ void c_main_form::misc_tab() {
 	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
 	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
 
-	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 82 );
-	auto client_hitbox = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.clienthitboxes );
-	auto duraction_hitbox = new c_slider( "Duration", other_groupbox, 0.f, 5.f, &g_vars.misc.duration, 0, 0.f, "s" );
+	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 92 );
+	auto client_hitboxes = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.client_hitboxes);
+	auto client_hitboxes_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.client_hitboxes_duration, 0, 2.f, "s" );
+	auto bullet_impacts = new c_checkbox( "Bullet impacts", other_groupbox, &g_vars.misc.bullet_impacts );
+	auto bullet_impacts_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.bullet_impacts_duration, 0, 4.f, "s" );
 
 	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
 	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
@@ -957,11 +960,8 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
 	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
-	if( text.empty( ) ){
-		SetLocation( x - 1, y - 20 );
-	}
-	else
-		SetLocation( x - 1, y );
+	SetLocation( x, y );
+
 	SetMinimum( min );
 	SetMaximum( max );
 	SetPrecision( 0 );
@@ -994,11 +994,8 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
 	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
-	if( text.empty( ) ){
-		SetLocation( x - 1, y - 20 );
-	}
-	else
-		SetLocation( x - 1, y );
+	SetLocation( x, y );
+
 	SetMinimum( min );
 	SetMaximum( max );
 	SetPrecision( precision );
@@ -1032,11 +1029,35 @@ c_slider::c_slider( const AnsiString &text, int x, int y, Control *parent, float
 }
 
 c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, int *value, int default_value, std::string append_text ) {
-	init( text, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2, g_menu.get_y_pos( ) + 4, parent, min, max, value, default_value, append_text );
-	g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+	int x = parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2;
+	int y = g_menu.get_y_pos( ) + 4;
+
+	if( text.empty() ) {
+		x -= 2;
+		y -= 16;
+	}
+
+	init( text, x, y, parent, min, max, value, default_value, append_text );
+
+	if( text.empty( ) )
+		g_menu.push_y_pos( Control::GetSize( ).Height - 4 );
+	else
+		g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
 }
 
 c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, float *value, int precision, float default_value, std::string append_text ) {
-	init( text, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2, g_menu.get_y_pos( ) + 4, parent, min, max, value, precision, default_value, append_text );
-	g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+	int x = parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2;
+	int y = g_menu.get_y_pos( ) + 4;
+
+	if( text.empty() ) {
+		x -= 2;
+		y -= 16;
+	}
+
+	init( text, x, y, parent, min, max, value, precision, default_value, append_text );
+
+	if( text.empty( ) )
+		g_menu.push_y_pos( Control::GetSize( ).Height - 4 );
+	else
+		g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
 }

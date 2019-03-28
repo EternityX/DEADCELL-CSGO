@@ -284,8 +284,8 @@ void c_ragebot::choose_angles( ){
 		weapon->update_accuracy( );
 		m_cmd->m_viewangles -= local->punch_angle( ) * 2.f;
 
-		if( g_vars.misc.clienthitboxes )
-			g_misc.capsule_overlay( selected_target, g_vars.misc.duration, mat );
+		if( g_vars.misc.client_hitboxes )
+			g_misc.capsule_overlay( selected_target, g_vars.misc.client_hitboxes_duration, mat );
 
 		if( !g_vars.rage.silent ){
 			g_csgo.m_engine->SetViewAngles( m_cmd->m_viewangles );

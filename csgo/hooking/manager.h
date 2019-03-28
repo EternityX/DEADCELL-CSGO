@@ -25,9 +25,9 @@ namespace hook {
 		using DoPostScreenEffects_t = bool (__thiscall *)( uintptr_t, const CViewSetup * );
 		using DispatchUserMessage_t = bool (__thiscall *)( uintptr_t, unsigned int, unsigned int, unsigned int, const void * );
 		using LockCursor_t = void (__thiscall *)( ISurface * );
-		using GetMaterial_t = IMaterial *( __thiscall* )( uintptr_t, const char *, const char*, bool, const char * );
+		using GetMaterial_t = IMaterial *( __thiscall*)( uintptr_t, const char *, const char *, bool, const char * );
 		using RenderSmokeOverlay_t = bool (__thiscall *)( uintptr_t, bool );
-		using RunCommand_t = void( __thiscall *)( uintptr_t, C_BasePlayer*, CUserCmd*, IMoveHelper* );
+		using RunCommand_t = void( __thiscall *)( uintptr_t, C_BasePlayer *, CUserCmd *, IMoveHelper * );
 
 	};
 
@@ -84,8 +84,7 @@ namespace hook {
 	bool __fastcall ShouldDrawFog( uintptr_t ecx, uintptr_t edx );
 	void __fastcall OverrideView( uintptr_t ecx, uintptr_t edx, CViewSetup *pSetup );
 	float __fastcall GetViewModelFOV( uintptr_t ecx, uintptr_t edx );
-	IMaterial * __fastcall GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain,
-		const char *complain_prefix );
+	IMaterial * __fastcall GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain, const char *complain_prefix );
 	void __fastcall SceneEnd( uintptr_t ecx, uintptr_t edx );
 	void __fastcall DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRenderContext *ctx, void *state,
 	                                  const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld );

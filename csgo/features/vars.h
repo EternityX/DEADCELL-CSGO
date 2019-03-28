@@ -114,8 +114,10 @@ public:
 		bool fast_duck;
 		bool dangerzone_menu;
 		int hitmarker_sound;
-		bool clienthitboxes;
-		float duration = 2.f;
+		bool client_hitboxes;
+		float client_hitboxes_duration = 2.f;
+		bool bullet_impacts;
+		float bullet_impacts_duration = 4.f;
 	} misc;
 	struct antiaim{
 		bool enabled;

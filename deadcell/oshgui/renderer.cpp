@@ -5,10 +5,9 @@
 
 using namespace renderer;
 
-c_renderer::c_renderer( ){ }
+c_renderer::c_renderer( ) { }
 
 void c_renderer::init( IDirect3DDevice9 *device ) {
-
 	// initialize oshgui with our renderer.
 	OSHGui::Application::Initialize( std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device ) );
 
@@ -33,26 +32,38 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 	device->GetRenderState( D3DRS_COLORWRITEENABLE, &m_old_color_write_enable );
 	device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 
-	get_renderer( ).BeginRendering( );
-
 	m_geometry = get_renderer( ).CreateGeometryBuffer( );
-}
-
-void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
 	if( !m_geometry )
 		return;
 
-	auto &render_target = get_renderer( ).GetDefaultRenderTarget( );
+	m_render_target = get_renderer( ).GetDefaultRenderTarget( );
+	if( !m_render_target )
+		return;
 
-	render_target->Activate( );
+	get_renderer( ).BeginRendering( );
+}
 
-	render_target->Draw( *m_geometry );
+void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
+	if( !m_render_target )
+		return;
 
-	render_target->Deactivate( );
+	D3DDEVICE_CREATION_PARAMETERS creation_parameters;
+	RECT rect;
+
+	device->GetCreationParameters( &creation_parameters );
+	GetClientRect( creation_parameters.hFocusWindow, &rect );
+
+	m_render_target->SetArea( OSHGui::Drawing::RectangleF( rect.left, rect.top, rect.right, rect.bottom ) );
+
+	m_render_target->Activate( );
+
+	m_render_target->Draw( *m_geometry );
+
+	m_render_target->Deactivate( );
 
 	get_instance( )->Render( );
 
-	get_renderer( ).EndRendering( );
+	get_instance( )->GetRenderer( ).EndRendering();
 
 	if( !m_old_color_write_enable )
 		return;

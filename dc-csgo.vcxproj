@@ -105,6 +105,7 @@
     <ClInclude Include="csgo\sdk\interfaces\iclientnetworkable.h" />
     <ClInclude Include="csgo\sdk\interfaces\iclientrenderable.h" />
     <ClInclude Include="csgo\sdk\interfaces\iclientunknown.h" />
+    <ClInclude Include="csgo\sdk\interfaces\icommandline.h" />
     <ClInclude Include="csgo\sdk\interfaces\icvar.h" />
     <ClInclude Include="csgo\sdk\interfaces\iefx.h" />
     <ClInclude Include="csgo\sdk\interfaces\ienginesounds.h" />
