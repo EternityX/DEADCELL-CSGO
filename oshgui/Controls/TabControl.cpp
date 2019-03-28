@@ -425,7 +425,7 @@ namespace OSHGui {
 			g.FillRectangleGradient( Color::FromARGB( 255, 55, 55, 64 ), PointF( 0, 0 ), GetSize() );
 			g.FillRectangleGradient( ColorRectangle( color, Color::FromARGB( 255, 35, 35, 43 ) ), PointF( 1, 1 ),
 			                         GetSize() - SizeF( 2, 0 ) );
-			g.FillRectangle( OSHGui::Drawing::Color::FromARGB( 255, 206, 115, 136 ), PointF( 1, 24 ), SizeF( GetWidth() - 2, 1 ) );
+			g.FillRectangle( OSHGui::Drawing::Color::FromARGB(g_vars.misc.gui_menu_color), PointF( 1, 24 ), SizeF( GetWidth() - 2, 1 ) );
 		}
 		else {
 			const auto backInactive = ( isInside_
