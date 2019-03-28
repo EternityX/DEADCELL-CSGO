@@ -178,7 +178,7 @@ namespace OSHGui {
 		g.FillRectangleGradient( ColorRectangle( Color::FromARGB( 255, 14, 14, 22 ), Color::FromARGB( 255, 23, 23, 30 ) ),
 		                         RectangleF( PointF( 1, captionBar_->GetBottom() - 13 ), SizeF( GetWidth() - 2, 25 ) ) );
 
-		g.FillRectangle( Color::FromARGB( 255, 206, 115, 136 ), RectangleF( PointF( 2, -2 ), SizeF( GetSize().Width - 4, 2 ) ) );
+		g.FillRectangle( Color::FromARGB(g_vars.misc.gui_menu_color), RectangleF( PointF( 2, -2 ), SizeF( GetSize().Width - 4, 2 ) ) );
 
 		/*ImagePtr image = Image::FromFile( "outlets.png" );
 
