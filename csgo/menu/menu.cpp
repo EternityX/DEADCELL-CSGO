@@ -187,9 +187,9 @@ void c_main_form::ragebot_tab() {
 	antiaim_groupbox->AddControl( antiaim_tab );
 	g_menu.set_x_pos( 19 );
 
-	//auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
-	//auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
-	//auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
+	auto *aa_enabled = new c_checkbox("Enabled", antiaim_page, &g_vars.antiaim.enabled);
+	auto *pitch = new c_combo("Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15);
+	auto *yaw = new c_combo("Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15);
 	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
 
 	g_menu.set_y_pos( 10 );
@@ -206,7 +206,7 @@ void c_main_form::misc_tab() {
 
 	auto thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
 	auto activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
-	auto thirdpersondead = new c_checkbox( "Force Thirdperson when spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
+	auto thirdpersondead = new c_checkbox("Force thirdperson while spectating", general_groupbox, &g_vars.misc.thirdperson_dead);
 	auto thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", general_groupbox, &g_vars.misc.thirdperson_grenade );
 	auto bhop = new c_checkbox( "Bunny hop", general_groupbox, &g_vars.misc.bhop );
 	auto air_strafe = new c_checkbox( "Air strafe", general_groupbox, &g_vars.misc.air_strafe );
@@ -272,9 +272,12 @@ void c_main_form::misc_tab() {
 	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
 	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
 
-	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 82 );
-	auto client_hitbox = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.clienthitboxes );
-	auto duraction_hitbox = new c_slider( "Duration", other_groupbox, 0.f, 5.f, &g_vars.misc.duration, 0, 0.f, "s" );
+
+	auto other_groupbox = new c_groupbox("Other", general_groupbox->GetRight() + 19, log_groupbox->GetBottom() + 19, 259, 92);
+	auto client_hitboxes = new c_checkbox("Client hitboxes", other_groupbox, &g_vars.misc.client_hitboxes);
+	auto client_hitboxes_duration = new c_slider("", other_groupbox, 0.f, 5.f, &g_vars.misc.client_hitboxes_duration, 0, 2.f, "s");
+	auto bullet_impacts = new c_checkbox("Bullet impacts", other_groupbox, &g_vars.misc.bullet_impacts);
+	auto bullet_impacts_duration = new c_slider("", other_groupbox, 0.f, 5.f, &g_vars.misc.bullet_impacts_duration, 0, 4.f, "s");
 
 	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
 	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
@@ -953,7 +956,7 @@ c_hotkey::c_hotkey( const AnsiString &text, Control *parent, int *cvar, int pare
 }
 
 /* SLIDER */
-void c_slider::init( const AnsiString &text, int x, int y, Control *parent, float min, float max, int *value, int default_value, std::string append_text) {
+void c_slider::init(const AnsiString &text, int x, int y, Control *parent, float min, float max, int *value, int default_value, std::string append_text) {
 	std::once_flag once_flag;
 	std::call_once( once_flag, [ & ] {
 		*value = default_value;
@@ -961,12 +964,8 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
 	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
+	SetLocation( x, y );
 
-	if( text.empty( ) ){
-		SetLocation( x - 1, y - 20 );
-	}
-	else
-		SetLocation( x - 1, y );
 	SetMinimum( min );
 	SetMaximum( max );
 	SetPrecision( 0 );
@@ -1000,11 +999,8 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
 	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
-	if( text.empty( ) ){
-		SetLocation( x - 1, y - 20 );
-	}
-	else
-		SetLocation( x - 1, y );
+	SetLocation( x, y );
+
 	SetMinimum( min );
 	SetMaximum( max );
 	SetPrecision( precision );
@@ -1038,12 +1034,36 @@ c_slider::c_slider( const AnsiString &text, int x, int y, Control *parent, float
 	init( text, x, y, parent, min, max, value, precision, default_value, append_text );
 }
 
-c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, int *value, int default_value, std::string append_text ) {
-	init( text, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2, g_menu.get_y_pos( ) + 4, parent, min, max, value, default_value, append_text );
-	g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+c_slider::c_slider(const AnsiString &text, Control *parent, float min, float max, int *value, int default_value, std::string append_text) {
+	int x = parent->GetWidth() / 2 - Control::GetWidth() / 2;
+	int y = g_menu.get_y_pos() + 4;
+
+	if (text.empty()) {
+		x -= 2;
+		y -= 16;
+	}
+
+	init(text, x, y, parent, min, max, value, default_value, append_text);
+
+	if (text.empty())
+		g_menu.push_y_pos(Control::GetSize().Height - 4);
+	else
+		g_menu.push_y_pos(Control::GetSize().Height + 10);
 }
 
-c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, float *value, int precision, float default_value, std::string append_text ) {
-	init( text, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2, g_menu.get_y_pos( ) + 4, parent, min, max, value, precision, default_value, append_text );
-	g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+c_slider::c_slider(const AnsiString &text, Control *parent, float min, float max, float *value, int precision, float default_value, std::string append_text) {
+	int x = parent->GetWidth() / 2 - Control::GetWidth() / 2;
+	int y = g_menu.get_y_pos() + 4;
+
+	if (text.empty()) {
+		x -= 2;
+		y -= 16;
+	}
+
+	init(text, x, y, parent, min, max, value, precision, default_value, append_text);
+
+	if (text.empty())
+		g_menu.push_y_pos(Control::GetSize().Height - 4);
+	else
+		g_menu.push_y_pos(Control::GetSize().Height + 10);
 }
