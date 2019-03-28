@@ -291,7 +291,7 @@ namespace OSHGui {
 			if( firstVisibleItemIndex_ + i == selectedIndex_ ) {
 				g.FillRectangle( Color::FromARGB( 255, 54, 54, 64 ), PointF( itemX - 1, itemY + i * padding - 1 ),
 				                 SizeF( itemAreaSize_.Width + 2, padding ) );
-				g.DrawString( items_[ firstVisibleItemIndex_ + i ]->GetItemText(), GetFont(), Color::FromARGB( 255, 206, 115, 136 ),
+				g.DrawString( items_[ firstVisibleItemIndex_ + i ]->GetItemText(), GetFont(), Color::FromARGB(g_vars.misc.gui_menu_color),
 				              PointF( itemX + 1, itemY + i * padding ) );
 			}
 			else {
