@@ -16,7 +16,7 @@ void c_fakelag::think( CUserCmd* cmd ) {
 				break;
 			}
 			case 1: { // Adaptive
-				choke = std::min< int >( static_cast< int >( std::ceilf( 64 / ( g_cl.m_local->velocity( ).Length2D( ) * g_csgo.m_global_vars->m_interval_per_tick ) ) ), 14 );
+				choke = std::min< int >( static_cast< int >( std::ceilf( 64 / ( g_cl.m_local->velocity( ).Length( ) * g_csgo.m_global_vars->m_interval_per_tick ) ) ), 14 );
 				break;
 			}
 		}
