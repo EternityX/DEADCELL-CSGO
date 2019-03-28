@@ -46,7 +46,7 @@ public:
 		bool flash_bar;
 		float flash_bar_color[ 4 ] = { 220, 255, 255, 255 };
 		bool glow;
-		float glow_color[4] = { 155, 110, 198, 37 };
+		float glow_color[4] = { 155, 206, 115, 136 };
 		int filter;
 		bool dropped_weapons;
 		bool dropped_ammo;
@@ -71,7 +71,7 @@ public:
 			float vis_color[ 4 ] = { 220, 255, 0, 0 };
 			float hid_color[ 4 ] = { 220, 255, 255, 255 };
 			bool local;
-			float local_col[ 4 ] = { 220, 110, 198, 37 };
+			float local_col[ 4 ] = { 220, 206, 115, 136 };
 		} chams;
 		struct misc {
 			bool no_flash;
@@ -114,8 +114,10 @@ public:
 		bool fast_duck;
 		bool dangerzone_menu;
 		int hitmarker_sound;
-		bool clienthitboxes;
-		float duration = 2.f;
+		bool client_hitboxes;
+		float client_hitboxes_duration = 2.f;
+		bool bullet_impacts;
+		float bullet_impacts_duration = 4.f;
 		float gui_menu_color[4] = { 255, 206, 115, 136 };
 	} misc;
 	struct antiaim{
