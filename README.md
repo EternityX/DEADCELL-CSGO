@@ -8,6 +8,8 @@
 ## Preface
 Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
 
+This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. However we are working toward a stable, free, feature-rich cheat for everyone to use!
+
 If you want a clean base without any features, please see the [deadcell SDK](https://github.com/alpine971/DEADCELL-SDK).
 
 ## Discord
@@ -21,8 +23,9 @@ We invite anyone interested in supporting development to join our Discord.
 This is *not* for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
 
 ## Known issues
-- Crashes and lots of them.
-- Game will crash when using -d3d9ex as a launch option.
+- Rendering issues when multi-core rendering is enabled (menu crashes and visuals flickering)
+- Weapon script assertions.
+- Does not support the -d3d9ex launch option.
 - Lots of code is unoptimized.
 - If you come across any more issues, please notify us via the issue tracker.
 
