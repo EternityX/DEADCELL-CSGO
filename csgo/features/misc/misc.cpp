@@ -388,7 +388,8 @@ void c_misc::nightmode( int override_brightness ) {
 void c_misc::transparent_props( int override_transparency ) {
 	if( !g_csgo.m_engine->IsConnected() || !g_cl.m_local )
 		return;
-
+	if ( g_vars.misc.prop_transparency == 100 )
+		return;
 	// disable fast path.
 	static auto r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
 	r_drawspecificstaticprop->SetValue( 0 );
