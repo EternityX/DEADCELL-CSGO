@@ -410,7 +410,7 @@ void c_misc::transparent_props( int override_transparency ) {
 	}
 }
 
-void c_misc::capsule_overlay( C_CSPlayer* e, float duration, std::array< matrix3x4_t, 128 > mat )
+void c_misc::capsule_overlay( C_CSPlayer* e, float duration, matrix3x4_t* mat )
 {
 	if ( !e )
 		return;
@@ -419,7 +419,7 @@ void c_misc::capsule_overlay( C_CSPlayer* e, float duration, std::array< matrix3
 	if ( !studio_model )
 		return;
 
-	mstudiohitboxset_t* hitboxset = studio_model->pHitboxSet( 0 );
+	mstudiohitboxset_t* hitboxset = studio_model->pHitboxSet( e->hitbox_set( ) );
 	if ( !hitboxset )
 		return;
 
@@ -430,10 +430,11 @@ void c_misc::capsule_overlay( C_CSPlayer* e, float duration, std::array< matrix3
 			continue;
 		
 		
-		vec3_t min = math::vector_transform( h->bb_min, mat.at( h->bone_index ) );
-		vec3_t max = math::vector_transform( h->bb_max, mat.at( h->bone_index ) );
+		vec3_t min = math::vector_transform( h->bb_min, mat[ h->bone_index ] );
+		vec3_t max = math::vector_transform( h->bb_max, mat[ h->bone_index ] );
 
-		g_csgo.m_debug_overlay->AddCapsuleOverlayVisible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
+		if( h->m_flRadius != -1 )
+			g_csgo.m_debug_overlay->AddCapsuleOverlayVisible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
 	}
 }
 
