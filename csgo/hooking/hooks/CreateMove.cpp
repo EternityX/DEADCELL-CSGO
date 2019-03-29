@@ -55,10 +55,12 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 			//g_misc.auto_zeus( cmd );
 
 		g_ragebot.work( cmd );
+		
+		g_fakelag.think( cmd );
 
 		g_antiaim.set_angles( cmd );
 
-		g_fakelag.think( cmd );
+		
 
 	} g_engine_pred.end( );
 
