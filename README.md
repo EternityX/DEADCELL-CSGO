@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="500" height="250" src="https://deadcell.cc/media/text-logo-black.png">
+  <img width="500" height="250" src="https://i.imgur.com/cEwKoeV.png">
 </p>
 
 [![Discord](https://img.shields.io/discord/559937792092667904.svg?label=discord)](https://discord.gg/dEMgzUZ)
