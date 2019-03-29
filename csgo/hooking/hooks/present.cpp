@@ -19,12 +19,7 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 
 	g_renderer.start_drawing( device );
 
-	try {
-		g_visuals.run( );
-	}
-	catch(...) {
-		console::print( "exception caught inside visuals" );
-	}
+	g_visuals.run( );
 
 	g_nadepred.draw( );
 

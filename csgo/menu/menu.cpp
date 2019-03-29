@@ -173,17 +173,17 @@ void c_main_form::ragebot_tab() {
 	antiaim_tab->SetButtonWidth( 121 );
 
 	auto *antiaim_page = new OSHGui::TabPage();
-	antiaim_page->SetText( "Anti-Aim" );
+	antiaim_page->SetText( "Anti-aim" );
 	antiaim_page->SetBorder( false );
 
 	auto *fakelag_page = new OSHGui::TabPage();
-	fakelag_page->SetText( "Fake Lag" );
+	fakelag_page->SetText( "Fake lag" );
 	fakelag_page->SetBorder( false );
 
 	antiaim_tab->AddTabPage( antiaim_page );
 	antiaim_tab->AddTabPage( fakelag_page );
 
-	auto *antiaim_groupbox = new c_groupbox( "Anti-Aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
+	auto *antiaim_groupbox = new c_groupbox( "Anti-aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
 	antiaim_groupbox->AddControl( antiaim_tab );
 	g_menu.set_x_pos( 19 );
 
@@ -415,7 +415,7 @@ void c_main_form::visuals_tab() {
 	auto remove_flash = new c_checkbox( "Flash", removals_page, &g_vars.visuals.misc.no_flash );
 	auto remove_fog = new c_checkbox( "Fog", removals_page, &g_vars.visuals.misc.fog );
 	auto remove_smoke = new c_checkbox( "Smoke", removals_page, &g_vars.visuals.misc.remove_smoke );
-	auto remove_scope = new c_checkbox( "Scope Overlay", removals_page, &g_vars.visuals.misc.remove_scope );
+	auto remove_scope = new c_checkbox( "Scope overlay", removals_page, &g_vars.visuals.misc.remove_scope );
 	//auto remove_blue = new c_checkbox( "Aug scope blur", removals_page, &g_vars.visuals.misc.remove_blur );
 
 	auto scope_color = new c_colorpicker( removals_page, remove_scope, g_vars.visuals.misc.scope_color );
@@ -576,7 +576,7 @@ void c_main_form::config_tab( ) {
 			return;
 		}
 
-		OSHGui::MessageBox::ShowDialog( "Are you sure you want to delete the selected profile?", "", OSHGui::MessageBoxButtons::YesNo, [ this, list ]( OSHGui::DialogResult result ) {
+		OSHGui::MessageBox::ShowDialog( "Are you sure you want to delete the selected profile?", "", OSHGui::MessageBoxButtons::YesNo, [ list ]( OSHGui::DialogResult result ) {
 			if( result == OSHGui::DialogResult::Yes ) {
 				g_configs.remove( items.at( index ) );
 				list->RemoveItem( index );

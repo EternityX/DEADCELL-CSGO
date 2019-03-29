@@ -6,7 +6,7 @@ public:
 		return util::misc::vfunc< float(__thiscall *)( decltype( this ) ) >( this, 12 )( this );
 	}
 
-	float GetInt() {
+	int GetInt() {
 		return util::misc::vfunc< int(__thiscall *)( decltype( this ) ) >( this, 13 )( this );
 	}
 

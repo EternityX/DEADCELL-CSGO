@@ -1,22 +1,16 @@
 #pragma once
 
-enum {
-	TE_BEAMPOINTS = 0x00,
-	// beam effect between two points
-	TE_SPRITE = 0x01,
-	// additive sprite, plays 1 cycle
-	TE_BEAMDISK = 0x02,
-	// disk that expands to max radius over lifetime
-	TE_BEAMCYLINDER = 0x03,
-	// cylinder that expands to max radius over lifetime
-	TE_BEAMFOLLOW = 0x04,
-	// create a line of decaying beam segments until entity stops moving
-	TE_BEAMRING = 0x05,
-	// connect a beam ring to two entities
+enum
+{
+	TE_BEAMPOINTS = 0x00,		// beam effect between two points
+	TE_SPRITE = 0x01,	// additive sprite, plays 1 cycle
+	TE_BEAMDISK = 0x02,	// disk that expands to max radius over lifetime
+	TE_BEAMCYLINDER = 0x03,		// cylinder that expands to max radius over lifetime
+	TE_BEAMFOLLOW = 0x04,		// create a line of decaying beam segments until entity stops moving
+	TE_BEAMRING = 0x05,		// connect a beam ring to two entities
 	TE_BEAMSPLINE = 0x06,
 	TE_BEAMRINGPOINT = 0x07,
-	TE_BEAMLASER = 0x08,
-	// Fades according to viewpoint
+	TE_BEAMLASER = 0x08,		// Fades according to viewpoint
 	TE_BEAMTESLA = 0x09,
 };
 
@@ -59,136 +53,129 @@ struct BeamTrail_t {
 
 typedef int pixelvis_handle_t;
 
-class Beam_t {
+class Beam_t
+{
 public:
 	Beam_t();
-
 	// Methods of IClientRenderable
-	virtual const vec3_t &GetRenderOrigin( void ) = 0;
-	virtual const vec3_t &GetRenderAngles( void ) = 0;
+	virtual const vec3_t&	GetRenderOrigin(void) = 0;
+	virtual const vec3_t&	GetRenderAngles(void) = 0;
 	virtual const matrix3x4_t &RenderableToWorldTransform() = 0;
-	virtual void GetRenderBounds( vec3_t &mins, vec3_t &maxs ) = 0;
-	virtual bool ShouldDraw( void ) = 0;
-	virtual bool IsTransparent( void ) = 0;
-	virtual int DrawModel( int flags ) = 0;
-	virtual void ComputeFxBlend() = 0;
-	virtual int GetFxBlend() = 0;
-
+	virtual void			GetRenderBounds(vec3_t& mins, vec3_t& maxs) = 0;
+	virtual bool			ShouldDraw(void) = 0;
+	virtual bool			IsTransparent(void) = 0;
+	virtual int				DrawModel(int flags) = 0;
+	virtual void			ComputeFxBlend() = 0;
+	virtual int				GetFxBlend() = 0;
 	// Resets the beam state
-	void Reset();
-
+	void			Reset();
 	// Method to computing the bounding box
-	void ComputeBounds();
-
+	void			ComputeBounds();
 	// Bounding box...
-	vec3_t m_Mins;
-	vec3_t m_Maxs;
+	vec3_t			m_Mins;
+	vec3_t			m_Maxs;
 	pixelvis_handle_t *m_queryHandleHalo;
-	float m_haloProxySize;
-
+	float			m_haloProxySize;
 	// Data is below..
-
 	// Next beam in list
-	Beam_t *next;
-
+	Beam_t*			next;
 	// Type of beam
-	int type;
-	int flags;
-
+	int				type;
+	int				flags;
 	// Control points for the beam
-	int numAttachments;
-	vec3_t attachment[ MAX_BEAM_ENTS ];
-	vec3_t delta;
-
+	int				numAttachments;
+	vec3_t			attachment[MAX_BEAM_ENTS];
+	vec3_t			delta;
 	// 0 .. 1 over lifetime of beam
-	float t;
-	float freq;
-
+	float			t;
+	float			freq;
 	// Time when beam should die
-	float die;
-	float width;
-	float endWidth;
-	float fadeLength;
-	float amplitude;
-	float life;
-
+	float			die;
+	float			width;
+	float			endWidth;
+	float			fadeLength;
+	float			amplitude;
+	float			life;
 	// Color
-	float r, g, b;
-	float brightness;
-
+	float			r, g, b;
+	float			brightness;
 	// Speed
-	float speed;
-
+	float			speed;
 	// Animation
-	float frameRate;
-	float frame;
-	int segments;
-
+	float			frameRate;
+	float			frame;
+	int				segments;
 	// Attachment entities for the beam
-	HANDLE entity[ MAX_BEAM_ENTS ];
-	int attachmentIndex[ MAX_BEAM_ENTS ];
-
+	HANDLE			entity[MAX_BEAM_ENTS];
+	int				attachmentIndex[MAX_BEAM_ENTS];
 	// Model info
-	int modelIndex;
-	int haloIndex;
-
-	float haloScale;
-	int frameCount;
-
-	float rgNoise[ NOISE_DIVISIONS + 1 ];
-
+	int				modelIndex;
+	int				haloIndex;
+	float			haloScale;
+	int				frameCount;
+	float			rgNoise[NOISE_DIVISIONS + 1];
 	// Popcorn trail for beam follows to use
-	BeamTrail_t *trail;
-
+	BeamTrail_t*	trail;
 	// for TE_BEAMRINGPOINT
-	float start_radius;
-	float end_radius;
-
+	float			start_radius;
+	float			end_radius;
 	// for FBEAM_ONLYNOISEONCE
-	bool m_bCalculatedNoise;
-
-	float m_flHDRColorScale;
+	bool			m_bCalculatedNoise;
+	float			m_flHDRColorScale;
 };
 
 struct BeamInfo_t {
-	//Beam
-	int m_nType;
-	C_BaseEntity *m_pStartEnt;
-	int m_nStartAttachment;
-	C_BaseEntity *m_pEndEnt;
-	int m_nEndAttachment;
-	vec3_t m_vecStart;
-	vec3_t m_vecEnd;
-	int m_nModelIndex;
-	const char *m_pszModelName;
-	int m_nHaloIndex;
-	const char *m_pszHaloName;
-	float m_flHaloScale;
-	float m_flLife;
-	float m_flWidth;
-	float m_flEndWidth;
-	float m_flFadeLength;
-	float m_flAmplitude;
-	float m_flBrightness;
-	float m_flSpeed;
-	int m_nStartFrame;
-	float m_flFrameRate;
-	float m_flRed;
-	float m_flGreen;
-	float m_flBlue;
-	bool m_bRenderable;
-	int m_nSegments;
-	int m_nFlags;
+	int			m_nType;
+
+	// Entities
+	IClientEntity* m_pStartEnt;
+	int			m_nStartAttachment;
+	IClientEntity* m_pEndEnt;
+	int			m_nEndAttachment;
+
+	// Points
+	vec3_t		m_vecStart;
+	vec3_t		m_vecEnd;
+
+	int			m_nModelIndex;
+	const char	*m_pszModelName;
+
+	int			m_nHaloIndex;
+	const char	*m_pszHaloName;
+	float		m_flHaloScale;
+
+	float		m_flLife;
+	float		m_flWidth;
+	float		m_flEndWidth;
+	float		m_flFadeLength;
+	float		m_flAmplitude;
+
+	float		m_flBrightness;
+	float		m_flSpeed;
+
+	int			m_nStartFrame;
+	float		m_flFrameRate;
+
+	float		m_flRed;
+	float		m_flGreen;
+	float		m_flBlue;
+
+	bool		m_bRenderable;
+
+	int			m_nSegments;
+
+	int			m_nFlags;
+
 	// Rings
-	vec3_t m_vecCenter;
-	float m_flStartRadius;
-	float m_flEndRadius;
+	vec3_t		m_vecCenter;
+	float		m_flStartRadius;
+	float		m_flEndRadius;
 
 	BeamInfo_t() {
 		m_nType = TE_BEAMPOINTS;
 		m_nSegments = -1;
-		m_pszModelName = nullptr;
-		m_pszHaloName = nullptr;
+		m_pszModelName = NULL;
+		m_pszHaloName = NULL;
 		m_nModelIndex = -1;
 		m_nHaloIndex = -1;
 		m_bRenderable = true;

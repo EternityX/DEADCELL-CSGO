@@ -11,6 +11,7 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 	if( g_cl.m_should_update_materials ) {
 		g_misc.nightmode( );
 		g_misc.transparent_props( );
+		g_cl.m_should_update_materials = false;
 	}
 
 	auto in_thirdperson = g_csgo.m_input->m_fCameraInThirdPerson;
