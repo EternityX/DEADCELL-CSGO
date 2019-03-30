@@ -17,8 +17,8 @@ bool unload() {
 #endif
 
 	// reset game brightness.
-	g_misc.nightmode( 100 ); // todo: error handling
-	g_misc.transparent_props( 100 ); // todo: error handling
+	g_misc.nightmode( 100.f );
+	g_misc.transparent_props( 100.f );
 
 	if( !g_events.remove( ) )
 		return false;

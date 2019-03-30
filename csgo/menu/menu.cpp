@@ -128,7 +128,7 @@ void c_main_form::ragebot_tab() {
 	g_menu.set_x_pos( 19 );
 
 	auto enabled = new c_checkbox( "Enabled", aimbot_page, &g_vars.rage.enabled );
-	auto activation_hotkey = new c_hotkey( "Activation key", aimbot_page, &g_vars.visuals.activation_key, aimbot_groupbox->GetWidth() - 15 );
+	//auto activation_hotkey = new c_hotkey( "Activation key", aimbot_page, &g_vars.visuals.activation_key, aimbot_groupbox->GetWidth() - 15 );
 	auto teammate = new c_checkbox( "Teammate", aimbot_page, &g_vars.rage.teammate );
 	auto silent = new c_checkbox( "Silent", aimbot_page, &g_vars.rage.silent );
 	auto autofire = new c_checkbox( "Auto fire", aimbot_page, &g_vars.rage.auto_fire );
@@ -190,7 +190,7 @@ void c_main_form::ragebot_tab() {
 	auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
 	auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
 	auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
+	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"ï¿½" );
 
 	g_menu.set_y_pos( 10 );
 	auto *fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );

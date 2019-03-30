@@ -8,6 +8,7 @@ namespace OSHGui {
 		  color_( Drawing::Color::White() ) {
 		picker = new ColorPicker();
 		picker->SetLocation( Drawing::PointI( 0, 10 ) );
+		picker->SetSize( 185, 185 );
 		picker->SetVisible( false );
 
 		picker->GetColorChangedEvent() += ColorChangedEventHandler( [ this ]( Control *, const Drawing::Color &color )
