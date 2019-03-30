@@ -221,6 +221,10 @@ namespace OSHGui {
 		textBox_->ShowCaret( true );
 		textBox_->SetParent( this );
 
+		auto text = textBox_->GetText();
+		if( text.empty() )
+			textBox_->SetText( "Click to set a hotkey..." );
+
 		SetSize( DefaultSize );
 
 		ApplyStyle( Application::Instance().GetStyle() );
@@ -306,9 +310,8 @@ namespace OSHGui {
 	}
 
 	//---------------------------------------------------------------------------
-	void HotkeyControl::HotkeyToText() {
-		auto ModifierToString = []( Key modifier ) -> Misc::AnsiString
-		{
+	void HotkeyControl::HotkeyToText( ) {
+		auto ModifierToString = []( Key modifier ) -> Misc::AnsiString {
 			Misc::AnsiString modifierName;
 			if( ( modifier & Key::Control ) == Key::Control )
 				modifierName = "Control";
@@ -331,22 +334,17 @@ namespace OSHGui {
 
 		if( modifier_ == Key::None && hotkey_ == Key::None ) {
 			textBox_->SetText( HotkeyNames[ hotkey_ ] );
+			textBox_->SetForeColor( Drawing::Color::FromRGB( 201, 201, 201 ) );
 		}
-			/*else if (modifier_ != Key::None && hotkey_ != Key::None && (hotkey_ != Key::ShiftKey && hotkey_ != Key::Menu && hotkey_ != Key::ControlKey))
-			{
-				auto modifierText = ModifierToString(modifier_);
-				auto hotkeyText = HotkeyNames[hotkey_];
-	
-				textBox_->SetText(modifierText + " + " + hotkeyText);
-			}*/
-		else if( hotkey_ != Key::None && ( hotkey_ != Key::ShiftKey && hotkey_ != Key::Menu && hotkey_ != Key::ControlKey )
-		) {
+		else if( hotkey_ != Key::None && ( hotkey_ != Key::ShiftKey && hotkey_ != Key::Menu && hotkey_ != Key::ControlKey ) ) {
 			const auto hotkeyText = HotkeyNames[ hotkey_ ];
 			textBox_->SetText( hotkeyText );
+			textBox_->SetForeColor( Drawing::Color::FromRGB( 201, 201, 201 ) );
 		}
 		else {
 			auto modifierText = ModifierToString( modifier_ );
 			textBox_->SetText( modifierText );
+			textBox_->SetForeColor( Drawing::Color::FromRGB( 201, 201, 201 ) );
 		}
 	}
 
@@ -378,6 +376,10 @@ namespace OSHGui {
 			g.FillRectangle( color, clearButtonLocation_ + PointF( i, 4 - i ), SizeF( 2, 1 ) );
 			g.FillRectangle( color, clearButtonLocation_ + PointF( 4 - i, 4 - i ), SizeF( 2, 1 ) );
 		}
+
+		if( isFocused_ ) {
+			g.DrawRectangle( Color::FromARGB( 255, 206, 115, 136 ), PointF( 0, 0 ), textBox_->GetSize() );
+		}
 	}
 
 	//---------------------------------------------------------------------------
@@ -391,13 +393,15 @@ namespace OSHGui {
 						OnGotFocus( this );
 
 				if( Intersection::TestRectangle( absoluteLocation_ + clearButtonLocation_, Drawing::SizeI( 9, 8 ),
-				                                 mouse.GetLocation() ) )
+					mouse.GetLocation() ) )
 					ClearHotkey();
 
 				return false;
 			}
 
 			if( isFocused_ ) {
+				textBox_->SetText( "Press a key..." );
+
 				if( mouse.GetButton() == MouseButton::Left && isEnabled_ )
 					SetHotkey( Key::LButton );
 
@@ -428,8 +432,8 @@ namespace OSHGui {
 
 			/*if ( args.GetKeyCode( ) == Key::Enter || args.GetKeyCode( ) == Key::Escape )
 			{
-				OnLostFocus( this );
-				return true;
+			OnLostFocus( this );
+			return true;
 			}*/
 
 			SetHotkey( args.GetKeyCode() );

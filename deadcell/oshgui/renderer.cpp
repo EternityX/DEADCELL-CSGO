@@ -5,16 +5,11 @@
 
 using namespace renderer;
 
-c_renderer::c_renderer()
-	: m_renderer{ }, m_instance{ nullptr } { }
+c_renderer::c_renderer( ) { }
 
 void c_renderer::init( IDirect3DDevice9 *device ) {
-	m_renderer = std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device );
-
 	// initialize oshgui with our renderer.
-	OSHGui::Application::Initialize( std::move( m_renderer ) );
-
-	m_instance = OSHGui::Application::InstancePtr( );
+	OSHGui::Application::Initialize( std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device ) );
 
 	m_fonts.resize( FONT_MAX );
 
@@ -25,7 +20,7 @@ void c_renderer::init( IDirect3DDevice9 *device ) {
 	m_fonts[ FONT_MARLETT_45PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( marlett_font ), 45.f, true );
 	m_fonts[ FONT_VERDANA_20PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( enhance_font ), 9.f, true );
 
-	m_instance->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
+	get_instance( )->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
 }
 
 void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
@@ -37,30 +32,38 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 	device->GetRenderState( D3DRS_COLORWRITEENABLE, &m_old_color_write_enable );
 	device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 
-	m_geometry = m_instance->GetRenderer().CreateGeometryBuffer();
+	m_geometry = get_renderer( ).CreateGeometryBuffer( );
 	if( !m_geometry )
 		return;
 
-	m_render_target = m_instance->GetRenderer().GetDefaultRenderTarget();
+	m_render_target = get_renderer( ).GetDefaultRenderTarget( );
 	if( !m_render_target )
 		return;
 
-	m_instance->GetRenderer().BeginRendering();
+	get_renderer( ).BeginRendering( );
 }
 
 void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
-	if( !m_render_target || !m_instance )
+	if( !m_render_target )
 		return;
 
-	m_render_target->Activate();
+	D3DDEVICE_CREATION_PARAMETERS creation_parameters;
+	RECT rect;
+
+	device->GetCreationParameters( &creation_parameters );
+	GetClientRect( creation_parameters.hFocusWindow, &rect );
+
+	m_render_target->SetArea( OSHGui::Drawing::RectangleF( rect.left, rect.top, rect.right, rect.bottom ) );
+
+	m_render_target->Activate( );
 
 	m_render_target->Draw( *m_geometry );
 
-	m_render_target->Deactivate();
+	m_render_target->Deactivate( );
 
-	m_instance->Render();
+	get_instance( )->Render( );
 
-	m_instance->GetRenderer().EndRendering();
+	get_instance( )->GetRenderer( ).EndRendering();
 
 	if( !m_old_color_write_enable )
 		return;
@@ -82,7 +85,6 @@ void c_renderer::filled_rect( const OSHGui::Drawing::Color &color, int x, int y,
 
 void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::Drawing::Color &color, const OSHGui::Drawing::Color &shadow_color, int x, int y, int flags, const std::string str, ... ) const {
 	va_list va;
-	int str_len;
 	std::string buf;
 
 	if( str.empty( ) )
@@ -90,7 +92,7 @@ void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::
 
 	va_start( va, str );
 
-	str_len = std::vsnprintf( nullptr, 0, str.c_str( ), va );
+	int str_len = std::vsnprintf( nullptr, 0, str.c_str( ), va );
 	if( str_len < 0 ) {
 		va_end( va );
 		return;
@@ -141,7 +143,7 @@ void c_renderer::line( const OSHGui::Drawing::Color &color, float x, float y, fl
 void c_renderer::circle( const OSHGui::Drawing::Color &color, int x, int y, int radius ) const {
 	OSHGui::Drawing::Graphics g( *m_geometry );
 
-	g.FillCircle( color, OSHGui::Drawing::PointI( x, y ),radius );
+	g.FillCircle( color, OSHGui::Drawing::PointI( x, y ), radius );
 }
 
 OSHGui::Drawing::FontPtr c_renderer::get_font( int index ) {
@@ -149,9 +151,9 @@ OSHGui::Drawing::FontPtr c_renderer::get_font( int index ) {
 }
 
 OSHGui::Application *c_renderer::get_instance( ) const {
-	return m_instance;
+	return OSHGui::Application::InstancePtr( );
 }
 
 OSHGui::Drawing::Renderer &c_renderer::get_renderer( ) const {
-	return m_instance->GetRenderer( );
+	return get_instance( )->GetRenderer( );
 }

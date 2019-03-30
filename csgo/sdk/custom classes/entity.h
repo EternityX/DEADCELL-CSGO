@@ -206,7 +206,7 @@ public:
 			|| weapon_index == WEAPON_SSG08;
 	}
 
-	const WeaponInfo_t *get_weapon_info( ) {
+	WeaponInfo_t *get_weapon_info( ) {
 		return g_csgo.m_weapon_system->GetWpnData( this->item_index( ) );
 	}
 
@@ -277,14 +277,10 @@ public:
 	OFFSET( float, spawn_time, 0xA350 )
 	OFFSET( CCSGOPlayerAnimState *, animstate, 0x3900 )
 	OFFSET( int, get_move_type, 0x25C )
+	OFFSET( CUtlVector< matrix3x4_t >, bone_cache, 0x2910 )
 
 	studiohdr_t *studio_hdr( ){
 		return **reinterpret_cast< studiohdr_t *** >( uintptr_t( this ) + 0x294C );
-	}
-
-	template< typename T >
-	T &get( uintptr_t offset ) {
-		return *reinterpret_cast< T* >( reinterpret_cast< uintptr_t >( this ) + offset );
 	}
 
 	CUtlVector< AnimationLayer_t >& animoverlays( ) {

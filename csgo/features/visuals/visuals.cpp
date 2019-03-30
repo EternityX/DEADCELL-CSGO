@@ -44,7 +44,7 @@ bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
 		float inverse = 1.f / width;
 
 		// todo: only grab display_size once.
-		OSHGui::Drawing::SizeF display_size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+		OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 		screen.x = static_cast< float >( display_size.Width / 2 + ( 0.5 * ( ( matrix.m[ 0 ][ 0 ] * origin.x + matrix.m[ 0 ][ 1 ] * origin.y + matrix.m[ 0 ][ 2 ] * origin.z + matrix.m[ 0 ][ 3 ] ) * inverse ) * display_size.Width + 0.5 ) );
 		screen.y = static_cast< float >( display_size.Height / 2 - ( 0.5 * ( ( matrix.m[ 1 ][ 0 ] * origin.x + matrix.m[ 1 ][ 1 ] * origin.y + matrix.m[ 1 ][ 2 ] * origin.z + matrix.m[ 1 ][ 3 ] ) * inverse ) * display_size.Height + 0.5 ) );
@@ -204,7 +204,7 @@ void c_visuals::player( C_CSPlayer *e ) {
 	if( !weapon )
 		return;
 
-	const WeaponInfo_t *info = g_csgo.m_weapon_system->GetWpnData( weapon->item_index( ) );
+	WeaponInfo_t *info = g_csgo.m_weapon_system->GetWpnData( weapon->item_index( ) );
 	if( !info )
 		return;
 
@@ -306,7 +306,7 @@ void c_visuals::draw_healthbar( C_CSPlayer *entity, float x, float y, float w, f
 	const int height = hp * static_cast< int >( h ) / 100;
 
 	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 6, y - 1, 4, h + 2 );
-	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 100, 100, 100 ) ), x - 5, y + h - height, 2, height );
+	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 50, 50, 50 ) ), x - 5, y + h - height, 2, height );
 
 	if( hp >= 90 || hp <= 10 )
 		return;
@@ -375,7 +375,7 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 	// ammo bar
 	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 220, 10, 10, 10 ),
 																	  color,
-																	  OSHColor::FromARGB( 220, 10, 10, 10 ),
+																	  color - OSHColor::FromARGB( 0, 50, 50, 50 ),
 	                                                                  color ),
 																	  x, y + h + 3 + ctx.offset, width, 2 );
 
@@ -459,7 +459,7 @@ void c_visuals::draw_spectators( ) {
 		if( spectator != local )
 			continue;
 
-		OSHGui::Drawing::SizeF display_size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+		OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_LUCIDA_CONSOLE ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ),
 		                      display_size.Width - 150, display_size.Height / 2 + 10 * spec_count - 300, DROPSHADOW, "%s", player_info_spec.m_szPlayerName );
 
@@ -503,7 +503,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 		if( !weapon->item_index( ) )
 			return;
 
-		const auto info = g_csgo.m_weapon_system->GetWpnData( weapon->item_index( ) );
+		auto info = g_csgo.m_weapon_system->GetWpnData( weapon->item_index( ) );
 		if( !info )
 			return;
 
@@ -626,7 +626,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 	}
 
 	if( g_vars.misc.dangerzone_menu ) {
-		if( entity->origin( ).DistTo( local->origin( ) ) > g_vars.dz.max_item_distance )
+		if( entity->origin( ).distance( local->origin( ) ) > g_vars.dz.max_item_distance )
 			return;
 
 		if( client_class->m_ClassID == CItemCash && g_vars.dz.cash )
@@ -723,7 +723,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 }
 
 void c_visuals::draw_bomb_timer( float time_left ) const {
-	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 	// todo: only grab this once on map load.
 	ConVar *max_c4_timer = g_csgo.m_convar->FindVar( "mp_c4timer" );
@@ -737,7 +737,7 @@ void c_visuals::draw_bomb_timer( float time_left ) const {
 void c_visuals::watermark( ) const {
 	const bool connected = g_csgo.m_engine->IsConnected( );
 
-	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 	g_renderer.filled_rect_gradient(
 		OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ),
@@ -766,7 +766,7 @@ void c_visuals::draw_scope( ) const {
 	if( !local || !local->is_scoped( ) || !local->get_active_weapon( ) || !local->get_active_weapon( )->has_sniper_scope( ) )
 		return;
 
-	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 	g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), 0, size.Height * 0.5f, size.Width, 1 );
 	g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), size.Width * 0.5f, 0, 1, size.Height );
@@ -781,7 +781,7 @@ void c_visuals::draw_crosshair( ) const {
 	if( !weapon )
 		return;
 
-	const auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 	const float spread_distance = ( weapon->inaccuracy( ) + weapon->spread( ) ) * 320.f / std::tan( math::deg_to_rad( g_vars.visuals.effects.camera_fov ) * 0.5f );
 	const float spread_radius = size.Height * 2 * 0.002083 * spread_distance;
@@ -790,7 +790,7 @@ void c_visuals::draw_crosshair( ) const {
 }
 
 void c_visuals::draw_hitmarker( ) {
-	auto size = g_renderer.m_instance->GetRenderer( ).GetDisplaySize( );
+	auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 	if( g_cl.m_hitmarker_alpha > 0.f ) {
 		g_renderer.line( OSHColor( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), size.Width / 2.f - 8.f, size.Height / 2.f - 8.f, size.Width / 2.f - 3.f, size.Height / 2.f - 3.f );

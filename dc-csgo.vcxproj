@@ -105,6 +105,7 @@
     <ClInclude Include="csgo\sdk\interfaces\iclientnetworkable.h" />
     <ClInclude Include="csgo\sdk\interfaces\iclientrenderable.h" />
     <ClInclude Include="csgo\sdk\interfaces\iclientunknown.h" />
+    <ClInclude Include="csgo\sdk\interfaces\icommandline.h" />
     <ClInclude Include="csgo\sdk\interfaces\icvar.h" />
     <ClInclude Include="csgo\sdk\interfaces\iefx.h" />
     <ClInclude Include="csgo\sdk\interfaces\ienginesounds.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="csgo\sdk\interfaces\iweaponsystem.h" />
     <ClInclude Include="csgo\sdk\interfaces\steam.h" />
     <ClInclude Include="csgo\sdk\sdk.h" />
+    <ClInclude Include="csgo\sdk\stack.h" />
     <ClInclude Include="csgo\sdk\utils\c_vmt.h" />
     <ClInclude Include="csgo\sdk\utils\interface_manager.h" />
     <ClInclude Include="csgo\sdk\utils\netvars.h" />

@@ -70,6 +70,7 @@ namespace OSHGui {
 
 		auto textLabel = new Label();
 		textLabel->SetText( text );
+		textLabel->SetLocation( 5, 5 );
 		this->AddControl( textLabel );
 
 		int formWidth = textLabel->GetWidth() + 20;
@@ -215,7 +216,7 @@ namespace OSHGui {
 			button->SetSize( 60, button->GetSize().Height );
 			button->SetText( label[ i ] );
 			button->GetClickEvent() += ClickEventHandler( eventHandler[ i ] );
-			button->SetLocation( GetWidth() - ( i + 1 ) * ( button->GetWidth() + 10 ), GetHeight() - button->GetHeight() - 25 );
+			button->SetLocation( GetWidth() - ( i + 1 ) * ( button->GetWidth() + 13 ), GetHeight() - button->GetHeight() - 35 );
 
 			AddControl( button );
 

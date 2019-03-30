@@ -34,6 +34,16 @@ void c_chams::on_sceneend( ) {
 		float vis_color[ 3 ] = { c1.GetRed( ), c1.GetGreen( ), c1.GetBlue( ) };
 		float hid_color[ 3 ] = { c2.GetRed( ), c2.GetGreen( ), c2.GetBlue( ) };
 
+		
+
+		// you can change the material's shader values using SetShaderAndParams and passing in a keyvalue pointer
+		// example : 
+		// static auto kv = static_cast<KeyValues*>( g_csgo.m_memalloc->Alloc( 36 ) );
+		// kv->SetInt( "$ignorez", 1 );
+		// this would update the material in real time without having to create a new material, obviously this can be used with more relevant
+		// shader params such as reflection for example, would allow us to control it with a slider instead of having it as a static value 
+		// when the material is created
+
 		if( g_vars.visuals.chams.twopass ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
 			g_csgo.m_model_render->ForcedMaterialOverride( g_vars.visuals.chams.type ? materials.at( 3 ) : materials.at( 2 ) );
@@ -100,7 +110,7 @@ void c_chams::push_players( ) {
 		if( player->immune( ) )
 			continue;
 
-		float dist = player->abs_origin( ).DistTo( C_CSPlayer::get_local( )->abs_origin( ) );
+		float dist = player->abs_origin( ).distance( C_CSPlayer::get_local( )->abs_origin( ) );
 		m_players.emplace_back( player, dist );
 	}
 
@@ -133,8 +143,8 @@ IMaterial *c_chams::create_material( bool shade, bool wireframe, bool ignorez, i
 	material_data += "}\n";
 
 	auto kv = static_cast<KeyValues*>( g_csgo.m_memalloc->Alloc( 36 ) );
-	kv->init_key_values( material_type.c_str( ) );
-	kv->load_from_buffer( material_name.c_str( ), material_data.c_str( ) );
+	kv->Init( material_type.c_str( ) );
+	kv->LoadFromBuffer( material_name.c_str( ), material_data.c_str( ) );
 
 	return g_csgo.m_material_system->CreateMaterial( material_name.c_str( ), kv );
 }

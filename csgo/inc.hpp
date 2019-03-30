@@ -34,6 +34,8 @@
 
 #include "sdk/address.h"
 
+#include "sdk/stack.h"
+
 // framework include.
 #include "../deadcell/inc.hpp"
 

@@ -126,7 +126,7 @@ public:
 		*this /= Length( );
 	}
 
-	float DistTo( const vec3_t &vOther ) const
+	float distance( const vec3_t &vOther ) const
 	{
 		vec3_t delta;
 

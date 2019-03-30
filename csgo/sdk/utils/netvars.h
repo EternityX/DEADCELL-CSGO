@@ -16,7 +16,7 @@ private:
 	std::unordered_map< hash32_t, // hash key + tables
 	                    std::unordered_map< hash32_t, // hash key + props
 	                                        netvar_data // prop offset / prop ptr
-	                    > > m_offsets;
+										    > > m_offsets;
 
 public:
 	// ctor.
@@ -47,8 +47,6 @@ public:
 	}
 
 	void store_table( const std::string &name, RecvTable *table, size_t offset = 0 ) {
-		std::ofstream fs( "vars.txt", std::ios::out | std::ios::app );
-
 		const hash32_t base{ util::hash::fnv1a_32( name ) };
 
 		// iterate props
@@ -65,9 +63,6 @@ public:
 
 			// insert if not present.
 			if( !m_offsets[ base ][ var ].m_offset ) {
-				fs << "> " << prop->m_pVarName << ": ";
-				fs << "0x" << std::setprecision( 4 ) << std::hex << std::uppercase << static_cast< size_t >( prop->m_Offset + offset ) << std::endl;
-
 				m_offsets[ base ][ var ].m_datamap_var = false;
 				m_offsets[ base ][ var ].m_prop_ptr = prop;
 				m_offsets[ base ][ var ].m_offset = static_cast< size_t >( prop->m_Offset + offset );
@@ -86,8 +81,8 @@ public:
 	}
 
 	int get_offset( const char *table, const char *prop ) {
-		auto tb = util::hash::fnv1a_32( table );
-		auto p = util::hash::fnv1a_32( prop );
+		const auto tb = util::hash::fnv1a_32( table );
+		const auto p = util::hash::fnv1a_32( prop );
 		return m_offsets[ tb ][ p ].m_offset;
 	}
 };

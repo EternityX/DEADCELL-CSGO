@@ -18,12 +18,12 @@ c_menu::c_menu()
 
 void c_menu::init() {
 	m_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_main_form >() );
-	m_form->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_form->SetFont( g_renderer.get_instance( )->GetDefaultFont() );
 
 	m_dangerzone_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_dangerzone_form >( ) );
-	m_dangerzone_form->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_dangerzone_form->SetFont( g_renderer.get_instance( )->GetDefaultFont() );
 
-	g_renderer.m_instance->Run( m_form );
+	g_renderer.get_instance( )->Run( m_form );
 
 	m_dangerzone_form->SetEnabled( true );
 	m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
@@ -31,7 +31,7 @@ void c_menu::init() {
 
 	m_form->Show( m_dangerzone_form );
 
-	g_renderer.m_instance->Enable( );
+	g_renderer.get_instance( )->Enable( );
 }
 
 /* CONTROL PLACEMENT */
@@ -77,7 +77,7 @@ void c_main_form::init_tabs() {
 	for( int i = 0; i < PAGE_MAX; ++i )
 		m_pages.push_back( std::make_shared< OSHGui::TabPage >( ) );
 
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
 	// set page titles.
 	m_pages.at( PAGE_RAGEBOT )->SetText( "Ragebot" );
@@ -87,7 +87,7 @@ void c_main_form::init_tabs() {
 	m_pages.at( PAGE_PLAYERLIST )->SetText( "Skinchanger" );
 
 	// set tab style.
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	m_tab_control->SetSize( 576, 380 );
 	m_tab_control->SetBackColor( OSHGui::Drawing::Color::FromRGB( 32, 32, 38 ) );
 	m_tab_control->SetLocation( 6, -15 );
@@ -103,11 +103,12 @@ void c_main_form::init_tabs() {
 void c_main_form::playerlist_tab() {
 	
 }
+
 void c_main_form::ragebot_tab() {
 	auto *aimbot_tab = new OSHGui::TabControl();
 	aimbot_tab->SetSize( 241, 310 );
 	aimbot_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	aimbot_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	aimbot_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	aimbot_tab->SetButtonWidth( 121 );
 
 	auto *aimbot_page = new OSHGui::TabPage();
@@ -127,7 +128,7 @@ void c_main_form::ragebot_tab() {
 	g_menu.set_x_pos( 19 );
 
 	auto enabled = new c_checkbox( "Enabled", aimbot_page, &g_vars.rage.enabled );
-	auto activation_hotkey = new c_hotkey( "Activation key", aimbot_page, &g_vars.visuals.activation_key, aimbot_groupbox->GetWidth() - 15 );
+	//auto activation_hotkey = new c_hotkey( "Activation key", aimbot_page, &g_vars.visuals.activation_key, aimbot_groupbox->GetWidth() - 15 );
 	auto teammate = new c_checkbox( "Teammate", aimbot_page, &g_vars.rage.teammate );
 	auto silent = new c_checkbox( "Silent", aimbot_page, &g_vars.rage.silent );
 	auto autofire = new c_checkbox( "Auto fire", aimbot_page, &g_vars.rage.auto_fire );
@@ -168,28 +169,28 @@ void c_main_form::ragebot_tab() {
 	auto antiaim_tab = new OSHGui::TabControl();
 	antiaim_tab->SetSize( 241, 310 );
 	antiaim_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	antiaim_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	antiaim_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	antiaim_tab->SetButtonWidth( 121 );
 
 	auto *antiaim_page = new OSHGui::TabPage();
-	antiaim_page->SetText( "Anti-Aim" );
+	antiaim_page->SetText( "Anti-aim" );
 	antiaim_page->SetBorder( false );
 
 	auto *fakelag_page = new OSHGui::TabPage();
-	fakelag_page->SetText( "Fake Lag" );
+	fakelag_page->SetText( "Fake lag" );
 	fakelag_page->SetBorder( false );
 
 	antiaim_tab->AddTabPage( antiaim_page );
 	antiaim_tab->AddTabPage( fakelag_page );
 
-	auto *antiaim_groupbox = new c_groupbox( "Anti-Aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
+	auto *antiaim_groupbox = new c_groupbox( "Anti-aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
 	antiaim_groupbox->AddControl( antiaim_tab );
 	g_menu.set_x_pos( 19 );
 
-	//auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
-	//auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
-	//auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"°" );
+	auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
+	auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
+	auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
+	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"ï¿½" );
 
 	g_menu.set_y_pos( 10 );
 	auto *fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
@@ -205,14 +206,14 @@ void c_main_form::misc_tab() {
 
 	auto thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
 	auto activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
-	auto thirdpersondead = new c_checkbox( "Force Thirdperson when spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
+	auto thirdpersondead = new c_checkbox( "Force thirdperson while spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
 	auto thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", general_groupbox, &g_vars.misc.thirdperson_grenade );
 	auto bhop = new c_checkbox( "Bunny hop", general_groupbox, &g_vars.misc.bhop );
 	auto air_strafe = new c_checkbox( "Air strafe", general_groupbox, &g_vars.misc.air_strafe );
 	auto autozeus = new c_checkbox( "Automatic zeus", general_groupbox, &g_vars.misc.autozeus );
 	auto radar = new c_checkbox( "Radar", general_groupbox, &g_vars.visuals.radar );
 
-	auto nightmode = new c_slider( "World Brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
+	auto nightmode = new c_slider( "World brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
 	nightmode->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
 		g_misc.nightmode( );
 	} );
@@ -271,9 +272,11 @@ void c_main_form::misc_tab() {
 	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
 	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
 
-	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 82 );
-	auto client_hitbox = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.clienthitboxes );
-	auto duraction_hitbox = new c_slider( "Duration", other_groupbox, 0.f, 5.f, &g_vars.misc.duration, 0, 0.f, "s" );
+	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 92 );
+	auto client_hitboxes = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.client_hitboxes);
+	auto client_hitboxes_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.client_hitboxes_duration, 0, 2.f, "s" );
+	auto bullet_impacts = new c_checkbox( "Bullet impacts", other_groupbox, &g_vars.misc.bullet_impacts );
+	auto bullet_impacts_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.bullet_impacts_duration, 0, 4.f, "s" );
 
 	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
 	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
@@ -284,7 +287,7 @@ void c_main_form::visuals_tab() {
 	auto player_tab = new OSHGui::TabControl();
 	player_tab->SetSize( 241, 310 );
 	player_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	player_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	player_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	player_tab->SetButtonWidth( 81 );
 
 	auto generic_esp_page = new OSHGui::TabPage();
@@ -358,7 +361,7 @@ void c_main_form::visuals_tab() {
 	auto world_tab = new OSHGui::TabControl();
 	world_tab->SetSize( 241, 100 );
 	world_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	world_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	world_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	world_tab->SetButtonWidth( 121 );
 
 	auto generic_world = new OSHGui::TabPage();
@@ -397,7 +400,7 @@ void c_main_form::visuals_tab() {
 	auto effects_tab = new OSHGui::TabControl();
 	effects_tab->SetSize( 241, 100 );
 	effects_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	effects_tab->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	effects_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	effects_tab->SetButtonWidth( 121 );
 
 	auto general_effects_page = new OSHGui::TabPage();
@@ -412,7 +415,7 @@ void c_main_form::visuals_tab() {
 	auto remove_flash = new c_checkbox( "Flash", removals_page, &g_vars.visuals.misc.no_flash );
 	auto remove_fog = new c_checkbox( "Fog", removals_page, &g_vars.visuals.misc.fog );
 	auto remove_smoke = new c_checkbox( "Smoke", removals_page, &g_vars.visuals.misc.remove_smoke );
-	auto remove_scope = new c_checkbox( "Scope Overlay", removals_page, &g_vars.visuals.misc.remove_scope );
+	auto remove_scope = new c_checkbox( "Scope overlay", removals_page, &g_vars.visuals.misc.remove_scope );
 	//auto remove_blue = new c_checkbox( "Aug scope blur", removals_page, &g_vars.visuals.misc.remove_blur );
 
 	auto scope_color = new c_colorpicker( removals_page, remove_scope, g_vars.visuals.misc.scope_color );
@@ -573,7 +576,7 @@ void c_main_form::config_tab( ) {
 			return;
 		}
 
-		OSHGui::MessageBox::ShowDialog( "Are you sure you want to delete the selected profile?", "", OSHGui::MessageBoxButtons::YesNo, [ this, list ]( OSHGui::DialogResult result ) {
+		OSHGui::MessageBox::ShowDialog( "Are you sure you want to delete the selected profile?", "", OSHGui::MessageBoxButtons::YesNo, [ list ]( OSHGui::DialogResult result ) {
 			if( result == OSHGui::DialogResult::Yes ) {
 				g_configs.remove( items.at( index ) );
 				list->RemoveItem( index );
@@ -641,14 +644,14 @@ void c_dangerzone_form::init_tabs( ) {
 	for( int i = 0; i < PAGE_MAX; ++i )
 		m_pages.push_back( std::make_shared< OSHGui::TabPage >( ) );
 
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
 	// set page titles.
 	m_pages.at( PAGE_VISUALS )->SetText( "Visuals" );
 	m_pages.at( PAGE_MISC )->SetText( "Miscellaneous" );
 
 	// set tab style.
-	m_tab_control->SetFont( g_renderer.m_instance->GetDefaultFont() );
+	m_tab_control->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	m_tab_control->SetSize( 277, 360 );
 	m_tab_control->SetBackColor( OSHGui::Drawing::Color::FromRGB( 32, 32, 38 ) );
 	m_tab_control->SetLocation( 6, 5 );
@@ -731,7 +734,7 @@ c_colorpicker::c_colorpicker( Control *parent, Control *control, float *col ) {
 }
 
 void c_checkbox::init( const AnsiString &text, int x, int y, Control *parent, bool *cvar ) {
-	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
+	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
 	SetFont( g_renderer.m_fonts.at( FONT_VERDANA_7PX ) );
 	SetLocation( x, y );
 	SetText( text );
@@ -956,12 +959,9 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	} );
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
-	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
-	if( text.empty( ) ){
-		SetLocation( x - 1, y - 20 );
-	}
-	else
-		SetLocation( x - 1, y );
+	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
+	SetLocation( x, y );
+
 	SetMinimum( min );
 	SetMaximum( max );
 	SetPrecision( 0 );
@@ -993,12 +993,9 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	} );
 
 	SetFont( g_renderer.get_font( FONT_VERDANA_BOLD_7PX ) );
-	SetBackColor( g_renderer.m_instance->GetPrimaryColor() );
-	if( text.empty( ) ){
-		SetLocation( x - 1, y - 20 );
-	}
-	else
-		SetLocation( x - 1, y );
+	SetBackColor( g_renderer.get_instance( )->GetPrimaryColor( ) );
+	SetLocation( x, y );
+
 	SetMinimum( min );
 	SetMaximum( max );
 	SetPrecision( precision );
@@ -1032,11 +1029,35 @@ c_slider::c_slider( const AnsiString &text, int x, int y, Control *parent, float
 }
 
 c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, int *value, int default_value, std::string append_text ) {
-	init( text, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2, g_menu.get_y_pos( ) + 4, parent, min, max, value, default_value, append_text );
-	g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+	int x = parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2;
+	int y = g_menu.get_y_pos( ) + 4;
+
+	if( text.empty() ) {
+		x -= 2;
+		y -= 16;
+	}
+
+	init( text, x, y, parent, min, max, value, default_value, append_text );
+
+	if( text.empty( ) )
+		g_menu.push_y_pos( Control::GetSize( ).Height - 4 );
+	else
+		g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
 }
 
 c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, float *value, int precision, float default_value, std::string append_text ) {
-	init( text, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2, g_menu.get_y_pos( ) + 4, parent, min, max, value, precision, default_value, append_text );
-	g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+	int x = parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2;
+	int y = g_menu.get_y_pos( ) + 4;
+
+	if( text.empty() ) {
+		x -= 2;
+		y -= 16;
+	}
+
+	init( text, x, y, parent, min, max, value, precision, default_value, append_text );
+
+	if( text.empty( ) )
+		g_menu.push_y_pos( Control::GetSize( ).Height - 4 );
+	else
+		g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
 }

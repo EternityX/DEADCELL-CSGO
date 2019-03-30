@@ -6,7 +6,7 @@
 
 class c_ragebot {
 	struct rage_t {
-		rage_t( C_CSPlayer *player, int i, int damage, vec3_t point, float dist, std::array< matrix3x4_t, 128 > matrix ){
+		rage_t( C_CSPlayer *player, int i, int damage, vec3_t point, float dist, matrix3x4_t* matrix ){
 			m_player = player;
 			index = i;
 			m_damage = damage;
@@ -19,12 +19,12 @@ class c_ragebot {
 		int index;
 		int m_damage;
 		float distance;
-		std::array< matrix3x4_t, 128 > mat;
+		matrix3x4_t* mat;
 	};
 	std::vector< rage_t > m_players;
 	void choose_angles( );
 	void select_target( );
-	bool get_points_from_hitbox( C_CSPlayer * e, std::vector< int > hitboxes, std::array< matrix3x4_t, 128 > matrix, std::vector<vec3_t>& points, float scale );
+	bool get_points_from_hitbox( C_CSPlayer * e, std::vector< int > hitboxes, matrix3x4_t* matrix, std::vector<vec3_t>& points, float scale );
 	void quickstop( C_BaseCombatWeapon *local_weapon );
 	bool is_valid( C_CSPlayer * player );
 	bool hitchance( vec3_t &angle, C_CSPlayer *ent );

@@ -3,47 +3,27 @@
 void c_fakelag::think( CUserCmd* cmd ) {
 	g_cl.m_sendpacket = true;
 
-	if ( !g_vars.misc.fakelag.enabled ) {
-		m_choked = 0;
+	static int choke = 0;
+	auto local = C_CSPlayer::get_local( );
+	if( !g_vars.misc.fakelag.enabled && g_vars.antiaim.enabled ){
+		choke = 1;
+	}
 
-		if ( g_vars.antiaim.enabled ) {
-			static auto should_send_packet = true;
-			g_cl.m_sendpacket = should_send_packet;
-			should_send_packet = !should_send_packet;
-		}
-		else {
-			return;
+	if( g_vars.misc.fakelag.enabled ) {
+		switch( g_vars.misc.fakelag.type ) {
+			case 0:{ // Maximum
+				choke = std::min< int >( g_vars.misc.fakelag.amount + 1, 14 );
+				break;
+			}
+			case 1: { // Adaptive
+				choke = std::min< int >( static_cast< int >( std::ceilf( 64 / ( g_cl.m_local->velocity( ).Length( ) * g_csgo.m_global_vars->m_interval_per_tick ) ) ), 14 );
+				break;
+			}
 		}
 	}
 
-	if ( !g_cl.m_local || !g_cl.m_local->alive( ) )
-		return;
-	
-	switch ( g_vars.misc.fakelag.type ) {
-		case MAXIMUM: {
-			if ( m_choked < g_vars.misc.fakelag.amount ) {
-				g_cl.m_sendpacket = false;
-			}
-			else {
-				m_choked = 0;
-			}
-			break;
-		}
-		case ADAPTIVE: {
-			int ideal_choke = int( ceil( 64.f / ( g_cl.m_local->velocity( ).Length( ) * g_csgo.m_global_vars->m_interval_per_tick ) ) );
-			math::clamp< int >( ideal_choke, 1, 15 );
-			if ( m_choked < ideal_choke ) {
-				g_cl.m_sendpacket = false;
-			}
-			else {
-				m_choked = 0;
-			}
-			break;
-		}
-	}
-
-	if ( !g_cl.m_sendpacket )
-		++m_choked;
+	if ( choke > static_cast< int >( g_csgo.m_clientstate->m_nChokedCommands ) )
+		g_cl.m_sendpacket = false;
 }
 
 c_fakelag g_fakelag;

@@ -4,11 +4,13 @@
 #include "../autowall/autowall.h"
 
 class c_antiaim {
-	float best_head_yaw( );
+	vec3_t m_input = vec3_t( );
 
-public:
+	bool allow( CUserCmd *ucmd );
 	void adjust_yaw( CUserCmd *ucmd );
 	void adjust_pitch( CUserCmd *ucmd );
+	float at_target( );
+public:
 	void set_angles( CUserCmd *ucmd );
 
 	vec3_t	m_real = vec3_t( );

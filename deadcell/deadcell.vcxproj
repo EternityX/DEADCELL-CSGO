@@ -133,12 +133,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9GeometryBuffer.hpp" />
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9Renderer.hpp" />
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9RenderTarget.hpp" />
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9Texture.hpp" />
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9TextureTarget.hpp" />
-    <ClInclude Include="..\oshgui\Drawing\Direct3D9\Direct3D9ViewportTarget.hpp" />
     <ClInclude Include="console\console.hpp" />
     <ClInclude Include="hash\hash.hpp" />
     <ClInclude Include="inc.hpp" />
@@ -152,11 +146,6 @@
     <ClInclude Include="util\misc\misc.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9GeometryBuffer.cpp" />
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9Renderer.cpp" />
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9Texture.cpp" />
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9TextureTarget.cpp" />
-    <ClCompile Include="..\oshgui\Drawing\Direct3D9\Direct3D9ViewportTarget.cpp" />
     <ClCompile Include="console\console.cpp" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="math\math.cpp" />

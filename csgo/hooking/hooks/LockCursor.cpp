@@ -1,8 +1,8 @@
 #include "../../inc.hpp"
 
 void __stdcall hook::LockCursor( ) {
-	if( g_renderer.m_instance ) {
-		if( g_renderer.m_instance->IsEnabled( ) ) {
+	if( g_renderer.get_instance( ) ) {
+		if( g_renderer.get_instance( )->IsEnabled( ) ) {
 			g_csgo.m_surface->UnlockCursor( );
 			return;
 		}

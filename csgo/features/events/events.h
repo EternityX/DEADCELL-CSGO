@@ -7,7 +7,7 @@ public:
 	~c_event_listener( );
 
 	bool setup( );
-	void remove( );
+	bool remove( );
 
 	void FireGameEvent( IGameEvent *m_event ) override;
 

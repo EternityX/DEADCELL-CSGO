@@ -72,7 +72,7 @@ namespace OSHGui {
 	//---------------------------------------------------------------------------
 	void Control::SetEnabled( bool isEnabled ) {
 		isEnabled_ = isEnabled;
-		if( isEnabled == false && isFocused_ ) {
+		if( !isEnabled && isFocused_ ) {
 			OnLostFocus( nullptr );
 		}
 
@@ -87,7 +87,7 @@ namespace OSHGui {
 	//---------------------------------------------------------------------------
 	void Control::SetVisible( bool isVisible ) {
 		isVisible_ = isVisible;
-		if( isVisible == false && isFocused_ ) {
+		if( !isVisible && isFocused_ ) {
 			OnLostFocus( nullptr );
 		}
 
@@ -316,7 +316,7 @@ namespace OSHGui {
 
 	//---------------------------------------------------------------------------
 	void Control::SetCursor( const CursorPtr &cursor ) {
-		cursor_ = std::move( cursor );
+		cursor_ = cursor;
 	}
 
 	//---------------------------------------------------------------------------
@@ -491,7 +491,8 @@ namespace OSHGui {
 			absoluteLocation_ = location_;
 		}
 
-		geometry_->SetTranslation( Drawing::Vector( absoluteLocation_.X, absoluteLocation_.Y, 0.0f ) );
+		if( geometry_.get() )
+			geometry_->SetTranslation( Drawing::Vector( absoluteLocation_.X, absoluteLocation_.Y, 0.0f ) );
 		//TODO: set clipping here
 
 		for( auto &control : internalControls_ ) {
