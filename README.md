@@ -67,5 +67,5 @@ Licensed under the MIT License. See [LICENSE](https://github.com/EternityX/DEADC
 ![image](https://i.imgur.com/q5M8Qx4.png)
 ![image](https://i.imgur.com/JcksnA7.png)
 ![image](https://i.imgur.com/0wAOPPj.png)
-![image](https://i.imgur.com/b76kQH2.png)
-![image](https://i.imgur.com/4ucjwAg.png)
+![image](https://i.imgur.com/nziS7Ek.png)
+![image](https://i.imgur.com/rtWEJiS.png)
