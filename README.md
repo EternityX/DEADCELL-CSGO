@@ -49,6 +49,15 @@ You can share profiles with friends by navigating to the configuration tab insid
 
 To import a profile, just copy all of the profile data and press **Import**. Make sure to save your profile by entering a name and pressing **Save**.
 
+### Why does "Generating code..." take forever when building the project?
+Most likely an issue with Visual Studio 2017, you can wait it out or use Visual Studio 2019 instead.
+
+### Why does the ESP flicker?
+Disable multi-core rendering in your CS:GO video settings.
+
+### Why does moving the menu crash the game?
+Disable multi-core rendering in your CS:GO video settings.
+
 ### How do I open the menu?
 Press `INSERT`.
 
