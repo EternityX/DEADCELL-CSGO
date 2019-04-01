@@ -34,42 +34,43 @@ namespace hook {
 	// enum for indexes for easier updating
 	enum idx : int {
 		// directx
-		RESET =					16,
-		PRESENT =				17,
+		RESET =						16,
+		PRESENT =					17,
 		
 		// clientmode
-		SHOULD_DRAW_FOG =		17,
-		OVERRIDE_VIEW =			18,
-		CREATE_MOVE =			24,
-		GET_VIEWMODEL_FOV =		35,
+		SHOULD_DRAW_FOG =			17,
+		OVERRIDE_VIEW =				18,
+		CREATE_MOVE =				24,
+		GET_VIEWMODEL_FOV =			35,
+		DO_POST_SCREEN_SPACE_FX =   44,
 
 		// client
-		LEVEL_INIT_POST_ENTITY = 7,
-		LEVEL_SHUTDOWN =		 8,
-		FRAME_STAGE_NOTIFY =	 37,
+		LEVEL_INIT_POST_ENTITY =	 7,
+		LEVEL_SHUTDOWN =			 8,
+		FRAME_STAGE_NOTIFY =		 37,
 
 		// surface
-		LOCK_CURSOR =			 67,
+		LOCK_CURSOR =				 67,
 
 		// panel
-		PAINT_TRAVERSE =		 41,
+		PAINT_TRAVERSE =			 41,
 
 		// modelrender
-		DRAW_MODEL_EXECUTE =	 21,
+		DRAW_MODEL_EXECUTE =		 21,
 
 		// renderview
-		SCENE_END =				 9,
+		SCENE_END =					 9,
 
 		// viewrender
-		RENDER_SMOKE_OVERLAY =	 41,
+		RENDER_SMOKE_OVERLAY =		 41,
 
 		// materialsystem
-		GET_MATERIAL =			 84,
+		GET_MATERIAL =				 84,
 
 		// ccsplayer
-		TEST_HITBOXES =			 52,
-		DO_EXTRA_BONE_PROC =	 193,
-		UPDATE_CLIENTSIDE_ANIM = 219,
+		TEST_HITBOXES =				 52,
+		DO_EXTRA_BONE_PROC =		 193,
+		UPDATE_CLIENTSIDE_ANIM =	 219,
 	};
 
 	// our funcs.

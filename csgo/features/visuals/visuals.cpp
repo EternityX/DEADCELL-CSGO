@@ -256,8 +256,8 @@ void c_visuals::handle_glow( ) {
 			continue;
 
 		auto &glow_object = g_csgo.m_glow_obj_manager->m_glow_object_definitions[ i ];
-		auto entity = reinterpret_cast< C_CSPlayer* >( glow_object.m_ent );
 
+		auto entity = reinterpret_cast< C_CSPlayer* >( glow_object.m_ent );
 		if( !entity )
 			continue;
 

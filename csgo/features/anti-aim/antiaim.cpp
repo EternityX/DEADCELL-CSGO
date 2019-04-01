@@ -10,7 +10,8 @@ bool c_antiaim::allow( CUserCmd *ucmd ) {
 	if( !local || local->flags( ) & FL_FROZEN || !local->alive( ) )
 		return false;
 
-	if( local->get_move_type( ) == MOVETYPE_LADDER || local->get_move_type( ) == MOVETYPE_NOCLIP )
+	const auto move_type = local->get_move_type( );
+	if( move_type == MOVETYPE_LADDER || move_type == MOVETYPE_NOCLIP )
 		return false;
 
 	if( ucmd->m_buttons & IN_USE )
@@ -24,9 +25,8 @@ bool c_antiaim::allow( CUserCmd *ucmd ) {
 		float next_secondary_attack = weapon->next_sec_attack( ) - g_csgo.m_global_vars->m_cur_time;
 		float next_primary_attack = weapon->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
 
-		if( ucmd->m_buttons & IN_ATTACK && next_primary_attack <= 0.f || ucmd->m_buttons & IN_ATTACK2 && next_secondary_attack <= 0.f ) {
+		if( ucmd->m_buttons & IN_ATTACK && next_primary_attack <= 0.f || ucmd->m_buttons & IN_ATTACK2 && next_secondary_attack <= 0.f )
 			return false;
-		}
 	}
 
 	if( ucmd->m_buttons & IN_ATTACK && local->can_shoot( weapon ) )
