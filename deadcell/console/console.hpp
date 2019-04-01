@@ -33,7 +33,6 @@ namespace console {
 		std::cout << format;
 	}
 
-	// https://en.cppreference.com/w/cpp/language/parameter_pack
 	template< typename T, typename... Targs >
 	void print( const char *format, T value, Targs ... f_args ) {
 		for( ; *format != '\0'; format++ ) {

@@ -14,7 +14,7 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 		g_cl.m_should_update_materials = false;
 	}
 
-	auto in_thirdperson = g_csgo.m_input->m_fCameraInThirdPerson;
+	const auto in_thirdperson = g_csgo.m_input->m_fCameraInThirdPerson;
 	if( in_thirdperson && g_vars.antiaim.enabled && curstage == FRAME_RENDER_START )
 		g_csgo.m_prediction->SetLocalViewangles( g_antiaim.m_real );
 

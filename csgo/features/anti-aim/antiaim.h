@@ -9,7 +9,7 @@ class c_antiaim {
 	bool allow( CUserCmd *ucmd );
 	void adjust_yaw( CUserCmd *ucmd );
 	void adjust_pitch( CUserCmd *ucmd );
-	float at_target( );
+	static float at_target( );
 public:
 	void set_angles( CUserCmd *ucmd );
 
