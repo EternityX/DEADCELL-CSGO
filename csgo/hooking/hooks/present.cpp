@@ -19,12 +19,7 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 
 	g_renderer.start_drawing( device );
 
-	try {
-		g_visuals.run( );
-	}
-	catch(...) {
-		console::print( "exception caught inside visuals" );
-	}
+	g_visuals.run( );
 
 	g_nadepred.run( );
 
@@ -41,6 +36,5 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 
 	g_renderer.end_drawing( device );
 
-	return g_hooks.m_directx.get_old_method< fn::Present_t >( hook::idx::PRESENT )( device, pSourceRect, pDestRect, hDestWindowOverride,
-	                                                           pDirtyRegion );
+	return g_hooks.m_directx.get_old_method< fn::Present_t >( hook::idx::PRESENT )( device, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion );
 }

@@ -13,11 +13,10 @@ public:
 	void strafe( CUserCmd *cmd );
 	void auto_zeus( CUserCmd *cmd );
 	void fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const;
-	void nightmode( int override_brightness = 0 );
-	void transparent_props( int override_transparency = 0 );
-	void capsule_overlay( C_CSPlayer * e, float duration, std::array<matrix3x4_t, 128> mat );
+	void nightmode( float override_brightness = 0.f );
+	void transparent_props( float override_transparency = 0.f );
+	void capsule_overlay( C_CSPlayer * e, float duration, matrix3x4_t* mat );
 	void no_smoke( ClientFrameStage_t stage );
-	void disable_assert( );
 };
 
 extern c_misc g_misc;

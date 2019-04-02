@@ -100,10 +100,17 @@ void c_ragebot::select_target( ) {
 
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
-			std::array< matrix3x4_t, 128 > _bones = { };
-			
-			if( !e->SetupBones( _bones.data( ), 128, 0x100, e->simtime( ) + g_csgo.m_global_vars->m_interval_per_tick ) )
-				continue;
+			matrix3x4_t* _bones;
+
+			int backup_fl = e->flags( );
+
+			e->flags( ) &= ~FL_ONGROUND;
+
+			e->SetupBones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
+
+			e->flags( ) = backup_fl;
+
+			_bones= e->bone_cache( ).Base( );
 
 			std::vector< vec3_t > points;
 			if( !get_points_from_hitbox( e, hitboxes, _bones, points, ( g_vars.rage.pointscale / 100.f ) ) )
@@ -220,7 +227,7 @@ void c_ragebot::choose_angles( ){
 	if( !weapon )
 		return;
 
-	std::array< matrix3x4_t, 128 > mat;
+	matrix3x4_t* mat = nullptr;
 
 	for( auto &data : m_players ) {
 		auto target = data.m_player;
@@ -284,8 +291,8 @@ void c_ragebot::choose_angles( ){
 		weapon->update_accuracy( );
 		m_cmd->m_viewangles -= local->punch_angle( ) * 2.f;
 
-		if( g_vars.misc.clienthitboxes )
-			g_misc.capsule_overlay( selected_target, g_vars.misc.duration, mat );
+		if( g_vars.misc.client_hitboxes && mat )
+			g_misc.capsule_overlay( selected_target, g_vars.misc.client_hitboxes_duration, mat );
 
 		if( !g_vars.rage.silent ){
 			g_csgo.m_engine->SetViewAngles( m_cmd->m_viewangles );
@@ -303,7 +310,7 @@ std::vector< lag_record_t > c_ragebot::get_best_records( std::deque< lag_record_
 	return output;
 }
 
-bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitboxes, std::array< matrix3x4_t, 128 > matrix, std::vector< vec3_t >& points, float scale ) {
+bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitboxes, matrix3x4_t *matrix, std::vector< vec3_t >& points, float scale ) {
 	if ( !e )
 		return false;
 
@@ -321,8 +328,8 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 			auto *bbox = studiohdr->pHitbox( h, 0 );
 
 			vec3_t max, min;
-			math::vector_transform( bbox->bb_min, matrix.at( bbox->bone_index ), min );
-			math::vector_transform( bbox->bb_max, matrix.at( bbox->bone_index ), max );
+			math::vector_transform( bbox->bb_min, matrix[ bbox->bone_index ], min );
+			math::vector_transform( bbox->bb_max, matrix[ bbox->bone_index ], max );
 			auto center = ( min + max ) / 2.f;
 
 			points.push_back( center );

@@ -23,9 +23,11 @@ bool c_event_listener::setup( ) {
 	g_csgo.m_game_event->AddListener( this, "player_hurt", false );
 	g_csgo.m_game_event->AddListener( this, "item_purchase", false );
 	g_csgo.m_game_event->AddListener( this, "bullet_impact", false );
+	g_csgo.m_game_event->AddListener( this, "weapon_fire", false );
+	g_csgo.m_game_event->AddListener( this, "player_footstep", false );
 
 	if( !g_csgo.m_game_event->FindListener( this, "player_hurt" ) || !g_csgo.m_game_event->FindListener( this, "item_purchase" )
-		|| !g_csgo.m_game_event->FindListener( this, "bullet_impact" ) ) {
+		|| !g_csgo.m_game_event->FindListener( this, "bullet_impact" ) || !g_csgo.m_game_event->FindListener( this, "weapon_fire" ) ) {
 		_RPT0( _CRT_ERROR, "Failed to setup event listener(s). Ignoring this message will result in instability or features not working." );
 		return false;
 	}
@@ -53,7 +55,6 @@ char *hitgroup_to_name( const int hitgroup ) {
 	}
 }
 
-
 void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 	if( !m_event )
 		return;
@@ -70,6 +71,9 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 			return;
 
 		vec3_t position{ m_event->GetFloat( "x" ), m_event->GetFloat( "y" ), m_event->GetFloat( "z" ) };
+
+		if( g_vars.misc.bullet_impacts )
+			g_csgo.m_debug_overlay->AddBoxOverlay( position, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 0, 0, 255, 127, g_vars.misc.bullet_impacts_duration );
 
 		if( g_vars.visuals.impact ) {
 			BeamInfo_t beam_info;
@@ -103,11 +107,46 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 		}
 	}
 
+	if( !strcmp( m_event->GetName( ), "weapon_fire" ) ) {
+		int user_id = m_event->GetInt( "userid" );
+
+		if( !g_vars.misc.bullet_impacts )
+			return;
+
+		auto local = C_CSPlayer::get_local( );
+		if( !local || !local->alive( ) )
+			return;
+
+		auto ent = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetPlayerForUserID( user_id ) );
+		if( !ent || local != ent )
+			return;
+
+		trace_t trace;
+		Ray_t ray;
+		CTraceFilter filter;
+		filter.m_skip = local;
+
+		vec3_t rem, forward, right, up,
+			src = local->eye_pos( );
+
+		static ConVar* weapon_recoil_scale = g_csgo.m_convar->FindVar("weapon_recoil_scale");
+
+		vec3_t view_angles = g_cl.m_cmd->m_viewangles;
+		view_angles += local->punch_angle( ) * weapon_recoil_scale->GetFloat();
+
+		math::angle_to_vectors( view_angles, &forward, &right, &up );
+
+		forward *= local->get_active_weapon( )->get_weapon_info( )->range;
+		rem = src + forward;
+
+		g_csgo.m_engine_trace->TraceRay( Ray_t{ src, rem }, 0x46004003, &filter, &trace );
+		g_csgo.m_debug_overlay->AddBoxOverlay( trace.endpos, vec3_t( -2, -2, -2 ), vec3_t( 2, 2, 2 ), vec3_t( 0, 0, 0 ), 255, 0, 0, 127, g_vars.misc.bullet_impacts_duration );
+	}
+
 	if( !strcmp( m_event->GetName( ), "player_hurt" ) ) {
 		int attacker = g_csgo.m_engine->GetPlayerForUserID( m_event->GetInt( "attacker" ) );
 		int target = g_csgo.m_engine->GetPlayerForUserID( m_event->GetInt( "userid" ) );
-		if( attacker ==  g_csgo.m_engine->GetLocalPlayer( ) && target != g_csgo.m_engine->GetLocalPlayer( ) ) {
-
+		if( attacker == g_csgo.m_engine->GetLocalPlayer( ) && target != g_csgo.m_engine->GetLocalPlayer( ) ) {
 			auto *ent = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetPlayerForUserID( target ) );
 
 			player_info_t info;
@@ -143,5 +182,48 @@ void c_event_listener::FireGameEvent( IGameEvent *m_event ) {
 			if( g_vars.misc.log_purchases )
 				g_notify.add( true, OSHGui::Drawing::Color::FromARGB( 220, 249, 44, 69 ), "%s bought %s", info.m_szPlayerName, m_event->GetString( "weapon" ) );
 		}
+	}
+
+	if( !strcmp( m_event->GetName(), "player_footstep" ) ) {
+		/*int user_id = m_event->GetInt( "userid" );
+		auto ent = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetPlayerForUserID( user_id ) );
+		if( !ent )
+			return;
+
+		auto local = C_CSPlayer::get_local( );
+		if( !local || ent == local )
+			return;
+
+		if( g_vars.visuals.filter == 1 && ent->team( ) == local->team( ) )
+			return;
+
+		BeamInfo_t beam_info;
+
+		beam_info.m_nType = TE_BEAMRINGPOINT;
+		beam_info.m_pszModelName = "sprites/purplelaser1.vmt";
+		beam_info.m_nModelIndex = g_csgo.m_model_info->GetModelIndex( "sprites/purplelaser1.vmt" );
+		beam_info.m_nHaloIndex = -1;
+		beam_info.m_flHaloScale = 5;
+		beam_info.m_flLife = 5.f;
+		beam_info.m_flWidth = 5.f;
+		beam_info.m_flFadeLength = 1.f;
+		beam_info.m_flAmplitude = 0.f;
+		beam_info.m_flRed = util::misc::get_random_float_range( 0.1f, 1.f ) * 255.f;
+		beam_info.m_flGreen = util::misc::get_random_float_range( 0.1f, 1.f ) * 255.f;
+		beam_info.m_flBlue = util::misc::get_random_float_range( 0.1f, 1.f ) * 255.f;
+		beam_info.m_flBrightness = 255.f;
+		beam_info.m_flSpeed = 0.f;
+		beam_info.m_nStartFrame = 0;
+		beam_info.m_flFrameRate = 1.f;
+		beam_info.m_nSegments = -1;
+		beam_info.m_nFlags = FBEAM_FADEOUT;
+		beam_info.m_vecCenter = ent->abs_origin( ) + vec3_t( 0, 0, 5 );
+		beam_info.m_flStartRadius = 0.f;
+		beam_info.m_flEndRadius = 75.f;
+
+		const auto beam = g_csgo.m_render_beams->CreateBeamRingPoint( beam_info );
+
+		if( beam )
+			g_csgo.m_render_beams->DrawBeam( beam );*/
 	}
 }

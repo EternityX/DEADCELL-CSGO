@@ -4,7 +4,7 @@
 c_visuals g_visuals;
 
 void c_visuals::run( ) {
-	if ( !g_renderer.get_instance(  ) )
+	if( !g_renderer.get_instance( ) )
 		return;
 
 	if( g_vars.visuals.misc.remove_scope )
@@ -13,7 +13,7 @@ void c_visuals::run( ) {
 	activation_type( );
 
 	for( int i = 1; i <= g_csgo.m_entity_list->GetHighestEntityIndex( ); i++ ) {
-		C_CSPlayer *entity = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
+		auto entity = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
 		if( !entity )
 			continue;
 
@@ -41,10 +41,9 @@ bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
 	const float width = matrix.m[ 3 ][ 0 ] * origin.x + matrix.m[ 3 ][ 1 ] * origin.y + matrix.m[ 3 ][ 2 ] * origin.z + matrix.m[ 3 ][ 3 ];
 
 	if( width > 0.01f ) {
-		float inverse = 1.f / width;
+		const float inverse = 1.f / width;
 
-		// todo: only grab display_size once.
-		OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
+		const OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
 
 		screen.x = static_cast< float >( display_size.Width / 2 + ( 0.5 * ( ( matrix.m[ 0 ][ 0 ] * origin.x + matrix.m[ 0 ][ 1 ] * origin.y + matrix.m[ 0 ][ 2 ] * origin.z + matrix.m[ 0 ][ 3 ] ) * inverse ) * display_size.Width + 0.5 ) );
 		screen.y = static_cast< float >( display_size.Height / 2 - ( 0.5 * ( ( matrix.m[ 1 ][ 0 ] * origin.x + matrix.m[ 1 ][ 1 ] * origin.y + matrix.m[ 1 ][ 2 ] * origin.z + matrix.m[ 1 ][ 3 ] ) * inverse ) * display_size.Height + 0.5 ) );
@@ -56,11 +55,11 @@ bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
 	return false;
 }
 
-bool c_visuals::calculate_bbox( C_BaseEntity *entity, bbox_t &box ) {
+bool c_visuals::calculate_bbox( C_BaseEntity *entity, bbox_t &box ) const {
 	matrix3x4_t &tran_frame = entity->coord_frame( );
 
-	vec3_t min = entity->mins( );
-	vec3_t max = entity->maxs( );
+	const vec3_t min = entity->mins( );
+	const vec3_t max = entity->maxs( );
 
 	vec3_t screen_boxes[ 8 ];
 
@@ -120,13 +119,13 @@ void c_visuals::activation_type( ) {
 
 	// hotkey stuff.
 	if( g_vars.visuals.activation_type == 0 /* always */ ) {
-		ctx.m_enabled = true;
+		m_ctx.m_enabled = true;
 	}
 	else if( g_vars.visuals.activation_type == 1 /* on-key */ ) {
 		if( g_input.key_pressed( g_vars.visuals.activation_key ) )
-			ctx.m_enabled = true;
+			m_ctx.m_enabled = true;
 		else
-			ctx.m_enabled = false;
+			m_ctx.m_enabled = false;
 	}
 	else if( g_vars.visuals.activation_type == 2 /* toggle */ ) {
 		if( g_input.key_pressed( g_vars.visuals.activation_key ) ) {
@@ -143,64 +142,53 @@ void c_visuals::activation_type( ) {
 		}
 
 		if( is_clicked )
-			ctx.m_enabled = !ctx.m_enabled;
+			m_ctx.m_enabled = !m_ctx.m_enabled;
 	}
 }
 
-void c_visuals::player( C_CSPlayer *e ) {
+void c_visuals::run_dormancy_fade( C_CSPlayer *entity, const int idx ) {
+	const float step = 255.f * ( 20.f / 15.f ) * g_csgo.m_global_vars->m_frametime;
+
+	g_vars.visuals.dormancy_fade ? entity->IsDormant( ) 
+		? m_alpha.at( idx ) -= step : m_alpha.at( idx ) += step * 5.f : entity->IsDormant( )
+		? m_alpha.at( idx ) = 0.f : m_alpha.at( idx ) = 220.f;
+
+	if( m_alpha.at( idx ) > 220.f )
+		m_alpha.at( idx ) = 220.f;
+	if( m_alpha.at( idx ) < 0.f )
+		m_alpha.at( idx ) = 0.f;
+
+	if( m_alpha.at( idx ) == 0.f )
+		return;
+}
+
+void c_visuals::player( C_CSPlayer *entity ) {
+	const auto index = entity->GetIndex( );
+
 	auto local = C_CSPlayer::get_local( );
-	if( !e->is_valid_player( false, true ) || !local )
+	if( !entity->is_valid_player( false, true ) || !local || entity == local )
 		return;
 
-	auto index = e->GetIndex( );
-	float step = 255.f * ( 20.f / 15.f ) * g_csgo.m_global_vars->m_frametime;
-
-	g_vars.visuals.dormancy_fade ? e->IsDormant( ) 
-		? m_alpha[ index ] -= step : m_alpha[ index ] += step * 5.f : e->IsDormant( )
-		? m_alpha[ index ] = 0.f : m_alpha[ index ] = 220.f;
-
-	if( m_alpha[ index ] > 220.f )
-		m_alpha[ index ] = 220.f;
-	if( m_alpha[ index ] < 0.f )
-		m_alpha[ index ] = 0.f;
-
-	if( m_alpha[ index ] == 0.f )
+	if( g_vars.visuals.filter == 1 && entity->team( ) == local->team( ) )
 		return;
 
-	if( !ctx.m_enabled )
+	run_dormancy_fade( entity, index );	
+
+	if( !m_ctx.m_enabled )
 		return;
 
 	if( !local->alive( ) ) {
 		const auto spec_handle = local->observer_handle( );
-		auto spec = g_csgo.m_entity_list->Get< C_BaseEntity >( spec_handle );
-		if( spec ) {
-			if( spec == e )
-				return;
-		}
+		const auto spec = g_csgo.m_entity_list->Get< C_BaseEntity >( spec_handle );
+		if( spec || spec == entity )
+			return;
 	}
 
-	if( e == local )
-		return;
-
-	if( g_vars.visuals.filter == 1 && e->team( ) == local->team( ) )
-		return;
-
-	ctx.offset = 0;
-	ctx.flag_count = 0;
-
 	bbox_t box{};
-	if( !calculate_bbox( e, box ) )
+	if( !calculate_bbox( entity, box ) )
 		return;
 
-	const OSHColor name_color = OSHColor::FromARGB( g_vars.visuals.name_color, m_alpha[ index ] );
-	const OSHColor box_color = OSHColor::FromARGB( g_vars.visuals.box_color, m_alpha[ index ] );
-	const OSHColor ammo_bar_color = OSHColor::FromARGB( g_vars.visuals.ammo_bar_color, m_alpha[ index ] );
-	const OSHColor weapon_color = OSHColor::FromARGB( g_vars.visuals.weapon_color, m_alpha[ index ] );
-	const OSHColor flag_color = OSHColor::FromARGB( g_vars.visuals.flag_color, m_alpha[ index ] );
-	const OSHColor money_color = OSHColor::FromARGB( g_vars.visuals.money_color, m_alpha[ index ] );
-	const OSHColor flashed_color = OSHColor::FromARGB( g_vars.visuals.flash_bar_color, m_alpha[ index ] );
-
-	auto weapon = e->get_active_weapon( );
+	C_BaseCombatWeapon *weapon = entity->get_active_weapon( );
 	if( !weapon )
 		return;
 
@@ -208,11 +196,19 @@ void c_visuals::player( C_CSPlayer *e ) {
 	if( !info )
 		return;
 
+	const auto name_color     = OSHColor::FromARGB( g_vars.visuals.name_color, m_alpha.at( index ) );
+	const auto box_color      = OSHColor::FromARGB( g_vars.visuals.box_color, m_alpha.at( index ) );
+	const auto ammo_bar_color = OSHColor::FromARGB( g_vars.visuals.ammo_bar_color, m_alpha.at( index ) );
+	const auto weapon_color   = OSHColor::FromARGB( g_vars.visuals.weapon_color, m_alpha.at( index ) );
+	const auto flag_color     = OSHColor::FromARGB( g_vars.visuals.flag_color, m_alpha.at( index ) );
+	const auto money_color    = OSHColor::FromARGB( g_vars.visuals.money_color, m_alpha.at( index ) );
+	const auto flashed_color  = OSHColor::FromARGB( g_vars.visuals.flash_bar_color, m_alpha.at( index ) );
+
 	if( g_vars.visuals.bbox )
-		draw_box( box_color, e->GetIndex( ), box.x, box.y, box.w, box.h );
+		draw_box( box_color, index, box.x, box.y, box.w, box.h );
 
 	if( g_vars.visuals.name ) {
-		std::string name = e->get_info( ).m_szPlayerName;
+		std::string name = entity->get_info( ).m_szPlayerName;
 
 		if( name.length( ) > 17 )
 			name = name.substr( 0, 17 ) + "...";
@@ -221,35 +217,34 @@ void c_visuals::player( C_CSPlayer *e ) {
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ),
 		                      name_color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
-		                      box.x + box.w * 0.5f, box.y - 12, CENTERED_X | DROPSHADOW,
-		                      e->get_info( ).xuid_low == 0 ? name.append( " ( BOT ) " ) : name );
+		                      box.x + box.w * 0.5, box.y - 12, CENTERED_X | DROPSHADOW,
+		                      entity->get_info( ).xuid_low == 0 ? name.append( " ( BOT ) " ) : name );
 	}
 
 	if( g_vars.visuals.healthbar )
-		draw_healthbar( e, box.x, box.y, box.w, box.h );
+		draw_healthbar( entity, box.x, box.y, box.w, box.h );
 
 	if( g_vars.visuals.flash_bar )
-		flash_bar( e, flashed_color, box.x, box.y, box.w, box.h );
+		flash_bar( entity, flashed_color, box.x, box.y, box.w, box.h );
 
 	if( g_vars.visuals.ammo_bar )
-		ammo_bar( weapon, e, ammo_bar_color, box.x, box.y, box.w, box.h, weapon->clip( ) );
+		ammo_bar( weapon, entity, ammo_bar_color, box.x, box.y, box.w, box.h, weapon->clip( ) );
 
 	if( g_vars.visuals.weapon )
-		weapon_name( weapon, e, weapon_color, box.x, box.y, box.w, box.h );
+		weapon_name( weapon, entity, weapon_color, box.x, box.y, box.w, box.h );
 
 	if( g_vars.visuals.money )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
 		                      money_color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
-		                      box.x + box.w + 3, box.y + ctx.flag_count++ * 8, OUTLINED, "$%i", e->money( ) );
+		                      box.x + box.w + 3, box.y + m_ctx.flag_count++ * 8, OUTLINED, "$%i", entity->money( ) );
 
 	if( g_vars.visuals.flags )
-		draw_flags( e, flag_color, box.x, box.y, box.w, box.h );
+		draw_flags( entity, flag_color, box.x, box.y, box.w, box.h );
 }
 
 void c_visuals::handle_glow( ) {
-
-	if( !ctx.m_enabled )
+	if( !m_ctx.m_enabled )
 		return;
 
 	auto local = C_CSPlayer::get_local( );
@@ -261,8 +256,8 @@ void c_visuals::handle_glow( ) {
 			continue;
 
 		auto &glow_object = g_csgo.m_glow_obj_manager->m_glow_object_definitions[ i ];
-		auto entity = reinterpret_cast< C_CSPlayer* >( glow_object.m_ent );
 
+		auto entity = reinterpret_cast< C_CSPlayer* >( glow_object.m_ent );
 		if( !entity )
 			continue;
 
@@ -338,7 +333,7 @@ void c_visuals::weapon_name( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSH
 	                      color,
 	                      OSHColor::FromARGB( 220, 10, 10, 10 ),
 	                      x + w * 0.5f,
-	                      y + h + 2 + ctx.offset,
+	                      y + h + 2 + m_ctx.offset,
 	                      CENTERED_X | OUTLINED,
 	                      print );
 }
@@ -370,14 +365,14 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 	}
 
 	// background
-	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 1, y + h + 2 + ctx.offset, w + 2, 4 );
+	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 1, y + h + 2 + m_ctx.offset, w + 2, 4 );
 
 	// ammo bar
 	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 220, 10, 10, 10 ),
 																	  color,
 																	  color - OSHColor::FromARGB( 0, 50, 50, 50 ),
 	                                                                  color ),
-																	  x, y + h + 3 + ctx.offset, width, 2 );
+																	  x, y + h + 3 + m_ctx.offset, width, 2 );
 
 	if( ammo < 5 && ammo != 0 )
 		g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
@@ -388,7 +383,7 @@ void c_visuals::ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHCol
 		                      OUTLINED,
 		                      "%i", ammo );
 
-	ctx.offset += 5;
+	m_ctx.offset += 5;
 }
 
 void c_visuals::flash_bar( C_CSPlayer *player, OSHColor color, float x, float y, float w, float h ) {
@@ -409,10 +404,13 @@ void c_visuals::flash_bar( C_CSPlayer *player, OSHColor color, float x, float y,
 	// flash bar
 	g_renderer.filled_rect( color, x, y + h + 3, width, 2 );
 
-	ctx.offset += 5;
+	m_ctx.offset += 5;
 }
 
 void c_visuals::draw_flags( C_CSPlayer *player, OSHColor color, float x, float y, float w, float h ) {
+	m_ctx.offset = 0;
+	m_ctx.flag_count = 0;
+
 	std::string armor_flag;
 	if( player->helmet( ) )
 		armor_flag += "H";
@@ -423,29 +421,29 @@ void c_visuals::draw_flags( C_CSPlayer *player, OSHColor color, float x, float y
 	if( !armor_flag.empty( ) )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
-		                      x + w + 3, y + ctx.flag_count++ * 8, OUTLINED, armor_flag );
+		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, armor_flag );
 
 	if( player->get_flashed( ) > 140.f )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
-		                      x + w + 3, y + ctx.flag_count++ * 8, OUTLINED, "F" );
+		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "F" );
 
 	if( player->is_scoped( ) )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
-		                      x + w + 3, y + ctx.flag_count++ * 8, OUTLINED, "+" );
+		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "+" );
 }
 
-void c_visuals::draw_spectators( ) {
+void c_visuals::draw_spectators( ) const {
 	int spec_count = 0;
 
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; i++ ) {
-		auto *entity = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
-		auto *local = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetLocalPlayer( ) );
+		auto entity = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
+		auto local = g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetLocalPlayer( ) );
 		if( !entity || entity->alive( ) || entity == local )
 			continue;
 
-		auto spectator = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->observer_handle( ) );
+		const auto spectator = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->observer_handle( ) );
 		if( !spectator )
 			continue;
 
@@ -459,7 +457,7 @@ void c_visuals::draw_spectators( ) {
 		if( spectator != local )
 			continue;
 
-		OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
+		const OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_LUCIDA_CONSOLE ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ),
 		                      display_size.Width - 150, display_size.Height / 2 + 10 * spec_count - 300, DROPSHADOW, "%s", player_info_spec.m_szPlayerName );
 
@@ -480,7 +478,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 		if( client_class->m_ClassID == CPlantedC4 && entity->bomb_ticking( ) && !entity->bomb_defused( ) ) {
 			float m_defuse_time = entity->get_defuse_length( );
 
-			float bomb_duration = entity->blow_time( ) - g_csgo.m_global_vars->m_cur_time;
+			const float bomb_duration = entity->blow_time( ) - g_csgo.m_global_vars->m_cur_time;
 
 			if( bomb_duration > 0.f )
 				draw_bomb_timer( bomb_duration );
@@ -491,7 +489,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 	if( !calculate_bbox( entity, box ) )
 		return;
 
-	auto owner = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->owner( ) );
+	const auto owner = g_csgo.m_entity_list->Get< C_BaseEntity >( entity->owner( ) );
 
 	if( !owner && ( client_class->m_ClassID != CBaseWeaponWorldModel && ( std::strstr( client_class->m_pNetworkName, "Weapon" )
 		|| client_class->m_ClassID == CDEagle || client_class->m_ClassID == CAK47 ) ) ) {
@@ -503,7 +501,7 @@ void c_visuals::world( C_BaseEntity *entity ) {
 		if( !weapon->item_index( ) )
 			return;
 
-		auto info = g_csgo.m_weapon_system->GetWpnData( weapon->item_index( ) );
+		const WeaponInfo_t *info = g_csgo.m_weapon_system->GetWpnData( weapon->item_index( ) );
 		if( !info )
 			return;
 

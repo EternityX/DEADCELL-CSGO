@@ -12,12 +12,12 @@ void c_misc::bunnyhop( CUserCmd *cmd ) {
 		return;
 
 	static bool last_jumped = false, should_fake = false;
-	if ( !last_jumped && should_fake ) {
+	if( !last_jumped && should_fake ) {
 		should_fake = false;
 		cmd->m_buttons |= IN_JUMP;
 	}
-	else if ( cmd->m_buttons & IN_JUMP ) {
-		if ( g_cl.m_local->flags( ) & FL_ONGROUND ) {
+	else if( cmd->m_buttons & IN_JUMP ) {
+		if( g_cl.m_local->flags( ) & FL_ONGROUND ) {
 			last_jumped = true;
 			should_fake = true;
 		}
@@ -36,35 +36,34 @@ void c_misc::automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd ) 
 	if( !active_weapon || !cmd )
 		return;
 
-	const WeaponInfo_t *wep_info = active_weapon->get_weapon_info();
+	const WeaponInfo_t *wep_info = active_weapon->get_weapon_info( );
 
-	if( wep_info->full_auto || !( wep_info->type == WEAPONTYPE_PISTOL ) || !( cmd->m_buttons & IN_ATTACK ) ) 
+	if( wep_info->full_auto || !( wep_info->type == WEAPONTYPE_PISTOL ) || !( cmd->m_buttons & IN_ATTACK ) )
 		return;
 
 	float next_wep_attack = active_weapon->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
 	float next_local_attack = g_cl.m_local->next_attack( ) - g_csgo.m_global_vars->m_cur_time;
-	if ( next_wep_attack >= 0.f || next_local_attack >= 0.f )
+	if( next_wep_attack >= 0.f || next_local_attack >= 0.f )
 		cmd->m_buttons &= ~IN_ATTACK;
 	else
 		cmd->m_buttons |= IN_ATTACK;
 }
 
-
 void c_misc::thirdperson( ) {
 	auto local = C_CSPlayer::get_local( );
 
-	if ( !local )
+	if( !local )
 		return;
 
 	static bool is_down = false;
 	static bool is_clicked = false;
 	static bool enabled = false;
 
-	if ( g_input.key_pressed( g_vars.misc.thirdperson_key ) ) {
+	if( g_input.key_pressed( g_vars.misc.thirdperson_key ) ) {
 		is_clicked = false;
 		is_down = true;
 	}
-	else if ( !g_input.key_pressed( g_vars.misc.thirdperson_key ) && is_down ) {
+	else if( !g_input.key_pressed( g_vars.misc.thirdperson_key ) && is_down ) {
 		is_clicked = true;
 		is_down = false;
 	}
@@ -119,17 +118,16 @@ void c_misc::thirdperson( ) {
 
 void c_misc::thirdperson( CViewSetup *setup ) {
 	auto local = C_CSPlayer::get_local( );
-	if ( !local )
+	if( !local )
 		return;
 
 	static bool once = false;
 	static bool once2 = false;
 
-	if ( g_vars.misc.thirdperson_dead )
-	{
+	if( g_vars.misc.thirdperson_dead ) {
 		once = true;
 
-		if ( local->alive( ) ) {
+		if( local->alive( ) ) {
 			once2 = false;
 			return;
 		}
@@ -137,17 +135,16 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 		auto spechandle = local->observer_handle( );
 
 		auto spec = g_csgo.m_entity_list->Get< C_CSPlayer >( spechandle );
-		if ( !spec )
+		if( !spec )
 			return;
 
 		static bool once2 = false;
 
-		if ( once2 )
+		if( once2 )
 			local->observer_mode( ) = 5;
 
-		if ( local->observer_mode( ) == 4 )
+		if( local->observer_mode( ) == 4 )
 			once2 = true;
-
 
 		static vec3_t angles;
 		g_csgo.m_engine->GetViewAngles( angles );
@@ -159,7 +156,7 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 		vec3_t forward, right, up;
 		math::angle_to_vectors( angles, &forward, &right, &up );
 
-		vec3_t cam_offset = spec->eye_pos( ) + ( forward * -120.f ) + ( right ) +( up );
+		vec3_t cam_offset = spec->eye_pos( ) + ( forward * -120.f ) + ( right ) + ( up );
 
 		ray.init( spec->eye_pos( ), cam_offset );
 		CTraceFilterWorldOnly traceFilter;
@@ -168,7 +165,7 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 
 		setup->m_origin = tr.endpos;
 	}
-	else if ( once ) {
+	else if( once ) {
 		local->observer_mode( ) = local->alive( ) ? 0 : 4;
 		once = false;
 	}
@@ -219,12 +216,12 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 	if( weapon->item_index( ) != WEAPON_TASER )
 		return;
 
-	for ( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
+	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
 		auto target = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
 
-		if( !target || target->IsDormant(  ) || target->team(  ) == local->team(  ) || target->immune(  ) )
+		if( !target || target->IsDormant( ) || target->team( ) == local->team( ) || target->immune( ) )
 			continue;
-		std::vector< int > hitboxes = { player_hitbox::pelvis, player_hitbox::u_chest, player_hitbox::l_chest };
+		std::vector< int > hitboxes = { pelvis, u_chest, l_chest };
 		std::array< matrix3x4_t, 128 > matrix = {};
 		std::vector< vec3_t > points;
 		vec3_t best_point;
@@ -233,10 +230,10 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 			continue;
 
 		auto studiohdr = target->studio_hdr( );
-		if ( !studiohdr )
+		if( !studiohdr )
 			continue;
 
-		for( auto &h : hitboxes ){
+		for( auto &h : hitboxes ) {
 			auto *bbox = studiohdr->pHitbox( h, 0 );
 
 			vec3_t max, min;
@@ -259,8 +256,8 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 			return ( tr.hit_entity == target || tr.fraction > 0.97f );
 		};
 
-		for( auto &p : points ){
-			if( is_visible( local->eye_pos( ), p, target ) ){
+		for( auto &p : points ) {
+			if( is_visible( local->eye_pos( ), p, target ) ) {
 				best_point = p;
 			}
 		}
@@ -286,7 +283,7 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 		if( !local->can_shoot( weapon ) )
 			return;
 
-		if( trace.hit_entity == target ){
+		if( trace.hit_entity == target ) {
 			cmd->m_buttons |= IN_ATTACK;
 
 			static auto firing = false;
@@ -297,7 +294,7 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 			}
 			firing = ( cmd->m_buttons & IN_ATTACK ) != 0;
 
-			if( cmd->m_buttons & IN_ATTACK ){
+			if( cmd->m_buttons & IN_ATTACK ) {
 				cmd->m_viewangles = aim_angle;
 			}
 		}
@@ -354,25 +351,23 @@ void c_misc::fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const {
 	cmd->m_upmove = util::misc::clamp( cmd->m_upmove, -320.f, 320.f );
 }
 
-void c_misc::nightmode( int override_brightness ) {
-	if( !g_csgo.m_engine->IsConnected() || !g_cl.m_local )
+void c_misc::nightmode( float override_brightness ) {
+	if( !g_csgo.m_engine->IsConnected( ) || !g_cl.m_local )
 		return;
 
 	// disable fast path.
-	static auto r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
+	static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
 	r_drawspecificstaticprop->SetValue( 0 );
 
 	float brightness = g_vars.misc.nightmode / 100.f;
 
-	if( override_brightness )
+	if( override_brightness > 0.f )
 		brightness = override_brightness / 100.f;
 
-	for( int i = g_csgo.m_material_system->FirstMaterial(); i != g_csgo.m_material_system->InvalidMaterial(); i = g_csgo.m_material_system->NextMaterial( i ) ) {
-		auto material = g_csgo.m_material_system->FindMaterial( i );
-		if( !material ) {
-			console::print( "Failed to retrieve material" );
+	for( int i = g_csgo.m_material_system->FirstMaterial( ); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
+		IMaterial *material = g_csgo.m_material_system->FindMaterial( i );
+		if( !material || material->IsErrorMaterial( ) )
 			continue;
-		}
 
 		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
 			material->ColorModulate( brightness, brightness, brightness + 0.05f );
@@ -382,62 +377,58 @@ void c_misc::nightmode( int override_brightness ) {
 
 		if( std::strstr( material->GetName( ), "glass" ) || std::strstr( material->GetName( ), "decals" ) || std::strstr( material->GetName( ), "door" ) )
 			brightness < 0.15f ? material->ColorModulate( 0.f, 0.f, 0.05f ) : material->ColorModulate( brightness - 0.15f, brightness - 0.15f, brightness + 0.05f );
+		
 	}
 }
 
-void c_misc::transparent_props( int override_transparency ) {
-	if( !g_csgo.m_engine->IsConnected() || !g_cl.m_local )
+void c_misc::transparent_props( float override_transparency ) {
+	if( !g_csgo.m_engine->IsConnected( ) || !g_cl.m_local )
 		return;
 
 	// disable fast path.
-	static auto r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
+	static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
 	r_drawspecificstaticprop->SetValue( 0 );
 
 	float translucency = g_vars.misc.prop_transparency / 100.f;
 
-	if( override_transparency )
+	if( override_transparency > 0.f )
 		translucency = override_transparency / 100.f;
 
-	for( int i = g_csgo.m_material_system->FirstMaterial(); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
-		auto material = g_csgo.m_material_system->FindMaterial( i );
-		if( !material ) {
-			console::print( "Failed to retrieve material" );
+	for( int i = g_csgo.m_material_system->FirstMaterial( ); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
+		IMaterial *material = g_csgo.m_material_system->FindMaterial( i );
+		if( !material || material->IsErrorMaterial( ) )
 			continue;
-		}
 
-		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
+		if( std::strstr( material->GetTextureGroupName(), "StaticProp" ) )
 			material->AlphaModulate( translucency );
 	}
 }
 
-void c_misc::capsule_overlay( C_CSPlayer* e, float duration, std::array< matrix3x4_t, 128 > mat )
-{
-	if ( !e )
+void c_misc::capsule_overlay( C_CSPlayer *e, float duration, matrix3x4_t *mat ) {
+	if( !e )
 		return;
 
-	studiohdr_t* studio_model = e->studio_hdr( );
-	if ( !studio_model )
+	studiohdr_t *studio_model = e->studio_hdr( );
+	if( !studio_model )
 		return;
 
-	mstudiohitboxset_t* hitboxset = studio_model->pHitboxSet( 0 );
-	if ( !hitboxset )
+	mstudiohitboxset_t *hitboxset = studio_model->pHitboxSet( e->hitbox_set( ) );
+	if( !hitboxset )
 		return;
 
-	for ( int i = 0; i < hitboxset->numhitboxes; i++ )
-	{
-		mstudiobbox_t* h = hitboxset->pHitbox( i );
-		if ( !h )
+	for( int i = 0; i < hitboxset->numhitboxes; i++ ) {
+		mstudiobbox_t *h = hitboxset->pHitbox( i );
+		if( !h )
 			continue;
-		
-		
-		vec3_t min = math::vector_transform( h->bb_min, mat.at( h->bone_index ) );
-		vec3_t max = math::vector_transform( h->bb_max, mat.at( h->bone_index ) );
 
-		g_csgo.m_debug_overlay->AddCapsuleOverlayVisible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
+		vec3_t min = math::vector_transform( h->bb_min, mat[ h->bone_index ] );
+		vec3_t max = math::vector_transform( h->bb_max, mat[ h->bone_index ] );
+
+		if( h->m_flRadius != -1 )
+			g_csgo.m_debug_overlay->AddCapsuleOverlayVisible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
 	}
 }
 
-// wrong way to do this.
 void c_misc::no_smoke( ClientFrameStage_t stage ) {
 	if( stage != FRAME_RENDER_START || !g_csgo.m_engine->IsConnected( ) )
 		return;
@@ -453,12 +444,4 @@ void c_misc::no_smoke( ClientFrameStage_t stage ) {
 		IMaterial *mat = g_csgo.m_material_system->GetMaterial( mat_s, TEXTURE_GROUP_OTHER );
 		mat->SetMaterialVarFlag( MATERIAL_VAR_NO_DRAW, g_vars.visuals.misc.remove_smoke );
 	}
-}
-
-void c_misc::disable_assert( ) {
-	using SetAllAssertsDisabled_t = void( __stdcall * )( bool bAssertsEnabled );
-
-	const SetAllAssertsDisabled_t SetAllAssertsDisabled = pe::get_export< SetAllAssertsDisabled_t >( pe::get_module( "tier0.dll" ), "SetAllAssertsDisabled" );
-	if( SetAllAssertsDisabled )
-		SetAllAssertsDisabled( true );
 }

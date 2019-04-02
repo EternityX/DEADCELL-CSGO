@@ -82,6 +82,11 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
+	if( !m_clientmode.hook_method( hook::idx::DO_POST_SCREEN_SPACE_FX, &hook::DoPostScreenSpaceEffects ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to hook DoPostScreenSpaceEffects. This is fatal." );
+		return false;
+	}
+
 	if( !m_client.hook_method( hook::idx::LEVEL_INIT_POST_ENTITY, &hook::LevelInitPostEntity ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook LevelInitPostEntity. This is fatal." );
 		return false;

@@ -45,7 +45,7 @@ public:
 	IMDLCache *m_modelcache                = nullptr;
 	IViewRender *m_viewrender              = nullptr;
 	CGlowObjectManager *m_glow_obj_manager = nullptr;
-	CommandLine_t m_command_line           = nullptr;
+	ICommandLine *m_command_line           = nullptr;
 
 	c_csgo() { }
 
@@ -66,7 +66,7 @@ public:
 		if( !m_memalloc )
 			return false;
 
-		m_command_line = pe::get_export< CommandLine_t >( pe::get_module( "tier0.dll" ), "CommandLine" );
+		m_command_line = pe::get_export< CommandLine_t >( pe::get_module( "tier0.dll" ), "CommandLine" )();
 		if( !m_command_line )
 			return false;
 

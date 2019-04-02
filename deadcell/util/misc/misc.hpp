@@ -153,6 +153,10 @@ namespace util {
 					reset();
 			}
 
+			void start() {
+				reset();
+			}
+
 			void reset() {
 				m_start = std::chrono::high_resolution_clock::now();
 			}
