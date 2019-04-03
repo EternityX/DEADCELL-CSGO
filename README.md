@@ -11,7 +11,7 @@
 ## Preface
 Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
 
-This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. However we are working towards a stable, free, feature-rich cheat for everyone to use!
+This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. As such it is highly recommended that you do not use this if you have no prior programming knowledge. However we are working towards a stable, free, feature-rich cheat for everyone to use!
 
 If you want a clean base without any features, please see the [deadcell SDK](https://github.com/alpine971/DEADCELL-SDK).
 
