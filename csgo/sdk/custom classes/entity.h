@@ -194,7 +194,7 @@ public:
 		return false;
 	}
 
-	bool is_knife( int i ){
+	static bool is_knife( int i ){
 		return ( i >= WEAPON_KNIFE_BAYONET && i < GLOVE_STUDDED_BLOODHOUND ) || i == WEAPON_KNIFE_T || i == WEAPON_KNIFE;
 	}
 

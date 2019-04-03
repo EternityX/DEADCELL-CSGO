@@ -360,6 +360,8 @@ void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
 		return;
 
 	float brightness = g_vars.misc.nightmode / 100.f;
+	if( !g_vars.misc.nightmode )
+		brightness = 0.f;
 
 	if( override_brightness > 0.f )
 		brightness = override_brightness / 100.f;
@@ -420,6 +422,8 @@ void c_misc::transparent_props( float override_transparency ) {
 		if( std::strstr( material->GetTextureGroupName(), "StaticProp" ) )
 			material->AlphaModulate( translucency );
 	}
+
+	g_cl.m_should_update_materials = false;
 }
 
 void c_misc::capsule_overlay( C_CSPlayer *e, float duration, matrix3x4_t *mat ) {
