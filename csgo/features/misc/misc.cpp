@@ -355,7 +355,7 @@ void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
 
 	float brightness = g_vars.misc.nightmode / 100.f;
 	if( !g_vars.misc.nightmode )
-		brightness = 0.f;
+		brightness = 0.001f;
 
 	if( override_brightness > 0.f )
 		brightness = override_brightness / 100.f;
