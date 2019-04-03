@@ -147,6 +147,13 @@ public:
 	}
 };
 
+class C_EnvTonemapController : C_BaseEntity {
+public:
+	NETVAR( unsigned char, use_custom_exposure_min, "DT_EnvTonemapController", "m_bUseCustomAutoExposureMin" );
+	NETVAR( unsigned char, use_custom_exposure_max, "DT_EnvTonemapController", "m_bUseCustomAutoExposureMax" );
+	NETVAR( float, custom_exposure_min, "DT_EnvTonemapController", "m_flCustomAutoExposureMin" );
+	NETVAR( float, custom_exposure_max, "DT_EnvTonemapController", "m_flCustomAutoExposureMax" );
+};
 
 class C_BaseCSGrenade : public C_BaseEntity {
 public:
@@ -163,8 +170,11 @@ public:
 	NETVAR( CBaseHandle, worldmodel_handle, "DT_BaseCombatWeapon", "m_hWeaponWorldModel" );
 	NETVAR( int, dropped_index, "DT_BaseCombatWeapon", "m_iWorldDroppedModelIndex" );
 	NETVAR( float, ready_time, "DT_WeaponBaseItem", "m_flPostponeFireReadyTime" );
-	NETVAR( float, next_attack, "DT_BaseCombatWeapon", "m_flNextPrimaryAttack" );
+	NETVAR( float, next_primary_attack, "DT_BaseCombatWeapon", "m_flNextPrimaryAttack" );
+	NETVAR( float, next_attack, "DT_BaseCombatCharacter", "m_flNextAttack" );
 	NETVAR( float, next_sec_attack, "DT_BaseCombatWeapon", "m_flNextSecondaryAttack" );
+	NETVAR( int, burst_shot_remaining, "DT_WeaponCSBaseGun", "m_iBurstShotsRemaining" );
+	NETVAR( bool, burst_mode, "DT_WeaponCSBaseGun", "m_bBurstMode" );
 
 	OFFSET( bool, in_reload, 0x3285 )
 
@@ -184,7 +194,7 @@ public:
 		return false;
 	}
 
-	bool is_knife( int i ){
+	static bool is_knife( int i ){
 		return ( i >= WEAPON_KNIFE_BAYONET && i < GLOVE_STUDDED_BLOODHOUND ) || i == WEAPON_KNIFE_T || i == WEAPON_KNIFE;
 	}
 
@@ -227,13 +237,13 @@ class C_BaseAttributableItem : public C_BaseCombatWeapon
 {
 public:
 	NETVAR( int, account_id, "DT_BaseAttributableItem","m_iAccountID" )
-		NETVAR( short, def_index, "DT_BaseAttributableItem","m_iItemDefinitionIndex" )
-		NETVAR( int, id_high, "DT_BaseAttributableItem","m_iItemIDHigh" )
-		NETVAR( int, quality, "DT_BaseAttributableItem","m_iEntityQuality" )
-		NETVAR( unsigned, paintkit, "DT_BaseAttributableItem","m_nFallbackPaintKit" )
-		NETVAR( unsigned, seed, "DT_BaseAttributableItem","m_nFallbackSeed" )
-		NETVAR( float, wear, "DT_BaseAttributableItem","m_flFallbackWear" )
-		NETVAR( unsigned, stattrack, "DT_BaseAttributableItem","m_nFallbackStatTrak" )
+	NETVAR( short, def_index, "DT_BaseAttributableItem","m_iItemDefinitionIndex" )
+	NETVAR( int, id_high, "DT_BaseAttributableItem","m_iItemIDHigh" )
+	NETVAR( int, quality, "DT_BaseAttributableItem","m_iEntityQuality" )
+	NETVAR( unsigned, paintkit, "DT_BaseAttributableItem","m_nFallbackPaintKit" )
+	NETVAR( unsigned, seed, "DT_BaseAttributableItem","m_nFallbackSeed" )
+	NETVAR( float, wear, "DT_BaseAttributableItem","m_flFallbackWear" )
+	NETVAR( unsigned, stattrack, "DT_BaseAttributableItem","m_nFallbackStatTrak" )
 };
 
 
@@ -384,24 +394,61 @@ public:
 		return trace.fraction == 1 || trace.hit_entity == entity;
 	}
 
-	bool can_shoot( C_BaseCombatWeapon* weapon ) {
-		const auto weapontype = weapon->get_weapon_info( )->type;
-		if ( weapontype == WEAPONTYPE_KNIFE || weapontype == WEAPONTYPE_C4 || weapon->is_grenade( ) )
+	bool can_shoot( C_BaseCombatWeapon *weapon ) {
+		float server_time = static_cast< float >( this->tickbase( ) ) * g_csgo.m_global_vars->m_interval_per_tick;
+
+		if( this->next_attack( ) > server_time )
 			return false;
 
-		if( weapon->clip( ) == 0 )
+		if( ( weapon->item_index( ) == WEAPON_FAMAS || weapon->item_index( ) == WEAPON_GLOCK ) && weapon->burst_mode( ) && weapon->burst_shot_remaining( ) > 0 )
+			return true;
+
+		if( weapon->next_primary_attack( ) > server_time )
 			return false;
 
-		if( weapon->in_reload( ) )
-			return false;
-
-		if( weapon->next_attack( ) > g_csgo.m_global_vars->m_cur_time )
-			return false;
-
-		if( this->next_attack( ) > g_csgo.m_global_vars->m_cur_time )
+		if( weapon->item_index( ) == WEAPON_REVOLVER && weapon->ready_time( ) > server_time )
 			return false;
 
 		return true;
+	}
+
+	bool is_shot_being_fired( C_BaseCombatWeapon *weapon, CUserCmd *user_command ) {
+		if( !weapon || !weapon->get_weapon_info( ) )
+			return false;
+
+		if( weapon->item_index( ) == WEAPON_C4 )
+			return false;
+
+		float server_time = static_cast< float >( this->tickbase( ) ) * g_csgo.m_global_vars->m_interval_per_tick;
+
+		if( weapon->is_grenade( ) ) {
+			if( !weapon->pin_pulled( ) || user_command->m_buttons & IN_ATTACK || user_command->m_buttons & IN_ATTACK2 ) {
+				float throw_time = weapon->throw_time( );
+				if( throw_time > 0.0f && throw_time < server_time )
+					return true;
+			}
+
+			return false;
+		}
+
+		if( weapon->is_knife( weapon->item_index( ) ) ) {
+			float next_secondary_attack = weapon->next_sec_attack( ) - server_time;
+			return user_command->m_buttons & IN_ATTACK && this->can_shoot( weapon ) || user_command->m_buttons & IN_ATTACK2 && next_secondary_attack <= 0;
+		}
+
+		if( user_command->m_buttons & IN_ATTACK && ( weapon->item_index( ) == WEAPON_FAMAS || weapon->item_index( ) == WEAPON_GLOCK ) && weapon->burst_mode( ) && weapon->burst_shot_remaining( ) > 0 )
+			return true;
+
+		if( weapon->item_index( ) == WEAPON_REVOLVER ) {
+			if( user_command->m_buttons & IN_ATTACK ) {
+				if( weapon->ready_time( ) > server_time )
+					return false;
+			}
+
+			return ( user_command->m_buttons & IN_ATTACK || user_command->m_buttons & IN_ATTACK2 ) && this->can_shoot( weapon );
+		}
+
+		return false;
 	}
 
 	float max_desync( ) {

@@ -11,7 +11,7 @@
 ## Preface
 Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
 
-This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. However we are working towards a stable, free, feature-rich cheat for everyone to use!
+This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. As such it is highly recommended that you do not use this if you have no prior programming knowledge. However we are working towards a stable, free, feature-rich cheat for everyone to use!
 
 If you want a clean base without any features, please see the [deadcell SDK](https://github.com/alpine971/DEADCELL-SDK).
 
@@ -48,6 +48,15 @@ Profiles are stored inside the **base** Counter-Strike Global Offensive director
 You can share profiles with friends by navigating to the configuration tab inside the cheat and selecting **Export**. This will copy all profile data to the clipboard which you can then paste to a friend.
 
 To import a profile, just copy all of the profile data and press **Import**. Make sure to save your profile by entering a name and pressing **Save**.
+
+### Why does "Generating code..." take forever when building the project?
+Most likely an issue with Visual Studio 2017, you can wait it out or use Visual Studio 2019 instead.
+
+### Why does the ESP flicker?
+Disable multi-core rendering in your CS:GO video settings.
+
+### Why does moving the menu crash the game?
+Disable multi-core rendering in your CS:GO video settings.
 
 ### How do I open the menu?
 Press `INSERT`.

@@ -8,7 +8,7 @@
 #include "../../features/fakelag/fakelag.h"
 
 bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, CUserCmd *cmd ) {
-	static bool ret = g_hooks.m_clientmode.get_old_method< fn::CreateMove_t >( hook::idx::CREATE_MOVE )( ecx, flInputSampleTime, cmd );
+	static bool ret = g_hooks.m_clientmode.get_old_method< fn::CreateMove_t >( CREATE_MOVE )( ecx, flInputSampleTime, cmd );
 
 	g_cl.m_local = C_CSPlayer::get_local( );
 
@@ -28,7 +28,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	static float framerate;
 	framerate = 0.9 * framerate + ( 1.0 - 0.9 ) * g_csgo.m_global_vars->m_absolute_frametime;
-	g_cl.m_under_server_tick_rate = static_cast< int >( 1.f / framerate <= 65 ) ? true : false;
+	g_cl.m_under_server_tick_rate = static_cast< int >( 1.f / framerate <= 65 ) != 0;
 
 	g_cl.m_cmd = cmd;
 
@@ -48,29 +48,28 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	g_nadepred.trace( cmd );
 
 	g_engine_pred.pre_start( );
-	g_engine_pred.start( cmd ); {
-		g_misc.automatic_fire( g_cl.m_local->get_active_weapon( ), cmd );
-
+	g_engine_pred.start( cmd );
+	{
+		c_misc::automatic_fire( g_cl.m_local->get_active_weapon( ), cmd );
 		//if ( g_vars.misc.autozeus )
-			//g_misc.auto_zeus( cmd );
+		//g_misc.auto_zeus( cmd );
 
 		g_ragebot.work( cmd );
-		
+		//g_ragebot.auto_revolver( g_cl.m_local->get_active_weapon( ), cmd );
+
 		g_fakelag.think( cmd );
 
 		g_antiaim.set_angles( cmd );
-
-		
-
-	} g_engine_pred.end( );
+	}
+	g_engine_pred.end( );
 
 	g_misc.fix_movement( cmd, wish_angle );
 
 	math::normalize_angles( cmd->m_viewangles );
 	math::clamp_angles( cmd->m_viewangles );
 
-	if ( g_cl.m_local ) {
-		if ( g_cl.m_sendpacket ) {
+	if( g_cl.m_local ) {
+		if( g_cl.m_sendpacket ) {
 			g_cl.m_last_sent_origin = g_cl.m_local->origin( );
 			g_antiaim.m_fake = cmd->m_viewangles;
 		}
@@ -81,9 +80,9 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	g_cl.m_local->GetRenderAngles( ) = g_antiaim.m_real;
 
-	uintptr_t* framePointer;
-	__asm mov framePointer, ebp;
-	*reinterpret_cast< bool* > ( *framePointer - 0x1C ) = g_cl.m_sendpacket;
+	uintptr_t *frame_pointer;
+	__asm mov frame_pointer, ebp;
+	*reinterpret_cast< bool* >( *frame_pointer - 0x1C ) = g_cl.m_sendpacket;
 
 	return false;
 }

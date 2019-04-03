@@ -16,8 +16,6 @@ bool unload() {
 	console::detach( );
 #endif
 
-	// reset game brightness.
-	g_misc.nightmode( 100.f );
 	g_misc.transparent_props( 100.f );
 
 	if( !g_events.remove( ) )
@@ -76,6 +74,8 @@ static ulong_t __stdcall cheat_init( void *arg ) {
 
 		if( !g_hooks.hook( ) )
 			throw std::runtime_error( "Failed to hook function(s)" );
+
+		g_misc.transparent_props( g_vars.misc.prop_transparency );
 
 #ifdef _DEBUG
 		while( !&g_renderer.get_renderer( ) )

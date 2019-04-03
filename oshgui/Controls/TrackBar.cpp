@@ -221,8 +221,20 @@ namespace OSHGui
 		g.FillRectangleGradient( Color::FromARGB( 255, 18, 18, 24 ), PointF( 4, DefaultTickOffset ), SizeF( 160, 7 ) );
 		g.FillRectangleGradient( ColorRectangle( color, Color::FromARGB( 255, 55, 55, 62 ) ), PointF( 5, DefaultTickOffset + 1 ), SizeF( 158, 5 ) );
 
-		if( value_ )
+		if( value_ ) {
 			g.FillRectangleGradient( ColorRectangle( GetBackColor(), GetBackColor() - Color::FromARGB( 0, 45, 40, 45 ) ), RectangleF( PointF( sliderLocation_.Left + 5, 8 ), SizeF( SliderSize.Width - sliderLocation_.Left - 8, 5 ) ) );
+		}
+
+		/*if( value_ != GetMinimum() ) {
+			g.DrawRectangle( OSHGui::Drawing::Color::FromARGB( 255, 105, 105, 112 ), RectangleF( -3, 10, 5, 1 ) );
+		}
+
+		if( value_ != GetMaximum() ) {
+			g.DrawRectangle( OSHGui::Drawing::Color::FromARGB( 255, 105, 105, 112 ), RectangleF( GetWidth() + 2, 8, 1, 5 ) );
+			g.DrawRectangle( OSHGui::Drawing::Color::FromARGB( 255, 105, 105, 112 ), RectangleF( GetWidth(), 10, 5, 1 ) );
+		}
+
+		g.DrawRectangle( OSHGui::Drawing::Color::FromARGB( 122, 255, 0, 0 ), absoluteLocation_.OffsetEx( 3, -8 ), Drawing::SizeF( 5, 5 ) );*/
 	}
 	//---------------------------------------------------------------------------
 	//Event-Handling
@@ -247,6 +259,8 @@ namespace OSHGui
 	{
 		Control::OnMouseClick( mouse );
 
+		
+
 		if( !drag_ )
 		{
 			HandleMouseEvent( mouse );
@@ -256,6 +270,10 @@ namespace OSHGui
 	void TrackBar::OnMouseMove( const MouseMessage &mouse )
 	{
 		Control::OnMouseMove( mouse );
+
+		if( Intersection::TestRectangle( absoluteLocation_.OffsetEx( 3, -8 ), Drawing::SizeF( 5, 5 ), mouse.GetLocation() ) ) {
+			SetValueInternal( --value_ );
+		}
 
 		if( drag_ )
 		{

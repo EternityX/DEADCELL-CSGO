@@ -4,12 +4,12 @@
 // get DOS / NT headers.
 bool pe::get_file_headers( uintptr_t base, PIMAGE_DOS_HEADER &out_dos, PIMAGE_NT_HEADERS &out_nt ) {
 	// get DOS header and check for invalid DOS / DOS signature.
-	auto dos = (IMAGE_DOS_HEADER *)base;
+	auto dos = reinterpret_cast< IMAGE_DOS_HEADER * >( base );
 	if( !dos || dos->e_magic != IMAGE_DOS_SIGNATURE /* "MZ" */ )
 		return false;
 
 	// get NT headers and check for invalid NT / NT signature.
-	auto nt = (IMAGE_NT_HEADERS *)( (uintptr_t)dos + dos->e_lfanew );
+	auto nt = reinterpret_cast< IMAGE_NT_HEADERS * >( reinterpret_cast< uintptr_t >( dos ) + dos->e_lfanew );
 	if( !nt || nt->Signature != IMAGE_NT_SIGNATURE /* "PE\0\0" */ )
 		return false;
 
@@ -22,14 +22,13 @@ bool pe::get_file_headers( uintptr_t base, PIMAGE_DOS_HEADER &out_dos, PIMAGE_NT
 pe::Module::Module(): m_ldr_entry{ nullptr }, m_dos{ nullptr }, m_nt{ nullptr }, m_base{ 0 } { }
 
 bool pe::Module::init( types::LDR_DATA_TABLE_ENTRY *ldr_entry ) {
-	uintptr_t base;
 	IMAGE_DOS_HEADER *dos;
 	IMAGE_NT_HEADERS *nt;
 
 	if( !ldr_entry )
 		return false;
 
-	base = ldr_entry->DllBase;
+	uintptr_t base = ldr_entry->DllBase;
 
 	if( !get_file_headers( base, dos, nt ) )
 		return false;
@@ -78,15 +77,12 @@ std::string pe::Module::get_pathA() const {
 }
 
 std::wstring pe::Module::get_module_nameW() const {
-	std::wstring out;
-	size_t delim;
-
 	if( m_pathW.empty() )
 		return { };
 
-	out = get_pathW();
+	std::wstring out = get_pathW( );
 
-	delim = out.find_last_of( '\\' );
+	size_t delim = out.find_last_of( '\\' );
 	if( delim == std::wstring::npos )
 		return { };
 
