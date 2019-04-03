@@ -55,31 +55,25 @@ void c_misc::thirdperson( ) {
 	if( !local )
 		return;
 
-	static bool is_down = false;
-	static bool is_clicked = false;
-	static bool enabled = false;
+	if( g_vars.misc.thirdperson_key != 0 )
+	{
+		static bool is_clicked = false;
+		static bool is_down = false;
+		
+		bool key_pressed = g_input.key_pressed(g_vars.misc.thirdperson_key);
+		is_clicked = !key_pressed && is_down;
+		is_down = key_pressed;
 
-	if( g_input.key_pressed( g_vars.misc.thirdperson_key ) ) {
-		is_clicked = false;
-		is_down = true;
+		if (is_clicked)
+			g_vars.misc.thirdperson = !g_vars.misc.thirdperson;
 	}
-	else if( !g_input.key_pressed( g_vars.misc.thirdperson_key ) && is_down ) {
-		is_clicked = true;
-		is_down = false;
-	}
-	else {
-		is_clicked = false;
-		is_down = false;
-	}
-
-	if( is_clicked )
-		enabled = !enabled;
+	
 
 	static vec3_t vecAngles;
 
 	g_csgo.m_engine->GetViewAngles( vecAngles );
 
-	if( enabled && local->alive( ) ) {
+	if( g_vars.misc.thirdperson && local->alive( ) ) {
 		if( !g_csgo.m_input->m_fCameraInThirdPerson ) {
 			auto GetCorrectDistance = [ & ]( float ideal_distance ) -> float {
 				vec3_t inverseAngles;
