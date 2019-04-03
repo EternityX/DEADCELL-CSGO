@@ -401,7 +401,12 @@ void c_misc::transparent_props( float override_transparency ) {
 
 	// disable fast path.
 	static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
-	r_drawspecificstaticprop->SetValue( 0 );
+	g_notify.add(true, OSHGui::Drawing::Color::FromARGB(220, 249, 44, 69), "test %i", r_drawspecificstaticprop->GetInt());
+
+	if( g_vars.misc.prop_transparency == 100.f )
+		r_drawspecificstaticprop->SetValue( -1 );
+	else
+		r_drawspecificstaticprop->SetValue( 0 );
 
 	float translucency = g_vars.misc.prop_transparency / 100.f;
 
