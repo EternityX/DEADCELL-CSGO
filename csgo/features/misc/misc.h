@@ -13,7 +13,7 @@ public:
 	void strafe( CUserCmd *cmd );
 	void auto_zeus( CUserCmd *cmd );
 	void fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const;
-	void nightmode( float override_brightness = 0.f );
+	void nightmode( C_BaseEntity *ent, float override_brightness = 0.f );
 	void transparent_props( float override_transparency = 0.f );
 	void capsule_overlay( C_CSPlayer * e, float duration, matrix3x4_t* mat );
 	void no_smoke( ClientFrameStage_t stage );

@@ -351,12 +351,30 @@ void c_misc::fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const {
 	cmd->m_upmove = util::misc::clamp( cmd->m_upmove, -320.f, 320.f );
 }
 
-void c_misc::nightmode( float override_brightness ) {
-	if( !g_csgo.m_engine->IsConnected( ) || !g_cl.m_local )
+void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
+	if( !g_csgo.m_engine->IsConnected( ) || !g_cl.m_local || !ent )
 		return;
 
+	auto client_class = ent->GetClientClass( );
+	if( !client_class || client_class->m_ClassID != CEnvTonemapController )
+		return;
+
+	float brightness = g_vars.misc.nightmode / 100.f;
+
+	if( override_brightness > 0.f )
+		brightness = override_brightness / 100.f;
+
+	// will not work if post processing is disabled.
+	auto tonemap_controller = reinterpret_cast< C_EnvTonemapController * >( ent );
+
+	tonemap_controller->use_custom_exposure_min( ) = 1;
+	tonemap_controller->use_custom_exposure_max( ) = 1;
+
+	tonemap_controller->custom_exposure_min( ) = brightness;
+	tonemap_controller->custom_exposure_max( ) = brightness;
+	
 	// disable fast path.
-	static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
+	/*static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
 	r_drawspecificstaticprop->SetValue( 0 );
 
 	float brightness = g_vars.misc.nightmode / 100.f;
@@ -378,7 +396,7 @@ void c_misc::nightmode( float override_brightness ) {
 		if( std::strstr( material->GetName( ), "glass" ) || std::strstr( material->GetName( ), "decals" ) || std::strstr( material->GetName( ), "door" ) )
 			brightness < 0.15f ? material->ColorModulate( 0.f, 0.f, 0.05f ) : material->ColorModulate( brightness - 0.15f, brightness - 0.15f, brightness + 0.05f );
 		
-	}
+	}*/
 }
 
 void c_misc::transparent_props( float override_transparency ) {

@@ -1,5 +1,6 @@
 #include "visuals.h"
 #include "../autowall/autowall.h"
+#include "../misc/misc.h"
 
 c_visuals g_visuals;
 
@@ -22,6 +23,7 @@ void c_visuals::run( ) {
 
 		player( entity );
 		world( entity );
+		g_misc.nightmode( entity );
 	}
 
 	if( g_vars.visuals.extra.speclist )

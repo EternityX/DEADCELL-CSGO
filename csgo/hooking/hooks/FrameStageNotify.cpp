@@ -9,7 +9,7 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 	g_misc.no_smoke( curstage );
 
 	if( g_cl.m_should_update_materials ) {
-		g_misc.nightmode( );
+		//g_misc.nightmode( );
 		g_misc.transparent_props( );
 		g_cl.m_should_update_materials = false;
 	}

@@ -109,7 +109,7 @@ void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::
 		text_helper.SetText( str );
 
 		if( flags & CENTERED_X )
-			x -= ( text_helper.GetSize( ).Width / 2.f );
+			x -= text_helper.GetSize( ).Width / 2.f;
 
 		if( flags & CENTERED_Y )
 			y -= text_helper.GetSize( ).Height / 2.f;

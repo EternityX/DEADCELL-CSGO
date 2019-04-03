@@ -5,7 +5,7 @@ c_ragebot g_ragebot;
 void c_ragebot::work( CUserCmd * cmd ) {
 	m_players.clear( );
 
-	if ( !g_vars.rage.enabled )
+	if( !g_vars.rage.enabled )
 		return;
 
 	if( g_vars.rage.key && !g_input.key_pressed( g_vars.rage.key ) )
@@ -131,7 +131,7 @@ void c_ragebot::select_target( ) {
 				}
 			}
 
-			m_players.push_back( rage_t( e, i, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones ) );
+			m_players.emplace_back( e, i, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
@@ -294,9 +294,8 @@ void c_ragebot::choose_angles( ){
 		if( g_vars.misc.client_hitboxes && mat )
 			g_misc.capsule_overlay( selected_target, g_vars.misc.client_hitboxes_duration, mat );
 
-		if( !g_vars.rage.silent ){
+		if( !g_vars.rage.silent )
 			g_csgo.m_engine->SetViewAngles( m_cmd->m_viewangles );
-		}
 	}
 }
 
@@ -447,11 +446,11 @@ void c_ragebot::quickstop( C_BaseCombatWeapon *local_weapon ) {
 		return;
 
 	// note: scoped weapons use the alternate speed member.
-	float max_speed = local_weapon->has_scope( ) ? weapon_info->max_speed_alt : weapon_info->max_speed;
+	const float max_speed = local_weapon->has_scope( ) ? weapon_info->max_speed_alt : weapon_info->max_speed;
 
 	if( g_misc.unpredicted_vel.Length2D( ) > max_speed * .34f ) {
-		vec3_t velocity = g_misc.unpredicted_vel;
-		float_t speed = g_cl.m_local->velocity( ).Length( );
+		const vec3_t velocity = g_misc.unpredicted_vel;
+		const float_t speed = g_cl.m_local->velocity( ).Length( );
 
 		vec3_t direction;
 		math::vector_angle( velocity, direction );
@@ -462,12 +461,22 @@ void c_ragebot::quickstop( C_BaseCombatWeapon *local_weapon ) {
 		math::angle_to_vector( direction, forward );
 		vec3_t negated_direction = forward * -speed;
 
-		float factor = std::max( negated_direction.x, negated_direction.y ) / 450.f;
+		const float factor = std::max( negated_direction.x, negated_direction.y ) / 450.f;
 		negated_direction *= factor;
 
 		m_cmd->m_forwardmove = negated_direction.x;
 		m_cmd->m_sidemove = negated_direction.y;
 	}
+}
+
+void c_ragebot::auto_revolver( C_BaseCombatWeapon *local_weapon, CUserCmd *cmd ) {
+	if( !local_weapon || local_weapon->item_index( ) != WEAPON_REVOLVER )
+		return;
+
+	if( !( TIME_TO_TICKS( g_csgo.m_global_vars->m_cur_time - local_weapon->ready_time( ) ) <= -1 ) )
+		return;
+
+	cmd->m_buttons |= IN_ATTACK;
 }
 
 bool c_ragebot::is_valid( C_CSPlayer *player ){

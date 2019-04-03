@@ -14,6 +14,7 @@ class c_ragebot {
 			distance = dist;
 			mat = matrix;
 		}
+
 		vec3_t m_bestpoint;
 		C_CSPlayer* m_player;
 		int index;
@@ -21,7 +22,10 @@ class c_ragebot {
 		float distance;
 		matrix3x4_t* mat;
 	};
+
 	std::vector< rage_t > m_players;
+	CUserCmd *m_cmd;
+
 	void choose_angles( );
 	void select_target( );
 	bool get_points_from_hitbox( C_CSPlayer * e, std::vector< int > hitboxes, matrix3x4_t* matrix, std::vector<vec3_t>& points, float scale );
@@ -29,11 +33,13 @@ class c_ragebot {
 	bool is_valid( C_CSPlayer * player );
 	bool hitchance( vec3_t &angle, C_CSPlayer *ent );
 	static std::vector< lag_record_t > get_best_records( std::deque< lag_record_t > records );
-	CUserCmd * m_cmd;
+
 public:
 	int shots_fired;
 	C_CSPlayer *m_last_target = nullptr;
+
 	void work( CUserCmd * cmd );
+	void auto_revolver( C_BaseCombatWeapon *local_weapon, CUserCmd *cmd );
 };
 
 extern c_ragebot g_ragebot;

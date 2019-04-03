@@ -215,7 +215,7 @@ void c_main_form::misc_tab() {
 
 	auto nightmode = new c_slider( "World brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
 	nightmode->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
-		g_misc.nightmode( );
+		//g_misc.nightmode( );
 	} );
 
 	auto translucent_props = new c_slider( "Prop transparency", general_groupbox, 0, 100, &g_vars.misc.prop_transparency, 100, "%" );
