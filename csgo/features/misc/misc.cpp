@@ -173,7 +173,7 @@ void c_misc::strafe( CUserCmd *cmd ) {
 	if( local->flags( ) & FL_ONGROUND && !( cmd->m_buttons & IN_JUMP ) )
 		return;
 
-	if( local->get_move_type( ) & ( MOVETYPE_LADDER || MOVETYPE_NOCLIP ) )
+	if( local->get_move_type( ) & ( MOVETYPE_LADDER | MOVETYPE_NOCLIP ) )
 		return;
 
 	vec3_t viewangles;
