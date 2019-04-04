@@ -5,7 +5,7 @@ void c_fakelag::think(CUserCmd* cmd) {
 
 	static int choke = 0;
 	auto local = C_CSPlayer::get_local();
-	if (g_vars.misc.fakelag.enabled && !g_csgo.m_engine->IsVoiceRecording && !(cmd->m_buttons & IN_ATTACK)) {
+	if (g_vars.misc.fakelag.enabled && !g_csgo.m_engine->IsVoiceRecording() && !(cmd->m_buttons & IN_ATTACK)) {
 			switch (g_vars.misc.fakelag.type) {
 			case 0: { // Maximum
 				choke = g_vars.misc.fakelag.amount;
