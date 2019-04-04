@@ -24,19 +24,7 @@ void c_ragebot::select_target( ) {
 		return;
 
 	auto weapon = local->get_active_weapon( );
-	if( !weapon )
-		return;
-
-	const short wpn_index = weapon->item_index( );
-
-	// this is really dirty.
-	if( wpn_index == WEAPON_FISTS
-		|| wpn_index == WEAPON_SPANNER
-		|| wpn_index == WEAPON_HAMMER
-		|| wpn_index == WEAPON_AXE
-		|| wpn_index == WEAPON_MELEE
-		|| wpn_index == WEAPON_BREACHCHARGE
-		|| wpn_index == WEAPON_TABLET )
+	if( !weapon || weapon->clip( ) <= 0 )
 		return;
 
 	try {
@@ -337,10 +325,6 @@ bool c_ragebot::get_points_from_hitbox( C_CSPlayer *e, std::vector< int > hitbox
 			// don't bother multipointing if body/head is visible.
 			// pretty sure this is called dynamic hitboxes in aimware.
 			if( g_vars.rage.dynamic_hitbox ) {
-				// get current framerate
-				static float framerate;
-				framerate = 0.9 * framerate + ( 1.0 - 0.9 ) * g_csgo.m_global_vars->m_absolute_frametime;
-
 				// framerate is lower than the servers, start optimizing points.
 				if( g_cl.m_under_server_tick_rate && m_last_target ) {
 					// check if we're aiming at the same target and if we are lets only multipoint this target until they are no longer the target.

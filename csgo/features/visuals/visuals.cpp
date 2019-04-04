@@ -109,8 +109,8 @@ bool c_visuals::calculate_bbox( C_BaseEntity *entity, bbox_t &box ) const {
 
 	box.x = static_cast< int >( left );
 	box.y = static_cast< int >( top );
-	box.w = static_cast< int >( right ) - left;
-	box.h = static_cast< int >( bottom ) - top;
+	box.w = static_cast< int >( right ) - static_cast< int >( left );
+	box.h = static_cast< int >( bottom ) - static_cast< int >( top );
 
 	return true;
 }
@@ -159,9 +159,6 @@ void c_visuals::run_dormancy_fade( C_CSPlayer *entity, const int idx ) {
 		m_alpha.at( idx ) = 220.f;
 	if( m_alpha.at( idx ) < 0.f )
 		m_alpha.at( idx ) = 0.f;
-
-	if( m_alpha.at( idx ) == 0.f )
-		return;
 }
 
 void c_visuals::player( C_CSPlayer *entity ) {
@@ -460,7 +457,7 @@ void c_visuals::draw_spectators( ) const {
 			continue;
 
 		const OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
-		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_LUCIDA_CONSOLE ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ),
+		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_LUCIDA_CONSOLE_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ),
 		                      display_size.Width - 150, display_size.Height / 2 + 10 * spec_count - 300, DROPSHADOW, "%s", player_info_spec.m_szPlayerName );
 
 		spec_count++;
@@ -739,10 +736,9 @@ void c_visuals::watermark( ) const {
 
 	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
-	g_renderer.filled_rect_gradient(
-		OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ),
-		                                 OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ) ),
-		size.Width - 270, size.Height - size.Height + 20, 250, 15 );
+	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ),
+		                             OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ) ),
+								     size.Width - 270, 20, 250, 15 );
 
 	time_t t = std::time( nullptr );
 	tm tm = *std::localtime( &t );
@@ -751,14 +747,18 @@ void c_visuals::watermark( ) const {
 	oss << std::put_time( &tm, "%I:%M%p" );
 	auto time = oss.str( );
 
-	if( connected )
+	if( connected ) {
+		const bool choking = g_csgo.m_clientstate->m_nChokedCommands > 1;	
+
 		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor::FromARGB( 220, 255, 255, 255 ),
-		                      OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, size.Height - size.Height + 22, 0,
-		                      "deadcell | %s | out %ims | choked %i", time.c_str( ), g_cl.m_ping, g_csgo.m_clientstate->m_nChokedCommands );
-	else
+			OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, 22, 0,
+			"deadcell | %s | out %ims | choking %s", time.c_str(), g_cl.m_ping, choking ? "true" : "false" );
+	}
+	else {
 		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor( 0.8f, 1.f, 1.f, 1.f ),
-		                      OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, size.Height - size.Height + 22, 0,
-		                      "deadcell | unconnected | %s", time.c_str( ) );
+			OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, 22, 0,
+			"deadcell | unconnected | %s", time.c_str() );
+	}
 }
 
 void c_visuals::draw_scope( ) const {
@@ -786,7 +786,7 @@ void c_visuals::draw_crosshair( ) const {
 	const float spread_distance = ( weapon->inaccuracy( ) + weapon->spread( ) ) * 320.f / std::tan( math::deg_to_rad( g_vars.visuals.effects.camera_fov ) * 0.5f );
 	const float spread_radius = size.Height * 2 * 0.002083 * spread_distance;
 
-	g_renderer.circle( OSHColor::FromARGB( g_vars.visuals.spread_circle_color ), size.Width / 2, size.Height / 2, spread_radius );
+	g_renderer.circle( OSHColor::FromARGB( g_vars.visuals.spread_circle_color, 70.f ), size.Width / 2, size.Height / 2, spread_radius );
 }
 
 void c_visuals::draw_hitmarker( ) {

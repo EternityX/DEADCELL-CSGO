@@ -37,9 +37,14 @@ void reset_item( item &item ) {
 
 	if( json[ item.name.c_str( ) ].is_array( ) )
 		for( int i = 0; i < 4; i++ )
-			json[ item.name.c_str( ) ][ i ].empty( );
+			json[ item.name.c_str( ) ][ i ].clear( );
 
 	json[ item.name.c_str( ) ].clear( );
+
+	json[ "g_vars.misc.nightmode" ] = 100;
+	json[ "g_vars.misc.prop_transparency" ] = 100;
+	json[ "g_vars.visuals.effects.camera_fov" ] = 90;
+	json[ "g_vars.visuals.effects.weapon_fov" ] = 68;
 }
 
 bool c_config::init( ) {
@@ -224,7 +229,7 @@ bool c_config::load( const std::string &file ) {
 	}
 	catch( const std::exception &ex ) {
 		UNREFERENCED_PARAMETER( ex );
-		_RPT2( _CRT_ERROR, "Failed to %s profile. Ignoring this error may prevent you from loading profiles.\n\n%s", file.c_str( ), ex.what( ) );
+		_RPT2( _CRT_ERROR, "Failed to load %s profile, profile could be corrupted. Ignoring this error may prevent you from loading profiles.\n\n%s", file.c_str( ), ex.what( ) );
 
 		input_file.close( );
 		return false;

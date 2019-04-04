@@ -16,9 +16,9 @@ void c_renderer::init( IDirect3DDevice9 *device ) {
 	m_fonts[ FONT_VERDANA_7PX ] = OSHGui::Drawing::FontManager::LoadFont( "Verdana", 7.f, true );
 	m_fonts[ FONT_VERDANA_BOLD_7PX ] = OSHGui::Drawing::FontManager::LoadFont( "Verdana Bold", 7.f, true );
 	m_fonts[ FONT_04B03_6PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( pixel_type_font ), 6.f, false );
-	m_fonts[ FONT_LUCIDA_CONSOLE ] = OSHGui::Drawing::FontManager::LoadFont( "Lucida Console", 7.5f, false );
+	m_fonts[ FONT_LUCIDA_CONSOLE_7PX ] = OSHGui::Drawing::FontManager::LoadFont( "Lucida Console", 7.5f, false );
 	m_fonts[ FONT_MARLETT_45PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( marlett_font ), 45.f, true );
-	m_fonts[ FONT_VERDANA_20PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( enhance_font ), 9.f, true );
+	m_fonts[ FONT_ENHANCE_9PX ] = OSHGui::Drawing::FontManager::LoadFontFromMemory( OSHGui::Misc::RawDataContainer( enhance_font ), 9.f, true );
 
 	get_instance( )->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
 }
