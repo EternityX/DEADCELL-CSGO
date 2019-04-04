@@ -39,3 +39,6 @@ using ulong_t = unsigned long;
 
 // renderer.
 #include "oshgui/renderer.hpp"
+
+//
+#include "util/KeyState.h"
