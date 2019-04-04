@@ -105,17 +105,17 @@ void c_main_form::playerlist_tab() {
 }
 
 void c_main_form::ragebot_tab() {
-	auto *aimbot_tab = new OSHGui::TabControl();
+	auto aimbot_tab = new OSHGui::TabControl();
 	aimbot_tab->SetSize( 241, 310 );
 	aimbot_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
 	aimbot_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	aimbot_tab->SetButtonWidth( 121 );
 
-	auto *aimbot_page = new OSHGui::TabPage();
+	auto aimbot_page = new OSHGui::TabPage();
 	aimbot_page->SetText( "General" );
 	aimbot_page->SetBorder( false );
 
-	auto *target_page = new OSHGui::TabPage();
+	auto target_page = new OSHGui::TabPage();
 	target_page->SetText( "Target" );
 	target_page->SetBorder( false );
 
@@ -132,14 +132,14 @@ void c_main_form::ragebot_tab() {
 	auto teammate = new c_checkbox( "Teammate", aimbot_page, &g_vars.rage.teammate );
 	auto silent = new c_checkbox( "Silent", aimbot_page, &g_vars.rage.silent );
 	auto autofire = new c_checkbox( "Auto fire", aimbot_page, &g_vars.rage.auto_fire );
-	auto *autostop = new c_checkbox( "Quickstop", aimbot_page, &g_vars.rage.autostop );
-	auto *autoscope = new c_combo( "Automatic scope", { "Off", "Always on", "Hitchance fail" }, aimbot_page, 4, &g_vars.rage.autoscope, aimbot_groupbox->GetWidth() - 15 );
-	auto *bodyaim_lethal = new c_checkbox( "Bodyaim if lethal", aimbot_page, &g_vars.rage.bodyaim_lethal );
-	auto *bodyaim_prefer = new c_checkbox( "Prefer bodyaim", aimbot_page, &g_vars.rage.prefer_bodyaim );
+	auto autostop = new c_checkbox( "Quickstop", aimbot_page, &g_vars.rage.autostop );
+	auto autoscope = new c_combo( "Automatic scope", { "Off", "Always on", "Hitchance fail" }, aimbot_page, 4, &g_vars.rage.autoscope, aimbot_groupbox->GetWidth() - 15 );
+	auto bodyaim_lethal = new c_checkbox( "Bodyaim if lethal", aimbot_page, &g_vars.rage.bodyaim_lethal );
+	auto bodyaim_prefer = new c_checkbox( "Prefer bodyaim", aimbot_page, &g_vars.rage.prefer_bodyaim );
 
 	g_menu.set_y_pos( 10 );
 	g_menu.set_x_pos( 38 );
-	auto *selection = new c_combo( "Target selection", { "Highest damage", "Closest distance", "Cycle" }, target_page, 4, &g_vars.rage.target_selection, aimbot_groupbox->GetWidth() - 15 );
+	auto selection = new c_combo( "Target selection", { "Highest damage", "Closest distance", "Cycle" }, target_page, 4, &g_vars.rage.target_selection, aimbot_groupbox->GetWidth() - 15 );
 	auto head_check = new c_checkbox( "Head", target_page, &g_vars.rage.hitbox_head );
 	g_menu.set_x_pos( 125 );
 	g_menu.push_y_pos( -18 );
@@ -149,7 +149,7 @@ void c_main_form::ragebot_tab() {
 	g_menu.set_x_pos( 125 );
 	g_menu.push_y_pos( -18 );
 	auto legs_check = new c_checkbox( "Legs", target_page, &g_vars.rage.hitbox_legs );
-	auto *primaryhitbox = new c_combo( "Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 4, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth() - 15 );
+	auto primaryhitbox = new c_combo( "Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 4, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth() - 15 );
 	g_menu.set_x_pos( 38 );
 	auto dynamic_hitbox = new c_checkbox( "Dynamic scanning", target_page, &g_vars.rage.dynamic_hitbox );
 	auto multipoint_head_check = new c_checkbox( "Scan head", target_page, &g_vars.rage.head );
@@ -172,37 +172,37 @@ void c_main_form::ragebot_tab() {
 	antiaim_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 	antiaim_tab->SetButtonWidth( 121 );
 
-	auto *antiaim_page = new OSHGui::TabPage();
+	auto antiaim_page = new OSHGui::TabPage();
 	antiaim_page->SetText( "Anti-aim" );
 	antiaim_page->SetBorder( false );
 
-	auto *fakelag_page = new OSHGui::TabPage();
+	auto fakelag_page = new OSHGui::TabPage();
 	fakelag_page->SetText( "Fake lag" );
 	fakelag_page->SetBorder( false );
 
 	antiaim_tab->AddTabPage( antiaim_page );
 	antiaim_tab->AddTabPage( fakelag_page );
 
-	auto *antiaim_groupbox = new c_groupbox( "Anti-aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
+	auto antiaim_groupbox = new c_groupbox( "Anti-aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
 	antiaim_groupbox->AddControl( antiaim_tab );
 	g_menu.set_x_pos( 19 );
 
-	auto *aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
-	auto *pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
-	auto *yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	//auto *jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"�" );
+	auto aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
+	auto pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
+	auto yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
+	//auto jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"�" );
 
 	g_menu.set_y_pos( 10 );
-	auto *fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
-	auto *fakelag_type = new c_combo( "Type", { "Maximum", "Adaptive" }, fakelag_page, 4, &g_vars.misc.fakelag.type, antiaim_groupbox->GetWidth() - 15 );
-	auto *fakelag_on_jump_check = new c_combo( "Air", { "Default", "On land", "On jump" }, fakelag_page, 3, &g_vars.misc.fakelag.lagjump, antiaim_groupbox->GetWidth() - 15 );
-	auto *fakelag_choke_check = new c_slider( "Choke", fakelag_page, 0, 14, &g_vars.misc.fakelag.amount, 0 );
+	auto fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
+	auto fakelag_type = new c_combo( "Type", { "Maximum", "Adaptive" }, fakelag_page, 4, &g_vars.misc.fakelag.type, antiaim_groupbox->GetWidth() - 15 );
+	auto fakelag_on_jump_check = new c_combo( "Air", { "Default", "On land", "On jump" }, fakelag_page, 3, &g_vars.misc.fakelag.lagjump, antiaim_groupbox->GetWidth() - 15 );
+	auto fakelag_choke_check = new c_slider( "Choke", fakelag_page, 0, 14, &g_vars.misc.fakelag.amount, 0 );
 
 	m_pages.at( PAGE_RAGEBOT )->AddControl( aimbot_groupbox );
 	m_pages.at( PAGE_RAGEBOT )->AddControl( antiaim_groupbox );
 }
 void c_main_form::misc_tab() {
-	auto *general_groupbox = new c_groupbox( "General", 17, 6, 260, 334 );
+	auto general_groupbox = new c_groupbox( "General", 17, 6, 260, 334 );
 
 	auto thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
 	auto activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
@@ -466,13 +466,13 @@ void c_main_form::config_tab( ) {
 
 	m_pages.at( PAGE_CONFIG )->AddControl( config_groupbox );
 
-	auto *config2_groupbox = new c_groupbox( "Configurations", config_groupbox->GetRight( ) + 19, 6, 259, 334 );
+	auto config2_groupbox = new c_groupbox( "Configurations", config_groupbox->GetRight( ) + 19, 6, 259, 334 );
 
 	// config name textbox.
-	auto *name_textbox = new c_text_box( "", config2_groupbox );
+	auto name_textbox = new c_text_box( "", config2_groupbox );
 
 	// new button.
-	auto *button_new = new c_button( "New", config2_groupbox );
+	auto button_new = new c_button( "New", config2_groupbox );
 	button_new->GetClickEvent() += OSHGui::ClickEventHandler( [ this, name_textbox, list ]( Control *sender ) {
 		if( name_textbox->GetText().empty() ) {
 			OSHGui::MessageBox::Show( "You must set a name." );
@@ -494,7 +494,8 @@ void c_main_form::config_tab( ) {
 			return;
 		}
 
-		g_configs.save( name_textbox->GetText() );
+		g_configs.save( name_textbox->GetText( ) );
+		g_configs.load( name_textbox->GetText( ) );
 
 		items = g_configs.get_configs();
 
@@ -515,6 +516,8 @@ void c_main_form::config_tab( ) {
 
 			// dumb hack to show the form without having to switch to misc tab.
 			g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
+
+			g_cl.m_should_update_materials = true;
 		}
 	}); config2_groupbox->AddControl( button_new );
 
@@ -543,6 +546,8 @@ void c_main_form::config_tab( ) {
 
 				// dumb hack to show the form without having to switch to misc tab.
 				g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
+
+				g_cl.m_should_update_materials = true;
 			}
 		});
 
@@ -556,9 +561,12 @@ void c_main_form::config_tab( ) {
 		OSHGui::MessageBox::ShowDialog( "Are you sure you want to reset the selected profile?", "", OSHGui::MessageBoxButtons::YesNo, [ this, list ]( OSHGui::DialogResult result ) {
 			if( result == OSHGui::DialogResult::Yes ) {
 				g_configs.reset( items.at( index ) );
+				g_configs.load( items.at( index ) );
 
 				// dumb hack to show the form without having to switch to misc tab.
 				g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
+
+				g_cl.m_should_update_materials = true;
 			}
 				
 		});	
@@ -968,7 +976,7 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	SetText( text );
 	SetAppendText( append_text );
 
-	auto *timer = new OSHGui::Timer( );
+	auto timer = new OSHGui::Timer( );
 	timer->SetInterval( 5 );
 	timer->Start( );
 
@@ -1002,7 +1010,7 @@ void c_slider::init( const AnsiString &text, int x, int y, Control *parent, floa
 	SetText( text );
 	SetAppendText( append_text );
 
-	auto *timer = new OSHGui::Timer( );
+	auto timer = new OSHGui::Timer( );
 	timer->SetInterval( 5 );
 	timer->Start( );
 
@@ -1032,32 +1040,26 @@ c_slider::c_slider( const AnsiString &text, Control *parent, float min, float ma
 	int x = parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2;
 	int y = g_menu.get_y_pos( ) + 4;
 
-	if( text.empty() ) {
+	if( text.empty( ) ) {
 		x -= 2;
 		y -= 16;
 	}
 
 	init( text, x, y, parent, min, max, value, default_value, append_text );
 
-	if( text.empty( ) )
-		g_menu.push_y_pos( Control::GetSize( ).Height - 4 );
-	else
-		g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+	g_menu.push_y_pos( text.empty( ) ? Control::GetSize( ).Height - 4 : Control::GetSize( ).Height + 10 );
 }
 
 c_slider::c_slider( const AnsiString &text, Control *parent, float min, float max, float *value, int precision, float default_value, std::string append_text ) {
 	int x = parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2;
 	int y = g_menu.get_y_pos( ) + 4;
 
-	if( text.empty() ) {
+	if( text.empty( ) ) {
 		x -= 2;
 		y -= 16;
 	}
 
 	init( text, x, y, parent, min, max, value, precision, default_value, append_text );
 
-	if( text.empty( ) )
-		g_menu.push_y_pos( Control::GetSize( ).Height - 4 );
-	else
-		g_menu.push_y_pos( Control::GetSize( ).Height + 10 );
+	g_menu.push_y_pos( text.empty( ) ? Control::GetSize( ).Height - 4 : Control::GetSize( ).Height + 10 );
 }

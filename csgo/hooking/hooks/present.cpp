@@ -12,11 +12,6 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 		once = true;
 	}
 
-	int screen_width, screen_height;
-
-	if( g_csgo.m_engine )
-		g_csgo.m_engine->GetScreenSize( screen_width, screen_height );
-
 	g_renderer.start_drawing( device );
 
 	g_visuals.run( );
@@ -28,8 +23,10 @@ HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRe
 	if( g_vars.visuals.extra.misc_flags ) {
 		int flag_count = 0;
 
-		if( g_cl.m_under_server_tick_rate )
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_20PX ), OSHColor::FromARGB( 230, 230, 43, 10 ), OSHColor::FromARGB( 200, 0, 0, 0 ), 15, ( screen_height / 2 ) - flag_count++ * 21, DROPSHADOW, "FPS" );
+		if( g_cl.m_under_server_tick_rate ) {
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_ENHANCE_9PX ), OSHColor::FromARGB( 230, 230, 43, 10 ), OSHColor::FromARGB( 200, 0, 0, 0 ), 15, ( g_renderer.get_renderer().GetDisplaySize().Height / 2 ) - flag_count++ * 21, DROPSHADOW, "FPS" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_7PX ), OSHColor::FromARGB( 230, 230, 43, 10 ), OSHColor::FromARGB( 200, 0, 0, 0 ), 15, ( g_renderer.get_renderer().GetDisplaySize().Height / 2 ) - 1 * 11, DROPSHADOW, "%i", g_cl.m_client_framerate );
+		}
 	}
 
 	g_visuals.watermark( );

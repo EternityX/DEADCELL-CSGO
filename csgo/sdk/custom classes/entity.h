@@ -431,7 +431,7 @@ public:
 			return false;
 		}
 
-		if( weapon->is_knife( weapon->item_index( ) ) ) {
+		if( C_BaseCombatWeapon::is_knife( weapon->item_index( ) ) ) {
 			float next_secondary_attack = weapon->next_sec_attack( ) - server_time;
 			return user_command->m_buttons & IN_ATTACK && this->can_shoot( weapon ) || user_command->m_buttons & IN_ATTACK2 && next_secondary_attack <= 0;
 		}
