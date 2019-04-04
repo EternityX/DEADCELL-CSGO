@@ -188,15 +188,18 @@ void c_main_form::ragebot_tab() {
 	g_menu.set_x_pos( 19 );
 
 	auto aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
-	auto pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
-	auto yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
-	//auto jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"�" );
+	auto pitch = new c_combo( "Pitch", { "Off", "Down", "Up" , "Random" }, antiaim_page, 4, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth() - 15 );
+	auto yaw = new c_combo( "Yaw", { "Off", "Default" ,"Default+Random","Backwards","Backwards+Random" ,"Random" }, antiaim_page, 6, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth() - 15 );
+	//auto pitch_flag = new c_slider("pitch_flag", antiaim_page, -60.f, 60.f, &g_vars.antiaim.pitch_flag, 0, 0.f, u8"�");
+	auto yaw_flag = new c_slider("Yaw_flag", antiaim_page, 0, 90, &g_vars.antiaim.yaw_flag, 10);
+	auto pitch_flag = new c_slider("Pitch_flag", antiaim_page, 0, 40, &g_vars.antiaim.pitch_flag, 10);
+
 
 	g_menu.set_y_pos( 10 );
 	auto fakelag_check = new c_checkbox( "Enabled", fakelag_page, &g_vars.misc.fakelag.enabled );
 	auto fakelag_type = new c_combo( "Type", { "Maximum", "Adaptive" }, fakelag_page, 4, &g_vars.misc.fakelag.type, antiaim_groupbox->GetWidth() - 15 );
 	auto fakelag_on_jump_check = new c_combo( "Air", { "Default", "On land", "On jump" }, fakelag_page, 3, &g_vars.misc.fakelag.lagjump, antiaim_groupbox->GetWidth() - 15 );
-	auto fakelag_choke_check = new c_slider( "Choke", fakelag_page, 0, 14, &g_vars.misc.fakelag.amount, 0 );
+	auto fakelag_choke_check = new c_slider( "Choke", fakelag_page, 0, 30, &g_vars.misc.fakelag.amount, 6 );
 
 	m_pages.at( PAGE_RAGEBOT )->AddControl( aimbot_groupbox );
 	m_pages.at( PAGE_RAGEBOT )->AddControl( antiaim_groupbox );

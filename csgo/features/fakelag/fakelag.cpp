@@ -8,11 +8,11 @@ void c_fakelag::think(CUserCmd* cmd) {
 	if (g_vars.misc.fakelag.enabled && !KEYDOWN(VK_K) && !(cmd->m_buttons & IN_ATTACK)) {
 			switch (g_vars.misc.fakelag.type) {
 			case 0: { // Maximum
-				choke = std::min< int >(g_vars.misc.fakelag.amount + 1, 14);
+				choke = g_vars.misc.fakelag.amount;
 				break;
 			}
 			case 1: { // Adaptive
-				choke = std::min< int >(static_cast<int>(std::ceilf(64 / (g_cl.m_local->velocity().Length() * g_csgo.m_global_vars->m_interval_per_tick))), 14);
+				choke = std::min< int >(static_cast<int>(std::ceilf(64 / (g_cl.m_local->velocity().Length() * g_csgo.m_global_vars->m_interval_per_tick))), g_vars.misc.fakelag.amount);
 				break;
 			}
 			default:

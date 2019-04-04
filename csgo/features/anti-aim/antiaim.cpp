@@ -40,20 +40,40 @@ bool c_antiaim::allow( CUserCmd *ucmd ) {
 
 void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
 	switch( g_vars.antiaim.yaw ) {
-		case 1:
+		case 1://????
 			at_target( ) != 0.f ? m_input.y = at_target( ) - 180.f + g_vars.antiaim.jitter : m_input.y += 180.f + g_vars.antiaim.jitter;
 			break;
-		default:
+		case 2://??? + Random
+			at_target() != 0.f ? m_input.y = at_target() - 180.f + g_vars.antiaim.jitter : m_input.y += 180.f + g_vars.antiaim.jitter;
+			m_input.y = math::random_float(m_input.y - g_vars.antiaim.yaw_flag, m_input.y + g_vars.antiaim.yaw_flag);
+			break;
+		case 3: //backwards
+			math::angle_addition_180(m_input.y);
+			break;
+		case 4://backwards + random
+			m_input.y = math::random_float(m_input.y - g_vars.antiaim.yaw_flag, m_input.y + g_vars.antiaim.yaw_flag);
+			math::angle_addition_180(m_input.y);
+			break;
+		case 5:// random
+			m_input.y = math::random_float(-179, 179);
+			break;
+		default://off??
 			break;
 	}
 }
 
 void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
 	switch( g_vars.antiaim.pitch ) {
-		case 1:
+		case 1://down
 			m_input.x = 89.f;
 			break;
-		default:
+		case 2://up
+			m_input.x = -89.f;
+			break;
+		case 3://random
+			m_input.x = math::random_float(89 - g_vars.antiaim.pitch_flag, 89);
+			break;
+		default://off?
 			break;
 	}
 }

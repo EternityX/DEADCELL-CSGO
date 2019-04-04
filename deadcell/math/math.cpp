@@ -201,3 +201,31 @@ void math::angle_matrix( const vec3_t &angles, matrix3x4_t &matrix ) {
 	matrix[ 1 ][ 3 ] = 0.f;
 	matrix[ 2 ][ 3 ] = 0.f;
 }
+
+void math::angle_addition_180(float &angles) {//[-179.179]
+	if (angles > 0 && angles <= 180) {
+		angles = (angles + 180) - 360;
+	}
+	else
+	{
+		angles += 180;
+	}
+}
+
+float math::random_float(float min, float max)
+{
+	typedef float(*RandomFloat_t)(float, float);
+	static RandomFloat_t m_RandomFloat = (RandomFloat_t)GetProcAddress(GetModuleHandle("vstdlib.dll"), "RandomFloat");
+	return m_RandomFloat(min, max);
+}
+/*
+int math::random_seed(int seed) {
+	
+	//static auto random_seed = reinterpret_cast< void( *)( int ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" ) );
+	//random_seed(seed);
+	
+	typedef int(__cdecl* RandomSeed_t)(int iSeed);
+	static RandomSeed_t m_RandomSeed = (RandomSeed_t)GetProcAddress(GetModuleHandle(XorStr("vstdlib.dll")), XorStr("RandomSeed"));
+	return m_RandomSeed(seed);
+}
+*/

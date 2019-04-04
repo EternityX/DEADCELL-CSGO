@@ -131,6 +131,8 @@ public:
 		int right_override_key = 39;
 		int backwards_override_key = 40;
 		int reset_override_key = 38;
+		int yaw_flag = 10;
+		int pitch_flag = 10;
 	} antiaim;
 	struct dangerzone{
 		int max_item_distance;
