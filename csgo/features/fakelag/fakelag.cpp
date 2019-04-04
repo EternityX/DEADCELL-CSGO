@@ -5,11 +5,7 @@ void c_fakelag::think( CUserCmd* cmd ) {
 
 	static int choke = 0;
 	auto local = C_CSPlayer::get_local( );
-	if( !g_vars.misc.fakelag.enabled && g_vars.antiaim.enabled ){
-		choke = 1;
-	}
-
-	if( g_vars.misc.fakelag.enabled ) {
+	if( g_vars.misc.fakelag.enabled && !KEYDOWN(VK_K) && !(cmd->m_buttons & IN_ATTACK)) {
 		switch( g_vars.misc.fakelag.type ) {
 			case 0:{ // Maximum
 				choke = std::min< int >( g_vars.misc.fakelag.amount + 1, 14 );
@@ -21,7 +17,9 @@ void c_fakelag::think( CUserCmd* cmd ) {
 			}
 		}
 	}
-
+	else{
+		choke = 1;
+	}
 	if ( choke > static_cast< int >( g_csgo.m_clientstate->m_nChokedCommands ) )
 		g_cl.m_sendpacket = false;
 }
