@@ -6,6 +6,7 @@
 #include "../../features/nade_pred/nade_pred.h"
 #include "../../features/engine_pred/engine_pred.h"
 #include "../../features/fakelag/fakelag.h"
+//#include "../../features/misc/misc.h"
 
 bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, CUserCmd *cmd ) {
 	static bool ret = g_hooks.m_clientmode.get_old_method< fn::CreateMove_t >( CREATE_MOVE )( ecx, flInputSampleTime, cmd );
@@ -60,7 +61,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 		//g_ragebot.auto_revolver( g_cl.m_local->get_active_weapon( ), cmd );
 
 		g_fakelag.think( cmd );
-
+		g_misc.slow_walk(cmd);
 		g_antiaim.set_angles( cmd );
 	}
 	g_engine_pred.end( );

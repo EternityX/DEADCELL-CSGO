@@ -155,6 +155,7 @@ bool c_config::init( ) {
 	item( g_vars.misc.autozeus, "g_vars.misc.autozeus", m_items );
 	item( g_vars.misc.log_damage, "g_vars.misc.log_damage", m_items );
 	item( g_vars.misc.log_purchases, "g_vars.misc.log_purchases", m_items );
+	item( g_vars.misc.slowWalk,"g_vars.misc.slowWalk", m_items);
 	item( g_vars.misc.nightmode, "g_vars.misc.nightmode", m_items );
 	item( g_vars.misc.prop_transparency, "g_vars.misc.prop_transparency", m_items );
 	item( g_vars.misc.fast_duck, "g_vars.misc.fast_duck", m_items );

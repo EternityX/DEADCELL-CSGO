@@ -17,6 +17,7 @@ public:
 	void transparent_props( float override_transparency = 0.f );
 	void capsule_overlay( C_CSPlayer * e, float duration, matrix3x4_t* mat );
 	void no_smoke( ClientFrameStage_t stage );
+	void slow_walk(CUserCmd* cmd);
 };
 
 extern c_misc g_misc;

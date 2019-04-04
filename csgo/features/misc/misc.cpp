@@ -465,3 +465,26 @@ void c_misc::no_smoke( ClientFrameStage_t stage ) {
 		mat->SetMaterialVarFlag( MATERIAL_VAR_NO_DRAW, g_vars.visuals.misc.remove_smoke );
 	}
 }
+
+void c_misc::slow_walk(CUserCmd* cmd) {
+	auto local = C_CSPlayer::get_local();
+	if (!cmd || !local || !g_csgo.m_engine->IsInGame())
+		return;
+
+	if (local->flags() & FL_ONGROUND) {
+		//if (!(local->flags() & (int)FL_INWATER)) {//i dont know what this mean
+		if (g_vars.misc.slowWalk) {
+			int movetype = local->get_move_type();
+			if (!(movetype == 8 || movetype == 9)) {
+				if (KEYDOWN(g_vars.misc.slowWalk_key)) {
+					static int choked = 0;
+					choked = choked > 7 ? 0 : choked + 1;
+					cmd->m_forwardmove = choked < 2 || choked > 5 ? 0 : cmd->m_forwardmove;
+					cmd->m_sidemove = choked < 2 || choked > 5 ? 0 : cmd->m_sidemove;
+					g_cl.m_sendpacket = choked < 1;
+				}
+			}
+		}
+		//}
+	}
+}

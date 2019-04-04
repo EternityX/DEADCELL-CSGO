@@ -100,6 +100,8 @@ public:
 			int amount = 6;
 			int lagjump;
 		} fakelag;
+		bool slowWalk = true;
+		int slowWalk_key = VK_LSHIFT;
 		bool bhop;
 		bool air_strafe;
 		bool thirdperson;
