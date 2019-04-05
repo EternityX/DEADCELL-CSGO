@@ -10,7 +10,7 @@ c_renderer g_renderer{ };
 c_menu g_menu{ };
 c_config g_configs{ };
 c_client g_cl{ };
-vars g_vars{ };
+c_vars g_vars{ };
 
 bool unload() {
 #ifdef _DEBUG

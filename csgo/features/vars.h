@@ -1,6 +1,6 @@
 #pragma once
 
-class vars {
+class c_vars {
 public:
 	struct rage {
 		int key;
@@ -151,4 +151,4 @@ public:
 	} dz;
 };
 
-extern vars g_vars;
+extern c_vars g_vars;

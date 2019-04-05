@@ -70,4 +70,3 @@ typedef OSHGui::Drawing::Color OSHColor;
 
 #include "features/notifications/notifications.h"
 #include "features/events/events.h"
-#include "features/player list/playerlist.h"
