@@ -1,4 +1,5 @@
 #include "chams.h"
+#include "../entity listener/ent_listener.h"
 
 c_chams g_chams;
 
@@ -101,8 +102,8 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const model_render_in
 }
 
 void c_chams::push_players( ) {
-	for( int index = 1; index <= g_csgo.m_global_vars->m_max_clients; index++ ) {
-		auto player = g_csgo.m_entity_list->get< c_csplayer >( index );
+	for( auto &entry : g_listener.m_players ) {
+		auto player = g_csgo.m_entity_list->get< c_csplayer >( entry.m_idx );
 
 		if( !player || !player->alive( ) || player->is_dormant( ) || ( ( player->team( ) == c_csplayer::get_local( )->team( ) ) && !g_vars.visuals.chams.teammates ) )
 			continue;
@@ -142,7 +143,7 @@ i_material *c_chams::create_material( bool shade, bool wireframe, bool ignorez, 
 	material_data += "\t\"$ignorez\" \"" + std::to_string( ignorez ) + "\"\n";
 	material_data += "}\n";
 
-	auto kv = static_cast<key_values*>( g_csgo.m_memalloc->alloc( 36 ) );
+	auto kv = static_cast< key_values* >( g_csgo.m_memalloc->alloc( 36 ) );
 	kv->init( material_type.c_str( ) );
 	kv->load_from_buffer( material_name.c_str( ), material_data.c_str( ) );
 
