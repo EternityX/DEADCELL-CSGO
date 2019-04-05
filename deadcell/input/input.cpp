@@ -1,7 +1,7 @@
 #include "../inc.hpp"
 #include "input.hpp"
 
-c_input g_input;
+input_mngr g_input;
 
 ulong_t __stdcall hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 	if( g_input.handle( hwnd, msg, wparam, lparam ) )
@@ -10,12 +10,12 @@ ulong_t __stdcall hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 	return CallWindowProcA( g_input.get_original_wndproc(), hwnd, msg, wparam, lparam );
 }
 
-c_input::c_input( )
+input_mngr::input_mngr( )
 	: m_window_handle{ }, m_original_wndproc{ }, m_key_pressed{ }, m_instance{ nullptr } {
 	
 }
 
-bool c_input::init( const std::string &window_name, OSHGui::Application *instance ) {
+bool input_mngr::init( const std::string &window_name, OSHGui::Application *instance ) {
 	if( m_window_handle || !instance )
 		return false;
 
@@ -26,11 +26,11 @@ bool c_input::init( const std::string &window_name, OSHGui::Application *instanc
 	return m_original_wndproc != nullptr;
 }
 
-bool c_input::init( HWND wnd ) {
+bool input_mngr::init( HWND wnd ) {
 	return false;
 }
 
-bool c_input::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
+bool input_mngr::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 	if( !(GetForegroundWindow( ) == m_window_handle) )
 		return false;
 
@@ -138,7 +138,7 @@ bool c_input::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 	return false;
 }
 
-bool c_input::remove() {
+bool input_mngr::remove() {
 	if( !m_window_handle || !m_original_wndproc )
 		return false;
 
@@ -147,7 +147,7 @@ bool c_input::remove() {
 	return true;
 }
 
-bool c_input::process_message( LPMSG msg, WPARAM wparam, LPARAM lparam ) {
+bool input_mngr::process_message( LPMSG msg, WPARAM wparam, LPARAM lparam ) {
 	switch( msg->message ) {
 		case WM_MOUSEMOVE:
 		case WM_LBUTTONDOWN:
@@ -291,11 +291,11 @@ bool c_input::process_message( LPMSG msg, WPARAM wparam, LPARAM lparam ) {
 	return false;
 }
 
-WNDPROC c_input::get_original_wndproc( ) const {
+WNDPROC input_mngr::get_original_wndproc( ) const {
 	return m_original_wndproc;
 }
 
-bool c_input::key_pressed( int virtual_key ) {
+bool input_mngr::key_pressed( int virtual_key ) {
 	if( !m_window_handle )
 		return false;
 

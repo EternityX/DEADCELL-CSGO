@@ -1,6 +1,6 @@
 #pragma once
 
-class c_input : public OSHGui::Input::Input {
+class input_mngr : public OSHGui::Input::Input {
 private:
 	HWND                    m_window_handle;
 	WNDPROC                 m_original_wndproc;
@@ -8,7 +8,7 @@ private:
 	OSHGui::Application     *m_instance;
 
 public:
-	c_input();
+	input_mngr();
 
 	bool init( const std::string &window_name, OSHGui::Application *instance );
 	bool init( HWND wnd );
@@ -21,4 +21,4 @@ public:
 	bool key_pressed( int virtual_key );
 };
 
-extern c_input g_input;
+extern input_mngr g_input;

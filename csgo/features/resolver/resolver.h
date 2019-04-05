@@ -18,7 +18,7 @@ class c_resolver {
 public:
 	void frame_stage_notify( );
 private:
-	void resolve_player( C_CSPlayer* e );
+	void resolve_player( c_csplayer* e );
 	resolver_data_t m_resolver_data[ 65 ];
 };
 

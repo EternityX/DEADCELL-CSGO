@@ -13,19 +13,19 @@ private:
 		int flag_count{ 0 };
 	} m_ctx;
 
-	void player( C_CSPlayer *entity );
-	void draw_healthbar( C_CSPlayer * entity, float x, float y, float w, float h );
-	bool calculate_bbox( C_BaseEntity *entity, bbox_t &box ) const;
+	void player( c_csplayer *entity );
+	void draw_healthbar( c_csplayer * entity, float x, float y, float w, float h );
+	bool calculate_bbox( c_base_entity *entity, bbox_t &box ) const;
 	void activation_type();
-	void run_dormancy_fade( C_CSPlayer *entity, int idx );
+	void run_dormancy_fade( c_csplayer *entity, int idx );
 	void draw_box( OSHColor color, int index, float x, float y, float w, float h );
-	void ammo_bar( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHColor color, float x, float y, float w, float h, int clip );
-	void flash_bar( C_CSPlayer * player, OSHColor color, float x, float y, float w, float h );
-	void weapon_name( C_BaseCombatWeapon *weapon, C_CSPlayer *player, OSHColor color, float x, float y, float w, float h );
-	void draw_flags( C_CSPlayer *player, OSHColor color, float x, float y, float w, float h );
+	void ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, OSHColor color, float x, float y, float w, float h, int clip );
+	void flash_bar( c_csplayer * player, OSHColor color, float x, float y, float w, float h );
+	void weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, OSHColor color, float x, float y, float w, float h );
+	void draw_flags( c_csplayer *player, OSHColor color, float x, float y, float w, float h );
 	void draw_spectators( ) const;
 
-	void world( C_BaseEntity * entity );
+	void world( c_base_entity * entity );
 	void draw_scope( ) const;
 	void draw_crosshair( ) const;
 	static void draw_hitmarker( );

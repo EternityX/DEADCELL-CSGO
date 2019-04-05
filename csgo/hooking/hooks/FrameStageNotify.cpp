@@ -11,9 +11,9 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 	if( g_cl.m_should_update_materials )
 		g_misc.transparent_props( );
 
-	const auto in_thirdperson = g_csgo.m_input->m_fCameraInThirdPerson;
+	const auto in_thirdperson = g_csgo.m_input->m_camera_in_thirdperson;
 	if( in_thirdperson && g_vars.antiaim.enabled && curstage == FRAME_RENDER_START )
-		g_csgo.m_prediction->SetLocalViewangles( g_antiaim.m_real );
+		g_csgo.m_prediction->set_local_viewangles( g_antiaim.m_real );
 
 	if( curstage == FRAME_NET_UPDATE_POSTDATAUPDATE_START )
 		g_resolver.frame_stage_notify( );
@@ -21,7 +21,7 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFram
 	g_hooks.m_client.get_old_method< fn::FrameStageNotify_t >( 37 )( ecx, curstage );
 
 	if( curstage == FRAME_NET_UPDATE_POSTDATAUPDATE_START ) {
-		auto local = C_CSPlayer::get_local( );
+		auto local = c_csplayer::get_local( );
 		if( local )
 			local->flash_alpha( ) = g_vars.visuals.misc.no_flash ? 0.f : 255.f;
 	}

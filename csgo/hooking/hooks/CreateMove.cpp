@@ -7,23 +7,23 @@
 #include "../../features/engine_pred/engine_pred.h"
 #include "../../features/fakelag/fakelag.h"
 
-bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, CUserCmd *cmd ) {
+bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, c_user_cmd *cmd ) {
 	static bool ret = g_hooks.m_clientmode.get_old_method< fn::CreateMove_t >( CREATE_MOVE )( ecx, flInputSampleTime, cmd );
 
-	g_cl.m_local = C_CSPlayer::get_local( );
+	g_cl.m_local = c_csplayer::get_local( );
 
 	if( !cmd->m_command_number )
 		return ret;
 
 	if( ret )
-		g_csgo.m_prediction->SetLocalViewangles( cmd->m_viewangles );
+		g_csgo.m_prediction->set_local_viewangles( cmd->m_viewangles );
 
-	INetChannelInfo *channel_info = g_csgo.m_engine->GetNetChannelInfo( );
+	i_net_channel_info *channel_info = g_csgo.m_engine->get_net_channel_info( );
 	if( channel_info ) {
-		float latency = channel_info->GetLatency( FLOW_INCOMING ) + channel_info->GetLatency( FLOW_OUTGOING );
+		float latency = channel_info->get_latency( FLOW_INCOMING ) + channel_info->get_latency( FLOW_OUTGOING );
 
 		g_cl.m_rtt = static_cast< int >( std::round( latency * 1000.f ) );
-		g_cl.m_ping = static_cast< int >( std::round( channel_info->GetAverageLatency( FLOW_OUTGOING ) * 1000.f ) );
+		g_cl.m_ping = static_cast< int >( std::round( channel_info->get_average_latency( FLOW_OUTGOING ) * 1000.f ) );
 	}
 
 	static float framerate;
@@ -80,7 +80,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 		}
 	}
 
-	g_cl.m_local->GetRenderAngles( ) = g_antiaim.m_real;
+	g_cl.m_local->get_render_angles( ) = g_antiaim.m_real;
 
 	uintptr_t *frame_pointer;
 	__asm mov frame_pointer, ebp;

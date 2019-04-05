@@ -1,23 +1,23 @@
 #pragma once
 
-class CBoneAccessor {
+class c_bone_accessor {
 public:
-	matrix3x4_t *GetBoneArrayForWrite( void ) const {
-		return m_pBones;
+	matrix3x4_t *get_bone_array_for_write( void ) const {
+		return m_bones;
 	}
 
-	void SetBoneArrayForWrite( matrix3x4_t *bonearray ) {
+	void set_bone_array_for_write( matrix3x4_t *bonearray ) {
 		for( int bones = 0; bones < 128; bones++ )
-			m_pBones[ bones ] = bonearray[ bones ];
+			m_bones[ bones ] = bonearray[ bones ];
 	}
 
-	matrix3x4_t *m_pBones;
+	matrix3x4_t *m_bones;
 
-	int m_ReadableBones; // Which bones can be read.
-	int m_WritableBones; // Which bones can be written.
+	int m_readable_bones; // Which bones can be read.
+	int m_writable_bones; // Which bones can be written.
 };
 
-enum LifeState {
+enum life_state_t {
 	ALIVE = 0,
 	DYING,
 	DEAD,
@@ -25,7 +25,7 @@ enum LifeState {
 	DISCARDBODY,
 };
 
-class C_BaseEntity : public IClientEntity {
+class c_base_entity : public i_client_entity {
 public:
 	NETVAR( int, team, "DT_BaseEntity", "m_iTeamNum" )
 	NETVAR( int, survival_team, "DT_BaseEntity", "m_nSurvivalTeam" )
@@ -35,7 +35,7 @@ public:
 	NETVAR( float, simtime, "DT_BaseEntity", "m_flSimulationTime" )
 	NETVAR( vec3_t, mins, "DT_BaseEntity", "m_vecMins" )
 	NETVAR( vec3_t, maxs, "DT_BaseEntity", "m_vecMaxs" )
-	NETVAR( CBaseHandle, owner, "DT_BaseEntity", "m_hOwnerEntity" );
+	NETVAR( c_base_handle, owner, "DT_BaseEntity", "m_hOwnerEntity" );
 	NETVAR( bool, bomb_ticking, "DT_PlantedC4", "m_bBombTicking" )
 	NETVAR( bool, bomb_defused, "DT_PlantedC4", "m_bBombDefused" )
 	NETVAR( float, blow_time, "DT_PlantedC4", "m_flC4Blow" )
@@ -67,7 +67,7 @@ public:
 	bool is_valid_world( bool check_dormant ) {
 		bool ret = true;
 
-		if( check_dormant && this->IsDormant( ) )
+		if( check_dormant && this->is_dormant( ) )
 			ret = false;
 
 		return ret;
@@ -78,8 +78,8 @@ public:
 		return return_value < 0 ? 0.f : return_value;
 	}
 
-	IClientRenderable *renderable( ) {
-		return reinterpret_cast< IClientRenderable* >( reinterpret_cast< uintptr_t >( this ) + 0x4 );
+	i_client_renderable *renderable( ) {
+		return reinterpret_cast< i_client_renderable* >( reinterpret_cast< uintptr_t >( this ) + 0x4 );
 	}
 
 	matrix3x4_t &coord_frame( ) {
@@ -91,13 +91,13 @@ public:
 	}
 };
 
-class C_BaseCombatCharacter : public C_BaseEntity {
+class c_base_combat_character : public c_base_entity {
 public:
 	
 	NETVAR( float, next_attack, "DT_BaseCombatCharacter", "m_flNextAttack" )
 };
 
-class C_BasePlayer : public C_BaseCombatCharacter {
+class c_base_player : public c_base_combat_character {
 public:
 	NETVAR( int, health, "DT_BasePlayer", "m_iHealth" );
 	NETVAR( int, flags, "DT_BasePlayer", "m_fFlags" );
@@ -106,8 +106,8 @@ public:
 	NETVAR( vec3_t, velocity, "DT_BasePlayer", "m_vecVelocity[0]" );
 	NETVAR( vec3_t, view_offset, "DT_BasePlayer", "m_vecViewOffset[0]" );
 	NETVAR( vec3_t, punch_angle, "DT_BasePlayer", "m_aimPunchAngle" );
-	NETVAR( CBaseHandle, weapon_handle, "DT_BasePlayer", "m_hActiveWeapon" )
-	NETVAR( CBaseHandle, viewmodel_handle, "DT_BasePlayer", "m_hViewModel[0]" )
+	NETVAR( c_base_handle, weapon_handle, "DT_BasePlayer", "m_hActiveWeapon" )
+	NETVAR( c_base_handle, viewmodel_handle, "DT_BasePlayer", "m_hViewModel[0]" )
 
 	OFFSET( int, impulse, 0x31FC )
 
@@ -122,7 +122,7 @@ public:
 	}
 
 	bool physics_run_think( int unk01 ) {
-		// if ( C_BaseEntity::PhysicsRunThink((_DWORD *)player, 0) )
+		// if ( c_base_entity::PhysicsRunThink((_DWORD *)player, 0) )
 		static auto impl_PhysicsRunThink = reinterpret_cast< bool( __thiscall * )( void *, int ) >(
 			pattern::find( g_csgo.m_client_dll, "55 8B EC 83 EC 10 53 56 57 8B F9 8B 87 ? ? ? ? C1 E8 16" )
 			);
@@ -147,7 +147,7 @@ public:
 	}
 };
 
-class C_EnvTonemapController : C_BaseEntity {
+class c_env_tonemap_controller : c_base_entity {
 public:
 	NETVAR( unsigned char, use_custom_exposure_min, "DT_EnvTonemapController", "m_bUseCustomAutoExposureMin" );
 	NETVAR( unsigned char, use_custom_exposure_max, "DT_EnvTonemapController", "m_bUseCustomAutoExposureMax" );
@@ -155,19 +155,19 @@ public:
 	NETVAR( float, custom_exposure_max, "DT_EnvTonemapController", "m_flCustomAutoExposureMax" );
 };
 
-class C_BaseCSGrenade : public C_BaseEntity {
+class c_base_cs_grenade : public c_base_entity {
 public:
 	NETVAR( bool, pin_pulled, "DT_BaseCSGrenade", "m_bPinPulled" );
 	NETVAR( float, throw_time, "DT_BaseCSGrenade", "m_fThrowTime" );
 	NETVAR( float, throw_strength, "DT_BaseCSGrenade", "m_flThrowStrength" );
 };
 
-class C_BaseCombatWeapon : public C_BaseCSGrenade {
+class c_base_combat_weapon : public c_base_cs_grenade {
 public:
 	NETVAR( short, item_index, "DT_WeaponBaseItem", "m_iItemDefinitionIndex" );
 	NETVAR( int, clip, "DT_WeaponBaseItem", "m_iClip1" );
 	NETVAR( int, viewmodel_index, "DT_BaseCombatWeapon", "m_iViewModelIndex" );
-	NETVAR( CBaseHandle, worldmodel_handle, "DT_BaseCombatWeapon", "m_hWeaponWorldModel" );
+	NETVAR( c_base_handle, worldmodel_handle, "DT_BaseCombatWeapon", "m_hWeaponWorldModel" );
 	NETVAR( int, dropped_index, "DT_BaseCombatWeapon", "m_iWorldDroppedModelIndex" );
 	NETVAR( float, ready_time, "DT_WeaponBaseItem", "m_flPostponeFireReadyTime" );
 	NETVAR( float, next_primary_attack, "DT_BaseCombatWeapon", "m_flNextPrimaryAttack" );
@@ -216,8 +216,8 @@ public:
 			|| weapon_index == WEAPON_SSG08;
 	}
 
-	WeaponInfo_t *get_weapon_info( ) {
-		return g_csgo.m_weapon_system->GetWpnData( this->item_index( ) );
+	weapon_info_t *get_weapon_info( ) {
+		return g_csgo.m_weapon_system->get_weapon_data( this->item_index( ) );
 	}
 
 	float spread( ) {
@@ -233,7 +233,7 @@ public:
 	}
 };
 
-class C_BaseAttributableItem : public C_BaseCombatWeapon
+class c_base_attributable_item : public c_base_combat_weapon
 {
 public:
 	NETVAR( int, account_id, "DT_BaseAttributableItem","m_iAccountID" )
@@ -247,16 +247,16 @@ public:
 };
 
 
-class C_BaseAnimating : public C_BasePlayer {
+class c_base_animating : public c_base_player {
 public:
-	NETVAR( CUtlVector< float >, poses, "DT_BaseAnimating", "m_flPoseParameter" );
+	NETVAR( c_utl_vector< float >, poses, "DT_BaseAnimating", "m_flPoseParameter" );
 	NETVAR( bool, client_side_anims, "DT_BaseAnimating", "m_bClientSideAnimation" );
 	NETVAR( int, hitbox_set, "DT_BaseAnimating", "m_nHitboxSet" );
 
 	VFUNC( 219, update_anims(), void( __thiscall* )( void* ) )( )
 };
 
-class C_CSPlayer : public C_BaseAnimating {
+class c_csplayer : public c_base_animating {
 public:
 	NETVAR( bool, has_defuser, "DT_CSPlayer", "m_bHasDefuser" );
 	NETVAR( bool, is_scoped, "DT_CSPlayer", "m_bIsScoped" );
@@ -277,33 +277,33 @@ public:
 	NETVAR( vec3_t, angles, "DT_CSPlayer", "m_angEyeAngles" )
 		
 
-	NETVAR( CBaseHandle, observer_handle, "DT_CSPlayer", "m_hObserverTarget" );
-	NETVAR( CBaseHandle, ground_ent, "DT_CSPlayer", "m_hGroundEntity" );
-	NETVAR( CBaseHandle *, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
-	NETVAR( CBaseHandle *, my_wearables, "DT_CSPlayer", "m_hMyWearables" )
+	NETVAR( c_base_handle, observer_handle, "DT_CSPlayer", "m_hObserverTarget" );
+	NETVAR( c_base_handle, ground_ent, "DT_CSPlayer", "m_hGroundEntity" );
+	NETVAR( c_base_handle *, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
+	NETVAR( c_base_handle *, my_wearables, "DT_CSPlayer", "m_hMyWearables" )
 
 	NETVAR( int, shots_fired, "DT_CSPlayer", "m_iShotsFired" )
 
 	OFFSET( float, spawn_time, 0xA350 )
-	OFFSET( CCSGOPlayerAnimState *, animstate, 0x3900 )
+	OFFSET( c_animstate *, animstate, 0x3900 )
 	OFFSET( int, get_move_type, 0x25C )
-	OFFSET( CUtlVector< matrix3x4_t >, bone_cache, 0x2910 )
+	OFFSET( c_utl_vector< matrix3x4_t >, bone_cache, 0x2910 )
 
 	studiohdr_t *studio_hdr( ){
 		return **reinterpret_cast< studiohdr_t *** >( uintptr_t( this ) + 0x294C );
 	}
 
-	CUtlVector< AnimationLayer_t >& animoverlays( ) {
-		return *reinterpret_cast< CUtlVector< AnimationLayer_t >* >( reinterpret_cast< uintptr_t >( this ) + 0x2980 );
+	c_utl_vector< animation_layer_t >& animoverlays( ) {
+		return *reinterpret_cast< c_utl_vector< animation_layer_t >* >( reinterpret_cast< uintptr_t >( this ) + 0x2980 );
 	}
 
-	static C_CSPlayer *get_local( ) {
-		return g_csgo.m_entity_list->Get< C_CSPlayer >( g_csgo.m_engine->GetLocalPlayer( ) );
+	static c_csplayer *get_local( ) {
+		return g_csgo.m_entity_list->get< c_csplayer >( g_csgo.m_engine->get_local_player( ) );
 	}
 
-	CBaseHandle *weapons( ){
+	c_base_handle *weapons( ){
 		static auto offset = g_netvars.get_offset( "DT_CSPlayer", "m_hMyWeapons" );
-		return reinterpret_cast< CBaseHandle * >( uintptr_t( this ) + offset );
+		return reinterpret_cast< c_base_handle * >( uintptr_t( this ) + offset );
 	}
 
 	void set_abs_origin( vec3_t &o ) {
@@ -331,12 +331,12 @@ public:
 
 	player_info_t get_info( ) {
 		player_info_t info;
-		g_csgo.m_engine->GetPlayerInfo( this->GetIndex( ), &info );
+		g_csgo.m_engine->get_player_info( this->get_index( ), &info );
 		return info;
 	}
 
-	C_BaseCombatWeapon *get_active_weapon( ) {
-		return g_csgo.m_entity_list->Get< C_BaseCombatWeapon >( weapon_handle( ) );
+	c_base_combat_weapon *get_active_weapon( ) {
+		return g_csgo.m_entity_list->get< c_base_combat_weapon >( weapon_handle( ) );
 	}
 
 	vec3_t eye_pos( ) {
@@ -349,7 +349,7 @@ public:
 	}
 
 	int activity( int sequence ) {
-		auto *hdr = g_csgo.m_model_info->GetStudioModel( this->GetModel( ) );
+		auto *hdr = g_csgo.m_model_info->get_studio_model( this->get_model( ) );
 
 		if( !hdr ) {
 			return -1;
@@ -369,7 +369,7 @@ public:
 		if( this->alive( ) )
 			ret = true;
 
-		if( check_dormant && this->IsDormant( ) )
+		if( check_dormant && this->is_dormant( ) )
 			ret = false;
 
 		if( check_protected && this->immune( ) )
@@ -378,23 +378,23 @@ public:
 		return ret;
 	}
 
-	bool is_visible( C_CSPlayer *entity, const vec3_t &start, const vec3_t &end, int mask, C_BaseEntity *ignore ) {
+	bool is_visible( c_csplayer *entity, const vec3_t &start, const vec3_t &end, int mask, c_base_entity *ignore ) {
 		if( !entity || !ignore )
 			return false;
 
-		Ray_t ray;
-		CTraceFilter filter;
+		ray_t ray;
+		c_trace_filter filter;
 		filter.m_skip = ignore;
-		CGameTrace trace;
+		c_game_trace trace;
 
 		ray.init( start, end );
 
-		g_csgo.m_engine_trace->TraceRay( ray, mask, &filter, &trace );
+		g_csgo.m_engine_trace->trace_ray( ray, mask, &filter, &trace );
 
-		return trace.fraction == 1 || trace.hit_entity == entity;
+		return trace.m_fraction == 1 || trace.m_hit_entity == entity;
 	}
 
-	bool can_shoot( C_BaseCombatWeapon *weapon ) {
+	bool can_shoot( c_base_combat_weapon *weapon ) {
 		float server_time = static_cast< float >( this->tickbase( ) ) * g_csgo.m_global_vars->m_interval_per_tick;
 
 		if( this->next_attack( ) > server_time )
@@ -412,7 +412,7 @@ public:
 		return true;
 	}
 
-	bool is_shot_being_fired( C_BaseCombatWeapon *weapon, CUserCmd *user_command ) {
+	bool is_shot_being_fired( c_base_combat_weapon *weapon, c_user_cmd *user_command ) {
 		if( !weapon || !weapon->get_weapon_info( ) )
 			return false;
 
@@ -431,7 +431,7 @@ public:
 			return false;
 		}
 
-		if( C_BaseCombatWeapon::is_knife( weapon->item_index( ) ) ) {
+		if( c_base_combat_weapon::is_knife( weapon->item_index( ) ) ) {
 			float next_secondary_attack = weapon->next_sec_attack( ) - server_time;
 			return user_command->m_buttons & IN_ATTACK && this->can_shoot( weapon ) || user_command->m_buttons & IN_ATTACK2 && next_secondary_attack <= 0;
 		}
@@ -456,11 +456,11 @@ public:
 		if ( !anim_state )
 			return 0.f;
 
-		float duck_amount = anim_state->m_fDuckAmount;
-		float speed_fraction = math::max< float >( 0, math::min< float >( anim_state->m_flFeetSpeedForwardsOrSideWays, 1 ) );
-		float speed_factor = math::max< float >( 0, math::min< float >( 1, anim_state->m_flFeetSpeedUnknownForwardOrSideways ) );
+		float duck_amount = anim_state->duck_amount;
+		float speed_fraction = math::max< float >( 0, math::min< float >( anim_state->feet_speed_forwards_or_sideways, 1 ) );
+		float speed_factor = math::max< float >( 0, math::min< float >( 1, anim_state->feet_speed_unknown_forwards_or_sideways ) );
 
-		float yaw_modifier = ( ( ( anim_state->m_flStopToFullRunningFraction * -0.3f ) - 0.2f ) * speed_fraction ) + 1.0f;
+		float yaw_modifier = ( ( ( anim_state->stop_to_full_running_fraction * -0.3f ) - 0.2f ) * speed_fraction ) + 1.0f;
 
 		if ( duck_amount > 0.f ) {
 			yaw_modifier += ( ( duck_amount * speed_factor ) * ( 0.5f - yaw_modifier ) );

@@ -6,7 +6,7 @@
 
 class c_ragebot {
 	struct rage_t {
-		rage_t( C_CSPlayer *player, int i, int damage, vec3_t point, float dist, matrix3x4_t* matrix ){
+		rage_t( c_csplayer *player, int i, int damage, vec3_t point, float dist, matrix3x4_t* matrix ){
 			m_player = player;
 			index = i;
 			m_damage = damage;
@@ -16,7 +16,7 @@ class c_ragebot {
 		}
 
 		vec3_t m_bestpoint;
-		C_CSPlayer* m_player;
+		c_csplayer* m_player;
 		int index;
 		int m_damage;
 		float distance;
@@ -24,22 +24,22 @@ class c_ragebot {
 	};
 
 	std::vector< rage_t > m_players;
-	CUserCmd *m_cmd;
+	c_user_cmd *m_cmd;
 
 	void choose_angles( );
 	void select_target( );
-	bool get_points_from_hitbox( C_CSPlayer * e, std::vector< int > hitboxes, matrix3x4_t* matrix, std::vector<vec3_t>& points, float scale );
-	void quickstop( C_BaseCombatWeapon *local_weapon );
-	bool is_valid( C_CSPlayer * player );
-	bool hitchance( vec3_t &angle, C_CSPlayer *ent );
+	bool get_points_from_hitbox( c_csplayer * e, std::vector< int > hitboxes, matrix3x4_t* matrix, std::vector<vec3_t>& points, float scale );
+	void quickstop( c_base_combat_weapon *local_weapon );
+	bool is_valid( c_csplayer * player );
+	bool hitchance( vec3_t &angle, c_csplayer *ent );
 	static std::vector< lag_record_t > get_best_records( std::deque< lag_record_t > records );
 
 public:
 	int shots_fired;
-	C_CSPlayer *m_last_target = nullptr;
+	c_csplayer *m_last_target = nullptr;
 
-	void work( CUserCmd * cmd );
-	void auto_revolver( C_BaseCombatWeapon *local_weapon, CUserCmd *cmd );
+	void work( c_user_cmd * cmd );
+	void auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd );
 };
 
 extern c_ragebot g_ragebot;

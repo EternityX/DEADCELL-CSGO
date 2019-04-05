@@ -246,30 +246,30 @@ public:
 	float x, y, z;
 };
 
-class __declspec( align( 16 ) ) vectorAligned : public vec3_t
+class __declspec( align( 16 ) ) vector_aligned : public vec3_t
 {
 public:
-	inline vectorAligned( void )
+	inline vector_aligned( void )
 	{ };
 
-	inline vectorAligned( float X, float Y, float Z )
+	inline vector_aligned( float X, float Y, float Z )
 	{
 		Init( X, Y, Z );
 	}
 
 public:
-	explicit vectorAligned( const vec3_t &vOther )
+	explicit vector_aligned( const vec3_t &vOther )
 	{
 		Init( vOther.x, vOther.y, vOther.z );
 	}
 
-	vectorAligned& operator=( const vec3_t &vOther )
+	vector_aligned& operator=( const vec3_t &vOther )
 	{
 		Init( vOther.x, vOther.y, vOther.z );
 		return *this;
 	}
 
-	vectorAligned& operator=( const vectorAligned &vOther )
+	vector_aligned& operator=( const vector_aligned &vOther )
 	{
 		Init( vOther.x, vOther.y, vOther.z );
 		return *this;

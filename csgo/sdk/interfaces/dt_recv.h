@@ -1,55 +1,55 @@
 #pragma once
 
-struct RecvProxyData;
-struct RecvTable;
-struct RecvProp;
+struct recv_proxy_data;
+struct recv_table;
+struct recv_prop;
 
-using RecvVarProxy_t = void(__cdecl *)( const RecvProxyData *, void *, void * );
+using recv_var_proxy_t = void(__cdecl *)( const recv_proxy_data *, void *, void * );
 
-struct DVariant {
+struct d_variant {
 	union {
-		float m_Float;
-		long m_Int;
-		char *m_pString;
-		void *m_pData;
-		float m_Vector[ 3 ];
-		__int64 m_Int64;
+		float m_float;
+		long m_int;
+		char *m_string;
+		void *m_data;
+		float m_vector[ 3 ];
+		__int64 m_int64;
 	};
 
-	int m_Type;
+	int m_type;
 };
 
-struct RecvProxyData {
-	const RecvProp *m_pRecvProp;
-	DVariant m_Value;
-	int m_iElement;
-	int m_ObjectID;
+struct recv_proxy_data {
+	const recv_prop *m_recv_prop;
+	d_variant m_value;
+	int m_element;
+	int m_object_id;
 };
 
-struct RecvTable {
-	RecvProp *m_pProps;
-	int m_nProps;
-	void *m_pDecoder;
-	char *m_pNetTableName;
+struct recv_table {
+	recv_prop *m_props;
+	int m_num_props;
+	void *m_decoder;
+	char *m_net_table_name;
 
 private:
 	PAD( 0x2 )
 };
 
-struct RecvProp {
-	char *m_pVarName;
-	int m_RecvType;
-	int m_Flags;
-	int m_StringBufferSize;
-	bool m_bInsideArray;
-	const void *m_pExtraData;
-	RecvProp *m_pArrayProp;
-	void *m_ArrayLengthProxy;
-	RecvVarProxy_t m_ProxyFn;
-	void *m_DataTableProxyFn;
-	RecvTable *m_pDataTable;
-	int m_Offset;
-	int m_ElementStride;
-	int m_nElements;
-	const char *m_pParentArrayPropName;
+struct recv_prop {
+	char *m_var_name;
+	int m_recv_type;
+	int m_flags;
+	int m_string_buffer_size;
+	bool m_inside_array;
+	const void *m_extra_data;
+	recv_prop *m_array_prop;
+	void *m_array_length_proxy;
+	recv_var_proxy_t m_proxy_fn;
+	void *m_data_table_proxy_fn;
+	recv_table *m_data_table;
+	int m_offset;
+	int m_element_stride;
+	int m_num_elements;
+	const char *m_parent_array_prop_name;
 };

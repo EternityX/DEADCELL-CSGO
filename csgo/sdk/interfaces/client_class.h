@@ -1,14 +1,14 @@
 #pragma once
 
-using CreateClientClass_t = void *( *)( int entnum, int serialNum );
-using CreateEvent_t = void *( *)();
+using create_client_class_t = void *( *)( int ent_num, int serial_num );
+using create_event_t = void *( *)();
 
-class ClientClass {
+class client_class {
 public:
-	CreateClientClass_t m_pCreateFn;
-	CreateEvent_t m_pCreateEventFn;
-	char *m_pNetworkName;
-	RecvTable *m_pRecvTable;
-	ClientClass *m_pNext;
-	int m_ClassID;
+	create_client_class_t m_create_fn;
+	create_event_t m_create_event_fn;
+	char *m_network_name;
+	recv_table *m_recv_table;
+	client_class *m_next;
+	int m_class_id;
 };

@@ -2,7 +2,7 @@
 
 c_nade_prediction g_nadepred;
 
-void c_nade_prediction::predict( CUserCmd *ucmd ) {
+void c_nade_prediction::predict( c_user_cmd *ucmd ) {
 	//	readability
 	constexpr float restitution = 0.45f;
 	constexpr float power[ ] = { 1.0f, 1.0f, 0.5f, 0.0f };
@@ -14,10 +14,10 @@ void c_nade_prediction::predict( CUserCmd *ucmd ) {
 	vec3_t angles, thrown;
 
 	//	first time setup
-	static auto sv_gravity = g_csgo.m_convar->FindVar( "sv_gravity" );
+	static auto sv_gravity = g_csgo.m_convar->find_var( "sv_gravity" );
 
 	//	calculate step and actual gravity value
-	gravity = sv_gravity->GetFloat( ) / 8.0f;
+	gravity = sv_gravity->get_float( ) / 8.0f;
 	step = g_csgo.m_global_vars->m_interval_per_tick;
 
 	//	get local view and eye origin
@@ -65,30 +65,30 @@ void c_nade_prediction::predict( CUserCmd *ucmd ) {
 
 		//	setup trace
 		trace_t trace;
-		CTraceFilterSkipEntity filter( g_cl.m_local );
+		c_trace_filter_skip_entity filter( g_cl.m_local );
 
-		g_csgo.m_engine_trace->TraceRay( Ray_t{ start, pos }, MASK_SOLID, &filter, &trace );
+		g_csgo.m_engine_trace->trace_ray( ray_t{ start, pos }, MASK_SOLID, &filter, &trace );
 
 		//	modify path if we have hit something
-		if( trace.fraction != 1.0f ) {
-			thrown_direction = trace.plane.m_normal * -2.0f * thrown_direction.Dot( trace.plane.m_normal ) + thrown_direction;
+		if( trace.m_fraction != 1.0f ) {
+			thrown_direction = trace.m_plane.m_normal * -2.0f * thrown_direction.Dot( trace.m_plane.m_normal ) + thrown_direction;
 
 			thrown_direction *= restitution;
 
-			pos = start + thrown_direction * trace.fraction * step;
+			pos = start + thrown_direction * trace.m_fraction * step;
 
-			time += ( step * ( 1.0f - trace.fraction ) );
+			time += ( step * ( 1.0f - trace.m_fraction ) );
 		}
 
 		//	check for detonation
 		auto detonate = detonated( g_cl.m_local->get_active_weapon( ), time, trace );
 
 		//	emplace nade point
-		_points.at( index++ ) = c_nadepoint( start, pos, trace.fraction != 1.0f, true, trace.plane.m_normal, detonate );
+		_points.at( index++ ) = c_nadepoint( start, pos, trace.m_fraction != 1.0f, true, trace.m_plane.m_normal, detonate );
 		start = pos;
 
 		//	apply gravity modifier
-		thrown_direction.z -= gravity * trace.fraction * step;
+		thrown_direction.z -= gravity * trace.m_fraction * step;
 
 		if( detonate ) {
 			break;
@@ -103,7 +103,7 @@ void c_nade_prediction::predict( CUserCmd *ucmd ) {
 	_predicted = true;
 }
 
-bool c_nade_prediction::detonated( C_BaseCombatWeapon *weapon, float time, trace_t &trace ) {
+bool c_nade_prediction::detonated( c_base_combat_weapon *weapon, float time, trace_t &trace ) {
 	if( !weapon ) {
 		return true;
 	}
@@ -123,7 +123,7 @@ bool c_nade_prediction::detonated( C_BaseCombatWeapon *weapon, float time, trace
 		//	fire grenades detonate on ground hit, or 3.5s after thrown
 	case WEAPON_MOLOTOV:
 	case 48:
-		if( trace.fraction != 1.0f && trace.plane.m_normal.z > 0.7f || time > 3.5f ) {
+		if( trace.m_fraction != 1.0f && trace.m_plane.m_normal.z > 0.7f || time > 3.5f ) {
 			return true;
 		}
 		break;
@@ -140,7 +140,7 @@ bool c_nade_prediction::detonated( C_BaseCombatWeapon *weapon, float time, trace
 	return false;
 }
 
-void c_nade_prediction::trace( CUserCmd *ucmd ) {
+void c_nade_prediction::trace( c_user_cmd *ucmd ) {
 	if( !g_vars.visuals.grenade_pred )
 		return;
 
@@ -176,7 +176,7 @@ void c_nade_prediction::draw( ) {
 	if( !g_vars.visuals.grenade_pred )
 		return;
 
-	if( !g_csgo.m_engine->IsInGame( ) || !g_cl.m_local || !g_cl.m_local->alive( ) )
+	if( !g_csgo.m_engine->is_in_game( ) || !g_cl.m_local || !g_cl.m_local->alive( ) )
 		return;
 
 	auto draw_3d_dotted_circle = [ ]( vec3_t position, float points, float radius ) {

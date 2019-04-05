@@ -26,8 +26,8 @@ void c_notifications::add( bool display, OSHColor color, const std::string messa
 	if( m_notifications.size( ) > 15 )
 		m_notifications.pop_front( );
 
-	g_csgo.m_convar->PrintToConsole( Color( 206, 115, 136 ), "[deadcell]" );
-	g_csgo.m_convar->PrintToConsole( Color( 255, 255, 255 ), " %s\n", buf.c_str( ) );
+	g_csgo.m_convar->print_to_console( Color( 206, 115, 136 ), "[deadcell]" );
+	g_csgo.m_convar->print_to_console( Color( 255, 255, 255 ), " %s\n", buf.c_str( ) );
 
 	if( display )
 		m_notifications.emplace_back( color, OSHGui::Drawing::Color::FromARGB( 125, 0, 0, 0 ), g_csgo.m_global_vars->m_cur_time, buf );

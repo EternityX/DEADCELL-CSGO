@@ -6,13 +6,13 @@ void c_chams::on_sceneend( ) {
 	if( !g_vars.visuals.chams.enabled )
 		return;
 
-	const auto local = C_CSPlayer::get_local( );
+	const auto local = c_csplayer::get_local( );
 	if( !local )
 		return;
 
 	push_players( );
 
-	static std::vector< IMaterial * > materials;
+	static std::vector< i_material * > materials;
 
 	static bool once{ false };
 	if( !once ) {
@@ -38,7 +38,7 @@ void c_chams::on_sceneend( ) {
 
 		// you can change the material's shader values using SetShaderAndParams and passing in a keyvalue pointer
 		// example : 
-		// static auto kv = static_cast<KeyValues*>( g_csgo.m_memalloc->Alloc( 36 ) );
+		// static auto kv = static_cast<key_values*>( g_csgo.m_memalloc->Alloc( 36 ) );
 		// kv->SetInt( "$ignorez", 1 );
 		// this would update the material in real time without having to create a new material, obviously this can be used with more relevant
 		// shader params such as reflection for example, would allow us to control it with a slider instead of having it as a static value 
@@ -46,38 +46,38 @@ void c_chams::on_sceneend( ) {
 
 		if( g_vars.visuals.chams.twopass ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
-			g_csgo.m_model_render->ForcedMaterialOverride( g_vars.visuals.chams.type ? materials.at( 3 ) : materials.at( 2 ) );
+			g_csgo.m_model_render->forced_material_override( g_vars.visuals.chams.type ? materials.at( 3 ) : materials.at( 2 ) );
 			g_csgo.m_render_view->set_color_modulation( hid_color );
 			m_applied = true;
-			ent->DrawModel( STUDIO_RENDER, 255 );
+			ent->draw_model( STUDIO_RENDER, 255 );
 			m_applied = false;
 		}
 
 		g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
-		g_csgo.m_model_render->ForcedMaterialOverride( g_vars.visuals.chams.type ? materials.at( 1 ) : materials.at( 0 ) );
+		g_csgo.m_model_render->forced_material_override( g_vars.visuals.chams.type ? materials.at( 1 ) : materials.at( 0 ) );
 		g_csgo.m_render_view->set_color_modulation( vis_color );
 		m_applied = true;
-		ent->DrawModel( STUDIO_RENDER, 255 );
+		ent->draw_model( STUDIO_RENDER, 255 );
 		m_applied = false;
 	}
 
 	if( !m_players.empty( ) )
 		m_players.clear( );
 
-	g_csgo.m_model_render->ForcedMaterialOverride( nullptr );
+	g_csgo.m_model_render->forced_material_override( nullptr );
 }
 
-bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld ) {
-	auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( pInfo.m_entity_index );
-	auto local = C_CSPlayer::get_local( );
+bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld ) {
+	auto player = g_csgo.m_entity_list->get< c_csplayer >( pInfo.m_entity_index );
+	auto local = c_csplayer::get_local( );
 	if( !local || !player || !pInfo.m_model )
 		return true;
 
-	std::string model_name = g_csgo.m_model_info->GetModelName( ( model_t* )pInfo.m_model );
+	std::string model_name = g_csgo.m_model_info->get_model_name( ( model_t* )pInfo.m_model );
 
-	if( pInfo.m_entity_index == g_csgo.m_engine->GetLocalPlayer( ) && g_csgo.m_input->m_fCameraInThirdPerson && g_vars.visuals.chams.local ) {
+	if( pInfo.m_entity_index == g_csgo.m_engine->get_local_player( ) && g_csgo.m_input->m_camera_in_thirdperson && g_vars.visuals.chams.local ) {
 		static auto mat = create_material( true, false, false, 7 );
-		g_csgo.m_model_render->ForcedMaterialOverride( mat );
+		g_csgo.m_model_render->forced_material_override( mat );
 		auto color = OSHColor::FromARGB( g_vars.visuals.chams.local_col );
 		float col[ 3 ] = { color.GetRed( ), color.GetGreen( ), color.GetBlue( ) };
 		g_csgo.m_render_view->set_color_modulation( col );
@@ -102,24 +102,24 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const ModelRenderInfo
 
 void c_chams::push_players( ) {
 	for( int index = 1; index <= g_csgo.m_global_vars->m_max_clients; index++ ) {
-		auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( index );
+		auto player = g_csgo.m_entity_list->get< c_csplayer >( index );
 
-		if( !player || !player->alive( ) || player->IsDormant( ) || ( ( player->team( ) == C_CSPlayer::get_local( )->team( ) ) && !g_vars.visuals.chams.teammates ) )
+		if( !player || !player->alive( ) || player->is_dormant( ) || ( ( player->team( ) == c_csplayer::get_local( )->team( ) ) && !g_vars.visuals.chams.teammates ) )
 			continue;
 
 		if( player->immune( ) )
 			continue;
 
-		float dist = player->abs_origin( ).distance( C_CSPlayer::get_local( )->abs_origin( ) );
+		float dist = player->abs_origin( ).distance( c_csplayer::get_local( )->abs_origin( ) );
 		m_players.emplace_back( player, dist );
 	}
 
-	std::sort( m_players.begin( ), m_players.end( ), [ ]( const std::pair< C_CSPlayer*, float > &left, const std::pair< C_CSPlayer*, float > &right ) {
+	std::sort( m_players.begin( ), m_players.end( ), [ ]( const std::pair< c_csplayer*, float > &left, const std::pair< c_csplayer*, float > &right ) {
 		return left.second < right.second;
 	} );
 }
 
-IMaterial *c_chams::create_material( bool shade, bool wireframe, bool ignorez, int rimlight_boost ) const {
+i_material *c_chams::create_material( bool shade, bool wireframe, bool ignorez, int rimlight_boost ) const {
 	static const std::string material_name = "game_material.vmt";
 	const std::string material_type = shade ? "VertexLitGeneric" : "UnlitGeneric";
 
@@ -142,9 +142,9 @@ IMaterial *c_chams::create_material( bool shade, bool wireframe, bool ignorez, i
 	material_data += "\t\"$ignorez\" \"" + std::to_string( ignorez ) + "\"\n";
 	material_data += "}\n";
 
-	auto kv = static_cast<KeyValues*>( g_csgo.m_memalloc->Alloc( 36 ) );
-	kv->Init( material_type.c_str( ) );
-	kv->LoadFromBuffer( material_name.c_str( ), material_data.c_str( ) );
+	auto kv = static_cast<key_values*>( g_csgo.m_memalloc->alloc( 36 ) );
+	kv->init( material_type.c_str( ) );
+	kv->load_from_buffer( material_name.c_str( ), material_data.c_str( ) );
 
-	return g_csgo.m_material_system->CreateMaterial( material_name.c_str( ), kv );
+	return g_csgo.m_material_system->create_material( material_name.c_str( ), kv );
 }

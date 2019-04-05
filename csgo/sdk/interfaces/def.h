@@ -417,14 +417,14 @@ struct CIncomingSequence {
 	float curtime;
 };
 
-enum class TraceType_t {
+enum class trace_type_t {
 	TRACE_EVERYTHING = 0,
 	TRACE_WORLD_ONLY,
 	TRACE_ENTITIES_ONLY,
 	TRACE_EVERYTHING_FILTER_PROPS,
 };
 
-enum OverrideType_t {
+enum override_type_t {
 	OVERRIDE_NORMAL = 0,
 	OVERRIDE_BUILD_SHADOWS,
 	OVERRIDE_DEPTH_WRITE,
@@ -552,7 +552,7 @@ struct SurfaceGameProps_t {
 	uint8_t climbable;
 };
 
-struct SurfaceData_t {
+struct surface_data_t {
 	SurfacePhysicsParams_t physics;
 	SurfaceAudioParams_t audio;
 	SurfaceSoundNames_t sounds;
@@ -1204,7 +1204,7 @@ enum ECstrike15UserMessages {
 	CS_UM_GlowPropTurnOff = 60,
 };
 
-struct ModelRenderInfo_t {
+struct model_render_info_t {
 	vec3_t m_origin;
 	vec3_t m_angles;
 	char pad_0x0001[0x4];
@@ -1240,7 +1240,7 @@ public:
 	char m_szTextureName[64]; //0x1559888 
 }; //Size=0x006C
 
-class AnimationLayer_t {
+class animation_layer_t {
 public:
 	PAD( 20 )
 	uint32_t m_nOrder;
@@ -1369,39 +1369,39 @@ public:
 	vec3_t viewangles;              //0x4D10
 };
 
-class IMemAlloc
+class i_mem_alloc
 {
 public:
 	// Release versions
-	virtual void *Alloc(size_t nSize) = 0;
-	virtual void *Realloc(void *pMem, size_t nSize) = 0;
-	virtual void  Free(void *pMem) = 0;
+	virtual void *alloc(size_t nSize) = 0;
+	virtual void *realloc(void *pMem, size_t nSize) = 0;
+	virtual void  free(void *pMem) = 0;
 	virtual void *Expand_NoLongerSupported(void *pMem, size_t nSize) = 0;
 
 	// Debug versions
-	virtual void *Alloc(size_t nSize, const char *pFileName, int nLine) = 0;
-	virtual void *Realloc(void *pMem, size_t nSize, const char *pFileName, int nLine) = 0;
-	virtual void  Free(void *pMem, const char *pFileName, int nLine) = 0;
+	virtual void *alloc(size_t nSize, const char *pFileName, int nLine) = 0;
+	virtual void *realloc(void *pMem, size_t nSize, const char *pFileName, int nLine) = 0;
+	virtual void  free(void *pMem, const char *pFileName, int nLine) = 0;
 	virtual void *Expand_NoLongerSupported(void *pMem, size_t nSize, const char *pFileName, int nLine) = 0;
 
 	// Returns size of a particular allocation
-	virtual size_t GetSize(void *pMem) = 0;
+	virtual size_t get_size(void *pMem) = 0;
 
 	// Force file + line information for an allocation
-	virtual void PushAllocDbgInfo(const char *pFileName, int nLine) = 0;
-	virtual void PopAllocDbgInfo() = 0;
+	virtual void push_alloc_dbg_info(const char *pFileName, int nLine) = 0;
+	virtual void pop_alloc_dbg_info() = 0;
 
-	virtual long CrtSetBreakAlloc(long lNewBreakAlloc) = 0;
-	virtual	int CrtSetReportMode(int nReportType, int nReportMode) = 0;
-	virtual int CrtIsValidHeapPointer(const void *pMem) = 0;
-	virtual int CrtIsValidPointer(const void *pMem, unsigned int size, int access) = 0;
-	virtual int CrtCheckMemory(void) = 0;
-	virtual int CrtSetDbgFlag(int nNewFlag) = 0;
-	virtual void CrtMemCheckpoint(_CrtMemState *pState) = 0;
+	virtual long crt_set_break_alloc(long lNewBreakAlloc) = 0;
+	virtual	int crt_set_report_mode(int nReportType, int nReportMode) = 0;
+	virtual int crt_is_valid_heap_pointer(const void *pMem) = 0;
+	virtual int crt_is_valid_pointer(const void *pMem, unsigned int size, int access) = 0;
+	virtual int crt_check_memory(void) = 0;
+	virtual int crt_set_dbg_flag(int nNewFlag) = 0;
+	virtual void crt_mem_checkpoint(_CrtMemState *pState) = 0;
 	virtual int heapchk() = 0;
 
-	virtual void DumpStats() = 0;
-	virtual void DumpStatsFileBase(char const *pchFileBase) = 0;
+	virtual void dump_stats() = 0;
+	virtual void dump_stats_file_base(char const *pchFileBase) = 0;
 };
 
 typedef unsigned short MDLHandle_t;

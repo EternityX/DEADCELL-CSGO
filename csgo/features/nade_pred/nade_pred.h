@@ -32,10 +32,10 @@ class c_nade_prediction {
 	std::array< c_nadepoint, 500 >	_points { };
 	bool		 _predicted = false;
 
-	void predict( CUserCmd *ucmd );
-	bool detonated( C_BaseCombatWeapon*weapon, float time, trace_t &trace );
+	void predict( c_user_cmd *ucmd );
+	bool detonated( c_base_combat_weapon*weapon, float time, trace_t &trace );
 public:
-	void trace( CUserCmd *ucmd );
+	void trace( c_user_cmd *ucmd );
 	void draw( );
 };
 

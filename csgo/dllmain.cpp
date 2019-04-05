@@ -84,7 +84,7 @@ static ulong_t __stdcall cheat_init( void *arg ) {
 		console::print( "game resolution ==> %x%.\n", g_renderer.get_renderer( ).GetDisplaySize( ).Width, g_renderer.get_renderer( ).GetDisplaySize( ).Height );
 #endif
 
-		if( !g_csgo.m_command_line->FindParm( "-insecure" ) ) {
+		if( !g_csgo.m_command_line->find_param( "-insecure" ) ) {
 #ifdef _DEBUG
 			console::print( "-insecure launch parameter not found.\n" );
 #endif
