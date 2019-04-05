@@ -6,12 +6,12 @@
 class c_antiaim {
 	vec3_t m_input = vec3_t{};
 
-	bool allow( CUserCmd *ucmd );
-	void adjust_yaw( CUserCmd *ucmd );
-	void adjust_pitch( CUserCmd *ucmd );
+	bool allow( c_user_cmd *ucmd );
+	void adjust_yaw( c_user_cmd *ucmd );
+	void adjust_pitch( c_user_cmd *ucmd );
 	static float at_target( );
 public:
-	void set_angles( CUserCmd *ucmd );
+	void set_angles( c_user_cmd *ucmd );
 
 	vec3_t	m_real = vec3_t( );
 	vec3_t	m_fake = vec3_t( );

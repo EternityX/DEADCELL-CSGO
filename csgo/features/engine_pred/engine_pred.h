@@ -19,10 +19,10 @@ private:
 	int m_prediction_player;
 	int m_prediction_seed;
 
-	int post_think( C_BasePlayer *player ) const;
+	int post_think( c_base_player *player ) const;
 public:
 	static void pre_start( );
-	void start( CUserCmd * ucmd );
+	void start( c_user_cmd * ucmd );
 	void end( ) const;
 };
 

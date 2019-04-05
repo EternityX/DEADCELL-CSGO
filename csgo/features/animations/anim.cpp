@@ -5,14 +5,14 @@ c_animations g_anim;
 // never finished.
 
 bool c_animations::init( ) {
-	g_csgo.m_entity_list->AddListenerEntity( this );
+	g_csgo.m_entity_list->add_listener_entity( this );
 
 	return true;
 }
 
 bool c_animations::remove( ) {
 	try {
-		g_csgo.m_entity_list->RemoveListenerEntity( this );
+		g_csgo.m_entity_list->remove_listener_entity( this );
 
 		for( int i = 0; i < 64; i++ ) {
 			if( m_track.at( i ).m_hooked ) {
@@ -29,20 +29,20 @@ bool c_animations::remove( ) {
 	return true;
 }
 
-void c_animations::OnEntityCreated( C_BaseEntity *ent ) {
+void c_animations::on_entity_created( c_base_entity *ent ) {
 	try {
 		if( !ent )
 			return;
 
-		const int index = ent->GetIndex( );
+		const int index = ent->get_index( );
 		if( index < 0 )
 			return;
 
-		ClientClass *cc = ent->GetClientClass( );
+		client_class *cc = ent->get_client_class( );
 		if( !cc )
 			return;
 
-		switch( cc->m_ClassID ) {
+		switch( cc->m_class_id ) {
 			case CCSPlayer: {
 
 				m_track.at( index ).m_index = index;
@@ -62,12 +62,12 @@ void c_animations::OnEntityCreated( C_BaseEntity *ent ) {
 	}
 }
 
-void c_animations::OnEntityDeleted( C_BaseEntity *ent ) {
+void c_animations::on_entity_deleted( c_base_entity *ent ) {
 	try {
 		if( !ent )
 			return;
 
-		int index = ent->GetIndex( );
+		int index = ent->get_index( );
 		if( index < 0 )
 			return;
 

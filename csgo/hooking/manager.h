@@ -1,7 +1,7 @@
 #pragma once
 
-class CBoneBitList;
-class CIKContext;
+class c_bone_bit_list;
+class c_ik_context;
 
 namespace hook {
 	namespace fn {
@@ -10,24 +10,24 @@ namespace hook {
 		using PaintTraverse_t = void (__thiscall *)( uintptr_t, int, bool, bool );
 		using LevelInitPostEntity_t = void (__thiscall *)( uintptr_t );
 		using LevelShutdown_t = void (__thiscall *)( uintptr_t );
-		using CreateMove_t = bool (__thiscall *)( uintptr_t, float, CUserCmd * );
+		using CreateMove_t = bool (__thiscall *)( uintptr_t, float, c_user_cmd * );
 		using ShouldDrawFog_t = bool (__thiscall *)( uintptr_t );
-		using OverrideView_t = void (__thiscall *)( uintptr_t, CViewSetup * );
+		using OverrideView_t = void (__thiscall *)( uintptr_t, c_view_setup * );
 		using GetViewModelFOV_t = float(__thiscall *)( uintptr_t );
 		using OverrideConfig_t = bool( __thiscall *)( uintptr_t, MaterialSystem_Config_t *, bool );
 		using BeginFrame_t = void (__thiscall *)( uintptr_t, float );
 		using SceneEnd_t = void (__thiscall *)( uintptr_t );
-		using DrawModelExecute_t = void (__thiscall *)( uintptr_t, IMatRenderContext *, void *, const ModelRenderInfo_t &,
+		using DrawModelExecute_t = void (__thiscall *)( uintptr_t, IMatRenderContext *, void *, const model_render_info_t &,
 		                                                matrix3x4_t * );
 		using FrameStageNotify_t = void (__thiscall *)( uintptr_t, ClientFrameStage_t );
 		using DrawModel_t = void (__thiscall *)( uintptr_t, uintptr_t, DrawModelInfo_t &, matrix3x4_t *, float *, float *,
 		                                         vec3_t &, int );
-		using DoPostScreenEffects_t = bool (__thiscall *)( uintptr_t, const CViewSetup * );
+		using DoPostScreenEffects_t = bool (__thiscall *)( uintptr_t, const c_view_setup * );
 		using DispatchUserMessage_t = bool (__thiscall *)( uintptr_t, unsigned int, unsigned int, unsigned int, const void * );
-		using LockCursor_t = void (__thiscall *)( ISurface * );
-		using GetMaterial_t = IMaterial *( __thiscall*)( uintptr_t, const char *, const char *, bool, const char * );
+		using LockCursor_t = void (__thiscall *)( i_surface * );
+		using GetMaterial_t = i_material *( __thiscall*)( uintptr_t, const char *, const char *, bool, const char * );
 		using RenderSmokeOverlay_t = bool (__thiscall *)( uintptr_t, bool );
-		using RunCommand_t = void( __thiscall *)( uintptr_t, C_BasePlayer *, CUserCmd *, IMoveHelper * );
+		using RunCommand_t = void( __thiscall *)( uintptr_t, c_base_player *, c_user_cmd *, i_move_helper * );
 
 	};
 
@@ -81,16 +81,16 @@ namespace hook {
 	void __fastcall PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel, bool forceRepaint, bool allowForce );
 	void __fastcall LevelInitPostEntity( uintptr_t ecx, uintptr_t edx );
 	void __fastcall LevelShutdown( uintptr_t ecx, uintptr_t edx );
-	bool __fastcall CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, CUserCmd *cmd );
+	bool __fastcall CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSampleTime, c_user_cmd *cmd );
 	bool __fastcall ShouldDrawFog( uintptr_t ecx, uintptr_t edx );
-	void __fastcall OverrideView( uintptr_t ecx, uintptr_t edx, CViewSetup *pSetup );
+	void __fastcall OverrideView( uintptr_t ecx, uintptr_t edx, c_view_setup *pSetup );
 	float __fastcall GetViewModelFOV( uintptr_t ecx, uintptr_t edx );
-	IMaterial * __fastcall GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain, const char *complain_prefix );
+	i_material * __fastcall GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain, const char *complain_prefix );
 	void __fastcall SceneEnd( uintptr_t ecx, uintptr_t edx );
 	void __fastcall DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRenderContext *ctx, void *state,
-	                                  const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld );
+	                                  const model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld );
 	void __fastcall FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFrameStage_t curstage );
-	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const CViewSetup *pSetup );
+	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const c_view_setup *pSetup );
 	void __fastcall RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 );
 };
 

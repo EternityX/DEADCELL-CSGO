@@ -3,9 +3,9 @@
 
 c_engine_pred g_engine_pred;
 
-int c_engine_pred::post_think( C_BasePlayer *player ) const {
-	static auto PostThinkVPhysics = pattern::find< bool( __thiscall*)( C_BaseEntity * ) >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 81 EC ?? ?? ?? ?? 53 8B D9" );
-	static auto SimulatePlayerSimulatedEntities = pattern::find< void(__thiscall*)( C_BaseEntity * ) >( g_csgo.m_client_dll, "56 8B F1 57 8B BE ?? ?? ?? ?? 83 EF 01" );
+int c_engine_pred::post_think( c_base_player *player ) const {
+	static auto PostThinkVPhysics = pattern::find< bool( __thiscall*)( c_base_entity * ) >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 81 EC ?? ?? ?? ?? 53 8B D9" );
+	static auto SimulatePlayerSimulatedEntities = pattern::find< void(__thiscall*)( c_base_entity * ) >( g_csgo.m_client_dll, "56 8B F1 57 8B BE ?? ?? ?? ?? 83 EF 01" );
 
 	util::misc::vfunc< void( __thiscall *)( void * ) >( g_csgo.m_modelcache, 33 )( g_csgo.m_modelcache );
 	if( player->alive( ) ) {
@@ -28,16 +28,16 @@ int c_engine_pred::post_think( C_BasePlayer *player ) const {
 }
 
 void c_engine_pred::pre_start( ) {
-	if( !g_csgo.m_engine->IsInGame( ) )
+	if( !g_csgo.m_engine->is_in_game( ) )
 		return;
 
 	if( g_csgo.m_clientstate->m_nDeltaTick > 0 ) {
-		g_csgo.m_prediction->Update( g_csgo.m_clientstate->m_nDeltaTick, g_csgo.m_clientstate->m_nDeltaTick > 0,
+		g_csgo.m_prediction->update( g_csgo.m_clientstate->m_nDeltaTick, g_csgo.m_clientstate->m_nDeltaTick > 0,
 		                             g_csgo.m_clientstate->m_nLastCommandAck, g_csgo.m_clientstate->m_nLastOutgoingCommand + g_csgo.m_clientstate->m_nChokedCommands );
 	}
 }
 
-void c_engine_pred::start( CUserCmd *ucmd ) {
+void c_engine_pred::start( c_user_cmd *ucmd ) {
 	if( !ucmd || !g_csgo.m_movehelper || !g_cl.m_local )
 		return;
 
@@ -58,8 +58,8 @@ void c_engine_pred::start( CUserCmd *ucmd ) {
 		*reinterpret_cast< int * >( m_prediction_seed ) = ucmd ? ucmd->m_random_seed : -1;
 		*reinterpret_cast< int * >( m_prediction_player ) = reinterpret_cast< int >( player );
 
-		*reinterpret_cast< CUserCmd ** >( uint32_t( player ) + 0x3334 ) = ucmd; // m_pCurrentCommand
-		*reinterpret_cast< CUserCmd ** >( uint32_t( player ) + 0x3288 ) = ucmd; // unk01
+		*reinterpret_cast< c_user_cmd ** >( uint32_t( player ) + 0x3334 ) = ucmd; // m_pCurrentCommand
+		*reinterpret_cast< c_user_cmd ** >( uint32_t( player ) + 0x3288 ) = ucmd; // unk01
 	}
 
 	//	backup player variables
@@ -75,17 +75,17 @@ void c_engine_pred::start( CUserCmd *ucmd ) {
 	const int old_tickbase = g_cl.m_local->tickbase( );
 
 	//	backup prediction variables
-	const bool old_in_prediction = g_csgo.m_prediction->m_bInPrediction;
-	const bool old_first_prediction = g_csgo.m_prediction->m_bIsFirstTimePredicted;
+	const bool old_in_prediction = g_csgo.m_prediction->m_in_prediction;
+	const bool old_first_prediction = g_csgo.m_prediction->m_is_first_time_predicted;
 
 	//	set globals correctly
 	g_csgo.m_global_vars->m_cur_time = player->tickbase( ) * g_csgo.m_global_vars->m_interval_per_tick;
-	g_csgo.m_global_vars->m_frametime = g_csgo.m_prediction->m_bEnginePaused ? 0 : g_csgo.m_global_vars->m_interval_per_tick;
+	g_csgo.m_global_vars->m_frametime = g_csgo.m_prediction->m_engine_paused ? 0 : g_csgo.m_global_vars->m_interval_per_tick;
 	g_csgo.m_global_vars->m_tickcount = player->tickbase( );
 
 	//	setup prediction
-	g_csgo.m_prediction->m_bIsFirstTimePredicted = false;
-	g_csgo.m_prediction->m_bInPrediction = true;
+	g_csgo.m_prediction->m_is_first_time_predicted = false;
+	g_csgo.m_prediction->m_in_prediction = true;
 
 	if( ucmd->m_impulse )
 		*reinterpret_cast< uint32_t * >( uint32_t( player ) + 0x31FC ) = ucmd->m_impulse;
@@ -105,7 +105,7 @@ void c_engine_pred::start( CUserCmd *ucmd ) {
 	}
 
 	//	check if player is standing on moving ground
-	g_csgo.m_prediction->CheckMovingGround( player, g_csgo.m_global_vars->m_frame_count );
+	g_csgo.m_prediction->check_moving_ground( player, g_csgo.m_global_vars->m_frame_count );
 
 	//	copy from command to player
 	player->set_local_viewangles( ucmd->m_viewangles );
@@ -130,19 +130,19 @@ void c_engine_pred::start( CUserCmd *ucmd ) {
 	}
 
 	//	set host
-	g_csgo.m_movehelper->SetHost( player );
+	g_csgo.m_movehelper->set_host( player );
 
 	//	setup input
-	g_csgo.m_prediction->SetupMove( player, ucmd, g_csgo.m_movehelper, m_movedata );
+	g_csgo.m_prediction->setup_move( player, ucmd, g_csgo.m_movehelper, m_movedata );
 
 	//	run movement
-	g_csgo.m_game_movement->ProcessMovement( player, m_movedata );
+	g_csgo.m_game_movement->process_movement( player, m_movedata );
 
 	//	finish prediction
-	g_csgo.m_prediction->FinishMove( player, ucmd, m_movedata );
+	g_csgo.m_prediction->finish_move( player, ucmd, m_movedata );
 
 	//	invoke impact functions
-	g_csgo.m_movehelper->ProcessImpacts( );
+	g_csgo.m_movehelper->process_impacts( );
 
 	//	CPrediction::RunPostThink
 	{
@@ -153,8 +153,8 @@ void c_engine_pred::start( CUserCmd *ucmd ) {
 	g_cl.m_local->tickbase( ) = old_tickbase;
 
 	//	restore prediction
-	g_csgo.m_prediction->m_bIsFirstTimePredicted = old_first_prediction;
-	g_csgo.m_prediction->m_bInPrediction = old_in_prediction;
+	g_csgo.m_prediction->m_is_first_time_predicted = old_first_prediction;
+	g_csgo.m_prediction->m_in_prediction = old_in_prediction;
 
 }
 
@@ -175,5 +175,5 @@ void c_engine_pred::end( ) const {
 		*reinterpret_cast< int * >( m_prediction_player ) = 0;
 	}
 
-	g_csgo.m_game_movement->Reset( );
+	g_csgo.m_game_movement->reset( );
 }

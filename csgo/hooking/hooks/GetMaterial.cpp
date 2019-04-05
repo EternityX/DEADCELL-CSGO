@@ -1,6 +1,6 @@
 #include "../../inc.hpp"
 
-IMaterial * __fastcall hook::GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain,
+i_material * __fastcall hook::GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain,
 	const char *complain_prefix ) {
 
 	static auto original = g_hooks.m_materialsystem.get_old_method< fn::GetMaterial_t >( hook::idx::GET_MATERIAL );

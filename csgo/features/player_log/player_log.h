@@ -3,7 +3,7 @@
 
 struct lag_record_t
 {
-	lag_record_t( C_CSPlayer *player )
+	lag_record_t( c_csplayer *player )
 		: m_bones{ } {
 
 		// save all data here.
@@ -12,7 +12,7 @@ struct lag_record_t
 		m_lby = player->lby_t( );
 		m_flags = player->flags( );
 		m_vel = player->velocity( );
-		player->SetupBones( m_bones.data( ), 128, 0x100, g_csgo.m_global_vars->m_cur_time );
+		player->setup_bones( m_bones.data( ), 128, 0x100, g_csgo.m_global_vars->m_cur_time );
 	}
 
 	bool is_valid( ) const;
@@ -23,14 +23,14 @@ struct lag_record_t
 	float					m_simtime;
 	vec3_t					m_vel;
 
-	CUtlVector< float >	m_poses;
+	c_utl_vector< float >	m_poses;
 	 
 	std::array< matrix3x4_t, 128 >	m_bones;
 };
 
 struct player_log_t
 {
-	C_CSPlayer *m_player;
+	c_csplayer *m_player;
 	std::deque< lag_record_t > m_records;
 };
 

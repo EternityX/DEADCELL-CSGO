@@ -3,7 +3,7 @@
 
 c_misc g_misc;
 
-void c_misc::bunnyhop( CUserCmd *cmd ) {
+void c_misc::bunnyhop( c_user_cmd *cmd ) {
 	if( !g_cl.m_local )
 		return;
 
@@ -32,11 +32,11 @@ void c_misc::bunnyhop( CUserCmd *cmd ) {
 	}
 }
 
-void c_misc::automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd ) {
+void c_misc::automatic_fire( c_base_combat_weapon *active_weapon, c_user_cmd *cmd ) {
 	if( !active_weapon || !cmd )
 		return;
 
-	const WeaponInfo_t *wep_info = active_weapon->get_weapon_info( );
+	const weapon_info_t *wep_info = active_weapon->get_weapon_info( );
 
 	if( wep_info->full_auto || !( wep_info->type == WEAPONTYPE_PISTOL ) || !( cmd->m_buttons & IN_ATTACK ) )
 		return;
@@ -50,7 +50,7 @@ void c_misc::automatic_fire( C_BaseCombatWeapon *active_weapon, CUserCmd *cmd ) 
 }
 
 void c_misc::thirdperson( ) {
-	auto local = C_CSPlayer::get_local( );
+	auto local = c_csplayer::get_local( );
 
 	if( !local )
 		return;
@@ -71,47 +71,47 @@ void c_misc::thirdperson( ) {
 
 	static vec3_t vecAngles;
 
-	g_csgo.m_engine->GetViewAngles( vecAngles );
+	g_csgo.m_engine->get_viewangles( vecAngles );
 
 	if( g_vars.misc.thirdperson && local->alive( ) ) {
-		if( !g_csgo.m_input->m_fCameraInThirdPerson ) {
+		if( !g_csgo.m_input->m_camera_in_thirdperson ) {
 			auto GetCorrectDistance = [ & ]( float ideal_distance ) -> float {
 				vec3_t inverseAngles;
-				g_csgo.m_engine->GetViewAngles( inverseAngles );
+				g_csgo.m_engine->get_viewangles( inverseAngles );
 
 				inverseAngles.x *= -1.f, inverseAngles.y += 180.f;
 
 				vec3_t direction;
 				math::angle_to_vector( inverseAngles, direction );
 
-				Ray_t ray;
+				ray_t ray;
 				trace_t trace;
-				CTraceFilterSkipEntity filter( local );
+				c_trace_filter_skip_entity filter( local );
 
 				ray.init( local->eye_pos( ), local->eye_pos( ) + ( direction * ideal_distance ) );
 
-				g_csgo.m_engine_trace->TraceRay( ray, MASK_SHOT, &filter, &trace );
+				g_csgo.m_engine_trace->trace_ray( ray, MASK_SHOT, &filter, &trace );
 
-				return ( ideal_distance * trace.fraction ) - 10.f;
+				return ( ideal_distance * trace.m_fraction ) - 10.f;
 			};
 
 			vecAngles.z = GetCorrectDistance( 60.f );
 
-			g_csgo.m_input->m_fCameraInThirdPerson = true;
+			g_csgo.m_input->m_camera_in_thirdperson = true;
 
-			g_csgo.m_input->m_vecCameraOffset = vec3_t( vecAngles.x, vecAngles.y, vecAngles.z );
+			g_csgo.m_input->m_camera_offset = vec3_t( vecAngles.x, vecAngles.y, vecAngles.z );
 		}
 	}
 	else {
-		g_csgo.m_input->m_fCameraInThirdPerson = false;
+		g_csgo.m_input->m_camera_in_thirdperson = false;
 
-		g_csgo.m_input->m_vecCameraOffset = vec3_t( vecAngles.x, vecAngles.y, 0 );
+		g_csgo.m_input->m_camera_offset = vec3_t( vecAngles.x, vecAngles.y, 0 );
 	}
 
 }
 
-void c_misc::thirdperson( CViewSetup *setup ) {
-	auto local = C_CSPlayer::get_local( );
+void c_misc::thirdperson( c_view_setup *setup ) {
+	auto local = c_csplayer::get_local( );
 	if( !local )
 		return;
 
@@ -128,7 +128,7 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 
 		auto spechandle = local->observer_handle( );
 
-		auto spec = g_csgo.m_entity_list->Get< C_CSPlayer >( spechandle );
+		auto spec = g_csgo.m_entity_list->get< c_csplayer >( spechandle );
 		if( !spec )
 			return;
 
@@ -141,11 +141,11 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 			once2 = true;
 
 		static vec3_t angles;
-		g_csgo.m_engine->GetViewAngles( angles );
+		g_csgo.m_engine->get_viewangles( angles );
 		setup->m_angles = angles;
 
 		trace_t tr;
-		Ray_t ray;
+		ray_t ray;
 
 		vec3_t forward, right, up;
 		math::angle_to_vectors( angles, &forward, &right, &up );
@@ -153,11 +153,11 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 		vec3_t cam_offset = spec->eye_pos( ) + ( forward * -120.f ) + ( right ) + ( up );
 
 		ray.init( spec->eye_pos( ), cam_offset );
-		CTraceFilterWorldOnly traceFilter;
-		traceFilter.m_skip = spec;
-		g_csgo.m_engine_trace->TraceRay( ray, MASK_SHOT, &traceFilter, &tr );
+		c_trace_filter_world_only trace_filter;
+		trace_filter.m_skip = spec;
+		g_csgo.m_engine_trace->trace_ray( ray, MASK_SHOT, &trace_filter, &tr );
 
-		setup->m_origin = tr.endpos;
+		setup->m_origin = tr.m_endpos;
 	}
 	else if( once ) {
 		local->observer_mode( ) = local->alive( ) ? 0 : 4;
@@ -165,8 +165,8 @@ void c_misc::thirdperson( CViewSetup *setup ) {
 	}
 }
 
-void c_misc::strafe( CUserCmd *cmd ) {
-	auto local = C_CSPlayer::get_local( );
+void c_misc::strafe( c_user_cmd *cmd ) {
+	auto local = c_csplayer::get_local( );
 	if( !local || !local->alive( ) )
 		return;
 
@@ -177,7 +177,7 @@ void c_misc::strafe( CUserCmd *cmd ) {
 		return;
 
 	vec3_t viewangles;
-	g_csgo.m_engine->GetViewAngles( viewangles );
+	g_csgo.m_engine->get_viewangles( viewangles );
 
 	static bool side_switch = false;
 	side_switch = !side_switch;
@@ -200,8 +200,8 @@ void c_misc::strafe( CUserCmd *cmd ) {
 	cmd->m_sidemove = ( sin_rot * cmd->m_forwardmove ) + ( cos_rot * cmd->m_sidemove );
 }
 
-void c_misc::auto_zeus( CUserCmd *cmd ) {
-	auto local = C_CSPlayer::get_local( );
+void c_misc::auto_zeus( c_user_cmd *cmd ) {
+	auto local = c_csplayer::get_local( );
 	if( !local || !local->alive( ) )
 		return;
 	auto weapon = local->get_active_weapon( );
@@ -211,16 +211,16 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 		return;
 
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
-		auto target = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
+		auto target = g_csgo.m_entity_list->get< c_csplayer >( i );
 
-		if( !target || target->IsDormant( ) || target->team( ) == local->team( ) || target->immune( ) )
+		if( !target || target->is_dormant( ) || target->team( ) == local->team( ) || target->immune( ) )
 			continue;
 		std::vector< int > hitboxes = { pelvis, u_chest, l_chest };
 		std::array< matrix3x4_t, 128 > matrix = {};
 		std::vector< vec3_t > points;
 		vec3_t best_point;
 
-		if( !target->SetupBones( matrix.data( ), 128, 0x100, target->simtime( ) ) )
+		if( !target->setup_bones( matrix.data( ), 128, 0x100, target->simtime( ) ) )
 			continue;
 
 		auto studiohdr = target->studio_hdr( );
@@ -238,16 +238,16 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 			points.push_back( center );
 		}
 
-		auto is_visible = [ & ]( const vec3_t &start, const vec3_t &end, C_CSPlayer *target ) -> bool {
-			Ray_t ray;
+		auto is_visible = [ & ]( const vec3_t &start, const vec3_t &end, c_csplayer *target ) -> bool {
+			ray_t ray;
 			trace_t tr;
 			ray.init( start, end );
 
-			CTraceFilterSkipEntity filter( g_cl.m_local );
+			c_trace_filter_skip_entity filter( g_cl.m_local );
 
-			g_csgo.m_engine_trace->TraceRay( ray, MASK_SHOT, &filter, &tr );
+			g_csgo.m_engine_trace->trace_ray( ray, MASK_SHOT, &filter, &tr );
 
-			return ( tr.hit_entity == target || tr.fraction > 0.97f );
+			return ( tr.m_hit_entity == target || tr.m_fraction > 0.97f );
 		};
 
 		for( auto &p : points ) {
@@ -265,19 +265,19 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 
 		vec3_t eye_pos = local->eye_pos( );
 
-		Ray_t ray;
+		ray_t ray;
 		ray.init( eye_pos, eye_pos + forward );
 
-		CTraceFilter filter;
+		c_trace_filter filter;
 		filter.m_skip = local;
 
-		CGameTrace trace;
-		g_csgo.m_engine_trace->TraceRay( ray, MASK_SHOT, &filter, &trace );
+		c_game_trace trace;
+		g_csgo.m_engine_trace->trace_ray( ray, MASK_SHOT, &filter, &trace );
 
 		if( !local->can_shoot( weapon ) )
 			return;
 
-		if( trace.hit_entity == target ) {
+		if( trace.m_hit_entity == target ) {
 			cmd->m_buttons |= IN_ATTACK;
 
 			static auto firing = false;
@@ -295,7 +295,7 @@ void c_misc::auto_zeus( CUserCmd *cmd ) {
 	}
 }
 
-void c_misc::fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const {
+void c_misc::fix_movement( c_user_cmd *cmd, vec3_t wish_angle ) const {
 	vec3_t view_fwd, view_right, view_up, cmd_fwd, cmd_right, cmd_up;
 	vec3_t viewangles = cmd->m_viewangles;
 
@@ -345,12 +345,12 @@ void c_misc::fix_movement( CUserCmd *cmd, vec3_t wish_angle ) const {
 	cmd->m_upmove = util::misc::clamp( cmd->m_upmove, -320.f, 320.f );
 }
 
-void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
-	if( !g_csgo.m_engine->IsConnected( ) || !g_cl.m_local || !ent )
+void c_misc::nightmode( c_base_entity *ent, float override_brightness ) {
+	if( !g_csgo.m_engine->is_connected( ) || !g_cl.m_local || !ent )
 		return;
 
-	auto client_class = ent->GetClientClass( );
-	if( !client_class || client_class->m_ClassID != CEnvTonemapController )
+	auto client_class = ent->get_client_class( );
+	if( !client_class || client_class->m_class_id != CEnvTonemapController )
 		return;
 
 	float brightness = g_vars.misc.nightmode / 100.f;
@@ -361,7 +361,7 @@ void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
 		brightness = override_brightness / 100.f;
 
 	// will not work if post processing is disabled.
-	auto tonemap_controller = reinterpret_cast< C_EnvTonemapController * >( ent );
+	auto tonemap_controller = reinterpret_cast< c_env_tonemap_controller * >( ent );
 
 	tonemap_controller->use_custom_exposure_min( ) = 1;
 	tonemap_controller->use_custom_exposure_max( ) = 1;
@@ -370,8 +370,8 @@ void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
 	tonemap_controller->custom_exposure_max( ) = brightness;
 	
 	// disable fast path.
-	/*static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
-	r_drawspecificstaticprop->SetValue( 0 );
+	/*static cvar *r_drawspecificstaticprop = g_csgo.m_convar->find_var( "r_drawspecificstaticprop" );
+	r_drawspecificstaticprop->set_value( 0 );
 
 	float brightness = g_vars.misc.nightmode / 100.f;
 
@@ -379,7 +379,7 @@ void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
 		brightness = override_brightness / 100.f;
 
 	for( int i = g_csgo.m_material_system->FirstMaterial( ); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
-		IMaterial *material = g_csgo.m_material_system->FindMaterial( i );
+		i_material *material = g_csgo.m_material_system->FindMaterial( i );
 		if( !material || material->IsErrorMaterial( ) )
 			continue;
 
@@ -396,35 +396,35 @@ void c_misc::nightmode( C_BaseEntity *ent, float override_brightness ) {
 }
 
 void c_misc::transparent_props( float override_transparency ) {
-	if( !g_csgo.m_engine->IsConnected( ) || !g_cl.m_local )
+	if( !g_csgo.m_engine->is_connected( ) || !g_cl.m_local )
 		return;
 
 	// disable fast path.
-	static ConVar *r_drawspecificstaticprop = g_csgo.m_convar->FindVar( "r_drawspecificstaticprop" );
+	static cvar *r_drawspecificstaticprop = g_csgo.m_convar->find_var( "r_drawspecificstaticprop" );
 
 	if( g_vars.misc.prop_transparency == 100.f )
-		r_drawspecificstaticprop->SetValue( -1 );
+		r_drawspecificstaticprop->set_value( -1 );
 	else
-		r_drawspecificstaticprop->SetValue( 0 );
+		r_drawspecificstaticprop->set_value( 0 );
 
 	float translucency = g_vars.misc.prop_transparency / 100.f;
 
 	if( override_transparency > 0.f )
 		translucency = override_transparency / 100.f;
 
-	for( int i = g_csgo.m_material_system->FirstMaterial( ); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
-		IMaterial *material = g_csgo.m_material_system->FindMaterial( i );
+	for( int i = g_csgo.m_material_system->first_material( ); i != g_csgo.m_material_system->invalid_material( ); i = g_csgo.m_material_system->next_material( i ) ) {
+		i_material *material = g_csgo.m_material_system->find_material( i );
 		if( !material || material->IsErrorMaterial( ) )
 			continue;
 
-		if( std::strstr( material->GetTextureGroupName(), "StaticProp" ) )
+		if( std::strstr( material->get_texture_group_name(), "StaticProp" ) )
 			material->AlphaModulate( translucency );
 	}
 
 	g_cl.m_should_update_materials = false;
 }
 
-void c_misc::capsule_overlay( C_CSPlayer *e, float duration, matrix3x4_t *mat ) {
+void c_misc::capsule_overlay( c_csplayer *e, float duration, matrix3x4_t *mat ) {
 	if( !e )
 		return;
 
@@ -445,12 +445,12 @@ void c_misc::capsule_overlay( C_CSPlayer *e, float duration, matrix3x4_t *mat ) 
 		vec3_t max = math::vector_transform( h->bb_max, mat[ h->bone_index ] );
 
 		if( h->m_flRadius != -1 )
-			g_csgo.m_debug_overlay->AddCapsuleOverlayVisible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
+			g_csgo.m_debug_overlay->add_capsule_overlay_visible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
 	}
 }
 
 void c_misc::no_smoke( ClientFrameStage_t stage ) {
-	if( stage != FRAME_RENDER_START || !g_csgo.m_engine->IsConnected( ) )
+	if( stage != FRAME_RENDER_START || !g_csgo.m_engine->is_connected( ) )
 		return;
 
 	std::vector< const char* > vistasmoke_mats = {
@@ -461,7 +461,7 @@ void c_misc::no_smoke( ClientFrameStage_t stage ) {
 	};
 
 	for( auto mat_s : vistasmoke_mats ) {
-		IMaterial *mat = g_csgo.m_material_system->GetMaterial( mat_s, TEXTURE_GROUP_OTHER );
+		i_material *mat = g_csgo.m_material_system->get_material( mat_s, TEXTURE_GROUP_OTHER );
 		mat->SetMaterialVarFlag( MATERIAL_VAR_NO_DRAW, g_vars.visuals.misc.remove_smoke );
 	}
 }

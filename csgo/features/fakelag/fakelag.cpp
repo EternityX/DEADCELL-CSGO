@@ -1,10 +1,10 @@
 #include "fakelag.h"
 
-void c_fakelag::think( CUserCmd* cmd ) {
+void c_fakelag::think( c_user_cmd* cmd ) {
 	g_cl.m_sendpacket = true;
 
 	static int choke = 0;
-	auto local = C_CSPlayer::get_local( );
+	auto local = c_csplayer::get_local( );
 	if( !g_vars.misc.fakelag.enabled && g_vars.antiaim.enabled ){
 		choke = 1;
 	}

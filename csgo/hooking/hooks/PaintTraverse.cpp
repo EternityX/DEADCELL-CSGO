@@ -4,7 +4,7 @@
 void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel, bool forceRepaint, bool allowForce ) {
 	static int hud_zoom_panel = 0;
 	if ( !hud_zoom_panel ) {
-		if ( util::hash::fnv1a_32( g_csgo.m_panel->GetName( vguiPanel ) ) == CT_HASH32( "HudZoom" ) )
+		if ( util::hash::fnv1a_32( g_csgo.m_panel->get_name( vguiPanel ) ) == CT_HASH32( "HudZoom" ) )
 			hud_zoom_panel = vguiPanel;
 	}
 	else {
@@ -18,7 +18,7 @@ void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel
 
 	static int mat_system_panel = 0;
 	if( !mat_system_panel ) {
-		if( util::hash::fnv1a_32( g_csgo.m_panel->GetName( vguiPanel ) ) == CT_HASH32( "MatSystemTopPanel" ) )
+		if( util::hash::fnv1a_32( g_csgo.m_panel->get_name( vguiPanel ) ) == CT_HASH32( "MatSystemTopPanel" ) )
 			mat_system_panel = vguiPanel;
 	}
 
@@ -26,6 +26,6 @@ void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel
 		return;
 
 	// ghetto fix for people who don't use net_graph/cl_showpos/cl_showfps.
-	g_csgo.m_surface->DrawSetColor( Color( 0, 0, 0, 255 ) );
-	g_csgo.m_surface->DrawFilledRect( 1, 1, 1, 1 );
+	g_csgo.m_surface->draw_set_color( Color( 0, 0, 0, 255 ) );
+	g_csgo.m_surface->draw_filled_rect( 1, 1, 1, 1 );
 }

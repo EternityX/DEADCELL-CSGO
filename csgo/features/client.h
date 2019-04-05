@@ -3,9 +3,9 @@
 class c_client {
 private:
 public:
-	CUserCmd     *m_cmd = nullptr;
-	C_CSPlayer   *m_local = nullptr;
-	ConVar       *c4_timer = nullptr;
+	c_user_cmd     *m_cmd = nullptr;
+	c_csplayer   *m_local = nullptr;
+	cvar       *c4_timer = nullptr;
 	void         *m_context = nullptr;
 
 	vec3_t       m_last_sent_origin;

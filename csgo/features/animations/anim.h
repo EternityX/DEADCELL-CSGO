@@ -3,12 +3,12 @@
 
 namespace animations {
 	void __fastcall UpdateClientSideAnimations( uintptr_t ecx, uintptr_t edx );
-	void __fastcall DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx, CStudioHdr *hdr, vec3_t *pos, Quaternion *q, matrix3x4_t *matrix, CBoneBitList &bone_list, CIKContext *context );
-	bool __fastcall TestHitboxes( uintptr_t ecx, uintptr_t edx, const Ray_t &ray, unsigned int fContentsMask, trace_t& tr );
+	void __fastcall DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx, c_studio_hdr *hdr, vec3_t *pos, Quaternion *q, matrix3x4_t *matrix, c_bone_bit_list &bone_list, c_ik_context *context );
+	bool __fastcall TestHitboxes( uintptr_t ecx, uintptr_t edx, const ray_t &ray, unsigned int fContentsMask, trace_t& tr );
 	namespace fn {
-		using DoExtraBonesProcessing_t = void (__thiscall *)( uintptr_t, CStudioHdr *, vec3_t *, Quaternion *, matrix3x4_t *, CBoneBitList &, CIKContext * );
+		using DoExtraBonesProcessing_t = void (__thiscall *)( uintptr_t, c_studio_hdr *, vec3_t *, Quaternion *, matrix3x4_t *, c_bone_bit_list &, c_ik_context * );
 		using UpdateClientSideAnimations_t = void (__thiscall *)( uintptr_t );
-		using TestHitboxes_t = bool ( __thiscall*)( uintptr_t, const Ray_t&, unsigned int, trace_t& );
+		using TestHitboxes_t = bool ( __thiscall*)( uintptr_t, const ray_t&, unsigned int, trace_t& );
 	}
 }
 
@@ -18,10 +18,10 @@ struct container_t {
 	bool m_hooked;
 };
 
-class c_animations : public IClientEntityListener {
+class c_animations : public i_client_entity_listener {
 public:
-	void OnEntityCreated( C_BaseEntity *ent ) override;
-	void OnEntityDeleted( C_BaseEntity *ent ) override;
+	void on_entity_created( c_base_entity *ent ) override;
+	void on_entity_deleted( c_base_entity *ent ) override;
 
 	bool init( );
 	bool remove( );

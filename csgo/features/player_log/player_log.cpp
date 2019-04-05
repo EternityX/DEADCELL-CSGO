@@ -3,29 +3,29 @@
 c_player_log g_player_log;
 
 bool lag_record_t::is_valid( ) const{
-	INetChannelInfo *channel_info = g_csgo.m_engine->GetNetChannelInfo();
+	i_net_channel_info *channel_info = g_csgo.m_engine->get_net_channel_info();
 	if( !channel_info )
 		return false;
 
 	auto get_lerp_time = []() {
-		int ud_rate = g_csgo.m_convar->FindVar( "cl_updaterate" )->GetInt();
+		int ud_rate = g_csgo.m_convar->find_var( "cl_updaterate" )->get_int();
 
-		ConVar *min_ud_rate = g_csgo.m_convar->FindVar( "sv_minupdaterate" );
-		ConVar *max_ud_rate = g_csgo.m_convar->FindVar( "sv_maxupdaterate" );
+		cvar *min_ud_rate = g_csgo.m_convar->find_var( "sv_minupdaterate" );
+		cvar *max_ud_rate = g_csgo.m_convar->find_var( "sv_maxupdaterate" );
 
 		if( min_ud_rate && max_ud_rate )
-			ud_rate = max_ud_rate->GetInt();
+			ud_rate = max_ud_rate->get_int();
 
-		float ratio = g_csgo.m_convar->FindVar( "cl_interp_ratio" )->GetFloat();
+		float ratio = g_csgo.m_convar->find_var( "cl_interp_ratio" )->get_float();
 		if( !ratio )
 			ratio = 1.f;
 
-		float lerp = g_csgo.m_convar->FindVar( "cl_interp" )->GetFloat();
-		ConVar *c_min_ratio = g_csgo.m_convar->FindVar( "sv_client_min_interp_ratio" );
-		ConVar *c_max_ratio = g_csgo.m_convar->FindVar( "sv_client_max_interp_ratio" );
+		float lerp = g_csgo.m_convar->find_var( "cl_interp" )->get_float();
+		cvar *c_min_ratio = g_csgo.m_convar->find_var( "sv_client_min_interp_ratio" );
+		cvar *c_max_ratio = g_csgo.m_convar->find_var( "sv_client_max_interp_ratio" );
 
-		if( c_min_ratio && c_max_ratio && c_min_ratio->GetFloat() != 1 )
-			ratio = util::misc::clamp( ratio, c_min_ratio->GetFloat( ), c_max_ratio->GetFloat( ) );
+		if( c_min_ratio && c_max_ratio && c_min_ratio->get_float() != 1 )
+			ratio = util::misc::clamp( ratio, c_min_ratio->get_float( ), c_max_ratio->get_float( ) );
 
 		return std::max( lerp, ratio / ud_rate );
 	};
@@ -34,7 +34,7 @@ bool lag_record_t::is_valid( ) const{
 	float curtime = TICKS_TO_TIME( g_cl.m_local->tickbase( ) );
 
 	// correct for latency and lerp time.
-	float correct = channel_info->GetAverageLatency( FLOW_OUTGOING ) + channel_info->GetAverageLatency( FLOW_INCOMING ) + get_lerp_time( );
+	float correct = channel_info->get_average_latency( FLOW_OUTGOING ) + channel_info->get_average_latency( FLOW_INCOMING ) + get_lerp_time( );
 	math::clamp( correct, 0.f, 0.2f /*sv_maxunlag*/ );
 
 	// get difference between tick sent by player and the latency tick.
@@ -43,7 +43,7 @@ bool lag_record_t::is_valid( ) const{
 
 void c_player_log::log( ){
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; i++ ) {
-		auto ent = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
+		auto ent = g_csgo.m_entity_list->get< c_csplayer >( i );
 		if( !ent || !g_cl.m_local || ent == g_cl.m_local )
 			continue;
 

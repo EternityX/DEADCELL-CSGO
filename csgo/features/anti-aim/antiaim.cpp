@@ -2,11 +2,11 @@
 
 c_antiaim g_antiaim;
 
-bool c_antiaim::allow( CUserCmd *ucmd ) {
+bool c_antiaim::allow( c_user_cmd *ucmd ) {
 	if( !g_vars.antiaim.enabled )
 		return false;
 
-	auto local = C_CSPlayer::get_local( );
+	auto local = c_csplayer::get_local( );
 	if( !local || local->flags( ) & FL_FROZEN || !local->alive( ) )
 		return false;
 
@@ -38,7 +38,7 @@ bool c_antiaim::allow( CUserCmd *ucmd ) {
 	return true;
 }
 
-void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
+void c_antiaim::adjust_yaw( c_user_cmd *ucmd ) {
 	switch( g_vars.antiaim.yaw ) {
 		case 1:
 			at_target( ) != 0.f ? m_input.y = at_target( ) - 180.f + g_vars.antiaim.jitter : m_input.y += 180.f + g_vars.antiaim.jitter;
@@ -48,7 +48,7 @@ void c_antiaim::adjust_yaw( CUserCmd *ucmd ) {
 	}
 }
 
-void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
+void c_antiaim::adjust_pitch( c_user_cmd *ucmd ) {
 	switch( g_vars.antiaim.pitch ) {
 		case 1:
 			m_input.x = 89.f;
@@ -58,7 +58,7 @@ void c_antiaim::adjust_pitch( CUserCmd *ucmd ) {
 	}
 }
 
-void c_antiaim::set_angles( CUserCmd *ucmd ) {
+void c_antiaim::set_angles( c_user_cmd *ucmd ) {
 	if( !allow( ucmd ) )
 		return;
 
@@ -72,7 +72,7 @@ void c_antiaim::set_angles( CUserCmd *ucmd ) {
 }
 
 float c_antiaim::at_target( ) {
-	auto local = C_CSPlayer::get_local( );
+	auto local = c_csplayer::get_local( );
 	if( !local )
 		return 0.f;
 
@@ -80,7 +80,7 @@ float c_antiaim::at_target( ) {
 	vec3_t best_angles = vec3_t( 0.0f, 0.f, 0.0f );
 
 	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
-		auto player = g_csgo.m_entity_list->Get< C_CSPlayer >( i );
+		auto player = g_csgo.m_entity_list->get< c_csplayer >( i );
 
 		if( !player || player == local )
 			continue;
@@ -93,7 +93,7 @@ float c_antiaim::at_target( ) {
 		vec3_t target_position = player->abs_origin( );
 
 		vec3_t viewangle;
-		g_csgo.m_engine->GetViewAngles( viewangle );
+		g_csgo.m_engine->get_viewangles( viewangle );
 
 		const float fov = math::get_fov( viewangle, math::calc_angle( local->eye_pos( ), player->eye_pos( ) ) );
 
