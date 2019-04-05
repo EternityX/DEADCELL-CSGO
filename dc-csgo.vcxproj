@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Mehdi%27s music stuff\DEADCELL-CSGO\csgo\features\entity listener\ent_listener.cpp" />
     <ClCompile Include="csgo\configs\configs.cpp" />
     <ClCompile Include="csgo\dllmain.cpp" />
     <ClCompile Include="csgo\features\animations\anim.cpp" />
@@ -59,6 +60,7 @@
     <ClCompile Include="csgo\menu\menu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Mehdi%27s music stuff\DEADCELL-CSGO\csgo\features\entity listener\ent_listener.h" />
     <ClInclude Include="csgo\configs\config.h" />
     <ClInclude Include="csgo\features\animations\anim.h" />
     <ClInclude Include="csgo\features\anti-aim\antiaim.h" />
