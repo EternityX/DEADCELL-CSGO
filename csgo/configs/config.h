@@ -29,11 +29,11 @@ public:
 	void export_to_clipboard( const std::string &file ) const;
 
 	bool init( );
-	bool		load( const std::string &file );
-	bool		save( const std::string &file );
+	bool load( const std::string &file );
+	bool save( const std::string &file );
 
-	bool		reset( const std::string &file );
-	void		remove( const std::string &file ) const;
+	bool reset( const std::string &file );
+	void remove( const std::string &file ) const;
 };
 
 extern c_config g_configs;
