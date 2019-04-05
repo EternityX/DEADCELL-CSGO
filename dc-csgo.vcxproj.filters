@@ -205,7 +205,7 @@
     <ClCompile Include="csgo\features\fakelag\fakelag.cpp">
       <Filter>dc-csgo\features\fakelag</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Mehdi%27s music stuff\DEADCELL-CSGO\csgo\features\entity listener\ent_listener.cpp">
+    <ClCompile Include="csgo\features\entity listener\ent_listener.cpp">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClCompile>
   </ItemGroup>
@@ -441,7 +441,7 @@
     <ClInclude Include="csgo\sdk\interfaces\c_input.h">
       <Filter>dc-csgo\sdk\interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Mehdi%27s music stuff\DEADCELL-CSGO\csgo\features\entity listener\ent_listener.h">
+    <ClInclude Include="csgo\features\entity listener\ent_listener.h">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClInclude>
   </ItemGroup>
