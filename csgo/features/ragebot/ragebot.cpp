@@ -81,9 +81,9 @@ void c_ragebot::select_target( ) {
 			}
 		}
 
-		for ( auto entry : g_anim.m_players ) {
-			auto idx = entry.second;
-			auto e = g_csgo.m_entity_list->get< c_csplayer >( idx );
+		for ( auto &entry : g_listener.m_players ) {
+			int idx = entry.m_idx;
+			c_csplayer* e = entry.m_player;
 			if( !is_valid( e ) )
 				continue;
 

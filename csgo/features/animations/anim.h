@@ -35,7 +35,6 @@ public:
 	bool remove( );
 
 	std::array< container_t, 64 > m_track;
-	std::map< int, int > m_players;
 };
 
 extern c_animations g_anim;
