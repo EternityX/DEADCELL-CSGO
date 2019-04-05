@@ -1,4 +1,5 @@
 #include "ragebot.h"
+#include "../animations/anim.h"
 
 c_ragebot g_ragebot;
 
@@ -80,9 +81,9 @@ void c_ragebot::select_target( ) {
 			}
 		}
 
-		for ( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
-			auto e = g_csgo.m_entity_list->get< c_csplayer >( i );
-
+		for ( auto entry : g_anim.m_players ) {
+			auto idx = entry.second;
+			auto e = g_csgo.m_entity_list->get< c_csplayer >( idx );
 			if( !is_valid( e ) )
 				continue;
 
@@ -119,7 +120,7 @@ void c_ragebot::select_target( ) {
 				}
 			}
 
-			m_players.emplace_back( e, i, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
+			m_players.emplace_back( e, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {

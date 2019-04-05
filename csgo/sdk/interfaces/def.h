@@ -137,26 +137,26 @@ struct mstudioseqdesc_t;
 struct mstudiobodyparts_t;
 struct mstudiotexture_t;
 struct virtualmodel_t;
-class Quaternion;
+class quaternion;
 
-class RadianEuler
+class radian_euler
 {
 public:
-	RadianEuler( void )							{ }
-	RadianEuler( float X, float Y, float Z )		{ x = X; y = Y; z = Z; }
-	RadianEuler( Quaternion const &q );	// evil auto type promotion!!!
-	RadianEuler( Angle_t const &angles );	// evil auto type promotion!!!
+	radian_euler( void )							{ }
+	radian_euler( float X, float Y, float Z )		{ x = X; y = Y; z = Z; }
+	radian_euler( quaternion const &q );	// evil auto type promotion!!!
+	radian_euler( Angle_t const &angles );	// evil auto type promotion!!!
 
 											// Initialization
-	inline void Init( float ix = 0.0f, float iy = 0.0f, float iz = 0.0f )	{ x = ix; y = iy; z = iz; }
+	inline void init( float ix = 0.0f, float iy = 0.0f, float iz = 0.0f )	{ x = ix; y = iy; z = iz; }
 
 	//	conversion to qangle
-	Angle_t ToQAngle( void ) const;
-	bool IsValid() const;
-	void Invalidate();
+	Angle_t to_angle( void ) const;
+	bool is_valid() const;
+	void invalidate();
 
-	inline float *Base() { return &x; }
-	inline const float *Base() const { return &x; }
+	inline float *base() { return &x; }
+	inline const float *base() const { return &x; }
 
 	// array access...
 	float operator[]( int i ) const;
@@ -165,23 +165,23 @@ public:
 	float x, y, z;
 };
 
-class Quaternion				// same data-layout as engine's vec4_t,
+class quaternion				// same data-layout as engine's vec4_t,
 {								//		which is a float[4]
 public:
-	inline Quaternion( void )	{}
-	inline Quaternion( float ix, float iy, float iz, float iw ) : x( ix ), y( iy ), z( iz ), w( iw ) { }
-	inline Quaternion( RadianEuler const &angle );	// evil auto type promotion!!!
+	inline quaternion( void )	{}
+	inline quaternion( float ix, float iy, float iz, float iw ) : x( ix ), y( iy ), z( iz ), w( iw ) { }
+	inline quaternion( radian_euler const &angle );	// evil auto type promotion!!!
 
 	inline void Init( float ix = 0.0f, float iy = 0.0f, float iz = 0.0f, float iw = 0.0f )	{ x = ix; y = iy; z = iz; w = iw; }
 
-	bool IsValid() const;
-	void Invalidate();
+	bool is_valid() const;
+	void invalidate();
 
-	bool operator==( const Quaternion &src ) const;
-	bool operator!=( const Quaternion &src ) const;
+	bool operator==( const quaternion &src ) const;
+	bool operator!=( const quaternion &src ) const;
 
-	float* Base() { return ( float* )this; }
-	const float* Base() const { return ( float* )this; }
+	float* base() { return ( float* )this; }
+	const float* base() const { return ( float* )this; }
 
 	// array access...
 	float operator[]( int i ) const;
@@ -190,21 +190,21 @@ public:
 	float x, y, z, w;
 };
 
-class __declspec( align( 16 ) ) QuaternionAligned : public Quaternion
+class __declspec( align( 16 ) ) quaternion_aligned : public quaternion
 {
 public:
-	inline QuaternionAligned( void ) {};
-	inline QuaternionAligned( float X, float Y, float Z, float W )
+	inline quaternion_aligned( void ) {};
+	inline quaternion_aligned( float X, float Y, float Z, float W )
 	{
 		Init( X, Y, Z, W );
 	}
 public:
-	explicit QuaternionAligned( const Quaternion &vOther )
+	explicit quaternion_aligned( const quaternion &vOther )
 	{
 		Init( vOther.x, vOther.y, vOther.z, vOther.w );
 	}
 
-	QuaternionAligned& operator=( const Quaternion &vOther )
+	quaternion_aligned& operator=( const quaternion &vOther )
 	{
 		Init( vOther.x, vOther.y, vOther.z, vOther.w );
 		return *this;
@@ -252,14 +252,14 @@ struct mstudiobone_t {
 
 												// default values
 	vec3_t				pos;
-	Quaternion			quat;
-	RadianEuler			rot;
+	quaternion			quat;
+	radian_euler			rot;
 	// compression scale
 	vec3_t				posscale;
 	vec3_t				rotscale;
 
 	matrix3x4_t			poseToBone;
-	Quaternion			qAlignment;
+	quaternion			qAlignment;
 	int					flags;
 	int					proctype;
 	int					procindex;		// procedural rule

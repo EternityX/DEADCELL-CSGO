@@ -34,8 +34,8 @@ void c_animations::on_entity_created( c_base_entity *ent ) {
 		if( !ent )
 			return;
 
-		const int index = ent->get_index( );
-		if( index < 0 )
+		const int idx = ent->get_index( );
+		if( idx < 0 )
 			return;
 
 		client_class *cc = ent->get_client_class( );
@@ -45,10 +45,8 @@ void c_animations::on_entity_created( c_base_entity *ent ) {
 		switch( cc->m_class_id ) {
 			case CCSPlayer: {
 
-				m_track.at( index ).m_index = index;
-				m_track.at( index ).m_vmt = std::make_unique< c_vmt >( ent );
-				m_track.at( index ).m_vmt->hook_method( hook::idx::DO_EXTRA_BONE_PROC, animations::DoExtraBonesProcessing );
-				m_track.at( index ).m_hooked = true;
+				m_track.at( idx ) = container_t( ent );
+				m_players.emplace( idx, idx );
 
 				break;
 			}
@@ -67,19 +65,21 @@ void c_animations::on_entity_deleted( c_base_entity *ent ) {
 		if( !ent )
 			return;
 
-		int index = ent->get_index( );
-		if( index < 0 )
+		int idx = ent->get_index( );
+		if( idx < 0 )
 			return;
+
+		m_players.erase( idx );
 
 		const auto it = std::find_if( m_track.begin( ), m_track.end( ), [ & ]( const container_t &data ) {
-			return data.m_index == index;
+			return data.m_idx == idx;
 		} );
 
-		if( it == m_track.end( ) )
+		if ( it == m_track.end( ) )
 			return;
 
-		if( m_track.at( it->m_index ).m_hooked )
-			m_track.at( it->m_index ).m_vmt->unhook_all( );
+		if ( m_track.at( it->m_idx ).m_hooked )
+			m_track.at( it->m_idx ).m_vmt->unhook_all( );
 	}
 	catch( const std::out_of_range &ex ) {
 		UNREFERENCED_PARAMETER( ex );
