@@ -74,9 +74,6 @@
     <Filter Include="dc-csgo\features\events">
       <UniqueIdentifier>{6f314770-4387-48f5-9c6f-2f70a64f5040}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dc-csgo\features\player list">
-      <UniqueIdentifier>{5dba3bc6-894e-42e9-9fbf-5433d2ddc417}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dc-csgo\features\engine_pred">
       <UniqueIdentifier>{a53443f8-457d-465b-a205-9b066572187e}</UniqueIdentifier>
     </Filter>
@@ -174,9 +171,6 @@
     </ClCompile>
     <ClCompile Include="csgo\features\events\events.cpp">
       <Filter>dc-csgo\features\events</Filter>
-    </ClCompile>
-    <ClCompile Include="csgo\features\player list\playerlist.cpp">
-      <Filter>dc-csgo\features\player list</Filter>
     </ClCompile>
     <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp">
       <Filter>dc-csgo\features\engine_pred</Filter>
@@ -314,9 +308,6 @@
     </ClInclude>
     <ClInclude Include="csgo\features\events\events.h">
       <Filter>dc-csgo\features\events</Filter>
-    </ClInclude>
-    <ClInclude Include="csgo\features\player list\playerlist.h">
-      <Filter>dc-csgo\features\player list</Filter>
     </ClInclude>
     <ClInclude Include="csgo\features\engine_pred\engine_pred.h">
       <Filter>dc-csgo\features\engine_pred</Filter>

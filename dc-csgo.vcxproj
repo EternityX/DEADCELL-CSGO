@@ -32,7 +32,6 @@
     <ClCompile Include="csgo\features\misc\misc.cpp" />
     <ClCompile Include="csgo\features\nade_pred\nade_pred.cpp" />
     <ClCompile Include="csgo\features\notifications\notifications.cpp" />
-    <ClCompile Include="csgo\features\player list\playerlist.cpp" />
     <ClCompile Include="csgo\features\player_log\player_log.cpp" />
     <ClCompile Include="csgo\features\ragebot\ragebot.cpp" />
     <ClCompile Include="csgo\features\resolver\resolver.cpp" />
@@ -73,7 +72,6 @@
     <ClInclude Include="csgo\features\misc\misc.h" />
     <ClInclude Include="csgo\features\nade_pred\nade_pred.h" />
     <ClInclude Include="csgo\features\notifications\notifications.h" />
-    <ClInclude Include="csgo\features\player list\playerlist.h" />
     <ClInclude Include="csgo\features\player_log\player_log.h" />
     <ClInclude Include="csgo\features\ragebot\ragebot.h" />
     <ClInclude Include="csgo\features\resolver\resolver.h" />
