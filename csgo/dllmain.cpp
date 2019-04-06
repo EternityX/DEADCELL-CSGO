@@ -2,6 +2,7 @@
 
 #include "features/misc/misc.h"
 #include "features/animations/anim.h"
+#include "features/entity listener/ent_listener.h"
 
 c_csgo g_csgo{ };
 c_netvars g_netvars{ };
@@ -9,7 +10,7 @@ c_renderer g_renderer{ };
 c_menu g_menu{ };
 c_config g_configs{ };
 c_client g_cl{ };
-vars g_vars{ };
+c_vars g_vars{ };
 
 bool unload() {
 #ifdef _DEBUG
@@ -22,6 +23,9 @@ bool unload() {
 		return false;
 
 	if( !g_anim.remove( ) )
+		return false;
+
+	if( !g_listener.remove( ) )
 		return false;
 
 	if( OSHGui::Application::HasBeenInitialized( ) )
@@ -68,6 +72,9 @@ static ulong_t __stdcall cheat_init( void *arg ) {
 
 		if( !g_anim.init( ) )
 			throw std::runtime_error( "Sanity check failed on animation intialization" );
+
+		if( !g_listener.init( ) )
+			throw std::runtime_error( "Sanity check failed on entity listener intialization" );
 
 		if( !g_hooks.init( ) )
 			throw std::runtime_error( "Failed to initialize hook(s)" );

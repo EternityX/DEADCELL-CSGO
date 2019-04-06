@@ -1,6 +1,7 @@
 #include "visuals.h"
 #include "../autowall/autowall.h"
 #include "../misc/misc.h"
+#include "../ragebot/ragebot.h"
 
 c_visuals g_visuals;
 
@@ -179,7 +180,7 @@ void c_visuals::player( c_csplayer *entity ) {
 	if( !local->alive( ) ) {
 		const auto spec_handle = local->observer_handle( );
 		const auto spec = g_csgo.m_entity_list->get< c_base_entity >( spec_handle );
-		if( spec || spec == entity )
+		if( spec == entity )
 			return;
 	}
 
@@ -431,6 +432,14 @@ void c_visuals::draw_flags( c_csplayer *player, OSHColor color, float x, float y
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
 		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "+" );
+
+	if( g_vars.rage.enabled ) {
+		if( g_ragebot.m_last_target == player ){
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
+							  OSHColor::FromARGB( 220, 10, 10, 10 ),
+							  x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "TARGET" );
+		}
+	}
 }
 
 void c_visuals::draw_spectators( ) const {

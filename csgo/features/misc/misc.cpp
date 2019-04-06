@@ -1,5 +1,6 @@
 #include "misc.h"
 #include "../anti-aim/antiaim.h"
+#include "../entity listener/ent_listener.h"
 
 c_misc g_misc;
 
@@ -60,11 +61,11 @@ void c_misc::thirdperson( ) {
 		static bool is_clicked = false;
 		static bool is_down = false;
 		
-		bool key_pressed = g_input.key_pressed(g_vars.misc.thirdperson_key);
+		bool key_pressed = g_input.key_pressed( g_vars.misc.thirdperson_key );
 		is_clicked = !key_pressed && is_down;
 		is_down = key_pressed;
 
-		if (is_clicked)
+		if( is_clicked )
 			g_vars.misc.thirdperson = !g_vars.misc.thirdperson;
 	}
 	
@@ -210,8 +211,8 @@ void c_misc::auto_zeus( c_user_cmd *cmd ) {
 	if( weapon->item_index( ) != WEAPON_TASER )
 		return;
 
-	for( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; ++i ) {
-		auto target = g_csgo.m_entity_list->get< c_csplayer >( i );
+	for( auto &entry : g_listener.m_players ) {
+		auto target = g_csgo.m_entity_list->get< c_csplayer >( entry.m_idx );
 
 		if( !target || target->is_dormant( ) || target->team( ) == local->team( ) || target->immune( ) )
 			continue;

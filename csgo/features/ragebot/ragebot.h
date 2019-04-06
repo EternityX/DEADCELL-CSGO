@@ -3,6 +3,7 @@
 #include "../autowall/autowall.h"
 #include "../misc/misc.h"
 #include "../player_log/player_log.h"
+#include "../entity listener/ent_listener.h"
 
 class c_ragebot {
 	struct rage_t {

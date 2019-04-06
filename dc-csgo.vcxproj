@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="csgo\features\entity listener\ent_listener.cpp" />
     <ClCompile Include="csgo\configs\configs.cpp" />
     <ClCompile Include="csgo\dllmain.cpp" />
     <ClCompile Include="csgo\features\animations\anim.cpp" />
@@ -31,7 +32,6 @@
     <ClCompile Include="csgo\features\misc\misc.cpp" />
     <ClCompile Include="csgo\features\nade_pred\nade_pred.cpp" />
     <ClCompile Include="csgo\features\notifications\notifications.cpp" />
-    <ClCompile Include="csgo\features\player list\playerlist.cpp" />
     <ClCompile Include="csgo\features\player_log\player_log.cpp" />
     <ClCompile Include="csgo\features\ragebot\ragebot.cpp" />
     <ClCompile Include="csgo\features\resolver\resolver.cpp" />
@@ -59,6 +59,7 @@
     <ClCompile Include="csgo\menu\menu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="csgo\features\entity listener\ent_listener.h" />
     <ClInclude Include="csgo\configs\config.h" />
     <ClInclude Include="csgo\features\animations\anim.h" />
     <ClInclude Include="csgo\features\anti-aim\antiaim.h" />
@@ -71,7 +72,6 @@
     <ClInclude Include="csgo\features\misc\misc.h" />
     <ClInclude Include="csgo\features\nade_pred\nade_pred.h" />
     <ClInclude Include="csgo\features\notifications\notifications.h" />
-    <ClInclude Include="csgo\features\player list\playerlist.h" />
     <ClInclude Include="csgo\features\player_log\player_log.h" />
     <ClInclude Include="csgo\features\ragebot\ragebot.h" />
     <ClInclude Include="csgo\features\resolver\resolver.h" />

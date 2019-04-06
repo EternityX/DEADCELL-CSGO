@@ -46,8 +46,6 @@ void c_animations::on_entity_created( c_base_entity *ent ) {
 			case CCSPlayer: {
 
 				m_track.at( idx ) = container_t( ent );
-				m_players.emplace( idx, idx );
-
 				break;
 			}
 			default:
@@ -68,8 +66,6 @@ void c_animations::on_entity_deleted( c_base_entity *ent ) {
 		int idx = ent->get_index( );
 		if( idx < 0 )
 			return;
-
-		m_players.erase( idx );
 
 		const auto it = std::find_if( m_track.begin( ), m_track.end( ), [ & ]( const container_t &data ) {
 			return data.m_idx == idx;

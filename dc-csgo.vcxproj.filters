@@ -74,9 +74,6 @@
     <Filter Include="dc-csgo\features\events">
       <UniqueIdentifier>{6f314770-4387-48f5-9c6f-2f70a64f5040}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dc-csgo\features\player list">
-      <UniqueIdentifier>{5dba3bc6-894e-42e9-9fbf-5433d2ddc417}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dc-csgo\features\engine_pred">
       <UniqueIdentifier>{a53443f8-457d-465b-a205-9b066572187e}</UniqueIdentifier>
     </Filter>
@@ -91,6 +88,9 @@
     </Filter>
     <Filter Include="dc-csgo\features\fakelag">
       <UniqueIdentifier>{02ace5ad-1b5c-45fa-bea0-243b2d37878f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\entity listener">
+      <UniqueIdentifier>{065beecb-cef8-4cc2-889e-a6eb2c32ab99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,9 +172,6 @@
     <ClCompile Include="csgo\features\events\events.cpp">
       <Filter>dc-csgo\features\events</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\features\player list\playerlist.cpp">
-      <Filter>dc-csgo\features\player list</Filter>
-    </ClCompile>
     <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp">
       <Filter>dc-csgo\features\engine_pred</Filter>
     </ClCompile>
@@ -207,6 +204,9 @@
     </ClCompile>
     <ClCompile Include="csgo\features\fakelag\fakelag.cpp">
       <Filter>dc-csgo\features\fakelag</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\entity listener\ent_listener.cpp">
+      <Filter>dc-csgo\features\entity listener</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +308,6 @@
     </ClInclude>
     <ClInclude Include="csgo\features\events\events.h">
       <Filter>dc-csgo\features\events</Filter>
-    </ClInclude>
-    <ClInclude Include="csgo\features\player list\playerlist.h">
-      <Filter>dc-csgo\features\player list</Filter>
     </ClInclude>
     <ClInclude Include="csgo\features\engine_pred\engine_pred.h">
       <Filter>dc-csgo\features\engine_pred</Filter>
@@ -443,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="csgo\sdk\interfaces\c_input.h">
       <Filter>dc-csgo\sdk\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\entity listener\ent_listener.h">
+      <Filter>dc-csgo\features\entity listener</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
