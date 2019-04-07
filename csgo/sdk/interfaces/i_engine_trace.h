@@ -174,11 +174,11 @@ public:
 		m_delta = end - start;
 
 		m_world_axis_transform = nullptr;
-		m_is_swept = m_delta.Length() != 0;
+		m_is_swept = m_delta.length() != 0;
 
 		m_extents = maxs - mins;
 		m_extents *= 0.5f;
-		m_is_ray = m_extents.LengthSqr() < 1e-6;
+		m_is_ray = m_extents.length_sqr() < 1e-6;
 
 		m_start_offset = maxs + mins;
 		m_start_offset *= 0.5f;
@@ -189,14 +189,14 @@ public:
 	void init( vec3_t const &start, vec3_t const &end ) {
 		m_delta = end - start;
 
-		m_is_swept = m_delta.LengthSqr() != 0;
+		m_is_swept = m_delta.length_sqr() != 0;
 
-		m_extents.Init( 0.f, 0.f, 0.f );
+		m_extents.init( 0.f, 0.f, 0.f );
 
 		m_world_axis_transform = nullptr;
 		m_is_ray = true;
 
-		m_start_offset.Init( 0.f, 0.f, 0.f );
+		m_start_offset.init( 0.f, 0.f, 0.f );
 		m_start = start;
 	}
 
@@ -204,11 +204,11 @@ public:
 		m_delta = end - start;
 
 		m_world_axis_transform = nullptr;
-		m_is_swept = m_delta.Length() != 0;
+		m_is_swept = m_delta.length() != 0;
 
 		m_extents = maxs - mins;
 		m_extents *= 0.5f;
-		m_is_ray = m_extents.LengthSqr() < 1e-6;
+		m_is_ray = m_extents.length_sqr() < 1e-6;
 
 		m_start_offset = maxs + mins;
 		m_start_offset *= 0.5f;

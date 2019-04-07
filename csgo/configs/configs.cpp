@@ -82,12 +82,13 @@ bool c_config::init( ) {
 	item( g_vars.visuals.dropped_ammo, "g_vars.visuals.dropped_ammo", m_items );
 	item( g_vars.visuals.dropped_ammo_color, "g_vars.visuals.dropped_ammo_color", m_items );
 	item( g_vars.visuals.radar, "g_vars.visuals.radar", m_items );
-	item( g_vars.visuals.spread_circle, "g_vars.visuals.spread_circle", m_items );
+	item( g_vars.visuals.visualize_spread, "g_vars.visuals.visualize_spread", m_items );
+	item( g_vars.visuals.visualize_spread_color, "g_vars.visuals.visualize_spread_color", m_items );
 	item( g_vars.visuals.hitmarker, "g_vars.visuals.hitmarker", m_items );
 	item( g_vars.visuals.impact, "g_vars.visuals.impact", m_items );
 	item( g_vars.visuals.impact_color, "g_vars.visuals.impact_color", m_items );
-	item( g_vars.visuals.spread_circle_color, "g_vars.visuals.spread_circle_color", m_items );
 	item( g_vars.visuals.misc.remove_scope, "g_vars.visuals.misc.remove_scope", m_items );
+	item( g_vars.visuals.misc.remove_scope_zoom, "g_vars.visuals.misc.remove_scope_zoom", m_items );
 	item( g_vars.visuals.misc.remove_smoke, "g_vars.visuals.misc.remove_smoke", m_items );
 	item( g_vars.visuals.misc.remove_blur, "g_vars.visuals.misc.remove_blur", m_items );
 	item( g_vars.visuals.misc.scope_color, "g_vars.visuals.misc.scope_color", m_items );
@@ -152,6 +153,7 @@ bool c_config::init( ) {
 	item( g_vars.misc.thirdperson_dead, "g_vars.misc.thirdperson_dead", m_items );
 	item( g_vars.misc.thirdperson, "g_vars.misc.thirdperson", m_items );
 	item( g_vars.misc.thirdperson_key, "g_vars.misc.thirdperson_key", m_items );
+	item( g_vars.misc.flashlight_key, "g_vars.misc.flashlight_key", m_items );
 	item( g_vars.misc.autozeus, "g_vars.misc.autozeus", m_items );
 	item( g_vars.misc.log_damage, "g_vars.misc.log_damage", m_items );
 	item( g_vars.misc.log_purchases, "g_vars.misc.log_purchases", m_items );
@@ -199,6 +201,7 @@ bool c_config::save( const std::string &file ) {
 		return true;
 	} 
 	catch( std::ofstream::failure &ex ) {
+		UNREFERENCED_PARAMETER( ex );
 		_RPT1( _CRT_WARN, "Failed to save the default profile. Ignoring this warning will most likely result in future profiles not being saved correctly.\n\n%s", ex.what( ) );
 		return false;
 	}

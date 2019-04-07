@@ -12,14 +12,14 @@ constexpr float math::rad_to_deg( float val ) {
 }
 
 vec3_t math::vector_transform( vec3_t in, matrix3x4_t matrix ) {
-	return vec3_t( in.Dot( matrix[ 0 ] ) + matrix[ 0 ][ 3 ], in.Dot( matrix[ 1 ] ) + matrix[ 1 ][ 3 ],
-		in.Dot( matrix[ 2 ] ) + matrix[ 2 ][ 3 ] );
+	return vec3_t( in.dot( matrix[ 0 ] ) + matrix[ 0 ][ 3 ], in.dot( matrix[ 1 ] ) + matrix[ 1 ][ 3 ],
+		in.dot( matrix[ 2 ] ) + matrix[ 2 ][ 3 ] );
 }
 
 void math::vector_transform( vec3_t &in, const matrix3x4_t &matrix, vec3_t &out ) {
-	out.x = in.Dot( matrix.m_mat_val[ 0 ] ) + matrix.m_mat_val[ 0 ][ 3 ];
-	out.y = in.Dot( matrix.m_mat_val[ 1 ] ) + matrix.m_mat_val[ 1 ][ 3 ];
-	out.z = in.Dot( matrix.m_mat_val[ 2 ] ) + matrix.m_mat_val[ 2 ][ 3 ];
+	out.x = in.dot( matrix.m_mat_val[ 0 ] ) + matrix.m_mat_val[ 0 ][ 3 ];
+	out.y = in.dot( matrix.m_mat_val[ 1 ] ) + matrix.m_mat_val[ 1 ][ 3 ];
+	out.z = in.dot( matrix.m_mat_val[ 2 ] ) + matrix.m_mat_val[ 2 ][ 3 ];
 }
 
 bool math::clamp_angles( vec3_t &angles ) {
@@ -88,7 +88,7 @@ void math::matrix_position( const matrix3x4_t &matrix, vec3_t &out ) {
 }
 
 float math::normalize_vector( vec3_t &v ) {
-	float l = v.Length( );
+	float l = v.length( );
 	if( l != 0.0f )
 		v /= l;
 	else
@@ -133,7 +133,7 @@ void math::vector_angle( const vec3_t &forward, vec3_t &angles ) {
 vec3_t math::calc_angle( vec3_t v1, vec3_t v2 ) {
 	vec3_t delta = v1 - v2;
 
-	float len = delta.Length();
+	float len = delta.length();
 
 	if ( delta.z == 0.0f && len == 0.0f )
 		return vec3_t{};
@@ -142,14 +142,14 @@ vec3_t math::calc_angle( vec3_t v1, vec3_t v2 ) {
 		return vec3_t{};
 
 	vec3_t angles;
-	angles.x = ( asinf( delta.z / delta.Length() ) * rad_pi );
+	angles.x = ( asinf( delta.z / delta.length() ) * rad_pi );
 
 	angles.y = ( atanf( delta.y / delta.x ) * rad_pi );
 
 	angles.z = 0.0f;
 	if ( delta.x >= 0.0f ) { angles.y += 180.0f; }
 
-	angles.Clamp( );
+	angles.clamp( );
 
 	return angles;
 }
@@ -173,7 +173,7 @@ float math::get_fov( const vec3_t &viewangle, const vec3_t &aimangle ) {
 	angle_to_vector( viewangle, aim );
 	angle_to_vector( aimangle, ang );
 
-	return ( rad_to_deg( acos( aim.Dot( ang ) / aim.LengthSqr( ) ) ) );
+	return ( rad_to_deg( acos( aim.dot( ang ) / aim.length_sqr( ) ) ) );
 }
 
 void math::angle_matrix( const vec3_t &angles, matrix3x4_t &matrix ) {
@@ -200,4 +200,9 @@ void math::angle_matrix( const vec3_t &angles, matrix3x4_t &matrix ) {
 	matrix[ 0 ][ 3 ] = 0.f;
 	matrix[ 1 ][ 3 ] = 0.f;
 	matrix[ 2 ][ 3 ] = 0.f;
+}
+
+float math::random_float( float min, float max ) {
+	static auto o_random_float = reinterpret_cast< float( *)( float, float ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomFloat" ) );
+	return o_random_float( min, max );
 }

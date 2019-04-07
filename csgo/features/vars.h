@@ -56,12 +56,12 @@ public:
 		bool objectives;
 		bool dormancy_fade;
 		bool grenade_pred;
-		bool spread_circle;
+		int visualize_spread;
 		bool hitmarker;
 		bool impact;
 		float impact_color[ 4 ] = { 255, 255, 0, 0 };
 		bool radar;
-		float spread_circle_color[ 4 ] = { 70, 113, 59, 198 };
+		float visualize_spread_color[ 4 ] = { 70, 113, 59, 198 };
 		struct chams{
 			bool teammates;
 			bool enabled;
@@ -76,10 +76,11 @@ public:
 		struct misc {
 			bool no_flash;
 			bool fog;
-			bool remove_scope;
+			int remove_scope;
+			bool remove_scope_zoom;
 			bool remove_blur;
 			float scope_color[ 4 ] = { 220, 0, 0, 0 };
-			bool remove_smoke;
+			int remove_smoke;
 		} misc;
 		struct extra {
 			bool speclist;
@@ -106,6 +107,7 @@ public:
 		bool thirdperson_dead;
 		bool thirdperson_grenade;
 		int thirdperson_key;
+		int flashlight_key;
 		bool autozeus;
 		bool log_damage;
 		bool log_purchases;

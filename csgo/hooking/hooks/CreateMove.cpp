@@ -30,7 +30,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	framerate = 0.9 * framerate + ( 1.0 - 0.9 ) * g_csgo.m_global_vars->m_absolute_frametime;
 
 	g_cl.m_client_framerate = static_cast< int >( 1.f / framerate );
-	g_cl.m_under_server_tick_rate = g_cl.m_client_framerate <= 65;
+	g_cl.m_under_tickrate = g_cl.m_client_framerate <= ( 1.0f / g_csgo.m_global_vars->m_interval_per_tick );
 
 	g_cl.m_cmd = cmd;
 

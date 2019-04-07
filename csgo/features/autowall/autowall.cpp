@@ -112,7 +112,7 @@ bool c_autowall::trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &
 		if( exit_trace->m_surface.m_flags >> 7 & SURF_LIGHT && !( enter_trace->m_surface.m_flags >> 7 & SURF_LIGHT ) )
 			continue;
 
-		if( exit_trace->m_plane.m_normal.Dot( dir ) <= 1.f ) {
+		if( exit_trace->m_plane.m_normal.dot( dir ) <= 1.f ) {
 			end = end - dir * ( exit_trace->m_fraction * 4.f );
 			return true;
 		}
@@ -169,7 +169,7 @@ bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *ente
 	m_avg_pen = average_penetration_modifier;
 
 	const float modifier = std::fmaxf( 0.f, 1.f / average_penetration_modifier );
-	const float pen_len = ( exit_trace.m_endpos - enter_trace->m_endpos ).Length( );
+	const float pen_len = ( exit_trace.m_endpos - enter_trace->m_endpos ).length( );
 	const float lost_dmg = modifier * 3.f * std::fmaxf( 0.f, 3.f / penetration * 1.25f ) + current_damage * damage_modifier + pen_len * pen_len * modifier / 24.f;
 
 	m_pen_len = pen_len;
@@ -193,24 +193,24 @@ void c_autowall::clip_trace( const vec3_t &src, vec3_t &end, trace_t *tr, c_base
 	const vec3_t maxs = target->maxs( );
 
 	vec3_t dir( end - src );
-	dir.Normalize( );
+	dir.normalize( );
 
 	const vec3_t center = ( maxs + mins ) / 2;
 	const vec3_t pos( center + target->origin( ) );
 
 	vec3_t to = pos - src;
-	const float range_along = dir.Dot( to );
+	const float range_along = dir.dot( to );
 
 	float range;
 	if( range_along < 0.f ) {
-		range = -to.Length( );
+		range = -to.length( );
 	}
-	else if( range_along > dir.Length( ) ) {
-		range = -( pos - end ).Length( );
+	else if( range_along > dir.length( ) ) {
+		range = -( pos - end ).length( );
 	}
 	else {
 		auto ray( pos - ( dir * range_along + src ) );
-		range = ray.Length( );
+		range = ray.length( );
 	}
 
 	if( range <= 60.f ) {
@@ -241,7 +241,7 @@ bool c_autowall::think( const vec3_t &position, c_csplayer *entity, const int mi
 
 	vec3_t start = local->eye_pos( );
 	vec3_t direction( position - start );
-	direction.Normalize( );
+	direction.normalize( );
 
 	int hits_left = 4;
 	float trace_length = 0.f;

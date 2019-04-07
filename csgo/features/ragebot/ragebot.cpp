@@ -53,17 +53,17 @@ void c_ragebot::select_target( ) {
 			hitboxes.push_back( r_foot );
 		} 
 		else {
-			if( g_vars.rage.hitbox_head ){
+			if ( g_vars.rage.hitbox_head ) {
 				hitboxes.push_back( head );
 				hitboxes.push_back( neck );
 			}
-			if( g_vars.rage.hitbox_pelvis ){
+			if ( g_vars.rage.hitbox_pelvis ) {
 				hitboxes.push_back( l_chest );
 				hitboxes.push_back( u_chest );
 				hitboxes.push_back( thorax );
 				hitboxes.push_back( pelvis );
 			}
-			if( g_vars.rage.hitbox_arms ){
+			if ( g_vars.rage.hitbox_arms ) {
 				hitboxes.push_back( l_upperarm );
 				hitboxes.push_back( r_upperarm );
 				hitboxes.push_back( l_forearm );
@@ -71,7 +71,7 @@ void c_ragebot::select_target( ) {
 				hitboxes.push_back( l_hand );
 				hitboxes.push_back( r_hand );
 			}
-			if( g_vars.rage.hitbox_legs ){
+			if ( g_vars.rage.hitbox_legs ) {
 				hitboxes.push_back( l_thigh );
 				hitboxes.push_back( r_thigh );
 				hitboxes.push_back( l_calf );
@@ -112,7 +112,9 @@ void c_ragebot::select_target( ) {
 				if( g_vars.visuals.extra.points )
 					g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-				if ( g_autowall.think( p, e, g_vars.rage.min_dmg, true ) ) {
+				auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
+
+				if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
 					if( g_autowall.m_autowall_dmg > player_best_damage ) {
 						player_best_damage = g_autowall.m_autowall_dmg;
 						player_best_point = p;
@@ -163,11 +165,10 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 		static auto random_seed = reinterpret_cast< void( *)( int ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" ) );
 		random_seed( seed );
 
-
-		float a = util::misc::get_random_float_range( 0.f, 1.f );
-		float b = util::misc::get_random_float_range( 0.f, 2.f * math::pi );
-		float c = util::misc::get_random_float_range( 0.f, 1.f );
-		float d = util::misc::get_random_float_range( 0.f, 2.f * math::pi );
+		float a = math::random_float( 0.f, 1.f );
+		float b = math::random_float( 0.f, 2.f * math::pi );
+		float c = math::random_float( 0.f, 1.f );
+		float d = math::random_float( 0.f, 2.f * math::pi );
 
 		const float generated_spread = a * weapon_spread;
 		const float generated_cone = c * weapon_cone;
@@ -178,7 +179,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 			0.f
 		);
 
-		return vec3_t ( forward + right * -spread.x + up * -spread.y ).Normalized( );
+		return vec3_t ( forward + right * -spread.x + up * -spread.y ).normalized( );
 	};
 
 	for( int i = 1; i <= 256; i++ ) {
@@ -256,7 +257,7 @@ void c_ragebot::choose_angles( ){
 		m_cmd->m_buttons |= IN_ATTACK2;
 
 	vec3_t aim_angle = math::calc_angle( local->eye_pos( ), best_hitboxpos );
-	aim_angle.Clamp( );
+	aim_angle.clamp( );
 
 	if( !hitchance( aim_angle, selected_target ) ){
 		if( g_vars.rage.autoscope == 2 && ( !local->is_scoped( ) && weapon->has_scope( ) ) )
@@ -327,7 +328,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 			// pretty sure this is called dynamic hitboxes in aimware.
 			if( g_vars.rage.dynamic_hitbox ) {
 				// framerate is lower than the servers, start optimizing points.
-				if( g_cl.m_under_server_tick_rate && m_last_target ) {
+				if( g_cl.m_under_tickrate && m_last_target ) {
 					// check if we're aiming at the same target and if we are lets only multipoint this target until they are no longer the target.
 					if( e != m_last_target )
 						continue;
@@ -399,7 +400,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 				points.push_back( vec3_t( bbox->bb_max.x, bbox->bb_min.y, bbox->bb_min.z ) * scale );*/
 			}
 			else if( bbox->m_flRadius > 0.f ) { // pill.
-				const float length = ( bbox->bb_min - bbox->bb_max ).Length( ) + bbox->m_flRadius * 2.f;
+				const float length = ( bbox->bb_min - bbox->bb_max ).length( ) + bbox->m_flRadius * 2.f;
 
 				if( h != l_upperarm && h != r_upperarm && h != l_thigh && h != r_thigh ) {
 					points.push_back( center + vec3_t( length / 3.f, 0.f, 0.f ) );
@@ -435,7 +436,7 @@ void c_ragebot::quickstop( c_base_combat_weapon *local_weapon ) {
 
 	if( g_misc.unpredicted_vel.Length2D( ) > max_speed * .34f ) {
 		const vec3_t velocity = g_misc.unpredicted_vel;
-		const float_t speed = g_cl.m_local->velocity( ).Length( );
+		const float_t speed = g_cl.m_local->velocity( ).length( );
 
 		vec3_t direction;
 		math::vector_angle( velocity, direction );

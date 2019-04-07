@@ -1,4 +1,6 @@
 #include "visuals.h"
+#include <mutex>
+
 #include "../autowall/autowall.h"
 #include "../misc/misc.h"
 #include "../ragebot/ragebot.h"
@@ -30,7 +32,7 @@ void c_visuals::run( ) {
 	if( g_vars.visuals.extra.speclist )
 		draw_spectators( );
 
-	if( g_vars.visuals.spread_circle )
+	if( g_vars.visuals.visualize_spread )
 		draw_crosshair( );
 
 	if( g_vars.visuals.hitmarker )
@@ -777,25 +779,91 @@ void c_visuals::draw_scope( ) const {
 
 	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
-	g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), 0, size.Height * 0.5f, size.Width, 1 );
-	g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), size.Width * 0.5f, 0, 1, size.Height );
+	if ( g_vars.visuals.misc.remove_scope == 1 ) {
+		g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), 0, size.Height * 0.5f, size.Width, 1 );
+		g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), size.Width * 0.5f, 0, 1, size.Height );
+	}
+	else {
+		float spread = ( local->get_active_weapon( )->inaccuracy( ) + local->get_active_weapon( )->spread( ) ) * 320;
+		float height = std::clamp( spread, 1.f, 25.f );
+		float alpha = ( 255.f - ( height * 4.2f ) );
+
+		auto color = OSHColor::FromARGB( g_vars.visuals.misc.scope_color, alpha );
+
+		g_renderer.filled_rect( color, 0, ( size.Height * 0.5f ) - ( height / 2.f ), size.Width, height );
+		g_renderer.filled_rect( color, ( size.Width * 0.5f ) - ( height / 2.f ), 0, height, size.Height );
+	}
 }
 
 void c_visuals::draw_crosshair( ) const {
 	auto local = c_csplayer::get_local( );
-	if( !local )
+	if ( !local )
 		return;
 
 	auto weapon = local->get_active_weapon( );
-	if( !weapon )
+	if ( !weapon )
 		return;
+
+	static std::vector< std::pair< float, float > > seeds;
+
+	std::once_flag once_flag;
+	std::call_once( once_flag, [ & ] {
+		for ( int i = 0; i < 256; i++ ) {
+			seeds.push_back( { util::misc::get_random_float_range( 0.0f, 1.0f ), util::misc::get_random_float_range( 0.0f, math::pi_2 ) } );
+		}
+	} );
 
 	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
 
-	const float spread_distance = ( weapon->inaccuracy( ) + weapon->spread( ) ) * 320.f / std::tan( math::deg_to_rad( g_vars.visuals.effects.camera_fov ) * 0.5f );
-	const float spread_radius = size.Height * 2 * 0.002083 * spread_distance;
+	if ( g_vars.visuals.visualize_spread == 1 ) {
+		const float spread_distance = ( weapon->inaccuracy( ) + weapon->spread( ) ) * 320.f / std::tan( math::deg_to_rad( g_vars.visuals.effects.camera_fov ) * 0.5f );
+		const float spread_radius = size.Height * 2 * 0.002083 * spread_distance;
 
-	g_renderer.circle( OSHColor::FromARGB( g_vars.visuals.spread_circle_color, 70.f ), size.Width / 2, size.Height / 2, spread_radius );
+		g_renderer.circle( OSHColor::FromARGB( g_vars.visuals.visualize_spread_color, 70.f ), size.Width / 2, size.Height / 2, spread_radius );
+	}
+	else if ( weapon ) {
+		int screen_w, screen_h;
+		g_csgo.m_engine->get_screen_size( screen_w, screen_h );
+		float cross_x = screen_w / 2, cross_y = screen_h / 2;
+
+		float recoil_step = screen_h / g_vars.visuals.effects.camera_fov;
+
+		cross_x -= ( local->punch_angle( ).y * recoil_step );
+		cross_y += ( local->punch_angle( ).x * recoil_step );
+
+		weapon->update_accuracy( );
+		float inaccuracy = weapon->inaccuracy( );
+		float spread = weapon->spread( );
+
+		float cone = inaccuracy * spread;
+		cone *= screen_h * 0.7f;
+		cone *= 90.f / g_vars.visuals.effects.camera_fov;
+
+		for ( int seed = 0; seed < 256; ++seed ) {
+			static auto random_seed = reinterpret_cast< void( *)( int ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" ) );
+			random_seed( seed );
+
+			float rand_a = math::random_float( 0.f, 1.0f );
+			float pi_rand_a = math::random_float( 0.f, math::pi_2 );
+			float rand_b = math::random_float( 0.0f, 1.0f );
+			float pi_rand_b = math::random_float( 0.f, math::pi_2 );
+
+			float spread_x = cos( pi_rand_a ) * ( rand_a * inaccuracy ) + cos( pi_rand_b ) * ( rand_b * spread );
+			float spread_y = sin( pi_rand_a ) * ( rand_a * inaccuracy ) + sin( pi_rand_b ) * ( rand_b * spread );
+
+			float max_x = cos( pi_rand_a ) * cone + cos( pi_rand_b ) * cone;
+			float max_y = sin( pi_rand_a ) * cone + sin( pi_rand_b ) * cone;
+
+			float step = screen_h / g_vars.visuals.effects.camera_fov * 90.f;
+			float screen_spread_x = static_cast< int >( spread_x * step * 0.7f );
+			float screen_spread_y = static_cast< int >( spread_y * step * 0.7f );
+
+			float percentage = ( rand_a * inaccuracy + rand_b * spread ) / ( inaccuracy + spread );
+
+			g_renderer.rect( OSHColor::FromARGB( g_vars.visuals.visualize_spread_color, 255 * ( 0.4f + percentage * 0.6f ) * ( 0.1f + percentage * 0.9f ) ), 
+							 cross_x + screen_spread_x, cross_y + screen_spread_y, 2, 2 );
+		}
+	}
 }
 
 void c_visuals::draw_hitmarker( ) {

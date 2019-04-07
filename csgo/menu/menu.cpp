@@ -268,15 +268,16 @@ void c_main_form::misc_tab() {
 
 	g_menu.push_y_pos( 40 );
 
-	auto log_groupbox = new c_groupbox( "Logging", general_groupbox->GetRight( ) + 19, 6, 259, 82 );
+	auto log_groupbox = new c_groupbox( "Logging", general_groupbox->GetRight( ) + 19, 6, 259, 64 );
 	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
 	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
 
-	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 92 );
+	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 126 );
 	auto client_hitboxes = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.client_hitboxes);
 	auto client_hitboxes_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.client_hitboxes_duration, 0, 2.f, "s" );
 	auto bullet_impacts = new c_checkbox( "Bullet impacts", other_groupbox, &g_vars.misc.bullet_impacts );
 	auto bullet_impacts_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.bullet_impacts_duration, 0, 4.f, "s" );
+	auto flashlight_hotkey = new c_hotkey( "Flashlight key", other_groupbox, &g_vars.misc.flashlight_key, other_groupbox->GetWidth( ) );
 
 	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
 	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
@@ -385,13 +386,13 @@ void c_main_form::visuals_tab() {
 
 	g_menu.set_y_pos( 10 );
 	//auto chicken_check = new c_checkbox( "Chicken", extra_world, &g_vars.visuals.chicken );
-	auto spread_circle = new c_checkbox( "Spread crosshair", extra_world, &g_vars.visuals.spread_circle );
+	auto visualize_spread = new c_combo( "Visualize spread", { "None", "Circle", "Dots" }, extra_world, 3, &g_vars.visuals.visualize_spread, extra_world->GetWidth( ) - 15 );;
 	auto impact_beams = new c_checkbox( "Impact", extra_world, &g_vars.visuals.impact );
 	auto hitmarker = new c_checkbox( "Hitmarker", extra_world, &g_vars.visuals.hitmarker );
 	auto extraflags = new c_checkbox( "Flags", extra_world, &g_vars.visuals.extra.misc_flags );
 
 	//auto impact_color = new c_colorpicker( extra_world, impact_beams, g_vars.visuals.impact_color );
-	auto spread_circle_color = new c_colorpicker( extra_world, spread_circle, g_vars.visuals.spread_circle_color );
+	auto visualize_spread_color = new c_colorpicker( extra_world, visualize_spread, g_vars.visuals.visualize_spread_color );
 	auto dropped_ammo_color = new c_colorpicker( generic_world, dropped_ammo_check, g_vars.visuals.dropped_ammo_color );
 
 	other_esp_groupbox->AddControl( world_tab );
@@ -414,8 +415,9 @@ void c_main_form::visuals_tab() {
 	g_menu.set_y_pos( 10 );
 	auto remove_flash = new c_checkbox( "Flash", removals_page, &g_vars.visuals.misc.no_flash );
 	auto remove_fog = new c_checkbox( "Fog", removals_page, &g_vars.visuals.misc.fog );
-	auto remove_smoke = new c_checkbox( "Smoke", removals_page, &g_vars.visuals.misc.remove_smoke );
-	auto remove_scope = new c_checkbox( "Scope overlay", removals_page, &g_vars.visuals.misc.remove_scope );
+	auto remove_scope_zoom = new c_checkbox( "Scope zoom", removals_page, &g_vars.visuals.misc.remove_scope_zoom );
+	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic" }, removals_page, 3, &g_vars.visuals.misc.remove_scope, effects_tab->GetWidth( ) - 15 );
+	auto remove_smoke_type = new c_combo( "Smoke", { "None", "Remove", "Wireframe" }, removals_page, 3, &g_vars.visuals.misc.remove_smoke, effects_tab->GetWidth( ) - 15 );
 	//auto remove_blue = new c_checkbox( "Aug scope blur", removals_page, &g_vars.visuals.misc.remove_blur );
 
 	auto scope_color = new c_colorpicker( removals_page, remove_scope, g_vars.visuals.misc.scope_color );
