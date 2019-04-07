@@ -4,7 +4,7 @@
 
 class c_misc {
 private:
-	int flashlight_idx;
+	c_flashlight_effect* create_flashlight( int idx, const char* texture_name, float fov, float far_z, float linear_atten );
 public:
 	vec3_t unpredicted_vel;
 

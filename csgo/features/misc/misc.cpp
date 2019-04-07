@@ -484,31 +484,31 @@ void c_misc::no_smoke( client_frame_stage_t stage ) {
 	}
 }
 
-void c_misc::flashlight( ) {
-	auto create_flashlight = [ ]( int idx, const char *texture_name, float fov, float far_z, float linear_atten ) -> c_flashlight_effect*
+c_flashlight_effect* c_misc::create_flashlight( int idx, const char* texture_name, float fov, float far_z, float linear_atten ) {
+	static auto constructor = pattern::find( g_csgo.m_client_dll, "55 8B EC F3 0F 10 45 ?? B8" );
+
+	// we need to use the engine memory management if we are calling the destructor later
+	c_flashlight_effect *flashlight_ptr = reinterpret_cast< c_flashlight_effect* >( g_csgo.m_memalloc->alloc( sizeof( c_flashlight_effect ) ) );
+
+	if ( !flashlight_ptr )
+		return nullptr;
+
+	// we need to call this function in a non standard way
+	__asm
 	{
-		static DWORD constructor = pattern::find( g_csgo.m_client_dll, "55 8B EC F3 0F 10 45 ?? B8" );
+		movss xmm3, fov
+		mov ecx, flashlight_ptr
+		push linear_atten
+		push far_z
+		push texture_name
+		push idx
+		call constructor
+	}
 
-		// we need to use the engine memory management if we are calling the destructor later
-		c_flashlight_effect *flashlight_ptr = reinterpret_cast< c_flashlight_effect* >( g_csgo.m_memalloc->alloc( sizeof( c_flashlight_effect ) ) );
+	return flashlight_ptr;
+}
 
-		if ( !flashlight_ptr )
-			return nullptr;
-
-		// we need to call this function in a non standard way
-		__asm
-		{
-			movss xmm3, fov
-			mov ecx, flashlight_ptr
-			push linear_atten
-			push far_z
-			push texture_name
-			push idx
-			call constructor
-		}
-
-		return flashlight_ptr;
-	};
+void c_misc::flashlight( ) {
 	auto destroy_flashlight = [ ]( c_flashlight_effect* flashlight_ptr ) {
 		static auto destroy_fn = reinterpret_cast< void( __thiscall* )( c_flashlight_effect*, c_flashlight_effect* ) >( pattern::find( g_csgo.m_client_dll, "56 8B F1 E8 ?? ?? ?? ?? 8B 4E 28" ) );
 
@@ -543,12 +543,10 @@ void c_misc::flashlight( ) {
 	if ( g_input.key_pressed( g_vars.misc.flashlight_key ) && GetTickCount( ) > last_tick + 250 ) {
 		if ( !flashlight ) {
 			flashlight = create_flashlight( local->get_index( ), "effects/flashlight001", 35, 5000, 1000 );
-			flashlight_idx = flashlight->m_idx;
 		}
 		else {
 			destroy_flashlight( flashlight );
 			flashlight = NULL;
-			flashlight_idx = -1;
 		}
 
 		last_tick = GetTickCount( );
