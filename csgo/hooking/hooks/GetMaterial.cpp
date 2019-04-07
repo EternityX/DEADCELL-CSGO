@@ -5,7 +5,7 @@ i_material * __fastcall hook::GetMaterial( uintptr_t ecx, uintptr_t edx, const c
 
 	static auto original = g_hooks.m_materialsystem.get_old_method< fn::GetMaterial_t >( hook::idx::GET_MATERIAL );
 
-	if( !strcmp( material_name, "dev/scope_bluroverlay" ) && g_vars.visuals.misc.remove_scope ){
+	if( strcmp( material_name, "dev/scope_bluroverlay" ) == 0 && g_vars.visuals.misc.remove_scope ){
 		static auto clear = original( ecx, "dev/clearalpha", nullptr, complain, complain_prefix );
 		return clear;
 	}

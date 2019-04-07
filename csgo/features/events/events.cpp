@@ -147,7 +147,7 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 		int attacker = g_csgo.m_engine->get_player_for_user_id( m_event->get_int( "attacker" ) );
 		int target = g_csgo.m_engine->get_player_for_user_id( m_event->get_int( "userid" ) );
 		if( attacker == g_csgo.m_engine->get_local_player( ) && target != g_csgo.m_engine->get_local_player( ) ) {
-			auto *ent = g_csgo.m_entity_list->get< c_csplayer >( g_csgo.m_engine->get_player_for_user_id( target ) );
+			auto *ent = g_csgo.m_entity_list->get< c_csplayer >( target );
 
 			player_info_t info;
 			if( g_csgo.m_engine->get_player_info( target, &info ) && ent ){
@@ -167,6 +167,9 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 				if( g_vars.misc.log_damage )
 					g_notify.add( true, OSHGui::Drawing::Color::FromARGB( 220, 249, 44, 69 ), "hit %s in the %s for %i damage.", s.c_str( ),
 						hitgroup_to_name( m_event->get_int( "hitgroup" ) ), m_event->get_int( "dmg_health" ) );
+
+				if( g_vars.misc.client_hitboxes )
+					g_misc.capsule_overlay( ent, g_vars.misc.client_hitboxes_duration, ent->bone_cache( ).base( ) );
 			}
 		}
 	}

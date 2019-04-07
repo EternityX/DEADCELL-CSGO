@@ -7,13 +7,12 @@
 
 class c_ragebot {
 	struct rage_t {
-		rage_t( c_csplayer *player, int i, int damage, vec3_t point, float dist, matrix3x4_t* matrix ){
+		rage_t( c_csplayer *player, int i, int damage, vec3_t point, float dist ){
 			m_player = player;
 			index = i;
 			m_damage = damage;
 			m_bestpoint = point;
 			distance = dist;
-			mat = matrix;
 		}
 
 		vec3_t m_bestpoint;
@@ -21,7 +20,6 @@ class c_ragebot {
 		int index;
 		int m_damage;
 		float distance;
-		matrix3x4_t* mat;
 	};
 
 	std::vector< rage_t > m_players;

@@ -16,8 +16,8 @@ public:
 	void on_entity_created(c_base_entity* ent) override;
 	void on_entity_deleted(c_base_entity* ent) override;
 
-	bool init();
-	bool remove();
+	void init();
+	void remove();
 
 	std::vector< ent_container_t > m_players;
 };

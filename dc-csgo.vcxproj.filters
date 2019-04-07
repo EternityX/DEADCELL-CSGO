@@ -136,9 +136,6 @@
     <ClCompile Include="csgo\hooking\hooks\LockCursor.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\UpdateClientSideAnimations.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
-    </ClCompile>
     <ClCompile Include="csgo\features\misc\misc.cpp">
       <Filter>dc-csgo\features\misc</Filter>
     </ClCompile>
@@ -156,9 +153,6 @@
     </ClCompile>
     <ClCompile Include="csgo\features\animations\anim.cpp">
       <Filter>dc-csgo\features\animations</Filter>
-    </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\TestHitboxes.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\GetViewmodelFOV.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
@@ -207,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="csgo\features\entity listener\ent_listener.cpp">
       <Filter>dc-csgo\features\entity listener</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\IsHltv.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

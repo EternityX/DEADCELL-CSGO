@@ -87,22 +87,13 @@ void c_ragebot::select_target( ) {
 			if( !is_valid( e ) )
 				continue;
 
-			float player_best_damage = 0.f;
+			int player_best_damage = 0;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
-			matrix3x4_t* _bones;
 
-			int backup_fl = e->flags( );
-
-			e->flags( ) &= ~FL_ONGROUND;
-
-			e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
-
-			e->flags( ) = backup_fl;
-
-			_bones= e->bone_cache( ).base( );
+			e->setup_bones( nullptr, -1, 0x100, g_csgo.m_global_vars->m_cur_time );
 
 			std::vector< vec3_t > points;
-			if( !get_points_from_hitbox( e, hitboxes, _bones, points, ( g_vars.rage.pointscale / 100.f ) ) )
+			if( !get_points_from_hitbox( e, hitboxes, e->bone_cache( ).base( ), points, ( g_vars.rage.pointscale / 100.f ) ) )
 				continue;
 
 			if( points.empty( ) )
@@ -116,13 +107,13 @@ void c_ragebot::select_target( ) {
 
 				if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
 					if( g_autowall.m_autowall_dmg > player_best_damage ) {
-						player_best_damage = g_autowall.m_autowall_dmg;
+						player_best_damage = static_cast< int >( g_autowall.m_autowall_dmg );
 						player_best_point = p;
 					}
 				}
 			}
 
-			m_players.emplace_back( e, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
+			m_players.emplace_back( e, idx, player_best_damage, player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ) );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
@@ -162,7 +153,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 	float weapon_cone = weapon->inaccuracy( );
 
 	const auto get_bullet_location = [ & ] ( int seed ) {
-		static auto random_seed = reinterpret_cast< void( *)( int ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" ) );
+		static auto random_seed = pe::get_export< void( *)( int ) >( pe::get_module( "vstdlib.dll" ), "RandomSeed" );
 		random_seed( seed );
 
 		float a = math::random_float( 0.f, 1.f );
@@ -217,8 +208,6 @@ void c_ragebot::choose_angles( ){
 	if( !weapon )
 		return;
 
-	matrix3x4_t* mat = nullptr;
-
 	for( auto &data : m_players ) {
 		auto target = data.m_player;
 
@@ -230,13 +219,11 @@ void c_ragebot::choose_angles( ){
 				selected_target = target;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
-				mat = data.mat;
 			}
 			if ( player_best_damage >= target->health( ) ) {
 				selected_target = target;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
-				mat = data.mat;
 				return true;
 			}
 			return false;
@@ -281,9 +268,6 @@ void c_ragebot::choose_angles( ){
 		weapon->update_accuracy( );
 		m_cmd->m_viewangles -= local->punch_angle( ) * 2.f;
 
-		if( g_vars.misc.client_hitboxes && mat )
-			g_misc.capsule_overlay( selected_target, g_vars.misc.client_hitboxes_duration, mat );
-
 		if( !g_vars.rage.silent )
 			g_csgo.m_engine->set_viewangles( m_cmd->m_viewangles );
 	}
@@ -303,7 +287,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 	if ( !e )
 		return false;
 
-	auto *studiohdr = e->studio_hdr( );
+	auto *studiohdr = e->model_ptr( )->m_studio_hdr;
 	if ( !studiohdr )
 		return false;
 

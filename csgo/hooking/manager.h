@@ -28,6 +28,7 @@ namespace hook {
 		using GetMaterial_t = i_material *( __thiscall*)( uintptr_t, const char *, const char *, bool, const char * );
 		using RenderSmokeOverlay_t = bool (__thiscall *)( uintptr_t, bool );
 		using RunCommand_t = void( __thiscall *)( uintptr_t, c_base_player *, c_user_cmd *, i_move_helper * );
+		using IsHltv_t = bool( __thiscall * )( uintptr_t );
 
 	};
 
@@ -43,6 +44,9 @@ namespace hook {
 		CREATE_MOVE =				24,
 		GET_VIEWMODEL_FOV =			35,
 		DO_POST_SCREEN_SPACE_FX =   44,
+
+		//engine
+		IS_HLTV = 93,
 
 		// client
 		LEVEL_INIT_POST_ENTITY =	 7,
@@ -68,9 +72,7 @@ namespace hook {
 		GET_MATERIAL =				 84,
 
 		// ccsplayer
-		TEST_HITBOXES =				 52,
-		DO_EXTRA_BONE_PROC =		 193,
-		UPDATE_CLIENTSIDE_ANIM =	 219,
+		DO_EXTRA_BONE_PROC =		 193
 	};
 
 	// our funcs.
@@ -92,6 +94,7 @@ namespace hook {
 	void __fastcall FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_frame_stage_t curstage );
 	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const c_view_setup *pSetup );
 	void __fastcall RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 );
+	bool __fastcall IsHltv( uintptr_t ecx, uintptr_t edx );
 };
 
 class c_hooks {
@@ -107,6 +110,7 @@ public:
 	c_vmt m_modelrender;
 	c_vmt m_materialsystem;
 	c_vmt m_viewrender;
+	c_vmt m_engine;
 
 	bool init( );
 	bool hook( );

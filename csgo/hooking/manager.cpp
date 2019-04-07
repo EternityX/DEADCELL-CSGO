@@ -48,6 +48,11 @@ bool c_hooks::init( ) {
 		return false;
 	}
 
+	if( !m_engine.init( g_csgo.m_engine ) ) {
+		_RPTF1( _CRT_ERROR, "Failed to initialize m_engine. This is fatal./n/n%#08X", g_csgo.m_engine );
+		return false;
+	}
+
 	return true;
 }
 
@@ -132,6 +137,11 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
+	if( !m_engine.hook_method( hook::idx::IS_HLTV, hook::IsHltv ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to hook IsHltv. This is fatal." );
+		return false;
+	}
+
 	m_hooked_successful = true;
 
 	return true;
@@ -180,6 +190,11 @@ bool c_hooks::release( ) {
 
 	if( !m_materialsystem.unhook_all( ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to unhook all functions from m_materialsystem. This is fatal." );
+		return false;
+	}
+
+	if( !m_engine.unhook_all( ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to unhook all functions from m_engine. This is fatal." );
 		return false;
 	}
 
