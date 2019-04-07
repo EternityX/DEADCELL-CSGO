@@ -76,7 +76,7 @@ void c_misc::thirdperson( ) {
 
 	if( g_vars.misc.thirdperson && local->alive( ) ) {
 		if( !g_csgo.m_input->m_camera_in_thirdperson ) {
-			auto GetCorrectDistance = [ & ]( float ideal_distance ) -> float {
+			auto get_correct_distance = [ & ]( float ideal_distance ) -> float {
 				vec3_t inverseAngles;
 				g_csgo.m_engine->get_viewangles( inverseAngles );
 
@@ -96,7 +96,7 @@ void c_misc::thirdperson( ) {
 				return ( ideal_distance * trace.m_fraction ) - 10.f;
 			};
 
-			vecAngles.z = GetCorrectDistance( 60.f );
+			vecAngles.z = get_correct_distance( 60.f );
 
 			g_csgo.m_input->m_camera_in_thirdperson = true;
 
@@ -258,7 +258,7 @@ void c_misc::auto_zeus( c_user_cmd *cmd ) {
 		}
 
 		vec3_t aim_angle = math::calc_angle( local->eye_pos( ), best_point );
-		aim_angle.Clamp( );
+		aim_angle.clamp( );
 
 		vec3_t forward;
 		math::angle_to_vector( aim_angle, forward );
@@ -347,53 +347,53 @@ void c_misc::fix_movement( c_user_cmd *cmd, vec3_t wish_angle ) const {
 }
 
 void c_misc::nightmode( c_base_entity *ent, float override_brightness ) {
-	if( !g_csgo.m_engine->is_connected( ) || !g_cl.m_local || !ent )
+	if( !g_csgo.m_engine->is_connected( ) || !g_cl.m_local /* || !ent */ )
 		return;
 
 	auto client_class = ent->get_client_class( );
 	if( !client_class || client_class->m_class_id != CEnvTonemapController )
 		return;
-
+	
 	float brightness = g_vars.misc.nightmode / 100.f;
 	if( !g_vars.misc.nightmode )
 		brightness = 0.001f;
-
+	
 	if( override_brightness > 0.f )
 		brightness = override_brightness / 100.f;
-
+	
 	// will not work if post processing is disabled.
 	auto tonemap_controller = reinterpret_cast< c_env_tonemap_controller * >( ent );
-
+	
 	tonemap_controller->use_custom_exposure_min( ) = 1;
 	tonemap_controller->use_custom_exposure_max( ) = 1;
-
+	
 	tonemap_controller->custom_exposure_min( ) = brightness;
 	tonemap_controller->custom_exposure_max( ) = brightness;
 	
 	// disable fast path.
-	/*static cvar *r_drawspecificstaticprop = g_csgo.m_convar->find_var( "r_drawspecificstaticprop" );
-	r_drawspecificstaticprop->set_value( 0 );
+	//static cvar *r_drawspecificstaticprop = g_csgo.m_convar->find_var( "r_drawspecificstaticprop" );
+	//r_drawspecificstaticprop->set_value( 0 );
 
-	float brightness = g_vars.misc.nightmode / 100.f;
-
-	if( override_brightness > 0.f )
-		brightness = override_brightness / 100.f;
-
-	for( int i = g_csgo.m_material_system->FirstMaterial( ); i != g_csgo.m_material_system->InvalidMaterial( ); i = g_csgo.m_material_system->NextMaterial( i ) ) {
-		i_material *material = g_csgo.m_material_system->FindMaterial( i );
-		if( !material || material->IsErrorMaterial( ) )
-			continue;
-
-		if( std::strstr( material->GetTextureGroupName( ), "StaticProp" ) )
-			material->ColorModulate( brightness, brightness, brightness + 0.05f );
-
-		if( std::strstr( material->GetTextureGroupName( ), "World" ) )
-			brightness < 0.10f ? material->ColorModulate( 0.f, 0.f, 0.05f ) : material->ColorModulate( brightness - 0.10f, brightness - 0.10f, brightness + 0.05f );
-
-		if( std::strstr( material->GetName( ), "glass" ) || std::strstr( material->GetName( ), "decals" ) || std::strstr( material->GetName( ), "door" ) )
-			brightness < 0.15f ? material->ColorModulate( 0.f, 0.f, 0.05f ) : material->ColorModulate( brightness - 0.15f, brightness - 0.15f, brightness + 0.05f );
-		
-	}*/
+	//float brightness = g_vars.misc.nightmode / 100.f;
+	//
+	//if( override_brightness > 0.f )
+	//	brightness = override_brightness / 100.f;
+	//
+	//for( int i = g_csgo.m_material_system->first_material( ); i != g_csgo.m_material_system->invalid_material( ); i = g_csgo.m_material_system->next_material( i ) ) {
+	//	i_material *material = g_csgo.m_material_system->find_material( i );
+	//	if( !material || material->is_error_material( ) || std::strstr( material->get_name( ), "flashlight" ) )
+	//		continue;
+	//
+	//	if( std::strstr( material->get_texture_group_name( ), "StaticProp" ) )
+	//		material->color_modulate( brightness + 0.05f, brightness + 0.05f, brightness + 0.05f );
+	//
+	//	if( std::strstr( material->get_texture_group_name( ), "World" ) )
+	//		brightness < 0.10f ? material->color_modulate( 0.01f, 0.01f, 0.01f ) : material->color_modulate( brightness, brightness, brightness );
+	//
+	//	if( std::strstr( material->get_name( ), "glass" ) || std::strstr( material->get_name( ), "decals" ) || std::strstr( material->get_name( ), "door" ) )
+	//		brightness < 0.15f ? material->color_modulate( 0.01f, 0.01f, 0.01f ) : material->color_modulate( brightness, brightness, brightness );
+	//	
+	//}
 }
 
 void c_misc::transparent_props( float override_transparency ) {
@@ -403,7 +403,7 @@ void c_misc::transparent_props( float override_transparency ) {
 	// disable fast path.
 	static cvar *r_drawspecificstaticprop = g_csgo.m_convar->find_var( "r_drawspecificstaticprop" );
 
-	if( g_vars.misc.prop_transparency == 100.f )
+	if( g_vars.misc.prop_transparency == 100.f && g_vars.misc.nightmode == 100.f )
 		r_drawspecificstaticprop->set_value( -1 );
 	else
 		r_drawspecificstaticprop->set_value( 0 );
@@ -415,11 +415,11 @@ void c_misc::transparent_props( float override_transparency ) {
 
 	for( int i = g_csgo.m_material_system->first_material( ); i != g_csgo.m_material_system->invalid_material( ); i = g_csgo.m_material_system->next_material( i ) ) {
 		i_material *material = g_csgo.m_material_system->find_material( i );
-		if( !material || material->IsErrorMaterial( ) )
+		if( !material || material->is_error_material( ) || std::strstr( material->get_name( ), "flashlight" ) )
 			continue;
 
-		if( std::strstr( material->get_texture_group_name(), "StaticProp" ) )
-			material->AlphaModulate( translucency );
+		if( std::strstr( material->get_texture_group_name( ), "StaticProp" ) )
+			material->alpha_modulate( translucency );
 	}
 
 	g_cl.m_should_update_materials = false;
@@ -450,19 +450,120 @@ void c_misc::capsule_overlay( c_csplayer *e, float duration, matrix3x4_t *mat ) 
 	}
 }
 
-void c_misc::no_smoke( ClientFrameStage_t stage ) {
+void c_misc::no_smoke( client_frame_stage_t stage ) {
 	if( stage != FRAME_RENDER_START || !g_csgo.m_engine->is_connected( ) )
 		return;
 
-	std::vector< const char* > vistasmoke_mats = {
+	static const std::vector< const char* > vistasmoke_mats = {
 		"particle/vistasmokev1/vistasmokev1_fire",
 		"particle/vistasmokev1/vistasmokev1_smokegrenade",
 		"particle/vistasmokev1/vistasmokev1_emods",
 		"particle/vistasmokev1/vistasmokev1_emods_impactdust",
 	};
 
-	for( auto mat_s : vistasmoke_mats ) {
-		i_material *mat = g_csgo.m_material_system->get_material( mat_s, TEXTURE_GROUP_OTHER );
-		mat->SetMaterialVarFlag( MATERIAL_VAR_NO_DRAW, g_vars.visuals.misc.remove_smoke );
+	if ( !g_vars.visuals.misc.remove_smoke ) {
+		for ( auto mat_s : vistasmoke_mats ) {
+			i_material *mat = g_csgo.m_material_system->get_material( mat_s, TEXTURE_GROUP_OTHER );
+			mat->set_material_var_flag( MATERIAL_VAR_NO_DRAW, false );
+			mat->set_material_var_flag( MATERIAL_VAR_WIREFRAME, false );
+		}
+	}
+	else if ( g_vars.visuals.misc.remove_smoke == 1 ) {
+		for ( auto mat_s : vistasmoke_mats ) {
+			i_material *mat = g_csgo.m_material_system->get_material( mat_s, TEXTURE_GROUP_OTHER );
+			mat->set_material_var_flag( MATERIAL_VAR_NO_DRAW, true );
+			mat->set_material_var_flag( MATERIAL_VAR_WIREFRAME, false );
+		}
+	}
+	else {
+		for ( auto mat_s : vistasmoke_mats ) {
+			i_material *mat = g_csgo.m_material_system->get_material( mat_s, TEXTURE_GROUP_OTHER );
+			mat->set_material_var_flag( MATERIAL_VAR_NO_DRAW, false );
+			mat->set_material_var_flag( MATERIAL_VAR_WIREFRAME, true );
+		}
+	}
+}
+
+void c_misc::flashlight( ) {
+	auto create_flashlight = [ ]( int idx, const char *texture_name, float fov, float far_z, float linear_atten ) -> c_flashlight_effect*
+	{
+		static DWORD constructor = pattern::find( g_csgo.m_client_dll, "55 8B EC F3 0F 10 45 ?? B8" );
+
+		// we need to use the engine memory management if we are calling the destructor later
+		c_flashlight_effect *flashlight_ptr = reinterpret_cast< c_flashlight_effect* >( g_csgo.m_memalloc->alloc( sizeof( c_flashlight_effect ) ) );
+
+		if ( !flashlight_ptr )
+			return nullptr;
+
+		// we need to call this function in a non standard way
+		__asm
+		{
+			movss xmm3, fov
+			mov ecx, flashlight_ptr
+			push linear_atten
+			push far_z
+			push texture_name
+			push idx
+			call constructor
+		}
+
+		return flashlight_ptr;
+	};
+	auto destroy_flashlight = [ ]( c_flashlight_effect* flashlight_ptr ) {
+		static auto destroy_fn = reinterpret_cast< void( __thiscall* )( c_flashlight_effect*, c_flashlight_effect* ) >( pattern::find( g_csgo.m_client_dll, "56 8B F1 E8 ?? ?? ?? ?? 8B 4E 28" ) );
+
+		// the flash light destructor handles the memory management, so we dont need to free the allocated memory
+		// call the destructor of the flashlight
+		destroy_fn( flashlight_ptr, flashlight_ptr );
+	};
+	auto update_flashlight = [ ]( c_flashlight_effect* flashlight_ptr, const vec3_t &pos, const vec3_t &forward, const vec3_t &right, const vec3_t &up ) {
+		// here we tell to the compiler wich calling convention we will use to call the function and the paramaters needed (note the __thiscall*)
+		typedef void( __thiscall* update_light_t )( void*, int, const vec3_t&, const vec3_t&, const vec3_t&, const vec3_t&, float, float, float, bool, const char* );
+
+		static update_light_t update_light = NULL;
+
+		if ( !update_light ) {
+			// here we have to deal with a call instruction (E8 rel32)
+			DWORD call_instruction = pattern::find( g_csgo.m_client_dll, "E8 ?? ?? ?? ?? 8B 06 F3 0F 10 46" ); // get the instruction address
+			DWORD rel_address = *( DWORD* )( call_instruction + 1 ); // read the rel32
+			DWORD next_instruction = call_instruction + 5; // get the address of next instruction
+			update_light = ( update_light_t )( next_instruction + rel_address ); // our function address will be nextInstruction + relativeAddress
+		}
+
+		update_light( flashlight_ptr, flashlight_ptr->m_idx, pos, forward, right, up, flashlight_ptr->m_fov, flashlight_ptr->m_far_z, flashlight_ptr->m_linear_atten, flashlight_ptr->m_casts_shadow, flashlight_ptr->m_texture_name );
+	};
+
+	auto local = c_csplayer::get_local( );
+	if ( !local || !local->alive( ) )
+		return;
+
+	static c_flashlight_effect *flashlight = NULL;
+	static float last_tick = 0;
+
+	if ( g_input.key_pressed( g_vars.misc.flashlight_key ) && GetTickCount( ) > last_tick + 250 ) {
+		if ( !flashlight ) {
+			flashlight = create_flashlight( local->get_index( ), "effects/flashlight001", 35, 5000, 1000 );
+			flashlight_idx = flashlight->m_idx;
+		}
+		else {
+			destroy_flashlight( flashlight );
+			flashlight = NULL;
+			flashlight_idx = -1;
+		}
+
+		last_tick = GetTickCount( );
+	}
+
+	if ( flashlight ) {
+		vec3_t f, r, u;
+		vec3_t viewAngles;
+
+		g_csgo.m_engine->get_viewangles( viewAngles );
+		math::angle_to_vectors( viewAngles, &f, &r, &u );
+
+		flashlight->m_is_on = true;
+		flashlight->m_casts_shadow = false;
+		flashlight->m_fov = 35;
+		update_flashlight( flashlight, local->eye_pos( ), f, r, u );
 	}
 }

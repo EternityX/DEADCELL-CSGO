@@ -3,6 +3,8 @@
 
 
 class c_misc {
+private:
+	int flashlight_idx;
 public:
 	vec3_t unpredicted_vel;
 
@@ -16,7 +18,8 @@ public:
 	void nightmode( c_base_entity *ent, float override_brightness = 0.f );
 	void transparent_props( float override_transparency = 0.f );
 	void capsule_overlay( c_csplayer * e, float duration, matrix3x4_t* mat );
-	void no_smoke( ClientFrameStage_t stage );
+	void no_smoke( client_frame_stage_t stage );
+	void flashlight( );
 };
 
 extern c_misc g_misc;

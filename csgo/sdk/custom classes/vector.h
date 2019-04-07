@@ -5,7 +5,7 @@ class vec3_t
 public:
 	vec3_t( void )
 	{
-		Invalidate( );
+		invalidate( );
 	}
 
 	vec3_t( float X, float Y, float Z )
@@ -22,17 +22,17 @@ public:
 		z = clr [ 2 ];
 	}
 
-	void Init( float ix = 0.0f, float iy = 0.0f, float iz = 0.0f )
+	void init( float ix = 0.0f, float iy = 0.0f, float iz = 0.0f )
 	{
 		x = ix; y = iy; z = iz;
 	}
 
-	bool IsValid( ) const
+	bool is_valid( ) const
 	{
 		return std::isfinite( x ) && std::isfinite( y ) && std::isfinite( z );
 	}
 
-	void Invalidate( )
+	void invalidate( )
 	{
 		x = y = z = std::numeric_limits< float >::infinity( );
 	}
@@ -47,7 +47,7 @@ public:
 		return ( ( float* ) this ) [ i ];
 	}
 
-	void Zero( )
+	void zero( )
 	{
 		x = y = z = 0.0f;
 	}
@@ -122,8 +122,8 @@ public:
 		return *this;
 	}
 
-	void Normalize( ) {
-		*this /= Length( );
+	void normalize( ) {
+		*this /= length( );
 	}
 
 	float distance( const vec3_t &vOther ) const
@@ -134,16 +134,16 @@ public:
 		delta.y = y - vOther.y;
 		delta.z = z - vOther.z;
 
-		return delta.Length( );
+		return delta.length( );
 	}
 
-	vec3_t Normalized( ) const {
+	vec3_t normalized( ) const {
 		vec3_t vec = *this;
-		vec.Normalize();
+		vec.normalize();
 		return vec;
 	}
 
-	float DistToSqr( const vec3_t &vOther ) const
+	float dist_to_sqr( const vec3_t &vOther ) const
 	{
 		vec3_t delta;
 
@@ -151,20 +151,20 @@ public:
 		delta.y = y - vOther.y;
 		delta.z = z - vOther.z;
 
-		return delta.LengthSqr( );
+		return delta.length_sqr( );
 	}
 
-	float Dot( const vec3_t &vOther ) const
+	float dot( const vec3_t &vOther ) const
 	{
 		return ( x * vOther.x + y * vOther.y + z * vOther.z );
 	}
 
-	float Length( ) const
+	float length( ) const
 	{
 		return sqrt( x * x + y * y + z * z );
 	}
 
-	float LengthSqr( void ) const
+	float length_sqr( void ) const
 	{
 		return ( x * x + y * y + z * z );
 	}
@@ -214,17 +214,17 @@ public:
 	{
 		return vec3_t( x / v.x, y / v.y, z / v.z );
 	}
-	inline float NormalizeL()
+	inline float normalize_l()
 	{
 		vec3_t res = *this;
-		float length = res.Length();
+		float length = res.length();
 		if ( length != 0.0f )
 			res /= length;
 		else
 			res.x = res.y = res.z = 0.0f;
 		return length;
 	}
-	inline vec3_t Clamp()
+	inline vec3_t clamp()
 	{
 		if ( this->x < -89.0f )
 			this->x = -89.0f;
@@ -254,24 +254,24 @@ public:
 
 	inline vector_aligned( float X, float Y, float Z )
 	{
-		Init( X, Y, Z );
+		init( X, Y, Z );
 	}
 
 public:
 	explicit vector_aligned( const vec3_t &vOther )
 	{
-		Init( vOther.x, vOther.y, vOther.z );
+		init( vOther.x, vOther.y, vOther.z );
 	}
 
 	vector_aligned& operator=( const vec3_t &vOther )
 	{
-		Init( vOther.x, vOther.y, vOther.z );
+		init( vOther.x, vOther.y, vOther.z );
 		return *this;
 	}
 
 	vector_aligned& operator=( const vector_aligned &vOther )
 	{
-		Init( vOther.x, vOther.y, vOther.z );
+		init( vOther.x, vOther.y, vOther.z );
 		return *this;
 	}
 

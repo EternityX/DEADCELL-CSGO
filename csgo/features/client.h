@@ -15,7 +15,7 @@ public:
 	int          m_ur;
 	bool         m_should_update_materials = false;
 	int          m_server_update_rate;
-	bool         m_under_server_tick_rate;
+	bool         m_under_tickrate;
 	int          m_client_framerate;
 	float        m_hitmarker_alpha;
 	int          m_pen_crosshair = 0;

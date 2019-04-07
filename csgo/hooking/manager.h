@@ -19,7 +19,7 @@ namespace hook {
 		using SceneEnd_t = void (__thiscall *)( uintptr_t );
 		using DrawModelExecute_t = void (__thiscall *)( uintptr_t, IMatRenderContext *, void *, const model_render_info_t &,
 		                                                matrix3x4_t * );
-		using FrameStageNotify_t = void (__thiscall *)( uintptr_t, ClientFrameStage_t );
+		using FrameStageNotify_t = void (__thiscall *)( uintptr_t, client_frame_stage_t );
 		using DrawModel_t = void (__thiscall *)( uintptr_t, uintptr_t, DrawModelInfo_t &, matrix3x4_t *, float *, float *,
 		                                         vec3_t &, int );
 		using DoPostScreenEffects_t = bool (__thiscall *)( uintptr_t, const c_view_setup * );
@@ -89,7 +89,7 @@ namespace hook {
 	void __fastcall SceneEnd( uintptr_t ecx, uintptr_t edx );
 	void __fastcall DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRenderContext *ctx, void *state,
 	                                  const model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld );
-	void __fastcall FrameStageNotify( uintptr_t ecx, uintptr_t edx, ClientFrameStage_t curstage );
+	void __fastcall FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_frame_stage_t curstage );
 	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const c_view_setup *pSetup );
 	void __fastcall RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 );
 };

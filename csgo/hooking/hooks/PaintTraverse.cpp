@@ -14,7 +14,7 @@ void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel
 		}
 	}
 
-	g_hooks.m_panel.get_old_method< fn::PaintTraverse_t >( 41 )( ecx, vguiPanel, forceRepaint, allowForce );
+	g_hooks.m_panel.get_old_method< fn::PaintTraverse_t >( idx::PAINT_TRAVERSE )( ecx, vguiPanel, forceRepaint, allowForce );
 
 	static int mat_system_panel = 0;
 	if( !mat_system_panel ) {

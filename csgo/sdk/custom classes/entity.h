@@ -169,6 +169,7 @@ public:
 	NETVAR( int, viewmodel_index, "DT_BaseCombatWeapon", "m_iViewModelIndex" );
 	NETVAR( c_base_handle, worldmodel_handle, "DT_BaseCombatWeapon", "m_hWeaponWorldModel" );
 	NETVAR( int, dropped_index, "DT_BaseCombatWeapon", "m_iWorldDroppedModelIndex" );
+	NETVAR( int, recoil_seed, "DT_BaseCombatWeapon", "m_iRecoilSeed" );
 	NETVAR( float, ready_time, "DT_WeaponBaseItem", "m_flPostponeFireReadyTime" );
 	NETVAR( float, next_primary_attack, "DT_BaseCombatWeapon", "m_flNextPrimaryAttack" );
 	NETVAR( float, next_attack, "DT_BaseCombatCharacter", "m_flNextAttack" );

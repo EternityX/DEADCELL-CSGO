@@ -71,7 +71,7 @@ void c_nade_prediction::predict( c_user_cmd *ucmd ) {
 
 		//	modify path if we have hit something
 		if( trace.m_fraction != 1.0f ) {
-			thrown_direction = trace.m_plane.m_normal * -2.0f * thrown_direction.Dot( trace.m_plane.m_normal ) + thrown_direction;
+			thrown_direction = trace.m_plane.m_normal * -2.0f * thrown_direction.dot( trace.m_plane.m_normal ) + thrown_direction;
 
 			thrown_direction *= restitution;
 

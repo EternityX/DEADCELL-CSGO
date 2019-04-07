@@ -73,4 +73,5 @@ namespace math {
 	void angle_to_vectors(const vec3_t & angles, vec3_t * forward, vec3_t * right, vec3_t * up);
 	void vector_angle(const vec3_t & forward, vec3_t & angles);
 	vec3_t calc_angle(vec3_t v1, vec3_t v2);
+	float random_float( float min, float max );
 }
