@@ -201,88 +201,6 @@ void c_main_form::ragebot_tab() {
 	m_pages.at( PAGE_RAGEBOT )->AddControl( aimbot_groupbox );
 	m_pages.at( PAGE_RAGEBOT )->AddControl( antiaim_groupbox );
 }
-void c_main_form::misc_tab() {
-	auto general_groupbox = new c_groupbox( "General", 17, 6, 260, 334 );
-
-	auto thirdperson_check = new c_checkbox( "Thirdperson", general_groupbox, &g_vars.misc.thirdperson );
-	auto activation_hotkey = new c_hotkey( "Activation key", general_groupbox, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) );
-	auto thirdpersondead = new c_checkbox( "Force thirdperson while spectating", general_groupbox, &g_vars.misc.thirdperson_dead );
-	auto thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", general_groupbox, &g_vars.misc.thirdperson_grenade );
-	auto bhop = new c_checkbox( "Bunny hop", general_groupbox, &g_vars.misc.bhop );
-	auto air_strafe = new c_checkbox( "Air strafe", general_groupbox, &g_vars.misc.air_strafe );
-	auto autozeus = new c_checkbox( "Automatic zeus", general_groupbox, &g_vars.misc.autozeus );
-	auto radar = new c_checkbox( "Radar", general_groupbox, &g_vars.visuals.radar );
-
-	auto nightmode = new c_slider( "World brightness", general_groupbox, 0, 100, &g_vars.misc.nightmode, 100, "%" );
-	nightmode->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
-		//g_misc.nightmode( );
-	} );
-
-	auto translucent_props = new c_slider( "Prop transparency", general_groupbox, 0, 100, &g_vars.misc.prop_transparency, 100, "%" );
-	translucent_props->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
-		g_cl.m_should_update_materials = true;
-	} );
-
-	auto fast_duck = new c_checkbox( "Fast duck", general_groupbox, &g_vars.misc.fast_duck );
-
-	auto dangerzone_check = new c_checkbox( "Danger Zone menu", general_groupbox, &g_vars.misc.dangerzone_menu );
-
-	dangerzone_check->GetCheckedChangedEvent() += OSHGui::CheckedChangedEventHandler( [ & ]( Control *sender ) {
-		g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
-	});
-
-	auto sounds = new c_sound_combo( "Hitsound", { "None" }, general_groupbox, 5, &g_vars.misc.hitmarker_sound );
-
-	const auto get_sound_files = [ & ] ( ) {
-		std::vector<std::string> names = {};
-		std::string dir = "hitsounds";
-
-		for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
-			if( !file_path.path().string().empty() ) {
-				if( file_path.path().string().find( ".wav" ) != std::string::npos )
-					names.emplace_back( file_path.path().string().erase( 0, dir.length() + 1 ) );
-			}
-		}
-
-		for( auto &item : names ) {
-			std::string final = item;
-
-			if( item.length( ) > 17 )
-				final = item.substr( 0, 17 ) + "...";
-
-			// reinit list view items.
-			for( int i = 0; i < sounds->GetItemsCount(); i++ ) {
-				const OSHGui::ListItem *list_item = sounds->GetItem( i );
-				if( !list_item )
-					continue;
-
-				if( final == list_item->GetItemText() )
-					sounds->RemoveItem( i );
-			}
-
-			sounds->AddItem( final );
-		}
-	};
-
-	get_sound_files( );
-
-	g_menu.push_y_pos( 40 );
-
-	auto log_groupbox = new c_groupbox( "Logging", general_groupbox->GetRight( ) + 19, 6, 259, 64 );
-	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
-	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
-
-	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 126 );
-	auto client_hitboxes = new c_checkbox( "Client hitboxes", other_groupbox, &g_vars.misc.client_hitboxes);
-	auto client_hitboxes_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.client_hitboxes_duration, 0, 2.f, "s" );
-	auto bullet_impacts = new c_checkbox( "Bullet impacts", other_groupbox, &g_vars.misc.bullet_impacts );
-	auto bullet_impacts_duration = new c_slider( "", other_groupbox, 0.f, 5.f, &g_vars.misc.bullet_impacts_duration, 0, 4.f, "s" );
-	auto flashlight_hotkey = new c_hotkey( "Flashlight key", other_groupbox, &g_vars.misc.flashlight_key, other_groupbox->GetWidth( ) );
-
-	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
-	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
-	m_pages.at( PAGE_MISC )->AddControl( other_groupbox );
-}
 
 void c_main_form::visuals_tab() {
 	auto player_tab = new OSHGui::TabControl();
@@ -356,40 +274,71 @@ void c_main_form::visuals_tab() {
 
 	//auto manualdirection_color = new c_colorpicker( extra_esp_page, aa_manual, g_vars.visuals.extra.antiaim_direction_color );
 
-	g_menu.set_x_pos( default_x_pos );
-
 	// other visuals groupbox.
 	auto world_tab = new OSHGui::TabControl();
 	world_tab->SetSize( 241, 100 );
 	world_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
 	world_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
-	world_tab->SetButtonWidth( 121 );
+	world_tab->SetButtonWidth( 81 );
 
 	auto generic_world = new OSHGui::TabPage();
 	generic_world->SetText( "General" );
 	generic_world->SetBorder( false );
+
+	auto extra_removals = new OSHGui::TabPage();
+	extra_removals->SetText( "Removals" );
+	extra_removals->SetBorder( false );
 
 	auto extra_world = new OSHGui::TabPage();
 	extra_world->SetText( "Extra" );
 	extra_world->SetBorder( false );
 
 	world_tab->AddTabPage( generic_world );
+	world_tab->AddTabPage( extra_removals );
 	world_tab->AddTabPage( extra_world );
 
-	auto other_esp_groupbox = new c_groupbox( "World ESP", player_esp_groupbox->GetRight( ) + 19, 6, 259, 150 );
+	auto other_esp_groupbox = new c_groupbox( "World ESP", player_esp_groupbox->GetRight( ) + 19, 6, 259, 334 );
+
+	g_menu.set_x_pos( 19 );
 
 	auto dropped_weapon_check = new c_checkbox( "Dropped weapons", generic_world, &g_vars.visuals.dropped_weapons );
 	auto dropped_ammo_check = new c_checkbox( "Dropped weapons ammo", generic_world, &g_vars.visuals.dropped_ammo );
 	auto objective_check = new c_checkbox( "Objective", generic_world, &g_vars.visuals.objectives );
 	auto grenade_check = new c_checkbox( "Projectiles", generic_world, &g_vars.visuals.projectiles );
 	auto grenadepred_check = new c_checkbox( "Projectile prediction", generic_world, &g_vars.visuals.grenade_pred );
+	auto hitmarker = new c_checkbox( "Hitmarker", generic_world, &g_vars.visuals.hitmarker );
+	auto extraflags = new c_checkbox( "Flags", generic_world, &g_vars.visuals.extra.misc_flags );
+	auto impact_beams = new c_checkbox( "Bullet impact beams", generic_world, &g_vars.visuals.impact );
+
+	auto overridefov_slider = new c_slider( "Camera FOV", generic_world, 0, 180, &g_vars.visuals.effects.camera_fov, 90, "" );
+	auto weaponfov_slider = new c_slider( "Weapon FOV", generic_world, 0, 180, &g_vars.visuals.effects.weapon_fov, 64, "" );
 
 	g_menu.set_y_pos( 10 );
-	//auto chicken_check = new c_checkbox( "Chicken", extra_world, &g_vars.visuals.chicken );
-	auto visualize_spread = new c_combo( "Visualize spread", { "None", "Circle", "Dots" }, extra_world, 3, &g_vars.visuals.visualize_spread, extra_world->GetWidth( ) - 15 );;
-	auto impact_beams = new c_checkbox( "Impact", extra_world, &g_vars.visuals.impact );
-	auto hitmarker = new c_checkbox( "Hitmarker", extra_world, &g_vars.visuals.hitmarker );
-	auto extraflags = new c_checkbox( "Flags", extra_world, &g_vars.visuals.extra.misc_flags );
+	auto remove_flash = new c_checkbox( "Flash", extra_removals, &g_vars.visuals.misc.no_flash );
+	auto remove_fog = new c_checkbox( "Fog", extra_removals, &g_vars.visuals.misc.fog );
+	auto remove_scope_zoom = new c_checkbox( "Scope zoom", extra_removals, &g_vars.visuals.misc.remove_scope_zoom );
+	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic" }, extra_removals, 3, &g_vars.visuals.misc.remove_scope, other_esp_groupbox->GetWidth( ) - 15 );
+	auto remove_smoke_type = new c_combo( "Smoke", { "None", "Remove", "Wireframe" }, extra_removals, 3, &g_vars.visuals.misc.remove_smoke, other_esp_groupbox->GetWidth( ) - 15 );
+	auto nightmode = new c_slider( "World brightness", extra_removals, 0, 100, &g_vars.misc.nightmode, 100, "%" );
+	nightmode->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
+		//g_misc.nightmode( );
+	} );
+
+	auto translucent_props = new c_slider( "Prop transparency", extra_removals, 0, 100, &g_vars.misc.prop_transparency, 100, "%" );
+	translucent_props->GetValueChangedEvent() += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
+		g_cl.m_should_update_materials = true;
+	} );
+	//auto remove_blue = new c_checkbox( "Aug scope blur", removals_page, &g_vars.visuals.misc.remove_blur );
+
+	auto scope_color = new c_colorpicker( extra_removals, remove_scope, g_vars.visuals.misc.scope_color );
+
+	g_menu.set_y_pos( 10 );
+	auto visualize_spread = new c_combo( "Visualize spread", { "None", "Circle", "Dots" }, extra_world, 3, &g_vars.visuals.visualize_spread, other_esp_groupbox->GetWidth( ) - 15 );
+	auto client_hitboxes = new c_checkbox( "Client hitboxes", extra_world, &g_vars.misc.client_hitboxes);
+	auto client_hitboxes_duration = new c_slider( "", extra_world, 0.f, 5.f, &g_vars.misc.client_hitboxes_duration, 0, 2.f, "s" );
+	auto bullet_impacts = new c_checkbox( "Bullet impacts", extra_world, &g_vars.misc.bullet_impacts );
+	auto bullet_impacts_duration = new c_slider( "", extra_world, 0.f, 5.f, &g_vars.misc.bullet_impacts_duration, 0, 4.f, "s" );
+	auto flashlight_hotkey = new c_hotkey( "Flashlight key", extra_world, &g_vars.misc.flashlight_key, other_esp_groupbox->GetWidth( ) - 15 );
 
 	//auto impact_color = new c_colorpicker( extra_world, impact_beams, g_vars.visuals.impact_color );
 	auto visualize_spread_color = new c_colorpicker( extra_world, visualize_spread, g_vars.visuals.visualize_spread_color );
@@ -397,43 +346,93 @@ void c_main_form::visuals_tab() {
 
 	other_esp_groupbox->AddControl( world_tab );
 
-	// effects groupbox.
-	auto effects_tab = new OSHGui::TabControl();
-	effects_tab->SetSize( 241, 100 );
-	effects_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
-	effects_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
-	effects_tab->SetButtonWidth( 121 );
-
-	auto general_effects_page = new OSHGui::TabPage();
-	general_effects_page->SetText( "General" );
-	general_effects_page->SetBorder( false );
-
-	auto removals_page = new OSHGui::TabPage();
-	removals_page->SetText( "Removals" );
-	removals_page->SetBorder( false );
-
-	g_menu.set_y_pos( 10 );
-	auto remove_flash = new c_checkbox( "Flash", removals_page, &g_vars.visuals.misc.no_flash );
-	auto remove_fog = new c_checkbox( "Fog", removals_page, &g_vars.visuals.misc.fog );
-	auto remove_scope_zoom = new c_checkbox( "Scope zoom", removals_page, &g_vars.visuals.misc.remove_scope_zoom );
-	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic" }, removals_page, 3, &g_vars.visuals.misc.remove_scope, effects_tab->GetWidth( ) - 15 );
-	auto remove_smoke_type = new c_combo( "Smoke", { "None", "Remove", "Wireframe" }, removals_page, 3, &g_vars.visuals.misc.remove_smoke, effects_tab->GetWidth( ) - 15 );
-	//auto remove_blue = new c_checkbox( "Aug scope blur", removals_page, &g_vars.visuals.misc.remove_blur );
-
-	auto scope_color = new c_colorpicker( removals_page, remove_scope, g_vars.visuals.misc.scope_color );
-
-	effects_tab->AddTabPage( general_effects_page );
-	effects_tab->AddTabPage( removals_page );
-
-	auto effects_groupbox = new c_groupbox( "Effects", player_esp_groupbox->GetRight() + 19, other_esp_groupbox->GetBottom() + 14, 259, 170 );
-	auto overridefov_slider = new c_slider( "Camera FOV", general_effects_page, 0, 180, &g_vars.visuals.effects.camera_fov, 90, "\xB0" );
-	auto weaponfov_slider = new c_slider( "Weapon FOV", general_effects_page, 0, 180, &g_vars.visuals.effects.weapon_fov, 64, "\xB0" );
-
-	effects_groupbox->AddControl( effects_tab );
-
-	m_pages.at( PAGE_VISUALS )->AddControl( effects_groupbox );
 	m_pages.at( PAGE_VISUALS )->AddControl( other_esp_groupbox );
 	m_pages.at( PAGE_VISUALS )->AddControl( player_esp_groupbox );
+}
+
+void c_main_form::misc_tab() {
+	auto misc_tab = new OSHGui::TabControl();
+	misc_tab->SetSize( 241, 310 );
+	misc_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	misc_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	misc_tab->SetButtonWidth( 121 );
+
+	auto generic_misc_page = new OSHGui::TabPage();
+	generic_misc_page->SetText( "General" );
+	generic_misc_page->SetBorder( false );
+
+	auto extra_misc_page = new OSHGui::TabPage();
+	extra_misc_page->SetText( "Extra" );
+	extra_misc_page->SetBorder( false );
+
+	misc_tab->AddTabPage( generic_misc_page );
+	misc_tab->AddTabPage( extra_misc_page );
+
+	auto general_groupbox = new c_groupbox( "General", 17, 6, 260, 334 );
+	general_groupbox->AddControl( misc_tab );
+
+	g_menu.set_x_pos( 19 );
+	auto bhop = new c_checkbox( "Bunny hop", generic_misc_page, &g_vars.misc.bhop );
+	auto air_strafe = new c_checkbox( "Air strafe", generic_misc_page, &g_vars.misc.air_strafe );
+	auto thirdperson_check = new c_checkbox( "Thirdperson", generic_misc_page, &g_vars.misc.thirdperson );
+	auto activation_hotkey = new c_hotkey( "Activation key", generic_misc_page, &g_vars.misc.thirdperson_key, general_groupbox->GetWidth( ) - 15 );
+	auto thirdpersondead = new c_checkbox( "Force thirdperson while spectating", generic_misc_page, &g_vars.misc.thirdperson_dead );
+	auto thirdpersongrenade = new c_checkbox( "Disable thirdperson on grenade", generic_misc_page, &g_vars.misc.thirdperson_grenade );
+	auto autozeus = new c_checkbox( "Automatic zeus", generic_misc_page, &g_vars.misc.autozeus );
+	auto radar = new c_checkbox( "Radar", generic_misc_page, &g_vars.visuals.radar );
+	auto fast_duck = new c_checkbox( "Fast duck", generic_misc_page, &g_vars.misc.fast_duck );
+	auto dangerzone_check = new c_checkbox( "Danger Zone menu", generic_misc_page, &g_vars.misc.dangerzone_menu );
+	dangerzone_check->GetCheckedChangedEvent() += OSHGui::CheckedChangedEventHandler( [ & ]( Control *sender ) {
+		g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
+	});
+
+	auto sounds = new c_sound_combo( "Hitsound", { "None" }, generic_misc_page, 5, &g_vars.misc.hitmarker_sound, general_groupbox->GetWidth( ) - 15 );
+
+	const auto get_sound_files = [ & ] ( ) {
+		std::vector<std::string> names = {};
+		std::string dir = "hitsounds";
+
+		for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
+			if( !file_path.path().string().empty() ) {
+				if( file_path.path().string().find( ".wav" ) != std::string::npos )
+					names.emplace_back( file_path.path().string().erase( 0, dir.length() + 1 ) );
+			}
+		}
+
+		for( auto &item : names ) {
+			std::string final = item;
+
+			if( item.length( ) > 17 )
+				final = item.substr( 0, 17 ) + "...";
+
+			// reinit list view items.
+			for( int i = 0; i < sounds->GetItemsCount(); i++ ) {
+				const OSHGui::ListItem *list_item = sounds->GetItem( i );
+				if( !list_item )
+					continue;
+
+				if( final == list_item->GetItemText() )
+					sounds->RemoveItem( i );
+			}
+
+			sounds->AddItem( final );
+		}
+	};
+
+	get_sound_files( );
+
+	g_menu.push_y_pos( 40 );
+
+	auto log_groupbox = new c_groupbox( "Logging", general_groupbox->GetRight( ) + 19, 6, 259, 64 );
+	auto log_dmg = new c_checkbox( "Log damage", log_groupbox, &g_vars.misc.log_damage );
+	auto log_purchases = new c_checkbox( "Log purchases", log_groupbox, &g_vars.misc.log_purchases );
+
+	auto other_groupbox = new c_groupbox( "Other", general_groupbox->GetRight( ) + 19, log_groupbox->GetBottom( ) + 19, 259, 126 );
+	
+
+	m_pages.at( PAGE_MISC )->AddControl( general_groupbox );
+	m_pages.at( PAGE_MISC )->AddControl( log_groupbox );
+	m_pages.at( PAGE_MISC )->AddControl( other_groupbox );
 }
 
 void c_main_form::config_tab( ) {
@@ -860,12 +859,6 @@ void c_sound_combo::init( const AnsiString &text, std::vector< AnsiString > item
 	timer->SetInterval( 250 );
 	timer->Start( );
 
-	/*auto refresh_button = new OSHGui::Button( );
-	refresh_button->SetLocation( PointI( GetRight() + 5, GetLocation().Y ) );
-	refresh_button->SetSize( SizeI( 20, 20 ) );
-	refresh_button->SetFont( g_renderer.get_font( FONT_VERDANA_7PX ) );
-	refresh_button->SetText( "R" );*/
-
 	//parent->AddControl( refresh_button );
 	parent->AddControl( timer );
 	parent->AddControl( this );
@@ -880,48 +873,14 @@ void c_sound_combo::init( const AnsiString &text, std::vector< AnsiString > item
 		*cvar = this->GetSelectedIndex( );
 		g_menu.m_selected_sound_text = this->GetSelectedItem()->GetItemText();
 	} );
-
-	/*refresh_button->GetClickEvent() += OSHGui::ClickEventHandler( [ this ]( Control *sender ) {
-		std::vector<std::string> names = {};
-		std::string dir = "hitsounds";
-
-		names.push_back( "None" );
-
-		for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
-			if( !file_path.path().string().empty() ) {
-				if( file_path.path().string().find( ".wav" ) != std::string::npos )
-					names.emplace_back( file_path.path().string().erase( 0, dir.length() + 1 ) );
-			}
-		}
-
-		for( auto &item : names ) {
-			std::string name = item;
-			std::string concat = item;
-
-			if( item.length() > 17 )
-				concat = item.substr( 0, 17 ) + "...";
-
-			 reinit list view items.
-			for( int i = 0; i < GetItemsCount(); i++ ) {
-				auto list_item = GetItem( i );
-				if( !list_item )
-					continue;
-
-
-				RemoveItem( i );
-			}
-
-			AddItem( concat );
-		}
-	});*/
 }
 
 c_sound_combo::c_sound_combo( const AnsiString &text, const std::vector< AnsiString > &items, int x, int y, Control *parent, int max_items, int *cvar ) {
 	init( text, items, x, y, parent, max_items, cvar );
 }
 
-c_sound_combo::c_sound_combo( const AnsiString &text, const std::vector< AnsiString > &items, Control *parent, int max_items, int *cvar ) {
-	init( text, items, parent->GetWidth( ) / 2 - Control::GetWidth( ) / 2 - 3, g_menu.get_y_pos( ) + 12, parent, max_items, cvar );
+c_sound_combo::c_sound_combo( const AnsiString &text, const std::vector< AnsiString > &items, Control *parent, int max_items, int *cvar, int parent_width ) {
+	init( text, items, parent_width / 2 - Control::GetWidth( ) / 2 - 3, g_menu.get_y_pos( ) + 12, parent, max_items, cvar );
 	g_menu.push_y_pos( 40 );
 }
 
