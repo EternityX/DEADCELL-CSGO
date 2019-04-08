@@ -72,6 +72,12 @@ namespace math {
 	float normalize_vector( vec3_t & v );
 	void angle_to_vectors( const vec3_t & angles, vec3_t * forward, vec3_t * right, vec3_t * up );
 	void vector_angle( const vec3_t & forward, vec3_t & angles );
-	vec3_t calc_angle(vec3_t v1, vec3_t v2 );
+	vec3_t calc_angle( vec3_t v1, vec3_t v2 );
 	float random_float( float min, float max );
+
+	void vector_itransform( const vec3_t *in1, const matrix3x4_t& in2, vec3_t *out );
+
+	// assume in2 is a rotation and rotate the input vector
+	void vector_irotate( const vec3_t *in1, const matrix3x4_t& in2, vec3_t *out );
+
 }

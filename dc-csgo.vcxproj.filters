@@ -92,6 +92,9 @@
     <Filter Include="dc-csgo\features\entity listener">
       <UniqueIdentifier>{065beecb-cef8-4cc2-889e-a6eb2c32ab99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dc-csgo\features\geometry">
+      <UniqueIdentifier>{29b831d0-8e9c-48be-8a45-acda888cc90d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="csgo\dllmain.cpp">
@@ -204,6 +207,9 @@
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\IsHltv.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\geometry\geometry.cpp">
+      <Filter>dc-csgo\features\geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,6 +446,9 @@
     </ClInclude>
     <ClInclude Include="csgo\features\entity listener\ent_listener.h">
       <Filter>dc-csgo\features\entity listener</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\geometry\geometry.h">
+      <Filter>dc-csgo\features\geometry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
