@@ -217,12 +217,12 @@ void c_ragebot::choose_angles( ){
 			float player_best_damage = data.m_damage;
 			vec3_t player_best_point = data.m_bestpoint;
 
-			if ( player_best_damage > best_damage ) {
+			if( player_best_damage > best_damage ) {
 				selected_target = target;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
 			}
-			if ( player_best_damage >= target->health( ) ) {
+			if( player_best_damage >= target->health( ) ) {
 				selected_target = target;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
@@ -239,7 +239,7 @@ void c_ragebot::choose_angles( ){
 
 	m_last_target = selected_target;
 
-	if ( !local->can_shoot( weapon ) )
+	if( !local->can_shoot( weapon ) )
 		return;
 
 	if( g_vars.rage.autoscope == 1 && ( !local->is_scoped( ) && weapon->has_scope( ) ) && selected_target ) 

@@ -12,9 +12,8 @@ bool __fastcall hook::IsHltv( uintptr_t ecx, uintptr_t edx ){
 	if( !g_csgo.m_engine->is_in_game( ) || !g_cl.m_local )
 		return ret;
 
-	if( _ReturnAddress( ) == accumulate_layers_call ) {
+	if( _ReturnAddress( ) == accumulate_layers_call )
 		return true;
-	}
 
 	return ret;
 }

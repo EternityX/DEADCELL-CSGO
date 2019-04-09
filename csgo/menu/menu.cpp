@@ -245,9 +245,10 @@ void c_main_form::visuals_tab() {
 
 	g_menu.set_y_pos( 10 );
 	auto enabled_chams = new c_checkbox( "Enabled", player_chams_page, &g_vars.visuals.chams.enabled );
-	auto chams_type = new c_combo( "Chams Type", { "Textured", "Flat" }, player_chams_page, 3, &g_vars.visuals.chams.type, player_esp_groupbox->GetWidth() - 15 );
+	auto chams_type = new c_combo( "Chams Type", { "Textured", "Flat", "Modulate" }, player_chams_page, 3, &g_vars.visuals.chams.type, player_esp_groupbox->GetWidth() - 15 );
 	auto chams_twopass = new c_checkbox( "Two Pass", player_chams_page, &g_vars.visuals.chams.twopass );
 	auto chams_alpha = new c_slider( "Alpha", player_chams_page, 0.f, 100.f, &g_vars.visuals.chams.alpha, 0, 100.f, "%" );
+	auto chams_reflect = new c_slider( "Reflectivity", player_chams_page, 0.f, 1.f, &g_vars.visuals.chams.reflectivity, 1, 1.f, "%" );
 	auto chams_teammates = new c_checkbox( "Teammates", player_chams_page, &g_vars.visuals.chams.teammates );
 	auto chams_local = new c_checkbox( "Localplayer", player_chams_page, &g_vars.visuals.chams.local );
 

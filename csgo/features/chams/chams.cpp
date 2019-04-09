@@ -13,41 +13,59 @@ void c_chams::on_sceneend( ) {
 
 	push_players( );
 
-	static std::vector< i_material * > materials;
+	static std::pair< i_material *, i_material * > material;
 
 	static bool once{ false };
 	if( !once ) {
-		materials.push_back( create_material( true, false, false ) ); // material.
-		materials.push_back( create_material( false, false, false ) ); // flat.
-		materials.push_back( create_material( true, false, true ) ); // material zignore.
-		materials.push_back( create_material( false, false, true ) ); // flat zignore.
+		m_shaded_mat = std::make_pair( create_material( shader_type_t::VertexLitGeneric, false ), 
+									   create_material( shader_type_t::VertexLitGeneric, true ) );
+
+		m_flat_mat = std::make_pair( create_material( shader_type_t::UnlitGeneric, false ), 
+									 create_material( shader_type_t::UnlitGeneric, true ) );
+
+		m_modulate_mat = std::make_pair( create_material( shader_type_t::Modulate, false ), 
+										 create_material( shader_type_t::Modulate, true ) );
+
 		once = true;
 	}
 
 	for( auto &e : m_players ) {
 		auto ent = e.first;
-
 		if( ent == local )
 			continue;
+
+		switch( g_vars.visuals.chams.type ) {
+			case 0: material = m_shaded_mat; break; // vertex lit
+			case 1: material = m_flat_mat; break; // unlit
+			case 2: material = m_modulate_mat; break; // modulate
+			default: break;
+		}
+
+		if( g_vars.visuals.chams.type == 0 ) {
+			static auto kv = static_cast<key_values *>( g_csgo.m_memalloc->alloc( 36 ) );
+			kv->init( "VertexLitGeneric" );
+
+			std::string param = "["
+				+ std::to_string( g_vars.visuals.chams.reflectivity ) + " "
+				+ std::to_string( g_vars.visuals.chams.reflectivity ) + " "
+				+ std::to_string( g_vars.visuals.chams.reflectivity ) + "]";
+
+			kv->set_string( "$basetexture", "vgui/white_additive" );
+			kv->set_string( "$envmaptint", param.c_str( ) );
+			kv->set_string( "$envmap", "env_cubemap" );
+
+			material.first->set_shader_and_params( kv );
+			material.second->set_shader_and_params( kv );
+		}
 
 		OSHColor c1 = OSHColor::FromARGB( g_vars.visuals.chams.vis_color );
 		OSHColor c2 = OSHColor::FromARGB( g_vars.visuals.chams.hid_color );
 		float vis_color[ 3 ] = { c1.GetRed( ), c1.GetGreen( ), c1.GetBlue( ) };
-		float hid_color[ 3 ] = { c2.GetRed( ), c2.GetGreen( ), c2.GetBlue( ) };
-
-		
-
-		// you can change the material's shader values using SetShaderAndParams and passing in a keyvalue pointer
-		// example : 
-		// static auto kv = static_cast<key_values*>( g_csgo.m_memalloc->Alloc( 36 ) );
-		// kv->SetInt( "$ignorez", 1 );
-		// this would update the material in real time without having to create a new material, obviously this can be used with more relevant
-		// shader params such as reflection for example, would allow us to control it with a slider instead of having it as a static value 
-		// when the material is created
+		float hid_color[ 3 ] = { c2.GetRed( ), c2.GetGreen( ), c2.GetBlue( ) };		
 
 		if( g_vars.visuals.chams.twopass ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
-			g_csgo.m_model_render->forced_material_override( g_vars.visuals.chams.type ? materials.at( 3 ) : materials.at( 2 ) );
+			g_csgo.m_model_render->forced_material_override( material.second );
 			g_csgo.m_render_view->set_color_modulation( hid_color );
 			m_applied = true;
 			ent->draw_model( STUDIO_RENDER, 255 );
@@ -55,8 +73,8 @@ void c_chams::on_sceneend( ) {
 		}
 
 		g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
-		g_csgo.m_model_render->forced_material_override( g_vars.visuals.chams.type ? materials.at( 1 ) : materials.at( 0 ) );
-		g_csgo.m_render_view->set_color_modulation( vis_color );
+		g_csgo.m_model_render->forced_material_override( material.first );
+		g_csgo.m_render_view->set_color_modulation( vis_color );	
 		m_applied = true;
 		ent->draw_model( STUDIO_RENDER, 255 );
 		m_applied = false;
@@ -77,7 +95,7 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const model_render_in
 	std::string model_name = g_csgo.m_model_info->get_model_name( ( model_t* )pInfo.m_model );
 
 	if( pInfo.m_entity_index == g_csgo.m_engine->get_local_player( ) && g_csgo.m_input->m_camera_in_thirdperson && g_vars.visuals.chams.local ) {
-		static auto mat = create_material( true, false, false, 7 );
+		static auto mat = create_material( shader_type_t::VertexLitGeneric, false, false );
 		g_csgo.m_model_render->forced_material_override( mat );
 		auto color = OSHColor::FromARGB( g_vars.visuals.chams.local_col );
 		float col[ 3 ] = { color.GetRed( ), color.GetGreen( ), color.GetBlue( ) };
@@ -120,31 +138,45 @@ void c_chams::push_players( ) {
 	} );
 }
 
-i_material *c_chams::create_material( bool shade, bool wireframe, bool ignorez, int rimlight_boost ) const {
+i_material *c_chams::create_material( shader_type_t shade, bool ignorez, bool wireframe ) {
 	static const std::string material_name = "game_material.vmt";
-	const std::string material_type = shade ? "VertexLitGeneric" : "UnlitGeneric";
+	std::string shade_type;
+
+	switch( shade ) {
+		case VertexLitGeneric: shade_type = "VertexLitGeneric"; break;
+		case UnlitGeneric: shade_type = "UnlitGeneric"; break;
+		case Modulate: shade_type = "Modulate"; break;
+		default: break;
+	}
 
 	std::string material_data;
 
-	material_data += "\"" + material_type + "\"\n{\n";
+	material_data += "\"" + shade_type + "\"\n{\n";
 	material_data += "\t\"$basetexture\" \"vgui/white_additive\"\n";
-	material_data += "\t\"$envmap\" \"\"\n";
+	material_data += "\t\"$envmap\" \"env_cubemap\"\n";
+	material_data += "\t\"$envmaptint\" \"[.8 .8 .8]\"\n";
+	/*material_data += "\t\"$envmapcontrast\" \"1\"\n";
+	material_data += "\t\"$envmapsaturation\" \"1.0\"\n";*/
+
 	material_data += "\t\"$model\" \"1\"\n";
 	material_data += "\t\"$flat\" \"1\"\n";
-	material_data += "\t\"$nocull\" \"0\"\n";
 	material_data += "\t\"$selfillum\" \"1\"\n";
+	material_data += "\t\"$selfillumtint\" \"[8 8 8]\"\n";
 	material_data += "\t\"$halflambert\" \"1\"\n";
-	material_data += "\t\"$znearer\" \"0\"\n";
-	material_data += "\t\"$rimlightboost\" \"" + std::to_string( rimlight_boost ) + "\"\n";
-	material_data += "\t\"$rimlightexponent\" \"" + std::to_string( 4 ) + "\"\n";
-	material_data += "\t\"$ambientreflectionboost\" \"0.2\"\n";
-	material_data += "\t\"$envmaplightscale\" \"" + std::to_string( 0.1 ) + "\"\n";
 	material_data += "\t\"$wireframe\" \"" + std::to_string( wireframe ) + "\"\n";
 	material_data += "\t\"$ignorez\" \"" + std::to_string( ignorez ) + "\"\n";
-	material_data += "}\n";
+
+	material_data += "\t\"$mod2x\" \"1\"\n";
+	material_data += "\t\"$nocull\" \"1\"\n"; // for Modulate shader	
+
+	material_data += "\"Proxies\"\n{\n";
+	// add proxies here.
+	material_data += "}\n"; // end of proxies.
+
+	material_data += "}\n"; // end of shader type.
 
 	auto kv = static_cast< key_values* >( g_csgo.m_memalloc->alloc( 36 ) );
-	kv->init( material_type.c_str( ) );
+	kv->init( shade_type.c_str( ) );
 	kv->load_from_buffer( material_name.c_str( ), material_data.c_str( ) );
 
 	return g_csgo.m_material_system->create_material( material_name.c_str( ), kv );
