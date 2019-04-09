@@ -263,8 +263,8 @@ public:
 
 	NETVAR( c_base_handle, observer_handle, "DT_CSPlayer", "m_hObserverTarget" );
 	NETVAR( c_base_handle, ground_ent, "DT_CSPlayer", "m_hGroundEntity" );
-	NETVAR( c_base_handle *, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
-	NETVAR( c_base_handle *, my_wearables, "DT_CSPlayer", "m_hMyWearables" )
+	PNETVAR( c_base_handle, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
+	PNETVAR( c_base_handle, my_wearables, "DT_CSPlayer", "m_hMyWearables" )
 
 	NETVAR( int, shots_fired, "DT_CSPlayer", "m_iShotsFired" )
 
@@ -286,11 +286,6 @@ public:
 
 	static c_csplayer *get_local( ) {
 		return g_csgo.m_entity_list->get< c_csplayer >( g_csgo.m_engine->get_local_player( ) );
-	}
-
-	c_base_handle *weapons( ){
-		static auto offset = g_netvars.get_offset( "DT_CSPlayer", "m_hMyWeapons" );
-		return reinterpret_cast< c_base_handle * >( uintptr_t( this ) + offset );
 	}
 
 	void set_abs_origin( vec3_t &o ) {
