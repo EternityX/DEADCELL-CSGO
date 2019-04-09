@@ -149,35 +149,6 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 	if ( !weapon )
 		return false;
 
-	std::vector< geometry::c_sphere > spheres;
-	std::vector< geometry::c_obb > oobs;
-
-	studiohdr_t *studio_model = ent->model_ptr( )->m_studio_hdr;
-	if( !studio_model )
-		return false;
-
-	mstudiohitboxset_t *hitboxset = studio_model->pHitboxSet( ent->hitbox_set( ) );
-	if( !hitboxset )
-		return false;
-
-	for( int i = 0; i < hitboxset->numhitboxes; i++ ) {
-		mstudiobbox_t *h = hitboxset->pHitbox( i );
-		if( !h )
-			continue;
-
-		vec3_t min = math::vector_transform( h->bb_min, ent->bone_cache( ).base( )[ h->bone_index ] );
-		vec3_t max = math::vector_transform( h->bb_max, ent->bone_cache( ).base( )[ h->bone_index ] );
-
-		float radius = h->m_flRadius;
-
-		if( radius != -1.f ){
-			g_intersection.setup( min, max, radius, spheres );
-		}
-		else {
-			oobs.push_back( geometry::c_obb( h->bb_min * 1.8f, h->bb_max * 1.8f, ent->bone_cache( ).base( )[ h->bone_index ] ) );
-		}
-	}
-
 	weapon->update_accuracy( );
 	float weapon_spread = weapon->spread( );
 	float weapon_cone = weapon->inaccuracy( );
@@ -203,28 +174,6 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 		return vec3_t ( forward + right * -spread.x + up * -spread.y ).normalized( );
 	};
 
-	const auto check_intersection = [ & ]( ray_t &ray, trace_t &trace ) {
-
-		trace.m_hit_entity = nullptr;
-
-		for ( auto& s : spheres ) {
-			if ( s.intersects_ray( ray ) ) {
-				trace.m_hit_entity = ent;
-				return;
-			}
-		}
-
-		if( trace.m_hit_entity )
-			return;
-
-		for ( auto& oob : oobs ) {
-			if ( g_intersection.intersect_ray_with_obb( ray, oob.m_min, oob.m_max, oob.m_matrix ) ) {
-				trace.m_hit_entity = ent;
-				return;
-			}
-		}
-	};
-
 	for( int i = 1; i <= 256; i++ ) {
 		vec3_t spread_angle;
 		vec3_t bullet_end;
@@ -236,10 +185,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 		ray_t ray;
 		ray.init( eye_position, eye_position + bullet_end * weapon->get_weapon_info( )->range );
 
-		check_intersection( ray, trace );
-
-		spheres.clear( );
-		oobs.clear( );
+		g_csgo.m_engine_trace->clip_ray_to_entity( ray, MASK_SHOT, ent, &trace );
 
 		if( trace.m_hit_entity == ent )
 			++traces_hit;

@@ -14,7 +14,7 @@ void geometry::c_intersection::setup( const vec3_t & min, const vec3_t & max, fl
 	spheres.push_back( c_sphere { max, radius } );
 }
 
-bool geometry::c_intersection::intersect_ray_with_obb( const ray_t & ray, vec3_t & min, vec3_t & max, const matrix3x4_t & matrix ) {
+bool geometry::c_intersection::intersect_ray_with_obb( const ray_t & ray, vec3_t & min, vec3_t & max, const matrix3x4_t &matrix ) {
 	vec3_t ray_trans, dir_trans;
 	math::vector_itransform( &ray.m_start, matrix, &ray_trans );
 	math::vector_irotate( &ray.m_delta, matrix, &dir_trans );
@@ -98,26 +98,25 @@ bool geometry::c_sphere::intersects_ray( const ray_t & ray, vec3_t & intersectio
 	return true;
 }
 
-bool geometry::c_sphere::intersect_infinite_ray_with_sphere( const vec3_t & origin, const vec3_t & delta, const vec3_t & sphere_center, float flRadius, float * t1, float * t2 ) {
+bool geometry::c_sphere::intersect_infinite_ray_with_sphere( const vec3_t & origin, const vec3_t & delta, const vec3_t & sphere_center, float radius, float * t1, float * t2 ) {
 	vec3_t sphere_to_ray = origin - sphere_center;
 
 	float a = delta.dot( delta );
 
-	if ( a == 0.0f )
-	{
+	if ( a == 0.0f ) {
 		*t1 = *t2 = 0.0f;
-		return sphere_to_ray.length_sqr( ) <= flRadius * flRadius;
+		return sphere_to_ray.length_sqr( ) <= radius * radius;
 	}
 
 	float b = 2 * sphere_to_ray.dot( delta );
-	float c = sphere_to_ray.dot( sphere_to_ray ) - flRadius * flRadius;
-	float flDiscrim = b * b - 4 * a * c;
-	if ( flDiscrim < 0.0f )
+	float c = sphere_to_ray.dot( sphere_to_ray ) - radius * radius;
+	float discrim = b * b - 4 * a * c;
+	if ( discrim < 0.0f )
 		return false;
 
-	flDiscrim = sqrt( flDiscrim );
+	discrim = sqrt( discrim );
 	float oo2a = 0.5f / a;
-	*t1 = ( -b - flDiscrim ) * oo2a;
-	*t2 = ( -b + flDiscrim ) * oo2a;
+	*t1 = ( -b - discrim ) * oo2a;
+	*t2 = ( -b + discrim ) * oo2a;
 	return true;
 }
