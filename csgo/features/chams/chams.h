@@ -13,7 +13,6 @@ private:
 	std::pair< i_material *, i_material * > m_flat_mat;
 	std::pair< i_material *, i_material * > m_modulate_mat;
 
-	bool m_applied = false;
 	std::vector< std::pair< c_csplayer *, float > > m_players;
 
 	void push_players( );

@@ -42,20 +42,35 @@ void c_chams::on_sceneend( ) {
 		}
 
 		if( g_vars.visuals.chams.type == 0 ) {
-			static auto kv = static_cast<key_values *>( g_csgo.m_memalloc->alloc( 36 ) );
-			kv->init( "VertexLitGeneric" );
+			/*static auto kv = static_cast<key_values *>( g_csgo.m_memalloc->alloc( 36 ) );
+			kv->init( "VertexLitGeneric" );*/
 
 			std::string param = "["
 				+ std::to_string( g_vars.visuals.chams.reflectivity ) + " "
 				+ std::to_string( g_vars.visuals.chams.reflectivity ) + " "
 				+ std::to_string( g_vars.visuals.chams.reflectivity ) + "]";
 
-			kv->set_string( "$basetexture", "vgui/white_additive" );
+			/*kv->set_string( "$basetexture", "vgui/white_additive" );
 			kv->set_string( "$envmaptint", param.c_str( ) );
 			kv->set_string( "$envmap", "env_cubemap" );
+			kv->set_int( "$model", 1 );
+            kv->set_int( "$flat", 1 );
+            kv->set_int( "$selfillum", 1 );
+			kv->set_int( "$halflambert", 1 );*/
 
-			material.first->set_shader_and_params( kv );
-			material.second->set_shader_and_params( kv );
+			bool found;
+			auto var = material.first->find_var( "$envmaptint", &found );
+			if ( found ) {
+				var->set_string_value( param.c_str( ) );
+			}
+
+			material.first->refresh( );
+			material.second->refresh( );
+			/*material.first->set_shader_and_params( kv );
+
+			kv->set_int( "$ignorez", 1 );
+
+			material.second->set_shader_and_params( kv );*/
 		}
 
 		OSHColor c1 = OSHColor::FromARGB( g_vars.visuals.chams.vis_color );
@@ -67,17 +82,13 @@ void c_chams::on_sceneend( ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
 			g_csgo.m_model_render->forced_material_override( material.second );
 			g_csgo.m_render_view->set_color_modulation( hid_color );
-			m_applied = true;
 			ent->draw_model( STUDIO_RENDER, 255 );
-			m_applied = false;
 		}
 
 		g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
 		g_csgo.m_model_render->forced_material_override( material.first );
 		g_csgo.m_render_view->set_color_modulation( vis_color );	
-		m_applied = true;
 		ent->draw_model( STUDIO_RENDER, 255 );
-		m_applied = false;
 	}
 
 	if( !m_players.empty( ) )
@@ -103,18 +114,6 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const model_render_in
 		if( local->is_scoped( ) )
 			g_csgo.m_render_view->set_blend( 0.4f );
 	}
-
-	/*if( g_vars.visuals.chams.enabled && model_name.find( "models/player" ) != std::string::npos ) {
-		if( model_name.find( "shadow" ) != std::string::npos )
-			return true;
-
-		if( m_applied )
-			return true;
-		if( player->team( ) != local->team( ) )
-			return false;
-		if( ( player->team( ) == local->team( ) ) && g_vars.visuals.chams.teammates && player != C_CSPlayer::get_local( ) )
-			return false;
-	}*/
 
 	return true;
 }
