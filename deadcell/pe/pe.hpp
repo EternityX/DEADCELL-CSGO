@@ -70,7 +70,7 @@ namespace pe {
 		if( name.empty() )
 			return get_module( 0 );
 
-		std::transform( name.begin(), name.end(), name.begin(), std::tolower );
+		std::transform( name.begin(), name.end(), name.begin(), tolower );
 
 		return get_module( util::hash::fnv1a_32( name ) );
 	}

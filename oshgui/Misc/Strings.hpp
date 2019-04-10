@@ -10,6 +10,7 @@
 #define OSHGUI_MISC_STRINGS_HPP
 
 #include <string>
+#include <locale>
 #include <stdarg.h>
 #include "../Exports.hpp"
 

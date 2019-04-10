@@ -75,6 +75,9 @@
     <Filter Include="Header Files\Drawing\Direct3D11">
       <UniqueIdentifier>{e8fc3b17-f57f-4c14-8b8b-6a7a7c9d38bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Drawing\Direct3D9Ex">
+      <UniqueIdentifier>{4b2c0a40-3552-4452-b5da-ca5d7fb43dc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Application.cpp">
@@ -346,6 +349,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Drawing\Direct3D9\Direct3D9ViewportTarget.cpp">
       <Filter>Source Files\Drawing\Direct3D9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExRenderer.cpp">
+      <Filter>Source Files\Drawing\Direct3D9Ex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExTexture.cpp">
+      <Filter>Source Files\Drawing\Direct3D9Ex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -714,6 +723,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Drawing\Direct3D9\Direct3D9ViewportTarget.hpp">
       <Filter>Header Files\Drawing\Direct3D9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExRenderer.hpp">
+      <Filter>Source Files\Drawing\Direct3D9Ex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExTexture.hpp">
+      <Filter>Source Files\Drawing\Direct3D9Ex</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 #include "../../features/nade_pred/nade_pred.h"
 #include "../../features/anti-aim/antiaim.h"
 
-HRESULT __stdcall hook::Present( IDirect3DDevice9 *device, const RECT *pSourceRect, const RECT *pDestRect, HWND hDestWindowOverride, const RGNDATA *pDirtyRegion ) {
+HRESULT __stdcall hook::Present( IDirect3DDevice9Ex *device, const RECT *pSourceRect, const RECT *pDestRect, HWND hDestWindowOverride, const RGNDATA *pDirtyRegion ) {
 	static bool once{ false };
 	if( !once ) {
 		g_renderer.init( device );

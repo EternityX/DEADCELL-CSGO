@@ -23,7 +23,7 @@ using ulong_t = unsigned long;
 
 // oshgui.
 #include <OSHGui.hpp>
-#include <Drawing/Direct3D9/Direct3D9Renderer.hpp>
+#include <Drawing/Direct3D9Ex/Direct3D9ExRenderer.hpp>
 #include <Drawing/RenderTarget.hpp>
 #include <Input/Input.hpp>
 
