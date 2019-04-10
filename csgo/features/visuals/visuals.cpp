@@ -809,7 +809,7 @@ void c_visuals::draw_crosshair( ) const {
 	std::once_flag once_flag;
 	std::call_once( once_flag, [ & ] {
 		for ( int i = 0; i < 256; i++ ) {
-			seeds.push_back( { util::misc::get_random_float_range( 0.0f, 1.0f ), util::misc::get_random_float_range( 0.0f, math::pi_2 ) } );
+			seeds.emplace_back( util::misc::get_random_float_range( 0.0f, 1.0f ), util::misc::get_random_float_range( 0.0f, math::pi_2 ) );
 		}
 	} );
 
@@ -861,7 +861,7 @@ void c_visuals::draw_crosshair( ) const {
 			float percentage = ( rand_a * inaccuracy + rand_b * spread ) / ( inaccuracy + spread );
 
 			g_renderer.rect( OSHColor::FromARGB( g_vars.visuals.visualize_spread_color, 255 * ( 0.4f + percentage * 0.6f ) * ( 0.1f + percentage * 0.9f ) ), 
-							 cross_x + screen_spread_x, cross_y + screen_spread_y, 2, 2 );
+							 cross_x + screen_spread_x, cross_y + screen_spread_y, 1, 1 );
 		}
 	}
 }

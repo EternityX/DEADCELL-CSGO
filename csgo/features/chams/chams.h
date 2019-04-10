@@ -21,7 +21,7 @@ private:
 	
 public:
 	void on_sceneend( );
-	bool on_dme( IMatRenderContext *ctx, void *state, const model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld );
+	bool on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld, hook::fn::DrawModelExecute_t orig );
 };
 
 extern c_chams g_chams;

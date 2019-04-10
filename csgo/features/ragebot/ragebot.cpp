@@ -420,7 +420,7 @@ void c_ragebot::quickstop( c_base_combat_weapon *local_weapon ) {
 	// note: scoped weapons use the alternate speed member.
 	const float max_speed = local_weapon->has_scope( ) ? weapon_info->max_speed_alt : weapon_info->max_speed;
 
-	if( g_misc.unpredicted_vel.Length2D( ) > max_speed * .34f ) {
+	if( g_misc.unpredicted_vel.length_2d( ) > max_speed * .34f ) {
 		const vec3_t velocity = g_misc.unpredicted_vel;
 		const float_t speed = g_cl.m_local->velocity( ).length( );
 

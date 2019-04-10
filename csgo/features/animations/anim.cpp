@@ -53,10 +53,10 @@ void c_animations::on_entity_deleted( c_base_entity *ent ) {
 		return data.m_idx == idx;
 	} );
 
-	if ( it == m_track.end( ) )
+	if( it == m_track.end( ) )
 		return;
 
-	if ( m_track.at( it->m_idx ).m_hooked ){
+	if( m_track.at( it->m_idx ).m_hooked ){
 		m_track.at( it->m_idx ).m_vmt->unhook_all( );
 		m_track.at( it->m_idx ).m_hooked = false;
 	}

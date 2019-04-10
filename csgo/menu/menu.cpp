@@ -238,19 +238,21 @@ void c_main_form::visuals_tab() {
 	auto name_check = new c_checkbox( "Name", generic_esp_page, &g_vars.visuals.name );	
 	auto weapon_check = new c_checkbox( "Weapon", generic_esp_page, &g_vars.visuals.weapon );
 	auto health_check = new c_checkbox( "Health bar", generic_esp_page, &g_vars.visuals.healthbar );
-	auto ammo_check = new c_checkbox( "Ammo bar", generic_esp_page, &g_vars.visuals.ammo_bar );
+	auto ammo_check = new c_checkbox( "Ammo bar", generic_esp_page, &g_vars.visuals.ammo_bar ); 
 	auto flag_check = new c_checkbox( "Flags", generic_esp_page, &g_vars.visuals.flags );
 	auto money_check = new c_checkbox( "Money", generic_esp_page, &g_vars.visuals.money );
 	auto flashed_check = new c_checkbox( "Flashed", generic_esp_page, &g_vars.visuals.flash_bar );
 
 	g_menu.set_y_pos( 10 );
 	auto enabled_chams = new c_checkbox( "Enabled", player_chams_page, &g_vars.visuals.chams.enabled );
-	auto chams_type = new c_combo( "Chams Type", { "Textured", "Flat", "Modulate" }, player_chams_page, 3, &g_vars.visuals.chams.type, player_esp_groupbox->GetWidth() - 15 );
-	auto chams_twopass = new c_checkbox( "Two Pass", player_chams_page, &g_vars.visuals.chams.twopass );
-	auto chams_alpha = new c_slider( "Alpha", player_chams_page, 0.f, 100.f, &g_vars.visuals.chams.alpha, 0, 100.f, "%" );
-	auto chams_reflect = new c_slider( "Reflectivity", player_chams_page, 0.f, 1.f, &g_vars.visuals.chams.reflectivity, 1, 1.f, "%" );
-	auto chams_teammates = new c_checkbox( "Teammates", player_chams_page, &g_vars.visuals.chams.teammates );
-	auto chams_local = new c_checkbox( "Localplayer", player_chams_page, &g_vars.visuals.chams.local );
+	auto chams_type = new c_combo( "Shader", { "Vertex lit", "Unlit", "Modulate" }, player_chams_page, 3, &g_vars.visuals.chams.type, player_esp_groupbox->GetWidth() - 15 );
+	auto chams_twopass = new c_checkbox( "Two-pass", player_chams_page, &g_vars.visuals.chams.twopass );
+	auto chams_teammates = new c_checkbox( "Teammate", player_chams_page, &g_vars.visuals.chams.teammates );
+	auto chams_local = new c_checkbox( "Local player", player_chams_page, &g_vars.visuals.chams.local );
+	auto chams_blend = new c_checkbox( "Blend when scoped", player_chams_page, &g_vars.visuals.chams.blend_scope );
+	auto chams_alpha = new c_slider( "Transparency", player_chams_page, 0.f, 100.f, &g_vars.visuals.chams.alpha, 0, 100.f, "%" );
+	auto chams_reflect = new c_slider( "Reflectivity", player_chams_page, 0.f, 100.f, &g_vars.visuals.chams.reflectivity, 1, 50.f, "%" );
+	auto chams_luminance = new c_slider( "Shine", player_chams_page, 0.f, 100.f, &g_vars.visuals.chams.luminance, 1, 25.f, "%" );
 
 	auto local_color = new c_colorpicker( player_chams_page, chams_local, g_vars.visuals.chams.local_col );
 	auto hid_color = new c_colorpicker( player_chams_page, chams_twopass, g_vars.visuals.chams.hid_color );
@@ -383,7 +385,7 @@ void c_main_form::misc_tab() {
 	auto radar = new c_checkbox( "Radar", generic_misc_page, &g_vars.visuals.radar );
 	auto fast_duck = new c_checkbox( "Fast duck", generic_misc_page, &g_vars.misc.fast_duck );
 	auto dangerzone_check = new c_checkbox( "Danger Zone menu", generic_misc_page, &g_vars.misc.dangerzone_menu );
-	dangerzone_check->GetCheckedChangedEvent() += OSHGui::CheckedChangedEventHandler( [ & ]( Control *sender ) {
+	dangerzone_check->GetCheckedChangedEvent( ) += OSHGui::CheckedChangedEventHandler( [ & ]( Control *sender ) {
 		g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
 	});
 
@@ -394,9 +396,9 @@ void c_main_form::misc_tab() {
 		std::string dir = "hitsounds";
 
 		for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
-			if( !file_path.path().string().empty() ) {
-				if( file_path.path().string().find( ".wav" ) != std::string::npos )
-					names.emplace_back( file_path.path().string().erase( 0, dir.length() + 1 ) );
+			if( !file_path.path( ).string().empty( ) ) {
+				if( file_path.path( ).string( ).find( ".wav" ) != std::string::npos )
+					names.emplace_back( file_path.path( ).string( ).erase( 0, dir.length() + 1 ) );
 			}
 		}
 
