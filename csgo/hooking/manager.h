@@ -5,8 +5,8 @@ class c_ik_context;
 
 namespace hook {
 	namespace fn {
-		using Present_t = HRESULT (__stdcall *)( IDirect3DDevice9 *, const RECT *, const RECT *, HWND, const RGNDATA * );
-		using Reset_t = HRESULT (__stdcall *)( IDirect3DDevice9 *, D3DPRESENT_PARAMETERS * );
+		using Present_t = HRESULT (__stdcall *)( IDirect3DDevice9Ex *, const RECT *, const RECT *, HWND, const RGNDATA * );
+		using Reset_t = HRESULT (__stdcall *)( IDirect3DDevice9Ex *, D3DPRESENT_PARAMETERS * );
 		using PaintTraverse_t = void (__thiscall *)( uintptr_t, int, bool, bool );
 		using LevelInitPostEntity_t = void (__thiscall *)( uintptr_t );
 		using LevelShutdown_t = void (__thiscall *)( uintptr_t );
@@ -76,9 +76,9 @@ namespace hook {
 	};
 
 	// our funcs.
-	HRESULT __stdcall Present( IDirect3DDevice9 *device, const RECT *pSourceRect, const RECT *pDestRect,
+	HRESULT __stdcall Present( IDirect3DDevice9Ex *device, const RECT *pSourceRect, const RECT *pDestRect,
 	                           HWND hDestWindowOverride, const RGNDATA *pDirtyRegion );
-	HRESULT __stdcall Reset( IDirect3DDevice9 *device, D3DPRESENT_PARAMETERS *pPresentationParameters );
+	HRESULT __stdcall Reset( IDirect3DDevice9Ex *device, D3DPRESENT_PARAMETERS *pPresentationParameters );
 	void __stdcall LockCursor( );
 	void __fastcall PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel, bool forceRepaint, bool allowForce );
 	void __fastcall LevelInitPostEntity( uintptr_t ecx, uintptr_t edx );

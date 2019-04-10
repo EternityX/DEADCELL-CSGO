@@ -39,7 +39,7 @@ bool pe::Module::init( types::LDR_DATA_TABLE_ENTRY *ldr_entry ) {
 	m_base = base;
 	m_pathW = ldr_entry->FullDllName.Buffer;
 
-	std::transform( m_pathW.begin(), m_pathW.end(), m_pathW.begin(), std::tolower );
+	std::transform( m_pathW.begin(), m_pathW.end(), m_pathW.begin(), tolower );
 
 	return true;
 }
