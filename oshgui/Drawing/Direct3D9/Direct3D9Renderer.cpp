@@ -260,7 +260,7 @@ namespace OSHGui {
 
 		//---------------------------------------------------------------------------
 		void Direct3D9Renderer::PostD3DReset() {
-			device->CreateStateBlock( D3DSBT_ALL, &stateBlock );
+			device->CreateStateBlock( D3DSBT_PIXELSTATE, &stateBlock );
 
 			RemoveWeakReferences();
 

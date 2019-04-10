@@ -200,6 +200,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExRenderer.cpp" />
+    <ClCompile Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExTexture.cpp" />
     <ClCompile Include="..\..\Drawing\Direct3D9\Direct3D9GeometryBuffer.cpp" />
     <ClCompile Include="..\..\Drawing\Direct3D9\Direct3D9Renderer.cpp" />
     <ClCompile Include="..\..\Drawing\Direct3D9\Direct3D9Texture.cpp" />
@@ -451,6 +453,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExRenderer.hpp" />
+    <ClInclude Include="..\..\Drawing\Direct3D9Ex\Direct3D9ExTexture.hpp" />
     <ClInclude Include="..\..\Drawing\Direct3D9\Direct3D9GeometryBuffer.hpp" />
     <ClInclude Include="..\..\Drawing\Direct3D9\Direct3D9Renderer.hpp" />
     <ClInclude Include="..\..\Drawing\Direct3D9\Direct3D9RenderTarget.hpp" />

@@ -159,7 +159,7 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 				}
 
 				std::string s = info.m_player_name;
-				std::transform( s.begin( ), s.end( ), s.begin( ), std::tolower );
+				std::transform( s.begin( ), s.end( ), s.begin( ), tolower );
 
 				if( g_vars.visuals.hitmarker )
 					g_cl.m_hitmarker_alpha = 1.f;
