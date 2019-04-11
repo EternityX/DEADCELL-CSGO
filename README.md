@@ -25,7 +25,6 @@ This is *not* for tech support. If you have an issue, open one [here](https://gi
 ## Known issues
 - Rendering issues when multi-core rendering is enabled (menu crashes and visuals flickering)
 - Weapon script assertions.
-- Does not support the -d3d9ex launch option.
 - Lots of code is unoptimized.
 - If you come across any more issues, please notify us via the issue tracker.
 
