@@ -20,7 +20,6 @@ public:
 	void capsule_overlay( c_csplayer * e, float duration, matrix3x4_t* mat );
 	void no_smoke( client_frame_stage_t stage );
 	void flashlight( );
-	void test( );
 };
 
 extern c_misc g_misc;

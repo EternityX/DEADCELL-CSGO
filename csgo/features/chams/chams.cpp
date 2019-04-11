@@ -63,16 +63,6 @@ void c_chams::on_sceneend( ) {
 		float vis_color[ 3 ] = { c1.GetRed( ), c1.GetGreen( ), c1.GetBlue( ) };
 		float hid_color[ 3 ] = { c2.GetRed( ), c2.GetGreen( ), c2.GetBlue( ) };		
 
-		
-
-		// you can change the material's shader values using SetShaderAndParams and passing in a keyvalue pointer
-		// example : 
-		// static auto kv = static_cast<key_values*>( g_csgo.m_memalloc->Alloc( 36 ) );
-		// kv->SetInt( "$ignorez", 1 );
-		// this would update the material in real time without having to create a new material, obviously this can be used with more relevant
-		// shader params such as reflection for example, would allow us to control it with a slider instead of having it as a static value 
-		// when the material is created
-
 		if( g_vars.visuals.chams.twopass ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
 			g_csgo.m_model_render->forced_material_override( material.second );
@@ -82,12 +72,9 @@ void c_chams::on_sceneend( ) {
 			m_applied = false;
 		}
 
-		var->set_vec_value( 0.5f, 0.5f, 0.5f );
-		materials.at( 0 )->get_reflectivity( reflectivity );
-		console::print( "reflectivity after set_vec_value: %, %, %", reflectivity.x, reflectivity.y, reflectivity.z );
 		g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
-		g_csgo.m_model_render->forced_material_override( g_vars.visuals.chams.type ? materials.at( 1 ) : materials.at( 0 ) );
-		g_csgo.m_render_view->set_color_modulation( vis_color );
+		g_csgo.m_model_render->forced_material_override( material.first );
+		g_csgo.m_render_view->set_color_modulation( vis_color );	
 		m_applied = true;
 		ent->draw_model( STUDIO_RENDER, 255 );
 		m_applied = false;
@@ -176,11 +163,6 @@ i_material *c_chams::create_material( shader_type_t shade, bool ignorez, bool wi
 	material_data += "\t\"$selfillum\" \"1\"\n";
 	material_data += "\t\"$selfillumtint\" \"[8 8 8]\"\n";
 	material_data += "\t\"$halflambert\" \"1\"\n";
-	material_data += "\t\"$znearer\" \"0\"\n";
-	material_data += "\t\"$rimlightboost\" \"" + std::to_string( rimlight_boost ) + "\"\n";
-	material_data += "\t\"$rimlightexponent\" \"" + std::to_string( 4 ) + "\"\n";
-	material_data += "\t\"$ambientreflectionboost\" \"0.2\"\n";
-	material_data += "\t\"$envmaplightscale\" \"" + std::to_string( 0.1 ) + "\"\n";
 	material_data += "\t\"$wireframe\" \"" + std::to_string( wireframe ) + "\"\n";
 	material_data += "\t\"$ignorez\" \"" + std::to_string( ignorez ) + "\"\n";
 
@@ -199,6 +181,3 @@ i_material *c_chams::create_material( shader_type_t shade, bool ignorez, bool wi
 
 	return g_csgo.m_material_system->create_material( material_name.c_str( ), kv );
 }
-
-		g_csgo.m_model_render->forced_material_override( material.first );
-		g_csgo.m_render_view->set_color_modulation( vis_color );	

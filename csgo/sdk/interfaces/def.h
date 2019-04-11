@@ -130,11 +130,8 @@
 #define MAX_FLOWS		2		// in & out
 
 #define Assert( _exp ) ((void)0)
-#include "i_surface.h"
 
-class bf_read;
 class model_t;
-class IScheme;
 struct mstudioanimdesc_t;
 struct mstudioseqdesc_t;
 struct mstudiobodyparts_t;

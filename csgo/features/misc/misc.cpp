@@ -591,7 +591,3 @@ void c_misc::flashlight( ) {
 		update_flashlight( flashlight, local->eye_pos( ), f, r, u );
 	}
 }
-
-void c_misc::test() {
-	
-}
