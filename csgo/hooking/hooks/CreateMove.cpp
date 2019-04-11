@@ -73,6 +73,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	if( g_cl.m_local ) {
 		if( g_cl.m_sendpacket ) {
 			g_cl.m_last_sent_origin = g_cl.m_local->origin( );
+			g_cl.m_local->setup_bones( g_cl.m_last_matrix.data( ), 128, 0x100, g_csgo.m_global_vars->m_cur_time );
 			g_antiaim.m_fake = cmd->m_viewangles;
 		}
 		else {

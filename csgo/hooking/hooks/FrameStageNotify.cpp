@@ -13,8 +13,8 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_fra
 	}
 
 	const auto in_thirdperson = g_csgo.m_input->m_camera_in_thirdperson;
-	if ( curstage == FRAME_RENDER_START ) {
-		if ( in_thirdperson && g_vars.antiaim.enabled ) {
+	if( curstage == FRAME_RENDER_START ) {
+		if( in_thirdperson && g_vars.antiaim.enabled ) {
 			g_csgo.m_prediction->set_local_viewangles( g_antiaim.m_real );
 		}
 		g_misc.flashlight( );

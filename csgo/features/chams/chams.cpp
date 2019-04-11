@@ -17,14 +17,9 @@ void c_chams::on_sceneend( ) {
 
 	static bool once{ false };
 	if( !once ) {
-		m_shaded_mat = std::make_pair( create_material( shader_type_t::VertexLitGeneric, false ), 
-									   create_material( shader_type_t::VertexLitGeneric, true ) );
-
-		m_flat_mat = std::make_pair( create_material( shader_type_t::UnlitGeneric, false ), 
-									 create_material( shader_type_t::UnlitGeneric, true ) );
-
-		m_modulate_mat = std::make_pair( create_material( shader_type_t::Modulate, false ), 
-										 create_material( shader_type_t::Modulate, true ) );
+		m_shaded_mat = std::make_pair( create_material( VertexLitGeneric, false ), create_material( VertexLitGeneric, true ) );
+		m_flat_mat = std::make_pair( create_material( UnlitGeneric, false ), create_material( UnlitGeneric, true ) );
+		m_modulate_mat = std::make_pair( create_material( Modulate, false ), create_material( Modulate, true ) );
 
 		once = true;
 	}
@@ -41,20 +36,48 @@ void c_chams::on_sceneend( ) {
 			default: break;
 		}
 
+		// bruh moment.
 		if( g_vars.visuals.chams.type == 0 ) {
 			static auto kv = static_cast<key_values *>( g_csgo.m_memalloc->alloc( 36 ) );
 			kv->init( "VertexLitGeneric" );
 
-			std::string param = "["
-				+ std::to_string( g_vars.visuals.chams.reflectivity ) + " "
-				+ std::to_string( g_vars.visuals.chams.reflectivity ) + " "
-				+ std::to_string( g_vars.visuals.chams.reflectivity ) + "]";
+			auto reflectivity_str = std::to_string( g_vars.visuals.chams.reflectivity / 100.f );
+			auto luminance_str = std::to_string( g_vars.visuals.chams.reflectivity / 100.f );
+
+			std::string reflectivity = "["
+				+ reflectivity_str + " "
+				+ reflectivity_str + " "
+				+ reflectivity_str + "]";
+
+			std::string luminance = "["
+				+ luminance_str + " "
+				+ luminance_str + " "
+				+ luminance_str + "]";
 
 			kv->set_string( "$basetexture", "vgui/white_additive" );
-			kv->set_string( "$envmaptint", param.c_str( ) );
+			kv->set_string( "$envmaptint", reflectivity.c_str( ) );
 			kv->set_string( "$envmap", "env_cubemap" );
 
+			kv->set_int( "$phong", 1 );
+			kv->set_int( "$phongexponent", 15 );
+			kv->set_int( "$normalmapalphaenvmask", 1 );
+			kv->set_string( "$phongboost", luminance.c_str( ) );
+			kv->set_string( "$phongfresnelranges", "[.5 .5 1]" );
+			kv->set_int( "$BasemapAlphaPhongMask", 1 );
+
+			kv->set_int( "$rimlight", 1 );
+			kv->set_int( "$rimlightexponent", 2 );
+			kv->set_string( "$rimlight", reflectivity.c_str( ) );
+
+			kv->set_int( "$model", 1 );
+            kv->set_int( "$flat", 1 );
+            kv->set_int( "$selfillum", 1 );
+			kv->set_int( "$halflambert", 1 );
+
 			material.first->set_shader_and_params( kv );
+
+			kv->set_int( "$ignorez", 1 );
+
 			material.second->set_shader_and_params( kv );
 		}
 
@@ -67,17 +90,13 @@ void c_chams::on_sceneend( ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
 			g_csgo.m_model_render->forced_material_override( material.second );
 			g_csgo.m_render_view->set_color_modulation( hid_color );
-			m_applied = true;
 			ent->draw_model( STUDIO_RENDER, 255 );
-			m_applied = false;
 		}
 
 		g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
 		g_csgo.m_model_render->forced_material_override( material.first );
 		g_csgo.m_render_view->set_color_modulation( vis_color );	
-		m_applied = true;
 		ent->draw_model( STUDIO_RENDER, 255 );
-		m_applied = false;
 	}
 
 	if( !m_players.empty( ) )
@@ -86,7 +105,7 @@ void c_chams::on_sceneend( ) {
 	g_csgo.m_model_render->forced_material_override( nullptr );
 }
 
-bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld ) {
+bool c_chams::on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld, hook::fn::DrawModelExecute_t orig ) {
 	auto player = g_csgo.m_entity_list->get< c_csplayer >( pInfo.m_entity_index );
 	auto local = c_csplayer::get_local( );
 	if( !local || !player || !pInfo.m_model )
@@ -95,26 +114,30 @@ bool c_chams::on_dme( IMatRenderContext *ctx, void *state, const model_render_in
 	std::string model_name = g_csgo.m_model_info->get_model_name( ( model_t* )pInfo.m_model );
 
 	if( pInfo.m_entity_index == g_csgo.m_engine->get_local_player( ) && g_csgo.m_input->m_camera_in_thirdperson && g_vars.visuals.chams.local ) {
-		static auto mat = create_material( shader_type_t::VertexLitGeneric, false, false );
+		// idk why but this is broken while jumping
+		if( local->velocity().length_2d( ) > 0.f ) {
+			static i_material *dogtag = g_csgo.m_material_system->get_material( "models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL );
+
+			g_csgo.m_model_render->forced_material_override( dogtag );
+			auto color2 = OSHColor::FromARGB( g_vars.visuals.chams.local_col );
+			float col2[ 3 ] = { 1.f, 1.f, 1.f };
+			g_csgo.m_render_view->set_color_modulation( col2 );
+
+			orig( ecx, ctx, state, pInfo, g_cl.m_last_matrix.data( ) ? g_cl.m_last_matrix.data( ) : pCustomBoneToWorld );
+		}
+		
+		static auto mat = create_material( VertexLitGeneric, false, false );
 		g_csgo.m_model_render->forced_material_override( mat );
+
 		auto color = OSHColor::FromARGB( g_vars.visuals.chams.local_col );
 		float col[ 3 ] = { color.GetRed( ), color.GetGreen( ), color.GetBlue( ) };
 		g_csgo.m_render_view->set_color_modulation( col );
-		if( local->is_scoped( ) )
+
+		if( g_vars.visuals.chams.blend_scope && local->is_scoped( ) )
 			g_csgo.m_render_view->set_blend( 0.4f );
+
+		orig( ecx, ctx, state, pInfo, pCustomBoneToWorld );
 	}
-
-	/*if( g_vars.visuals.chams.enabled && model_name.find( "models/player" ) != std::string::npos ) {
-		if( model_name.find( "shadow" ) != std::string::npos )
-			return true;
-
-		if( m_applied )
-			return true;
-		if( player->team( ) != local->team( ) )
-			return false;
-		if( ( player->team( ) == local->team( ) ) && g_vars.visuals.chams.teammates && player != C_CSPlayer::get_local( ) )
-			return false;
-	}*/
 
 	return true;
 }
@@ -153,10 +176,6 @@ i_material *c_chams::create_material( shader_type_t shade, bool ignorez, bool wi
 
 	material_data += "\"" + shade_type + "\"\n{\n";
 	material_data += "\t\"$basetexture\" \"vgui/white_additive\"\n";
-	material_data += "\t\"$envmap\" \"env_cubemap\"\n";
-	material_data += "\t\"$envmaptint\" \"[.8 .8 .8]\"\n";
-	/*material_data += "\t\"$envmapcontrast\" \"1\"\n";
-	material_data += "\t\"$envmapsaturation\" \"1.0\"\n";*/
 
 	material_data += "\t\"$model\" \"1\"\n";
 	material_data += "\t\"$flat\" \"1\"\n";
