@@ -20,7 +20,7 @@ https://discord.gg/dEMgzUZ
 
 We invite anyone interested in supporting development to join our Discord.
 
-This is *not* for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
+This is NOT for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
 
 ## Known issues
 - Rendering issues when multi-core rendering is enabled (menu crashes and visuals flickering)
