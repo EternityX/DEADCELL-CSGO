@@ -211,6 +211,9 @@
     <ClCompile Include="csgo\features\geometry\geometry.cpp">
       <Filter>dc-csgo\features\geometry</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\EndScene.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\inc.hpp">

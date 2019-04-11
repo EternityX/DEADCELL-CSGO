@@ -308,3 +308,9 @@ OSHGui/Projects/VS2017/OSHGui_Sample\.cpp
 *.tlog
 
 *.idb
+
+build/dc-csgo-obj/dc-csgo\.vcxproj\.FileListAbsolute\.txt
+
+build/deadcell-obj-debug/deadcell\.vcxproj\.FileListAbsolute\.txt
+
+build/oshgui-obj-debug/OSHGui_StaticLibrary\.vcxproj\.FileListAbsolute\.txt
