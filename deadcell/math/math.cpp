@@ -69,7 +69,7 @@ vec3_t math::to_angle( vec3_t vec ) {
 		angles.y = 0.f;
 	}
 	else {
-		angles.x = std::atan2f( -vec.z, vec.Length2D() ) * ( 180.f / pi );
+		angles.x = std::atan2f( -vec.z, vec.length_2d() ) * ( 180.f / pi );
 		if( angles.x < 0.f )
 			angles.x += 360.f;
 
@@ -141,7 +141,7 @@ void math::vector_angle( const vec3_t &forward, vec3_t &angles ) {
 		angles.y = 0.f;
 	}
 	else {
-		angles.x = rad_to_deg( std::atan2( -forward.z, forward.Length2D() ) );
+		angles.x = rad_to_deg( std::atan2( -forward.z, forward.length_2d() ) );
 		angles.y = rad_to_deg( std::atan2( forward.y, forward.x ) );
 	}
 

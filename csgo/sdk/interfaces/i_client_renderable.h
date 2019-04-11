@@ -23,8 +23,7 @@ public:
 	virtual void get_color_modulation( float *color ) = 0;
 	virtual bool lod_test() = 0;
 	virtual bool setup_bones( matrix3x4_t *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime ) = 0;
-	virtual void setup_weights( const matrix3x4_t *pBoneToWorld, int nFlexWeightCount, float *pFlexWeights,
-	                           float *pFlexDelayedWeights ) = 0;
+	virtual void setup_weights( const matrix3x4_t *pBoneToWorld, int nFlexWeightCount, float *pFlexWeights, float *pFlexDelayedWeights ) = 0;
 	virtual void do_animation_events( void ) = 0;
 	virtual void * /*IPVSNotify*/ get_pvs_notify_interface() = 0;
 	virtual void get_render_bounds( vec3_t &mins, vec3_t &maxs ) = 0;

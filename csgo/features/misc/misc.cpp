@@ -188,7 +188,7 @@ void c_misc::strafe( c_user_cmd *cmd ) {
 
 	float velocity_yaw = local->velocity( ).y;
 
-	float rotation = util::misc::clamp< float >( math::rad_to_deg( std::atan2( 15.f, local->velocity( ).Length2D( ) ) ), 0.f, 90.f );
+	float rotation = util::misc::clamp< float >( math::rad_to_deg( std::atan2( 15.f, local->velocity( ).length_2d( ) ) ), 0.f, 90.f );
 
 	float abs_yaw = std::fabs( math::normalize_angle( velocity_yaw - viewangles.y ) );
 

@@ -3,13 +3,13 @@
 
 void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel, bool forceRepaint, bool allowForce ) {
 	static int hud_zoom_panel = 0;
-	if ( !hud_zoom_panel ) {
-		if ( util::hash::fnv1a_32( g_csgo.m_panel->get_name( vguiPanel ) ) == CT_HASH32( "HudZoom" ) )
+	if( !hud_zoom_panel ) {
+		if( util::hash::fnv1a_32( g_csgo.m_panel->get_name( vguiPanel ) ) == CT_HASH32( "HudZoom" ) )
 			hud_zoom_panel = vguiPanel;
 	}
 	else {
-		if ( g_vars.visuals.misc.remove_scope ) {
-			if ( vguiPanel == hud_zoom_panel )
+		if( g_vars.visuals.misc.remove_scope ) {
+			if( vguiPanel == hud_zoom_panel )
 				return;
 		}
 	}

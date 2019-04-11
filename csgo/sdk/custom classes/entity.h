@@ -260,7 +260,6 @@ public:
 	NETVAR( int, armor, "DT_CSPlayer", "m_ArmorValue" );
 	NETVAR( vec3_t, angles, "DT_CSPlayer", "m_angEyeAngles" )
 		
-
 	NETVAR( c_base_handle, observer_handle, "DT_CSPlayer", "m_hObserverTarget" );
 	NETVAR( c_base_handle, ground_ent, "DT_CSPlayer", "m_hGroundEntity" );
 	PNETVAR( c_base_handle, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
