@@ -57,13 +57,18 @@ bool c_hooks::init( ) {
 }
 
 bool c_hooks::hook( ) {
-	if( !m_directx.hook_method( hook::idx::PRESENT, &hook::Present ) ) {
+	/*if( !m_directx.hook_method( hook::idx::PRESENT, &hook::Present ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook Present. This is fatal." );
 		return false;
-	}
+	}*/
 
 	if( !m_directx.hook_method( hook::idx::RESET, &hook::Reset ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook Reset. This is fatal." );
+		return false;
+	}
+
+	if( !m_directx.hook_method( hook::idx::END_SCENE, &hook::EndScene ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to hook EndScene. This is fatal." );
 		return false;
 	}
 
