@@ -610,6 +610,12 @@ void c_visuals::world( c_base_entity *entity ) {
 		                      OSHColor::FromARGB( 200, 10, 10, 10 ),
 		                      box.x + box.w * 0.5f, box.y - 5.f, CENTERED_X | OUTLINED, "CHICKEN" );
 	}
+	if( g_vars.visuals.fish && !owner && client_class->m_class_id == CFish ) {
+		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
+		                      OSHColor::FromARGB( 200, 255, 255, 100 ),
+		                      OSHColor::FromARGB( 200, 10, 10, 10 ),
+		                      box.x + box.w * 0.5f, box.y - 5.f, CENTERED_X | OUTLINED, "Fish" );
+	}
 
 	std::string model_name = g_csgo.m_model_info->get_model_name( entity->get_model( ) );
 	if( g_vars.visuals.projectiles ) {
