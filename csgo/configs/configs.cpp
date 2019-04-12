@@ -76,6 +76,7 @@ bool c_config::init( ) {
 	item( g_vars.visuals.glow_color, "g_vars.visuals.glow_color", m_items );
 	item( g_vars.visuals.filter, "g_vars.visuals.filter", m_items );
 	item( g_vars.visuals.chicken, "g_vars.visuals.chicken", m_items );
+	item( g_vars.visuals.fish, "g_vars.visuals.fish", m_items );
 	item( g_vars.visuals.projectiles, "g_vars.visuals.projectiles", m_items );
 	item( g_vars.visuals.objectives, "g_vars.visuals.objectives", m_items );
 	item( g_vars.visuals.dropped_weapons, "g_vars.visuals.dropped_weapons", m_items );
