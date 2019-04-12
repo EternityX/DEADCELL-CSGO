@@ -52,6 +52,7 @@ public:
 		bool dropped_ammo;
 		float dropped_ammo_color[ 4 ] = { 220, 79, 130, 255 };
 		bool chicken;
+		bool fish;
 		bool projectiles;
 		bool objectives;
 		bool dormancy_fade;
