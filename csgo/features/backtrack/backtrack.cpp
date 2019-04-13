@@ -46,7 +46,7 @@ void c_backtrack::log( ){
 	for ( auto &entry : g_listener.m_players ) {
 		int idx = entry.m_idx;
 		c_csplayer* e = entry.m_player;
-		if( !e || !g_cl.m_local || e == g_cl.m_local )
+		if( !e || !g_cl.m_local || e == g_cl.m_local || e->team( ) == g_cl.m_local->team( ) )
 			continue;
 
 		if( !e->is_valid_player( true, true ) )
@@ -93,8 +93,6 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 	e->get_collideable( )->mins( ) = record.m_mins;
 	e->get_collideable( )->maxs( ) = record.m_maxs;
 
-	e->invalidate_bone_cache( );
-
 	std::memcpy( e->bone_cache( ).base( ), record.m_matrix, sizeof( matrix3x4_t ) * 128 );
 
 	// TO-DO : restore bonecount
@@ -105,6 +103,8 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 void c_backtrack::update_animation_data( c_csplayer *e ){
 	e->client_side_anims( ) = true; {
 		e->update_anims( );
+
+		e->invalidate_bone_cache( );
 
 		int backup_flags = e->flags( );
 		e->flags( ) &= ~FL_ONGROUND;
