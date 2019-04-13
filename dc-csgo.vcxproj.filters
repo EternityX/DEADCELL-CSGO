@@ -77,9 +77,6 @@
     <Filter Include="dc-csgo\features\engine_pred">
       <UniqueIdentifier>{a53443f8-457d-465b-a205-9b066572187e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dc-csgo\features\player_log">
-      <UniqueIdentifier>{d66f17ca-ba80-436a-b7a7-c5199330f0c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dc-csgo\features\chams">
       <UniqueIdentifier>{1aa07ca5-72cb-470c-bdc2-d5c01b5fc3cb}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,9 @@
     </Filter>
     <Filter Include="dc-csgo\features\geometry">
       <UniqueIdentifier>{29b831d0-8e9c-48be-8a45-acda888cc90d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\backtrack">
+      <UniqueIdentifier>{a145db99-63d9-4018-a68b-5b41e4a269e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -202,8 +202,6 @@
     <ClCompile Include="csgo\features\entity listener\ent_listener.cpp">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\features\backtrack\backtrack.cpp">
-      <Filter>dc-csgo\features\player_log</Filter>
     <ClCompile Include="csgo\hooking\hooks\IsHltv.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
@@ -212,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\EndScene.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\backtrack\backtrack.cpp">
+      <Filter>dc-csgo\features\backtrack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,11 +447,11 @@
     <ClInclude Include="csgo\features\entity listener\ent_listener.h">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClInclude>
-    <ClInclude Include="csgo\features\backtrack\backtrack.h">
-      <Filter>dc-csgo\features\player_log</Filter>
-	</ClInclude>
     <ClInclude Include="csgo\features\geometry\geometry.h">
       <Filter>dc-csgo\features\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\backtrack\backtrack.h">
+      <Filter>dc-csgo\features\backtrack</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

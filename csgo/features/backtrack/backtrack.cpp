@@ -116,6 +116,7 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 		e->flags( ) &= ~FL_ONGROUND;
 		e->setup_bones( nullptr, -1, 0x7FF00, record.m_curtime );
 		e->flags( ) = backup_flags;
+
 	} e->client_side_anims( ) = false;
 
 	return true;
