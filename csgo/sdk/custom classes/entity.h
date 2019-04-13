@@ -128,6 +128,10 @@ public:
 	void select_item( const char *name, int a2 ){
 		util::misc::vfunc< void( __thiscall * )( void *, const char *, int ) >( this, 323 )( this, name, a2 );
 	}
+
+	var_mapping_t* var_mapping( ) {
+		return reinterpret_cast< var_mapping_t* >( this + 0x24 );
+	}
 };
 
 class c_env_tonemap_controller : c_base_entity {
@@ -432,10 +436,19 @@ public:
 		return false;
 	}
 
-	float max_desync( ) {
-		auto anim_state = this->animstate( );
+	void invalidate_bone_cache( ) {
+		static auto invalidate_bone_cache = pattern::find( g_csgo.m_client_dll, "80 3D ?? ?? ?? ?? ?? 74 16 A1 ?? ?? ?? ?? 48 C7 81" );
+		static auto model_bone_counter = **reinterpret_cast< uintptr_t** >( invalidate_bone_cache + 10 );
+		*reinterpret_cast< unsigned int* >( this + 0x2924 ) = 0xFF7FFFFF; // m_flLastBoneSetupTime = -FLT_MAX;
+		*reinterpret_cast< unsigned int* >( this + 0x2690 ) = ( model_bone_counter - 1 ); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
+	}
+
+	float max_desync( c_animstate* override_animstate = nullptr, bool jitter = false ) {
+		float max_desync_angle = 0.f;
+		
+		auto anim_state = override_animstate != nullptr ? override_animstate : this->animstate( );
 		if ( !anim_state )
-			return 0.f;
+			return max_desync_angle;
 
 		float duck_amount = anim_state->duck_amount;
 		float speed_fraction = math::max< float >( 0, math::min< float >( anim_state->feet_speed_forwards_or_sideways, 1 ) );
@@ -447,6 +460,14 @@ public:
 			yaw_modifier += ( ( duck_amount * speed_factor ) * ( 0.5f - yaw_modifier ) );
 		}
 
-		return anim_state->velocity_subtract_y * yaw_modifier;
+		max_desync_angle = anim_state->velocity_subtract_y * yaw_modifier;
+
+		if ( jitter ) {
+			if ( const auto yaw_feet_delta = anim_state->goal_feet_yaw - anim_state->eye_angles_y; yaw_feet_delta < max_desync_angle ) {
+				max_desync_angle = 180.f;
+			}
+		}
+
+		return max_desync_angle;
 	}
 };

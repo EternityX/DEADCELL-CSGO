@@ -31,9 +31,9 @@ void c_engine_pred::pre_start( ) {
 	if( !g_csgo.m_engine->is_in_game( ) )
 		return;
 
-	if( g_csgo.m_clientstate->m_nDeltaTick > 0 ) {
-		g_csgo.m_prediction->update( g_csgo.m_clientstate->m_nDeltaTick, g_csgo.m_clientstate->m_nDeltaTick > 0,
-		                             g_csgo.m_clientstate->m_nLastCommandAck, g_csgo.m_clientstate->m_nLastOutgoingCommand + g_csgo.m_clientstate->m_nChokedCommands );
+	if( g_csgo.m_clientstate->m_delta_tick > 0 ) {
+		g_csgo.m_prediction->update( g_csgo.m_clientstate->m_delta_tick, g_csgo.m_clientstate->m_delta_tick > 0,
+		                             g_csgo.m_clientstate->m_last_command_ack, g_csgo.m_clientstate->m_last_outgoing_command + g_csgo.m_clientstate->m_choked_commands );
 	}
 }
 

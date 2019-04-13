@@ -38,11 +38,11 @@ public:
 	i_view_render_beams *m_render_beams       = nullptr;
 	i_weapon_system *m_weapon_system         = nullptr;
 	iv_efx *m_effects                       = nullptr;
-	ClientState *m_clientstate             = nullptr;
+	client_state *m_clientstate             = nullptr;
 	c_physics_surface *m_physics_surface     = nullptr;
 	i_localize *m_localize                  = nullptr;
 	i_mem_alloc *m_memalloc                  = nullptr;
-	IMDLCache *m_modelcache                = nullptr;
+	i_mdl_cache *m_modelcache                = nullptr;
 	i_view_render *m_viewrender              = nullptr;
 	c_glow_object_mngr *m_glow_obj_manager = nullptr;
 	i_command_line *m_command_line           = nullptr;
@@ -167,7 +167,7 @@ public:
 		if( !m_effects )
 			return false;
 
-		m_clientstate = **c_vmt::get_method( m_engine, 12 ).add< ClientState*** >( 16 );
+		m_clientstate = **c_vmt::get_method( m_engine, 12 ).add< client_state*** >( 16 );
 		if( !m_clientstate )
 			return false;
 
@@ -179,7 +179,7 @@ public:
 		if( !m_localize )
 			return false;
 
-		m_modelcache = get_interface< IMDLCache >( CT_HASH32( "MDLCache" ) );
+		m_modelcache = get_interface< i_mdl_cache >( CT_HASH32( "MDLCache" ) );
 		if( !m_modelcache )
 			return false;
 

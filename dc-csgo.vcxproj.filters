@@ -172,9 +172,6 @@
     <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp">
       <Filter>dc-csgo\features\engine_pred</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\features\player_log\player_log.cpp">
-      <Filter>dc-csgo\features\player_log</Filter>
-    </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\DrawModelExecute.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
@@ -205,6 +202,8 @@
     <ClCompile Include="csgo\features\entity listener\ent_listener.cpp">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\features\backtrack\backtrack.cpp">
+      <Filter>dc-csgo\features\player_log</Filter>
     <ClCompile Include="csgo\hooking\hooks\IsHltv.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
@@ -317,9 +316,6 @@
     </ClInclude>
     <ClInclude Include="csgo\features\engine_pred\engine_pred.h">
       <Filter>dc-csgo\features\engine_pred</Filter>
-    </ClInclude>
-    <ClInclude Include="csgo\features\player_log\player_log.h">
-      <Filter>dc-csgo\features\player_log</Filter>
     </ClInclude>
     <ClInclude Include="csgo\features\chams\chams.h">
       <Filter>dc-csgo\features\chams</Filter>
@@ -450,6 +446,9 @@
     <ClInclude Include="csgo\features\entity listener\ent_listener.h">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClInclude>
+    <ClInclude Include="csgo\features\backtrack\backtrack.h">
+      <Filter>dc-csgo\features\player_log</Filter>
+	</ClInclude>
     <ClInclude Include="csgo\features\geometry\geometry.h">
       <Filter>dc-csgo\features\geometry</Filter>
     </ClInclude>

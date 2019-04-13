@@ -79,7 +79,7 @@ bool c_hooks::hook( ) {
 
 	if( !m_clientmode.hook_method( hook::idx::CREATE_MOVE, &hook::CreateMove ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook CreateMove. This is fatal." );
-		return false;	
+		return false;
 	}
 
 	if( !m_clientmode.hook_method( hook::idx::OVERRIDE_VIEW, &hook::OverrideView ) ) {
@@ -134,7 +134,7 @@ bool c_hooks::hook( ) {
 
 	if( !m_viewrender.hook_method( hook::idx::RENDER_SMOKE_OVERLAY, hook::RenderSmokeOverlay ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook RenderSmokeOverlay. This is fatal." );
-		return false;	
+		return false;
 	}
 
 	if( !m_materialsystem.hook_method( hook::idx::GET_MATERIAL, hook::GetMaterial ) ) {

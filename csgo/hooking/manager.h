@@ -37,7 +37,7 @@ namespace hook {
 		RESET =						16,
 		PRESENT =					17,
 		END_SCENE =					42,
-		
+
 		// clientmode
 		SHOULD_DRAW_FOG =			17,
 		OVERRIDE_VIEW =				18,

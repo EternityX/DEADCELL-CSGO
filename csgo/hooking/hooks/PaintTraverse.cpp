@@ -1,6 +1,16 @@
 #include "../../inc.hpp"
 #include "../../features/visuals/visuals.h"
 
+c_csplayer* UTIL_PlayerByIndex( int index ) {
+	typedef c_csplayer*( __fastcall* PlayerByIndex )( int );
+	static PlayerByIndex UTIL_PlayerByIndex = ( PlayerByIndex )pattern::find( "server.dll", "85 C9 7E 2A A1" );
+
+	if ( !UTIL_PlayerByIndex )
+		return false;
+
+	return UTIL_PlayerByIndex( index );
+}
+
 void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel, bool forceRepaint, bool allowForce ) {
 	static int hud_zoom_panel = 0;
 	if( !hud_zoom_panel ) {

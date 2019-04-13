@@ -140,6 +140,7 @@ bool c_config::init( ) {
 	item( g_vars.antiaim.jitter, "g_vars.antiaim.jitter", m_items );
 	item( g_vars.antiaim.pitch, "g_vars.antiaim.pitch", m_items );
 	item( g_vars.antiaim.yaw, "g_vars.antiaim.yaw", m_items );
+	item( g_vars.antiaim.side_switch_key, "g_vars.antiaim.side_switch_key", m_items );
 	item( g_vars.antiaim.left_override_key, "g_vars.antiaim.left_override_key", m_items );
 	item( g_vars.antiaim.right_override_key, "g_vars.antiaim.right_override_key", m_items );
 	item( g_vars.antiaim.backwards_override_key, "g_vars.antiaim.backwards_override_key", m_items );

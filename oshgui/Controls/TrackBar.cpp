@@ -6,6 +6,8 @@
 * See license in OSHGui.hpp
 */
 
+#pragma warning( disable : 4101 ) // unreferenced local variable
+
 #include "TrackBar.hpp"
 #include "Label.hpp"
 #include "../Misc/Exceptions.hpp"

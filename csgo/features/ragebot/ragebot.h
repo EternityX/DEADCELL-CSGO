@@ -2,13 +2,14 @@
 #include "../../inc.hpp"
 #include "../autowall/autowall.h"
 #include "../misc/misc.h"
-#include "../player_log/player_log.h"
 #include "../entity listener/ent_listener.h"
+#include "../backtrack/backtrack.h"
 
 class c_ragebot {
 	struct rage_t {
-		rage_t( c_csplayer *player, int i, int damage, vec3_t point, float dist ){
+		rage_t( c_csplayer *player, lag_record_t *record, int i, int damage, vec3_t point, float dist ){
 			m_player = player;
+			m_record = record;
 			index = i;
 			m_damage = damage;
 			m_bestpoint = point;
@@ -17,6 +18,7 @@ class c_ragebot {
 
 		vec3_t m_bestpoint;
 		c_csplayer* m_player;
+		lag_record_t* m_record;
 		int index;
 		int m_damage;
 		float distance;
@@ -27,6 +29,7 @@ class c_ragebot {
 
 	void choose_angles( );
 	void select_target( );
+	void restore_players( );
 	bool get_points_from_hitbox( c_csplayer * e, std::vector< int > hitboxes, matrix3x4_t* matrix, std::vector<vec3_t>& points, float scale );
 	void quickstop( c_base_combat_weapon *local_weapon );
 	bool is_valid( c_csplayer * player );
