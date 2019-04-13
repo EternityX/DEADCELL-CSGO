@@ -301,14 +301,16 @@ void c_ragebot::choose_angles( ){
 	}
 }
 
-std::vector< lag_record_t > c_ragebot::get_best_records( std::deque< lag_record_t > records ){
-	std::vector< lag_record_t > output{ };
-	for( size_t i = 0; i < records.size( ); ++i ){
-		auto lag_record = records.at( i );
+bool c_ragebot::get_best_records( c_csplayer*e, std::deque< lag_record_t > &out ){
+	
+	out = g_backtrack.get( e->get_index( ) )->m_records;
+	auto it = std::find_if( out.begin( ), out.end( ), [](lag_record_t &record){
+		return !record.is_valid();
+	});
 
-	}
+	out.erase( it, out.end( ) );
 
-	return output;
+	return true;
 }
 
 bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitboxes, matrix3x4_t *matrix, std::vector< vec3_t >& points, float scale ) {
