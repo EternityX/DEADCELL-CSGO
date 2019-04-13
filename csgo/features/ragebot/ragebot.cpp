@@ -94,6 +94,9 @@ void c_ragebot::select_target( ) {
 
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
 			for ( auto &record : g_backtrack.get( idx )->m_records ) {
+				if( !record.is_valid( ) )
+					continue;
+
 				if ( !g_backtrack.restore( e, record ) )
 					continue;
 

@@ -6,7 +6,7 @@ struct lag_record_t {
 
 	lag_record_t( c_csplayer *player )  {
 
-		std::memcpy( m_matrix, player->bone_cache( ).base( ), sizeof( matrix3x4_t ) * player->get_bone_count( ) );
+		std::memcpy( m_matrix, player->bone_cache( ).base( ), player->get_bone_count( ) * sizeof( matrix3x4_t ) );
 
 		m_bonecount = player->get_bone_count( );
 
