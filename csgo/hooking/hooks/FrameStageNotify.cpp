@@ -37,7 +37,12 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_fra
 		}
 		case FRAME_NET_UPDATE_END: {
 			if ( g_vars.rage.enabled ) {
-				g_backtrack.log( );
+				if ( g_cl.m_local && g_cl.m_local->alive( ) ) {
+					g_backtrack.log( );
+				}
+				else {
+					g_backtrack.reset( );
+				}
 			}
 		}
 	}

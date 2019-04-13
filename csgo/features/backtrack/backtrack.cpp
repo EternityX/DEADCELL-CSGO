@@ -78,6 +78,12 @@ void c_backtrack::log( ){
 	}
 }
 
+void c_backtrack::reset( ) {
+	for ( auto player :  m_players ) {
+		player.m_records.clear( );
+	}
+}
+
 bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 	if ( !e || !e->alive( ) )
 		return false;
@@ -93,7 +99,7 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 	e->get_collideable( )->mins( ) = record.m_mins;
 	e->get_collideable( )->maxs( ) = record.m_maxs;
 
-	std::memcpy( e->bone_cache( ).base( ), record.m_matrix, sizeof( matrix3x4_t ) * 128 );
+	std::memcpy( e->bone_cache( ).base( ), &record.m_matrix, sizeof( matrix3x4_t ) * e->bone_cache( ).count( ) );
 
 	// TO-DO : restore bonecount
 
@@ -124,5 +130,12 @@ void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &rec
 }
 
 player_log_t c_backtrack::get( int index ){
-	return m_players.at( index - 1 );
+	try {
+		return m_players.at( index - 1 );
+	}
+	catch ( std::out_of_range &ex ) {
+		UNREFERENCED_PARAMETER( ex );
+		_RPT1( _CRT_WARN, "Failed to get player backtrack records", ex.what( ) );
+		return player_log_t{};
+	}
 }

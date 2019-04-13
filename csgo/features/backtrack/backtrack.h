@@ -4,9 +4,9 @@
 struct lag_record_t {
 	lag_record_t( ){ }
 
-	lag_record_t( c_csplayer *player ) {
+	lag_record_t( c_csplayer *player )  {
 
-		std::memcpy( m_matrix, player->bone_cache( ).base( ), sizeof( matrix3x4_t ) * 128 );
+		std::memcpy( &m_matrix, player->bone_cache( ).base( ), sizeof( matrix3x4_t ) * player->bone_cache( ).count( ) );
 
 		m_tickcount = g_csgo.m_global_vars->m_tickcount;
 
@@ -37,7 +37,7 @@ struct lag_record_t {
 	float							  m_simtime;
 	vec3_t							  m_vel;
 
-	matrix3x4_t*					  m_matrix;
+	matrix3x4_t						  m_matrix[ 128 ];
 
 	vec3_t							  m_mins;
 	vec3_t							  m_maxs;
@@ -53,6 +53,7 @@ class c_backtrack{
 public:
 	std::array< player_log_t, 64 > m_players;
 	void log( );
+	void reset( );
 	bool restore( c_csplayer *e, lag_record_t &record );
 	void update_animation_data( c_csplayer *e );
 	void process_cmd( c_user_cmd* cmd, c_csplayer* e, lag_record_t &record );
