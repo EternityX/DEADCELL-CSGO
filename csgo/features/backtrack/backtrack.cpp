@@ -58,8 +58,9 @@ void c_backtrack::log( ){
 		entry->m_player = e;
 
 		// we have no records or we received a player update from the server, make a new entry.
-		if( entry->m_records.empty( ) || e->simtime() > entry->m_records.front( ).m_simtime ) {
-			auto lag_record = lag_record_t( e, entry->m_records );
+		if( entry->m_records.empty( ) || e->simtime( ) > entry->m_records.front( ).m_simtime ) {
+			update_animation_data( e );
+			auto lag_record = lag_record_t( e );
 
 			// only push valid records.
 			if ( lag_record.is_valid( ) ) {
@@ -84,42 +85,33 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 	if ( !record.is_valid( ) )
 		return false;
 
-	vec3_t extrapolated_origin = record.m_origin;
-	if ( record.m_prev_record && ( record.m_origin - record.m_prev_record->m_origin ).length_sqr( ) > 4096.f ) {
-		float simtime_delta = record.m_simtime - record.m_prev_record->m_simtime;
-		vec3_t avg_vel = ( record.m_origin - record.m_prev_record->m_origin ) / ( simtime_delta > 0.f ? simtime_delta : 1.f );
-
-		int extrapolation_ticks = std::clamp( int( simtime_delta ), 1, 15 );
-		while ( extrapolation_ticks > 0 ) {
-			extrapolated_origin += avg_vel * g_csgo.m_global_vars->m_interval_per_tick;
-			--extrapolation_ticks;
-		}
-	}
-
 	e->angles( ) = record.m_angles;
-	e->origin( ) = extrapolated_origin;
-	e->abs_origin( ) = extrapolated_origin;
+	e->origin( ) = record.m_origin;
+	e->abs_origin( ) = record.m_abs_origin;
 	e->velocity( ) = record.m_vel;
 	e->flags( ) = record.m_flags;
-	e->poses( ) = record.m_poses;
-	e->animstate( ) = record.m_animstate;
-	e->animoverlays( ) = record.m_animoverlays;
 	e->get_collideable( )->mins( ) = record.m_mins;
 	e->get_collideable( )->maxs( ) = record.m_maxs;
 
 	e->invalidate_bone_cache( );
-	
+
+	std::memcpy( e->bone_cache( ).base( ), record.m_matrix, sizeof( matrix3x4_t ) * 128 );
+
+	// TO-DO : restore bonecount
+
+	return true;
+}
+
+void c_backtrack::update_animation_data( c_csplayer *e ){
 	e->client_side_anims( ) = true; {
 		e->update_anims( );
 
 		int backup_flags = e->flags( );
 		e->flags( ) &= ~FL_ONGROUND;
-		e->setup_bones( nullptr, -1, 0x7FF00, record.m_curtime );
+		e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
 		e->flags( ) = backup_flags;
 
 	} e->client_side_anims( ) = false;
-
-	return true;
 }
 
 void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &record ) {

@@ -29,33 +29,6 @@ void c_ragebot::select_target( ) {
 	if( !weapon || weapon->clip( ) <= 0 )
 		return;
 
-	auto bounding_check = [ this, local ]( c_csplayer* e, const lag_record_t& record, float min_dmg ) -> bool {
-		auto *studio_hdr = e->model_ptr( )->m_studio_hdr;
-		if ( !studio_hdr )
-			return false;
-
-		auto head_hitbox = studio_hdr->hitbox( head, 0 );
-		if ( !head_hitbox )
-			return false;
-
-		const auto bbmin = record.m_mins + record.m_origin;
-		const auto bbmax = record.m_maxs + record.m_origin;
-
-		vec3_t points[ 5 ];
-		points[ 0 ] = bbmax;
-		points[ 1 ] = ( bbmin + bbmax ) * 0.5f;
-		points[ 2 ] = ( head_hitbox->bb_min + head_hitbox->bb_max ) * 0.5f;
-		points[ 3 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
-		points[ 4 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
-
-		for ( const auto& p : points ) {
-			if ( g_autowall.think( p, e, min_dmg, true ) )
-				return true;
-		}
-
-		return false;
-	};
-
 	try {
 		std::vector< int > hitboxes = { };
 		hitboxes.push_back( g_vars.rage.primary_hitbox );
@@ -122,9 +95,6 @@ void c_ragebot::select_target( ) {
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
 			for ( auto &record : g_backtrack.get( idx ).m_records ) {
 				if ( !g_backtrack.restore( e, record ) )
-					continue;
-
-				if ( !bounding_check( e, record, best_min_dmg ) )
 					continue;
 
 				std::vector< vec3_t > points;
