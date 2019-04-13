@@ -30,7 +30,7 @@ void c_ragebot::select_target( ) {
 		return;
 
 	auto bounding_check = [ this, local ]( c_csplayer* e, const lag_record_t& record, float min_dmg ) -> bool {
-		auto *studio_hdr = e->studio_hdr( );
+		auto *studio_hdr = e->model_ptr( )->m_studio_hdr;
 		if ( !studio_hdr )
 			return false;
 
@@ -127,10 +127,8 @@ void c_ragebot::select_target( ) {
 				if ( !bounding_check( e, record, best_min_dmg ) )
 					continue;
 
-				_bones = e->bone_cache( ).base( );
-
 				std::vector< vec3_t > points;
-				if ( !get_points_from_hitbox( e, hitboxes, _bones, points, ( g_vars.rage.pointscale / 100.f ) ) )
+				if ( !get_points_from_hitbox( e, hitboxes, e->bone_cache( ).base( ), points, ( g_vars.rage.pointscale / 100.f ) ) )
 					continue;
 
 				if ( points.empty( ) )
@@ -150,7 +148,7 @@ void c_ragebot::select_target( ) {
 				}
 			}
 
-			m_players.emplace_back( e, player_record, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
+			m_players.emplace_back( e, player_record, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ) );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {

@@ -7,7 +7,7 @@
 
 class c_ragebot {
 	struct rage_t {
-		rage_t( c_csplayer *player, lag_record_t *record, int i, int damage, vec3_t point, float dist, matrix3x4_t* matrix ){
+		rage_t( c_csplayer *player, lag_record_t *record, int i, int damage, vec3_t point, float dist ){
 			m_player = player;
 			m_record = record;
 			index = i;

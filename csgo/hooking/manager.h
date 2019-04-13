@@ -27,7 +27,6 @@ namespace hook {
 		using GetMaterial_t = i_material *( __thiscall*)( uintptr_t, const char *, const char *, bool, const char * );
 		using RenderSmokeOverlay_t = bool (__thiscall *)( uintptr_t, bool );
 		using RunCommand_t = void( __thiscall *)( uintptr_t, c_base_player *, c_user_cmd *, i_move_helper * );
-		using EndScene_t = long( __stdcall* ) ( IDirect3DDevice9* );
 		using IsHltv_t = bool( __thiscall * )( uintptr_t );
 
 	};
@@ -95,7 +94,6 @@ namespace hook {
 	void __fastcall FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_frame_stage_t curstage );
 	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const c_view_setup *pSetup );
 	void __fastcall RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 );
-	long __stdcall  EndScene( IDirect3DDevice9 *device );
 	bool __fastcall IsHltv( uintptr_t ecx, uintptr_t edx );
 };
 
