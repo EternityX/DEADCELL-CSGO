@@ -58,7 +58,6 @@
     <ClCompile Include="csgo\hooking\hooks\ShouldDrawFog.cpp" />
     <ClCompile Include="csgo\hooking\manager.cpp" />
     <ClCompile Include="csgo\menu\menu.cpp" />
-    <ClCompile Include="csgo\hooking\hooks\EndScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\features\entity listener\ent_listener.h" />
