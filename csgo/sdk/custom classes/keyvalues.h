@@ -26,6 +26,7 @@ public:
 
 		LoadFromBufferEx( this, resource_name, buf, file_sys, path_id, eval_sym_proc, unk );
 	}
+
 	key_values *find_key( const char *name, bool bCreate ){
 		using findkey_t = key_values*( __thiscall* )( key_values*, const char*, bool );
 		static auto FindKey = pattern::find< findkey_t >( g_csgo.m_client_dll, "55 8B EC 83 EC 1C 53 8B D9 85 DB" );

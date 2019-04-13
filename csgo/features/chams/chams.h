@@ -1,14 +1,28 @@
 #pragma once
 #include "../../inc.hpp"
 
+enum shader_type_t {
+	VertexLitGeneric,
+	UnlitGeneric,
+	Modulate
+};
+
 class c_chams {
-	void push_players( );
-	i_material *create_material( bool shade, bool wireframe, bool ignorez, int rimlight_boost = 0 ) const;
+private:
+	std::pair< i_material *, i_material * > m_shaded_mat;
+	std::pair< i_material *, i_material * > m_flat_mat;
+	std::pair< i_material *, i_material * > m_modulate_mat;
+
 	std::vector< std::pair< c_csplayer *, float > > m_players;
-	bool m_applied = false;
+
+	void push_players( );
+	i_material *create_material( shader_type_t shade, bool ignorez, bool wireframe = false );
+
 public:
+	bool m_kv_needs_update = false;
+
 	void on_sceneend( );
-	bool on_dme( IMatRenderContext *ctx, void *state, const model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld );
+	bool on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld, hook::fn::DrawModelExecute_t orig );
 };
 
 extern c_chams g_chams;

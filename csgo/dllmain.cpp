@@ -22,11 +22,9 @@ bool unload() {
 	if( !g_events.remove( ) )
 		return false;
 
-	if( !g_anim.remove( ) )
-		return false;
+	g_anim.remove( );
 
-	if( !g_listener.remove( ) )
-		return false;
+	g_listener.remove( );
 
 	if( OSHGui::Application::HasBeenInitialized( ) )
 		g_renderer.get_renderer( ).PreD3DReset( );
@@ -70,11 +68,9 @@ static ulong_t __stdcall cheat_init( void *arg ) {
 		if( !g_netvars.init( ) )
 			throw std::runtime_error( "Sanity check failed on netvar intialization" );
 
-		if( !g_anim.init( ) )
-			throw std::runtime_error( "Sanity check failed on animation intialization" );
+		g_anim.init( );
 
-		if( !g_listener.init( ) )
-			throw std::runtime_error( "Sanity check failed on entity listener intialization" );
+		g_listener.init( );
 
 		if( !g_hooks.init( ) )
 			throw std::runtime_error( "Failed to initialize hook(s)" );

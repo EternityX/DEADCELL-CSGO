@@ -14,7 +14,6 @@ class c_ragebot {
 			m_damage = damage;
 			m_bestpoint = point;
 			distance = dist;
-			mat = matrix;
 		}
 
 		vec3_t m_bestpoint;
@@ -23,7 +22,6 @@ class c_ragebot {
 		int index;
 		int m_damage;
 		float distance;
-		matrix3x4_t* mat;
 	};
 
 	std::vector< rage_t > m_players;

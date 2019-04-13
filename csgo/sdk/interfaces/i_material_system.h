@@ -12,11 +12,8 @@ public:
 			this, material_name, kv );
 	}
 
-	i_material *get_material( const char *material_name, const char *texture_group_name, bool complain = true,
-	                        const char *complain_prefix = nullptr ) {
-		return util::misc::vfunc< i_material *( __thiscall *)( decltype( this ), const char *, const char *, bool,
-		                                                      const char * ) >( this, 84 )(
-			this, material_name, texture_group_name, complain, complain_prefix );
+	i_material *get_material( const char *material_name, const char *texture_group_name, bool complain = true, const char *complain_prefix = nullptr ) {
+		return util::misc::vfunc< i_material *( __thiscall *)( decltype( this ), const char *, const char *, bool, const char * ) >( this, 84 )( this, material_name, texture_group_name, complain, complain_prefix );
 	}
 
 	int first_material() {

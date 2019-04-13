@@ -31,10 +31,10 @@ namespace renderer {
 		std::vector< OSHGui::Drawing::FontPtr > m_fonts;
 
 		c_renderer();
-		void init( IDirect3DDevice9 *device );
+		void init( IDirect3DDevice9Ex *device );
 
-		void start_drawing( IDirect3DDevice9 *device );
-		void end_drawing( IDirect3DDevice9 *device ) const;
+		void start_drawing( IDirect3DDevice9Ex *device );
+		void end_drawing( IDirect3DDevice9Ex *device ) const;
 
 		// drawing.
 		void rect( const OSHGui::Drawing::Color &color, int x, int y, int width, int height ) const;

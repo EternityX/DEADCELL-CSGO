@@ -2,26 +2,12 @@
 
 c_custom_listener g_listener;
 
-bool c_custom_listener::init( ) {
-	try {
-		g_csgo.m_entity_list->add_listener_entity( this );
-	}
-	catch( ... ) {
-		return false;
-	}
-
-	return true;
+void c_custom_listener::init( ) {
+	g_csgo.m_entity_list->add_listener_entity( this );
 }
 
-bool c_custom_listener::remove( ) {
-	try {
-		g_csgo.m_entity_list->remove_listener_entity( this );
-	}
-	catch( ... ) {
-		return false;
-	}
-
-	return true;
+void c_custom_listener::remove( ) {
+	g_csgo.m_entity_list->remove_listener_entity( this );
 }
 
 void c_custom_listener::on_entity_created( c_base_entity *ent ) {

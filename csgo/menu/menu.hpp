@@ -97,7 +97,7 @@ namespace controls {
 		void init( const AnsiString &text, std::vector<AnsiString> items, int x, int y, Control *parent, int max_items, int *cvar );
 	public:
 		c_sound_combo( const AnsiString &text, const std::vector<AnsiString> &items, int x, int y, Control *parent, int max_items, int *cvar );
-		c_sound_combo( const AnsiString &text, const std::vector<AnsiString> &items, Control *parent, int max_items, int *cvar );
+		c_sound_combo( const AnsiString &text, const std::vector<AnsiString> &items, Control *parent, int max_items, int *cvar, int parent_width );
 	};
 
 	class c_slider : public OSHGui::TrackBar {

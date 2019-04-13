@@ -92,6 +92,9 @@
     <Filter Include="dc-csgo\features\entity listener">
       <UniqueIdentifier>{065beecb-cef8-4cc2-889e-a6eb2c32ab99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dc-csgo\features\geometry">
+      <UniqueIdentifier>{29b831d0-8e9c-48be-8a45-acda888cc90d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="csgo\dllmain.cpp">
@@ -136,9 +139,6 @@
     <ClCompile Include="csgo\hooking\hooks\LockCursor.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\UpdateClientSideAnimations.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
-    </ClCompile>
     <ClCompile Include="csgo\features\misc\misc.cpp">
       <Filter>dc-csgo\features\misc</Filter>
     </ClCompile>
@@ -156,9 +156,6 @@
     </ClCompile>
     <ClCompile Include="csgo\features\animations\anim.cpp">
       <Filter>dc-csgo\features\animations</Filter>
-    </ClCompile>
-    <ClCompile Include="csgo\hooking\hooks\TestHitboxes.cpp">
-      <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\GetViewmodelFOV.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
@@ -205,11 +202,22 @@
     <ClCompile Include="csgo\features\entity listener\ent_listener.cpp">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="csgo\hooking\hooks\EndScene.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
     <ClCompile Include="csgo\features\backtrack\backtrack.cpp">
       <Filter>dc-csgo\features\player_log</Filter>
+=======
+    <ClCompile Include="csgo\hooking\hooks\IsHltv.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\geometry\geometry.cpp">
+      <Filter>dc-csgo\features\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\EndScene.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+>>>>>>> effd852e36e246b8ae1cd9a39b0333f62d086cfd
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -444,8 +452,13 @@
     <ClInclude Include="csgo\features\entity listener\ent_listener.h">
       <Filter>dc-csgo\features\entity listener</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="csgo\features\backtrack\backtrack.h">
       <Filter>dc-csgo\features\player_log</Filter>
+=======
+    <ClInclude Include="csgo\features\geometry\geometry.h">
+      <Filter>dc-csgo\features\geometry</Filter>
+>>>>>>> effd852e36e246b8ae1cd9a39b0333f62d086cfd
     </ClInclude>
   </ItemGroup>
 </Project>
