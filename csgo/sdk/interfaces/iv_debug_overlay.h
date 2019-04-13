@@ -27,6 +27,8 @@ public:
 	virtual void            add_box_overlay2( const vec3_t& origin, const vec3_t& mins, const vec3_t& max, vec3_t const& orientation, const uint8_t* faceColor, const uint8_t* edgeColor, float duration ) = 0;
 	virtual void			add_line_overlay( const vec3_t& origin, const vec3_t& dest, int r, int g, int b, int a, float, float ) = 0;
 	virtual void            purge_text_overlays() = 0;
-	VFUNC( 23, add_capsule_overlay( vec3_t& mins, vec3_t& maxs, float radius, int r, int g, int b, int a, float duration ), void( __thiscall* )( void*, vec3_t&, vec3_t&, float&, int, int, int, int, float ) )( mins, maxs, radius, r, g, b, a, duration )
+	void add_capsule_overlay( vec3_t& mins, vec3_t& maxs, float pillradius, int r, int g, int b, int a, float duration ) {
+		util::misc::vfunc< void(__thiscall*)(void*, vec3_t&, vec3_t&, float&, int, int, int, int, float) >( this, 23 )(this, mins, maxs, pillradius, r, g, b, a, duration);
+	}
 	VFUNC( 24, add_capsule_overlay_visible( vec3_t& mins, vec3_t& maxs, float radius, int r, int g, int b, int a, float duration ), void( __thiscall* )( void*, vec3_t&, vec3_t&, float&, int, int, int, int, float ) )( mins, maxs, radius, r, g, b, a, duration )
 };

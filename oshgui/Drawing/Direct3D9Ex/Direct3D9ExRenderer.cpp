@@ -15,8 +15,8 @@ namespace OSHGui
 		//---------------------------------------------------------------------------
 		//Constructor
 		//---------------------------------------------------------------------------
-		Direct3D9ExRenderer::Direct3D9ExRenderer(LPDIRECT3DDEVICE9 device)
-			: Direct3D9Renderer(device)
+		Direct3D9ExRenderer::Direct3D9ExRenderer( LPDIRECT3DDEVICE9 device )
+			: Direct3D9Renderer( device )
 		{
 			
 		}
@@ -25,22 +25,22 @@ namespace OSHGui
 		//---------------------------------------------------------------------------
 		TexturePtr Direct3D9ExRenderer::CreateTexture()
 		{
-			auto texture = std::shared_ptr<Direct3D9ExTexture>(new Direct3D9ExTexture(*this));
-			RegisterTexture(texture);
+			auto texture = std::shared_ptr< Direct3D9ExTexture >( new Direct3D9ExTexture( *this ) );
+			RegisterTexture( texture );
 			return texture;
 		}
 		//---------------------------------------------------------------------------
 		TexturePtr Direct3D9ExRenderer::CreateTexture(const Misc::AnsiString &filename)
 		{
-			auto texture = std::shared_ptr<Direct3D9ExTexture>(new Direct3D9ExTexture(*this, filename));
-			RegisterTexture(texture);
+			auto texture = std::shared_ptr< Direct3D9ExTexture >( new Direct3D9ExTexture( *this, filename ) );
+			RegisterTexture( texture );
 			return texture;
 		}
 		//---------------------------------------------------------------------------
 		TexturePtr Direct3D9ExRenderer::CreateTexture(const SizeF &size)
 		{
-			auto texture = std::shared_ptr<Direct3D9ExTexture>(new Direct3D9ExTexture(*this, size));
-			RegisterTexture(texture);
+			auto texture = std::shared_ptr< Direct3D9ExTexture >( new Direct3D9ExTexture( *this, size ) );
+			RegisterTexture( texture );
 			return texture;
 		}
 		//---------------------------------------------------------------------------

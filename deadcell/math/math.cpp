@@ -22,6 +22,24 @@ void math::vector_transform( vec3_t &in, const matrix3x4_t &matrix, vec3_t &out 
 	out.z = in.dot( matrix.m_mat_val[ 2 ] ) + matrix.m_mat_val[ 2 ][ 3 ];
 }
 
+void math::vector_itransform( const vec3_t *in1, const matrix3x4_t& in2, vec3_t *out ) {
+	float in1t[ 3 ];
+
+	in1t[ 0 ] = in1->x - in2[ 0 ][ 3 ];
+	in1t[ 1 ] = in1->y - in2[ 1 ][ 3 ];
+	in1t[ 2 ] = in1->z - in2[ 2 ][ 3 ];
+
+	out->x = in1t[ 0 ] * in2[ 0 ][ 0 ] + in1t[ 1 ] * in2[ 1 ][ 0 ] + in1t[ 2 ] * in2[ 2 ][ 0 ];
+	out->y = in1t[ 0 ] * in2[ 0 ][ 1 ] + in1t[ 1 ] * in2[ 1 ][ 1 ] + in1t[ 2 ] * in2[ 2 ][ 1 ];
+	out->z = in1t[ 0 ] * in2[ 0 ][ 2 ] + in1t[ 1 ] * in2[ 1 ][ 2 ] + in1t[ 2 ] * in2[ 2 ][ 2 ];
+}
+
+void math::vector_irotate( const vec3_t *in1, const matrix3x4_t& in2, vec3_t *out ) {
+	out->x = in1->dot( in2[ 0 ] );
+	out->y = in1->dot( in2[ 1 ] );
+	out->z = in1->dot( in2[ 2 ] );
+}
+
 bool math::clamp_angles( vec3_t &angles ) {
 	if( std::isfinite( angles.x ) && std::isfinite( angles.y ) && std::isfinite( angles.z ) ) {
 		clamp( angles.x, -89.f, 89.f );
@@ -51,7 +69,7 @@ vec3_t math::to_angle( vec3_t vec ) {
 		angles.y = 0.f;
 	}
 	else {
-		angles.x = std::atan2f( -vec.z, vec.Length2D() ) * ( 180.f / pi );
+		angles.x = std::atan2f( -vec.z, vec.length_2d() ) * ( 180.f / pi );
 		if( angles.x < 0.f )
 			angles.x += 360.f;
 
@@ -123,7 +141,7 @@ void math::vector_angle( const vec3_t &forward, vec3_t &angles ) {
 		angles.y = 0.f;
 	}
 	else {
-		angles.x = rad_to_deg( std::atan2( -forward.z, forward.Length2D() ) );
+		angles.x = rad_to_deg( std::atan2( -forward.z, forward.length_2d() ) );
 		angles.y = rad_to_deg( std::atan2( forward.y, forward.x ) );
 	}
 

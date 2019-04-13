@@ -169,7 +169,7 @@ public:
 		return ( x * x + y * y + z * z );
 	}
 
-	float Length2D( ) const
+	float length_2d( ) const
 	{
 		return sqrt( x * x + y * y );
 	}

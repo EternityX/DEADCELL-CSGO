@@ -188,7 +188,7 @@ void c_misc::strafe( c_user_cmd *cmd ) {
 
 	float velocity_yaw = local->velocity( ).y;
 
-	float rotation = util::misc::clamp< float >( math::rad_to_deg( std::atan2( 15.f, local->velocity( ).Length2D( ) ) ), 0.f, 90.f );
+	float rotation = util::misc::clamp< float >( math::rad_to_deg( std::atan2( 15.f, local->velocity( ).length_2d( ) ) ), 0.f, 90.f );
 
 	float abs_yaw = std::fabs( math::normalize_angle( velocity_yaw - viewangles.y ) );
 
@@ -224,7 +224,7 @@ void c_misc::auto_zeus( c_user_cmd *cmd ) {
 		if( !target->setup_bones( matrix.data( ), 128, 0x100, target->simtime( ) ) )
 			continue;
 
-		auto studiohdr = target->studio_hdr( );
+		auto studiohdr = target->model_ptr( )->m_studio_hdr;
 		if( !studiohdr )
 			continue;
 
@@ -429,13 +429,29 @@ void c_misc::capsule_overlay( c_csplayer *e, float duration, matrix3x4_t *mat ) 
 	if( !e )
 		return;
 
-	studiohdr_t *studio_model = e->studio_hdr( );
+	studiohdr_t *studio_model = e->model_ptr( )->m_studio_hdr;
 	if( !studio_model )
 		return;
 
 	mstudiohitboxset_t *hitboxset = studio_model->hitbox_set( e->hitbox_set( ) );
 	if( !hitboxset )
 		return;
+
+	vec3_t hullcolor[ 8 ] = 
+	{
+		vec3_t( 1.0, 1.0, 1.0 ),
+		vec3_t( 1.0, 0.5, 0.5 ),
+		vec3_t( 0.5, 1.0, 0.5 ),
+		vec3_t( 1.0, 1.0, 0.5 ),
+		vec3_t( 0.5, 0.5, 1.0 ),
+		vec3_t( 1.0, 0.5, 1.0 ),
+		vec3_t( 0.5, 1.0, 1.0 ),
+		vec3_t( 1.0, 1.0, 1.0 )
+	};
+
+	int r = 0;
+	int g = 0;
+	int b = 255;
 
 	for( int i = 0; i < hitboxset->numhitboxes; i++ ) {
 		mstudiobbox_t *h = hitboxset->pHitbox( i );
@@ -445,8 +461,18 @@ void c_misc::capsule_overlay( c_csplayer *e, float duration, matrix3x4_t *mat ) 
 		vec3_t min = math::vector_transform( h->bb_min, mat[ h->bone_index ] );
 		vec3_t max = math::vector_transform( h->bb_max, mat[ h->bone_index ] );
 
-		if( h->m_flRadius != -1 )
-			g_csgo.m_debug_overlay->add_capsule_overlay_visible( min, max, h->m_flRadius, 255, 0, 0, 255, duration );
+		int j = ( h->m_iGroup % 8 );
+
+		r = static_cast< int >( 255.0f * hullcolor[ j ][ 0 ] );
+		g = static_cast< int >( 255.0f * hullcolor[ j ][ 1 ] );
+		b = static_cast< int >( 255.0f * hullcolor[ j ][ 2 ] );
+
+		float radius = h->m_flRadius;
+
+		if( radius != -1.f ){
+			g_csgo.m_debug_overlay->add_capsule_overlay_visible( min, max, h->m_flRadius, r, g, b, 150, duration );
+		}
+
 	}
 }
 
@@ -510,7 +536,7 @@ c_flashlight_effect* c_misc::create_flashlight( int idx, const char* texture_nam
 
 void c_misc::flashlight( ) {
 	auto destroy_flashlight = [ ]( c_flashlight_effect* flashlight_ptr ) {
-		static auto destroy_fn = reinterpret_cast< void( __thiscall* )( c_flashlight_effect*, c_flashlight_effect* ) >( pattern::find( g_csgo.m_client_dll, "56 8B F1 E8 ?? ?? ?? ?? 8B 4E 28" ) );
+		static auto destroy_fn = pattern::find< void( __thiscall* )( c_flashlight_effect*, c_flashlight_effect* ) >( g_csgo.m_client_dll, "56 8B F1 E8 ?? ?? ?? ?? 8B 4E 28" );
 
 		// the flash light destructor handles the memory management, so we dont need to free the allocated memory
 		// call the destructor of the flashlight
@@ -524,10 +550,10 @@ void c_misc::flashlight( ) {
 
 		if ( !update_light ) {
 			// here we have to deal with a call instruction (E8 rel32)
-			DWORD call_instruction = pattern::find( g_csgo.m_client_dll, "E8 ?? ?? ?? ?? 8B 06 F3 0F 10 46" ); // get the instruction address
-			DWORD rel_address = *( DWORD* )( call_instruction + 1 ); // read the rel32
-			DWORD next_instruction = call_instruction + 5; // get the address of next instruction
-			update_light = ( update_light_t )( next_instruction + rel_address ); // our function address will be nextInstruction + relativeAddress
+			auto call_instruction = pattern::find( g_csgo.m_client_dll, "E8 ?? ?? ?? ?? 8B 06 F3 0F 10 46" ); // get the instruction address
+			uintptr_t rel_address = *reinterpret_cast< uintptr_t* >( call_instruction + 1 ); // read the rel32
+			uintptr_t next_instruction = call_instruction + 5; // get the address of next instruction
+			update_light = reinterpret_cast< update_light_t >( next_instruction + rel_address ); // our function address will be nextInstruction + relativeAddress
 		}
 
 		update_light( flashlight_ptr, flashlight_ptr->m_idx, pos, forward, right, up, flashlight_ptr->m_fov, flashlight_ptr->m_far_z, flashlight_ptr->m_linear_atten, flashlight_ptr->m_casts_shadow, flashlight_ptr->m_texture_name );

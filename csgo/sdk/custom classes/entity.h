@@ -1,22 +1,5 @@
 #pragma once
 
-class c_bone_accessor {
-public:
-	matrix3x4_t *get_bone_array_for_write( void ) const {
-		return m_bones;
-	}
-
-	void set_bone_array_for_write( matrix3x4_t *bonearray ) {
-		for( int bones = 0; bones < 128; bones++ )
-			m_bones[ bones ] = bonearray[ bones ];
-	}
-
-	matrix3x4_t *m_bones;
-
-	int m_readable_bones; // Which bones can be read.
-	int m_writable_bones; // Which bones can be written.
-};
-
 enum life_state_t {
 	ALIVE = 0,
 	DYING,
@@ -57,7 +40,7 @@ public:
 	}
 
 	bool is_player( ) {
-		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 151 )( this );
+		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 153 )( this );
 	}
 
 	bool is_weapon( ) {
@@ -281,11 +264,10 @@ public:
 	NETVAR( int, armor, "DT_CSPlayer", "m_ArmorValue" );
 	NETVAR( vec3_t, angles, "DT_CSPlayer", "m_angEyeAngles" )
 		
-
 	NETVAR( c_base_handle, observer_handle, "DT_CSPlayer", "m_hObserverTarget" );
 	NETVAR( c_base_handle, ground_ent, "DT_CSPlayer", "m_hGroundEntity" );
-	NETVAR( c_base_handle *, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
-	NETVAR( c_base_handle *, my_wearables, "DT_CSPlayer", "m_hMyWearables" )
+	PNETVAR( c_base_handle, my_weapons, "DT_CSPlayer", "m_hMyWeapons" )
+	PNETVAR( c_base_handle, my_wearables, "DT_CSPlayer", "m_hMyWearables" )
 
 	NETVAR( int, shots_fired, "DT_CSPlayer", "m_iShotsFired" )
 
@@ -293,9 +275,12 @@ public:
 	OFFSET( c_animstate *, animstate, 0x3900 )
 	OFFSET( int, get_move_type, 0x25C )
 	OFFSET( c_utl_vector< matrix3x4_t >, bone_cache, 0x2910 )
+	OFFSET( int, eflags, 0xE8 )
+	OFFSET( vec3_t, abs_velocity, 0x94 )
+	
 
-	studiohdr_t *studio_hdr( ){
-		return **reinterpret_cast< studiohdr_t *** >( uintptr_t( this ) + 0x294C );
+	c_studio_hdr *model_ptr( ){
+		return *reinterpret_cast< c_studio_hdr ** >( uintptr_t( this ) + 0x294C );
 	}
 
 	c_utl_vector< animation_layer_t >& animoverlays( ) {
@@ -304,11 +289,6 @@ public:
 
 	static c_csplayer *get_local( ) {
 		return g_csgo.m_entity_list->get< c_csplayer >( g_csgo.m_engine->get_local_player( ) );
-	}
-
-	c_base_handle *weapons( ){
-		static auto offset = g_netvars.get_offset( "DT_CSPlayer", "m_hMyWeapons" );
-		return reinterpret_cast< c_base_handle * >( uintptr_t( this ) + offset );
 	}
 
 	void set_abs_origin( vec3_t &o ) {

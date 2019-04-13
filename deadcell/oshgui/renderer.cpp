@@ -7,9 +7,9 @@ using namespace renderer;
 
 c_renderer::c_renderer( ) { }
 
-void c_renderer::init( IDirect3DDevice9 *device ) {
+void c_renderer::init( IDirect3DDevice9Ex *device ) {
 	// initialize oshgui with our renderer.
-	OSHGui::Application::Initialize( std::make_unique< OSHGui::Drawing::Direct3D9Renderer >( device ) );
+	OSHGui::Application::Initialize( std::make_unique< OSHGui::Drawing::Direct3D9ExRenderer >( device ) );
 
 	m_fonts.resize( FONT_MAX );
 
@@ -23,7 +23,7 @@ void c_renderer::init( IDirect3DDevice9 *device ) {
 	get_instance( )->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
 }
 
-void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
+void c_renderer::start_drawing( IDirect3DDevice9Ex *device ) {
 	if( !device )
 		return;
 
@@ -43,7 +43,7 @@ void c_renderer::start_drawing( IDirect3DDevice9 *device ) {
 	get_renderer( ).BeginRendering( );
 }
 
-void c_renderer::end_drawing( IDirect3DDevice9 *device ) const {
+void c_renderer::end_drawing( IDirect3DDevice9Ex *device ) const {
 	if( !m_render_target )
 		return;
 

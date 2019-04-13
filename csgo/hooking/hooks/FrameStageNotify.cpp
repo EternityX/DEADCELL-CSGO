@@ -41,7 +41,7 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_fra
 		}
 	}
 
-	g_hooks.m_client.get_old_method< fn::FrameStageNotify_t >( 37 )( ecx, curstage );
+	g_hooks.m_client.get_old_method< fn::FrameStageNotify_t >( hook::idx::FRAME_STAGE_NOTIFY )( ecx, curstage );
 
 	switch ( curstage ) {
 		case FRAME_NET_UPDATE_POSTDATAUPDATE_START: {

@@ -215,7 +215,7 @@ void c_visuals::player( c_csplayer *entity ) {
 		if( name.length( ) > 17 )
 			name = name.substr( 0, 17 ) + "...";
 
-		//std::transform( name.begin( ), name.end( ), name.begin( ), std::tolower );
+		//std::transform( name.begin( ), name.end( ), name.begin( ), tolower );
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ),
 		                      name_color,
 		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
@@ -329,7 +329,7 @@ void c_visuals::weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, O
 	std::wstring localised_name = g_csgo.m_localize->find( name );
 
 	std::string print = util::misc::unicode_to_ascii( localised_name );
-	std::transform( print.begin( ), print.end( ), print.begin( ), std::toupper );
+	std::transform( print.begin( ), print.end( ), print.begin( ), toupper );
 
 	g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
 	                      color,
@@ -532,7 +532,7 @@ void c_visuals::world( c_base_entity *entity ) {
 		wchar_t *localised_name = g_csgo.m_localize->find( name );
 
 		auto weapon_name = util::misc::unicode_to_ascii( std::wstring( localised_name ) );
-		std::transform( weapon_name.begin( ), weapon_name.end( ), weapon_name.begin( ), std::toupper );
+		std::transform( weapon_name.begin( ), weapon_name.end( ), weapon_name.begin( ), toupper );
 		if( g_vars.visuals.dropped_weapons )
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
 			                      OSHColor::FromARGB( 200, 255, 255, 255 ),
@@ -809,7 +809,7 @@ void c_visuals::draw_crosshair( ) const {
 	std::once_flag once_flag;
 	std::call_once( once_flag, [ & ] {
 		for ( int i = 0; i < 256; i++ ) {
-			seeds.push_back( { util::misc::get_random_float_range( 0.0f, 1.0f ), util::misc::get_random_float_range( 0.0f, math::pi_2 ) } );
+			seeds.emplace_back( util::misc::get_random_float_range( 0.0f, 1.0f ), util::misc::get_random_float_range( 0.0f, math::pi_2 ) );
 		}
 	} );
 
@@ -861,7 +861,7 @@ void c_visuals::draw_crosshair( ) const {
 			float percentage = ( rand_a * inaccuracy + rand_b * spread ) / ( inaccuracy + spread );
 
 			g_renderer.rect( OSHColor::FromARGB( g_vars.visuals.visualize_spread_color, 255 * ( 0.4f + percentage * 0.6f ) * ( 0.1f + percentage * 0.9f ) ), 
-							 cross_x + screen_spread_x, cross_y + screen_spread_y, 2, 2 );
+							 cross_x + screen_spread_x, cross_y + screen_spread_y, 1, 1 );
 		}
 	}
 }

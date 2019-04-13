@@ -78,21 +78,21 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 		if( g_vars.visuals.impact ) {
 			beam_info_t beam_info;
 			beam_info.m_type = TE_BEAMPOINTS;
-			beam_info.m_model_name = "sprites/physbeam.vmt";
+			beam_info.m_model_name = "sprites/white.vmt";
 			beam_info.m_model_index = -1;
 			beam_info.m_halo_scale = 0.f;
 			beam_info.m_life = 4.f;
-			beam_info.m_width = 2.f;
-			beam_info.m_end_width = 2.f;
-			beam_info.m_fade_length = 0.1f;
+			beam_info.m_width = 1.f;
+			beam_info.m_end_width = 1.f;
+			beam_info.m_fade_length = 1.f;
 			beam_info.m_amplitude = 2.f;
-			beam_info.m_brightness = 140.f;
+			beam_info.m_brightness = 110.f;
 			beam_info.m_speed = 0.2f;
 			beam_info.m_start_frame = 0;
 			beam_info.m_frame_rate = 0.f;
-			beam_info.m_red = util::misc::get_random_float_range( 0.1f, 1.f ) * 255.f;
-			beam_info.m_green = util::misc::get_random_float_range( 0.1f, 1.f ) * 255.f;
-			beam_info.m_blue = util::misc::get_random_float_range( 0.1f, 1.f ) * 255.f;
+			beam_info.m_red = util::misc::get_random_float_range( 0.5f, 1.f ) * 255.f;
+			beam_info.m_green = util::misc::get_random_float_range( 0.5f, 1.f ) * 255.f;
+			beam_info.m_blue = util::misc::get_random_float_range( 0.5f, 1.f ) * 255.f;
 			beam_info.m_num_segments = 2;
 			beam_info.m_renderable = true;
 			beam_info.m_flags = FBEAM_ONLYNOISEONCE | FBEAM_NOTILE | FBEAM_HALOBEAM;
@@ -147,7 +147,7 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 		int attacker = g_csgo.m_engine->get_player_for_user_id( m_event->get_int( "attacker" ) );
 		int target = g_csgo.m_engine->get_player_for_user_id( m_event->get_int( "userid" ) );
 		if( attacker == g_csgo.m_engine->get_local_player( ) && target != g_csgo.m_engine->get_local_player( ) ) {
-			auto *ent = g_csgo.m_entity_list->get< c_csplayer >( g_csgo.m_engine->get_player_for_user_id( target ) );
+			auto *ent = g_csgo.m_entity_list->get< c_csplayer >( target );
 
 			player_info_t info;
 			if( g_csgo.m_engine->get_player_info( target, &info ) && ent ){
@@ -159,7 +159,7 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 				}
 
 				std::string s = info.m_player_name;
-				std::transform( s.begin( ), s.end( ), s.begin( ), std::tolower );
+				std::transform( s.begin( ), s.end( ), s.begin( ), tolower );
 
 				if( g_vars.visuals.hitmarker )
 					g_cl.m_hitmarker_alpha = 1.f;
@@ -167,6 +167,9 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 				if( g_vars.misc.log_damage )
 					g_notify.add( true, OSHGui::Drawing::Color::FromARGB( 220, 249, 44, 69 ), "hit %s in the %s for %i damage.", s.c_str( ),
 						hitgroup_to_name( m_event->get_int( "hitgroup" ) ), m_event->get_int( "dmg_health" ) );
+
+				if( g_vars.misc.client_hitboxes )
+					g_misc.capsule_overlay( ent, g_vars.misc.client_hitboxes_duration, ent->bone_cache( ).base( ) );
 			}
 		}
 	}
