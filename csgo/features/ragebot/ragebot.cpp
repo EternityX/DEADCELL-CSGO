@@ -98,7 +98,7 @@ void c_ragebot::select_target( ) {
 					continue;
 
 				std::vector< vec3_t > points;
-				if ( !get_points_from_hitbox( e, hitboxes, e->bone_cache( ).base( ), points, ( g_vars.rage.pointscale / 100.f ) ) )
+				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
 					continue;
 
 				if ( points.empty( ) )

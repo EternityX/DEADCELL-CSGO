@@ -9,4 +9,5 @@ void __fastcall hook::LevelInitPostEntity( uintptr_t ecx, uintptr_t edx ) {
 	g_cl.m_should_update_materials = true;
 	g_cl.m_server_update_rate = g_csgo.m_convar->find_var( "sv_maxupdaterate" )->get_int( );
 	g_ragebot.m_last_target = nullptr;
+	g_backtrack.reset( );
 }
