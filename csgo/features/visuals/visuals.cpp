@@ -759,7 +759,7 @@ void c_visuals::watermark( ) const {
 	auto time = oss.str( );
 
 	if( connected ) {
-		const bool choking = g_csgo.m_clientstate->m_nChokedCommands > 1;	
+		const bool choking = g_csgo.m_clientstate->m_choked_commands > 1;	
 
 		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor::FromARGB( 220, 255, 255, 255 ),
 			OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, 22, 0,

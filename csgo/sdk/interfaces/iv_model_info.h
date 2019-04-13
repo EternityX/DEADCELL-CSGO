@@ -32,5 +32,5 @@ public:
 	c_utl_vector< int >	m_bone_flags; //0x002C 
 	c_utl_vector< int >	m_bone_parent; //0x0040 
 	inline int			numbones( void ) const { return m_studio_hdr->numbones; };
-	inline mstudiobone_t *bone( int i ) const { return m_studio_hdr->pBone( i ); };
+	inline mstudiobone_t *bone( int i ) const { return m_studio_hdr->bone( i ); };
 }; //Size=0x0054

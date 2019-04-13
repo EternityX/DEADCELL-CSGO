@@ -62,6 +62,11 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
+	if ( !m_directx.hook_method( 42, &hook::EndScene ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to hook Reset. This is fatal." );
+		return false;
+	}
+
 	if( !m_clientmode.hook_method( hook::idx::SHOULD_DRAW_FOG, &hook::ShouldDrawFog ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook ShouldDrawFog. This is fatal." );
 		return false;

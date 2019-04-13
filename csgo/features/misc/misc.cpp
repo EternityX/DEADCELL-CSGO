@@ -229,7 +229,7 @@ void c_misc::auto_zeus( c_user_cmd *cmd ) {
 			continue;
 
 		for( auto &h : hitboxes ) {
-			auto *bbox = studiohdr->pHitbox( h, 0 );
+			auto *bbox = studiohdr->hitbox( h, 0 );
 
 			vec3_t max, min;
 			math::vector_transform( bbox->bb_min, matrix.at( bbox->bone_index ), min );
@@ -433,7 +433,7 @@ void c_misc::capsule_overlay( c_csplayer *e, float duration, matrix3x4_t *mat ) 
 	if( !studio_model )
 		return;
 
-	mstudiohitboxset_t *hitboxset = studio_model->pHitboxSet( e->hitbox_set( ) );
+	mstudiohitboxset_t *hitboxset = studio_model->hitbox_set( e->hitbox_set( ) );
 	if( !hitboxset )
 		return;
 

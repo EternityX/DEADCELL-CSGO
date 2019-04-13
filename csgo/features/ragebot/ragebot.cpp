@@ -15,8 +15,8 @@ void c_ragebot::work( c_user_cmd * cmd ) {
 	m_cmd = cmd;
 
 	select_target( );
-
 	choose_angles( );
+	restore_players( );
 }
 
 void c_ragebot::select_target( ) {
@@ -27,6 +27,33 @@ void c_ragebot::select_target( ) {
 	auto weapon = local->get_active_weapon( );
 	if( !weapon || weapon->clip( ) <= 0 )
 		return;
+
+	auto bounding_check = [ this, local ]( c_csplayer* e, const lag_record_t& record, float min_dmg ) -> bool {
+		auto *studio_hdr = e->studio_hdr( );
+		if ( !studio_hdr )
+			return false;
+
+		auto head_hitbox = studio_hdr->hitbox( head, 0 );
+		if ( !head_hitbox )
+			return false;
+
+		const auto bbmin = record.m_mins + record.m_origin;
+		const auto bbmax = record.m_maxs + record.m_origin;
+
+		vec3_t points[ 5 ];
+		points[ 0 ] = bbmax;
+		points[ 1 ] = ( bbmin + bbmax ) * 0.5f;
+		points[ 2 ] = ( head_hitbox->bb_min + head_hitbox->bb_max ) * 0.5f;
+		points[ 3 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
+		points[ 4 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
+
+		for ( const auto& p : points ) {
+			if ( g_autowall.think( p, e, min_dmg, true ) )
+				return true;
+		}
+
+		return false;
+	};
 
 	try {
 		std::vector< int > hitboxes = { };
@@ -87,42 +114,43 @@ void c_ragebot::select_target( ) {
 			if( !is_valid( e ) )
 				continue;
 
+			lag_record_t* player_record;
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 			matrix3x4_t* _bones;
 
-			int backup_fl = e->flags( );
+			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
+			for ( auto &record : g_backtrack.get( idx ).m_records ) {
+				if ( !g_backtrack.restore( e, record ) )
+					continue;
 
-			e->flags( ) &= ~FL_ONGROUND;
+				if ( !bounding_check( e, record, best_min_dmg ) )
+					continue;
 
-			e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
+				_bones = e->bone_cache( ).base( );
 
-			e->flags( ) = backup_fl;
+				std::vector< vec3_t > points;
+				if ( !get_points_from_hitbox( e, hitboxes, _bones, points, ( g_vars.rage.pointscale / 100.f ) ) )
+					continue;
 
-			_bones= e->bone_cache( ).base( );
+				if ( points.empty( ) )
+					continue;
 
-			std::vector< vec3_t > points;
-			if( !get_points_from_hitbox( e, hitboxes, _bones, points, ( g_vars.rage.pointscale / 100.f ) ) )
-				continue;
+				for ( auto& p : points ) {
+					//if ( g_vars.visuals.extra.points )
+					//	g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-			if( points.empty( ) )
-				continue;
-
-			for( auto& p : points ) {
-				if( g_vars.visuals.extra.points )
-					g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
-
-				auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
-
-				if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
-					if( g_autowall.m_autowall_dmg > player_best_damage ) {
-						player_best_damage = g_autowall.m_autowall_dmg;
-						player_best_point = p;
+					if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
+						if ( g_autowall.m_autowall_dmg > player_best_damage ) {
+							player_best_damage = g_autowall.m_autowall_dmg;
+							player_best_point = p;
+							player_record = &record;
+						}
 					}
 				}
 			}
 
-			m_players.emplace_back( e, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
+			m_players.emplace_back( e, player_record, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ), _bones );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
@@ -140,6 +168,19 @@ void c_ragebot::select_target( ) {
 	catch( const std::out_of_range &ex ) {
 		UNREFERENCED_PARAMETER( ex );
 		_RPT0( _CRT_ERROR, ex.what( ) );
+	}
+}
+
+void c_ragebot::restore_players( ) {
+	for ( auto entry : g_listener.m_players ) {
+		int idx = entry.m_idx;
+		c_csplayer* e = entry.m_player;
+		if ( !is_valid( e ) )
+			continue;
+
+		auto records = g_backtrack.get( idx ).m_records;
+		if ( records.size( ) )
+			g_backtrack.restore( e, records.front( ) );
 	}
 }
 
@@ -206,6 +247,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 
 void c_ragebot::choose_angles( ){
 	c_csplayer*		selected_target = nullptr;
+	lag_record_t*	best_record = nullptr;
 	vec3_t			best_hitboxpos;
 	float			best_damage = 0.f;
 
@@ -223,17 +265,20 @@ void c_ragebot::choose_angles( ){
 		auto target = data.m_player;
 
 		auto calc_damage = [ & ] (  ) {
+			lag_record_t* player_record = data.m_record;
 			float player_best_damage = data.m_damage;
 			vec3_t player_best_point = data.m_bestpoint;
 
 			if ( player_best_damage > best_damage ) {
 				selected_target = target;
+				best_record = player_record;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
 				mat = data.mat;
 			}
 			if ( player_best_damage >= target->health( ) ) {
 				selected_target = target;
+				best_record = player_record;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
 				mat = data.mat;
@@ -286,6 +331,8 @@ void c_ragebot::choose_angles( ){
 
 		if( !g_vars.rage.silent )
 			g_csgo.m_engine->set_viewangles( m_cmd->m_viewangles );
+
+		g_backtrack.process_cmd( m_cmd, selected_target, *best_record );
 	}
 }
 
@@ -314,7 +361,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 	try {
 		for( size_t idx = 0; idx < hitboxes.size( ); ++idx ) {
 			int h = hitboxes.at( idx );
-			auto *bbox = studiohdr->pHitbox( h, 0 );
+			auto *bbox = studiohdr->hitbox( h, 0 );
 
 			vec3_t max, min;
 			math::vector_transform( bbox->bb_min, matrix[ bbox->bone_index ], min );
