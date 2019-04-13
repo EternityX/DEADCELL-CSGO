@@ -32,5 +32,5 @@ long __stdcall hook::EndScene( IDirect3DDevice9 *device ) {
 
 	g_renderer.end_drawing( device );
 
-	return g_hooks.m_directx.get_old_method< fn::EndScene_t >( 42 )( device );
+	return g_hooks.m_directx.get_old_method< fn::EndScene_t >( hook::idx::END_SCENE )( device );
 }

@@ -29,6 +29,7 @@
     <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp" />
     <ClCompile Include="csgo\features\events\events.cpp" />
     <ClCompile Include="csgo\features\fakelag\fakelag.cpp" />
+    <ClCompile Include="csgo\features\geometry\geometry.cpp" />
     <ClCompile Include="csgo\features\misc\misc.cpp" />
     <ClCompile Include="csgo\features\nade_pred\nade_pred.cpp" />
     <ClCompile Include="csgo\features\notifications\notifications.cpp" />
@@ -40,9 +41,11 @@
     <ClCompile Include="csgo\hooking\hooks\DoExtraBonesProcessing.cpp" />
     <ClCompile Include="csgo\hooking\hooks\DoPostScreenSpaceEffects.cpp" />
     <ClCompile Include="csgo\hooking\hooks\DrawModelExecute.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\EndScene.cpp" />
     <ClCompile Include="csgo\hooking\hooks\GetMaterial.cpp" />
     <ClCompile Include="csgo\hooking\hooks\FrameStageNotify.cpp" />
     <ClCompile Include="csgo\hooking\hooks\GetViewmodelFOV.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\IsHltv.cpp" />
     <ClCompile Include="csgo\hooking\hooks\LevelShutdown.cpp" />
     <ClCompile Include="csgo\hooking\hooks\LevelInitPostEntity.cpp" />
     <ClCompile Include="csgo\hooking\hooks\LockCursor.cpp" />
@@ -53,8 +56,6 @@
     <ClCompile Include="csgo\hooking\hooks\Reset.cpp" />
     <ClCompile Include="csgo\hooking\hooks\SceneEnd.cpp" />
     <ClCompile Include="csgo\hooking\hooks\ShouldDrawFog.cpp" />
-    <ClCompile Include="csgo\hooking\hooks\TestHitboxes.cpp" />
-    <ClCompile Include="csgo\hooking\hooks\UpdateClientSideAnimations.cpp" />
     <ClCompile Include="csgo\hooking\manager.cpp" />
     <ClCompile Include="csgo\menu\menu.cpp" />
     <ClCompile Include="csgo\hooking\hooks\EndScene.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="csgo\features\engine_pred\engine_pred.h" />
     <ClInclude Include="csgo\features\events\events.h" />
     <ClInclude Include="csgo\features\fakelag\fakelag.h" />
+    <ClInclude Include="csgo\features\geometry\geometry.h" />
     <ClInclude Include="csgo\features\misc\misc.h" />
     <ClInclude Include="csgo\features\nade_pred\nade_pred.h" />
     <ClInclude Include="csgo\features\notifications\notifications.h" />

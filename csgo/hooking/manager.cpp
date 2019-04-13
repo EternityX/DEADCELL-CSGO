@@ -48,22 +48,27 @@ bool c_hooks::init( ) {
 		return false;
 	}
 
+	if( !m_engine.init( g_csgo.m_engine ) ) {
+		_RPTF1( _CRT_ERROR, "Failed to initialize m_engine. This is fatal./n/n%#08X", g_csgo.m_engine );
+		return false;
+	}
+
 	return true;
 }
 
 bool c_hooks::hook( ) {
-	if( !m_directx.hook_method( hook::idx::PRESENT, &hook::Present ) ) {
+	/*if( !m_directx.hook_method( hook::idx::PRESENT, &hook::Present ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook Present. This is fatal." );
 		return false;
-	}
+	}*/
 
 	if( !m_directx.hook_method( hook::idx::RESET, &hook::Reset ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook Reset. This is fatal." );
 		return false;
 	}
 
-	if ( !m_directx.hook_method( 42, &hook::EndScene ) ) {
-		_RPTF0( _CRT_ERROR, "Failed to hook Reset. This is fatal." );
+	if( !m_directx.hook_method( hook::idx::END_SCENE, &hook::EndScene ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to hook EndScene. This is fatal." );
 		return false;
 	}
 
@@ -74,7 +79,7 @@ bool c_hooks::hook( ) {
 
 	if( !m_clientmode.hook_method( hook::idx::CREATE_MOVE, &hook::CreateMove ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook CreateMove. This is fatal." );
-		return false;	
+		return false;
 	}
 
 	if( !m_clientmode.hook_method( hook::idx::OVERRIDE_VIEW, &hook::OverrideView ) ) {
@@ -129,11 +134,16 @@ bool c_hooks::hook( ) {
 
 	if( !m_viewrender.hook_method( hook::idx::RENDER_SMOKE_OVERLAY, hook::RenderSmokeOverlay ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook RenderSmokeOverlay. This is fatal." );
-		return false;	
+		return false;
 	}
 
 	if( !m_materialsystem.hook_method( hook::idx::GET_MATERIAL, hook::GetMaterial ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook GetMaterial. This is fatal." );
+		return false;
+	}
+
+	if( !m_engine.hook_method( hook::idx::IS_HLTV, hook::IsHltv ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to hook IsHltv. This is fatal." );
 		return false;
 	}
 
@@ -185,6 +195,11 @@ bool c_hooks::release( ) {
 
 	if( !m_materialsystem.unhook_all( ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to unhook all functions from m_materialsystem. This is fatal." );
+		return false;
+	}
+
+	if( !m_engine.unhook_all( ) ) {
+		_RPTF0( _CRT_ERROR, "Failed to unhook all functions from m_engine. This is fatal." );
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 #include "ragebot.h"
 #include "../animations/anim.h"
+#include "../geometry/geometry.h"
 
 c_ragebot g_ragebot;
 
@@ -78,7 +79,7 @@ void c_ragebot::select_target( ) {
 			hitboxes.push_back( r_calf );
 			hitboxes.push_back( l_foot );
 			hitboxes.push_back( r_foot );
-		} 
+		}
 		else {
 			if ( g_vars.rage.hitbox_head ) {
 				hitboxes.push_back( head );
@@ -117,7 +118,6 @@ void c_ragebot::select_target( ) {
 			lag_record_t* player_record;
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
-			matrix3x4_t* _bones;
 
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
 			for ( auto &record : g_backtrack.get( idx ).m_records ) {
@@ -203,7 +203,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 	float weapon_cone = weapon->inaccuracy( );
 
 	const auto get_bullet_location = [ & ] ( int seed ) {
-		static auto random_seed = reinterpret_cast< void( *)( int ) >( GetProcAddress( GetModuleHandleA( "vstdlib.dll" ), "RandomSeed" ) );
+		static auto random_seed = pe::get_export< void( *)( int ) >( pe::get_module( "vstdlib.dll" ), "RandomSeed" );
 		random_seed( seed );
 
 		float a = math::random_float( 0.f, 1.f );
@@ -233,6 +233,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 		trace_t trace;
 		ray_t ray;
 		ray.init( eye_position, eye_position + bullet_end * weapon->get_weapon_info( )->range );
+
 		g_csgo.m_engine_trace->clip_ray_to_entity( ray, MASK_SHOT, ent, &trace );
 
 		if( trace.m_hit_entity == ent )
@@ -259,8 +260,6 @@ void c_ragebot::choose_angles( ){
 	if( !weapon )
 		return;
 
-	matrix3x4_t* mat = nullptr;
-
 	for( auto &data : m_players ) {
 		auto target = data.m_player;
 
@@ -269,36 +268,34 @@ void c_ragebot::choose_angles( ){
 			float player_best_damage = data.m_damage;
 			vec3_t player_best_point = data.m_bestpoint;
 
-			if ( player_best_damage > best_damage ) {
+			if( player_best_damage > best_damage ) {
 				selected_target = target;
 				best_record = player_record;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
-				mat = data.mat;
 			}
-			if ( player_best_damage >= target->health( ) ) {
+			if( player_best_damage >= target->health( ) ) {
 				selected_target = target;
 				best_record = player_record;
 				best_hitboxpos = player_best_point;
 				best_damage = player_best_damage;
-				mat = data.mat;
 				return true;
 			}
 			return false;
 		};
-		
+
 		if( calc_damage( ) )
-			break;		
+			break;
 	}
 	if ( !selected_target )
 		return;
 
 	m_last_target = selected_target;
 
-	if ( !local->can_shoot( weapon ) )
+	if( !local->can_shoot( weapon ) )
 		return;
 
-	if( g_vars.rage.autoscope == 1 && ( !local->is_scoped( ) && weapon->has_scope( ) ) && selected_target ) 
+	if( g_vars.rage.autoscope == 1 && ( !local->is_scoped( ) && weapon->has_scope( ) ) && selected_target )
 		m_cmd->m_buttons |= IN_ATTACK2;
 
 	vec3_t aim_angle = math::calc_angle( local->eye_pos( ), best_hitboxpos );
@@ -326,9 +323,6 @@ void c_ragebot::choose_angles( ){
 		weapon->update_accuracy( );
 		m_cmd->m_viewangles -= local->punch_angle( ) * 2.f;
 
-		if( g_vars.misc.client_hitboxes && mat )
-			g_misc.capsule_overlay( selected_target, g_vars.misc.client_hitboxes_duration, mat );
-
 		if( !g_vars.rage.silent )
 			g_csgo.m_engine->set_viewangles( m_cmd->m_viewangles );
 
@@ -350,7 +344,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 	if ( !e )
 		return false;
 
-	auto *studiohdr = e->studio_hdr( );
+	auto *studiohdr = e->model_ptr( )->m_studio_hdr;
 	if ( !studiohdr )
 		return false;
 
@@ -369,7 +363,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 			auto center = ( min + max ) / 2.f;
 
 			points.push_back( center );
-			
+
 
 			// don't bother multipointing if body/head is visible.
 			// pretty sure this is called dynamic hitboxes in aimware.
@@ -387,7 +381,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 				if( points.size( ) >= hitboxes.size( ) ) {
 					switch( h ) {
 						case head:
-						case neck:		
+						case neck:
 						case l_chest:
 						case u_chest:
 						case thorax:
@@ -396,7 +390,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 						default: continue;
 					}
 
-					if( e->is_visible( e, local->eye_pos( ), points.at( head ), MASK_SHOT, local ) 
+					if( e->is_visible( e, local->eye_pos( ), points.at( head ), MASK_SHOT, local )
 						|| e->is_visible( e, local->eye_pos( ), points.at( pelvis ), MASK_SHOT, local ) )
 						return true;
 				}
@@ -404,7 +398,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 
 			if( g_vars.rage.bodyaim_lethal && e->health( ) < local->get_active_weapon( )->get_weapon_info( )->damage ) {
 				hitboxes.at( 0 ) = pelvis;
-			}	
+			}
 
 			if( g_vars.rage.prefer_bodyaim ) {
 				if( !( e->flags( ) & FL_ONGROUND ) || e->health( ) < 50 ) {
@@ -414,7 +408,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 
 			switch( h ) {
 				case head:
-				case neck:		
+				case neck:
 					if( !g_vars.rage.head )
 						continue;
 					break;
@@ -461,7 +455,7 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 					points.push_back( center - vec3_t( 0.f, 0.f, bbox->m_flRadius * scale ) ); // bottom
 
 				points.push_back( center + vec3_t( 0.f, bbox->m_flRadius * scale, 0.f ) ); // front center
-				points.push_back( center - vec3_t( 0.f, bbox->m_flRadius * scale, 0.f ) ); // back center	
+				points.push_back( center - vec3_t( 0.f, bbox->m_flRadius * scale, 0.f ) ); // back center
 			}
 		}
 	}
@@ -481,7 +475,7 @@ void c_ragebot::quickstop( c_base_combat_weapon *local_weapon ) {
 	// note: scoped weapons use the alternate speed member.
 	const float max_speed = local_weapon->has_scope( ) ? weapon_info->max_speed_alt : weapon_info->max_speed;
 
-	if( g_misc.unpredicted_vel.Length2D( ) > max_speed * .34f ) {
+	if( g_misc.unpredicted_vel.length_2d( ) > max_speed * .34f ) {
 		const vec3_t velocity = g_misc.unpredicted_vel;
 		const float_t speed = g_cl.m_local->velocity( ).length( );
 
