@@ -277,6 +277,7 @@ public:
 	OFFSET( c_utl_vector< matrix3x4_t >, bone_cache, 0x2910 )
 	OFFSET( int, eflags, 0xE8 )
 	OFFSET( vec3_t, abs_velocity, 0x94 )
+	OFFSET( int, get_bone_count, 0x291C )
 	
 
 	c_studio_hdr *model_ptr( ){

@@ -58,7 +58,7 @@ void c_backtrack::log( ){
 		entry->m_player = e;
 
 		// we have no records or we received a player update from the server, make a new entry.
-		if( entry->m_records.empty( ) || e->simtime( ) > entry->m_records.front( ).m_simtime ) {
+		if( entry->m_records.empty( ) || e->simtime( ) != entry->m_records.front( ).m_simtime ) {
 			update_animation_data( e );
 			auto lag_record = lag_record_t( e );
 
@@ -79,16 +79,16 @@ void c_backtrack::log( ){
 }
 
 void c_backtrack::reset( ) {
-	for ( auto player :  m_players ) {
+	if( m_players.empty( ) )
+		return;
+
+	for ( auto &player : m_players ) {
 		player.m_records.clear( );
 	}
 }
 
 bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
-	if ( !e || !e->alive( ) )
-		return false;
-
-	if ( !record.is_valid( ) )
+	if ( !e )
 		return false;
 
 	e->angles( ) = record.m_angles;
@@ -99,9 +99,9 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 	e->get_collideable( )->mins( ) = record.m_mins;
 	e->get_collideable( )->maxs( ) = record.m_maxs;
 
-	std::memcpy( e->bone_cache( ).base( ), &record.m_matrix, sizeof( matrix3x4_t ) * e->bone_cache( ).count( ) );
+	std::memcpy( e->bone_cache( ).base( ), record.m_matrix, record.m_bonecount * sizeof( matrix3x4_t )  );
 
-	// TO-DO : restore bonecount
+	e->get_bone_count( ) = record.m_bonecount;
 
 	return true;
 }
@@ -122,20 +122,20 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 
 void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &record ) {
 	if ( !record.is_valid( ) ) {
-		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( ) + get_lerp_time( ) );
+		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( ) );
 	}
 	else {
-		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime + get_lerp_time( ) );
+		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
 	}
 }
 
-player_log_t c_backtrack::get( int index ){
+player_log_t *c_backtrack::get( int index ){
 	try {
-		return m_players.at( index - 1 );
+		return &m_players.at( index - 1 );
 	}
 	catch ( std::out_of_range &ex ) {
 		UNREFERENCED_PARAMETER( ex );
 		_RPT1( _CRT_WARN, "Failed to get player backtrack records", ex.what( ) );
-		return player_log_t{};
+		return nullptr;
 	}
 }

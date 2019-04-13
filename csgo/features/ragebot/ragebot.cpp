@@ -88,12 +88,12 @@ void c_ragebot::select_target( ) {
 			if( !is_valid( e ) )
 				continue;
 
-			lag_record_t* player_record;
+			lag_record_t player_record;
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
-			for ( auto &record : g_backtrack.get( idx ).m_records ) {
+			for ( auto &record : g_backtrack.get( idx )->m_records ) {
 				if ( !g_backtrack.restore( e, record ) )
 					continue;
 
@@ -105,14 +105,14 @@ void c_ragebot::select_target( ) {
 					continue;
 
 				for ( auto& p : points ) {
-					//if ( g_vars.visuals.extra.points )
-					//	g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
+					if ( g_vars.visuals.extra.points )
+						g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
 					if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
 						if ( g_autowall.m_autowall_dmg > player_best_damage ) {
 							player_best_damage = g_autowall.m_autowall_dmg;
 							player_best_point = p;
-							player_record = &record;
+							player_record = record;
 						}
 					}
 				}
@@ -146,7 +146,7 @@ void c_ragebot::restore_players( ) {
 		if ( !is_valid( e ) )
 			continue;
 
-		auto records = g_backtrack.get( idx ).m_records;
+		auto &records = g_backtrack.get( idx )->m_records;
 		if ( records.size( ) )
 			g_backtrack.restore( e, records.front( ) );
 	}
@@ -216,7 +216,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 
 void c_ragebot::choose_angles( ){
 	c_csplayer*		selected_target = nullptr;
-	lag_record_t*	best_record = nullptr;
+	lag_record_t	best_record{};
 	vec3_t			best_hitboxpos;
 	float			best_damage = 0.f;
 
@@ -232,7 +232,7 @@ void c_ragebot::choose_angles( ){
 		auto target = data.m_player;
 
 		auto calc_damage = [ & ] (  ) {
-			lag_record_t* player_record = data.m_record;
+			lag_record_t player_record = data.m_record;
 			float player_best_damage = data.m_damage;
 			vec3_t player_best_point = data.m_bestpoint;
 
@@ -294,7 +294,7 @@ void c_ragebot::choose_angles( ){
 		if( !g_vars.rage.silent )
 			g_csgo.m_engine->set_viewangles( m_cmd->m_viewangles );
 
-		g_backtrack.process_cmd( m_cmd, selected_target, *best_record );
+		g_backtrack.process_cmd( m_cmd, selected_target, best_record );
 	}
 }
 

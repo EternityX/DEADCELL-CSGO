@@ -6,7 +6,9 @@ struct lag_record_t {
 
 	lag_record_t( c_csplayer *player )  {
 
-		std::memcpy( &m_matrix, player->bone_cache( ).base( ), sizeof( matrix3x4_t ) * player->bone_cache( ).count( ) );
+		std::memcpy( m_matrix, player->bone_cache( ).base( ), sizeof( matrix3x4_t ) * player->get_bone_count( ) );
+
+		m_bonecount = player->get_bone_count( );
 
 		m_tickcount = g_csgo.m_global_vars->m_tickcount;
 
@@ -21,26 +23,25 @@ struct lag_record_t {
 
 		m_mins = player->get_collideable( )->mins( );
 		m_maxs = player->get_collideable( )->maxs( );
-
-		// TO-DO : store bonecount
 	}
 
 	bool is_valid( ) const;
 
-	int								  m_tickcount;
+	int m_tickcount;
+	int m_flags;
+	int m_bonecount;
 
-	int								  m_flags;
-	vec3_t							  m_origin;
-	vec3_t							  m_abs_origin;
-	vec3_t							  m_angles;
-	float							  m_lby;
-	float							  m_simtime;
-	vec3_t							  m_vel;
+	float m_lby;
+	float m_simtime;
 
-	matrix3x4_t						  m_matrix[ 128 ];
+	vec3_t m_origin;
+	vec3_t m_abs_origin;
+	vec3_t m_angles;
+	vec3_t m_vel;
+	vec3_t m_mins;
+	vec3_t m_maxs;
 
-	vec3_t							  m_mins;
-	vec3_t							  m_maxs;
+	matrix3x4_t m_matrix[ 128 ];
 };
 
 struct player_log_t {
@@ -57,7 +58,7 @@ public:
 	bool restore( c_csplayer *e, lag_record_t &record );
 	void update_animation_data( c_csplayer *e );
 	void process_cmd( c_user_cmd* cmd, c_csplayer* e, lag_record_t &record );
-	player_log_t get( int index );
+	player_log_t *get( int index );
 };
 
 extern c_backtrack g_backtrack;
