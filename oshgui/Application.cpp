@@ -6,6 +6,8 @@
  * See license in OSHGui.hpp
  */
 
+#pragma warning( disable : 4101 ) // unreferenced local variable
+
 #include "Application.hpp"
 #include "Controls/Form.hpp"
 #include "Misc/Exceptions.hpp"

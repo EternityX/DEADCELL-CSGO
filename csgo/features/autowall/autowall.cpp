@@ -121,7 +121,7 @@ bool c_autowall::trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &
 	return false;
 }
 
-bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage ) {
+bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage, float min_dmg ) {
 	bool a5 = enter_trace->m_contents >> 3 & CONTENTS_SOLID;
 	bool v19 = enter_trace->m_surface.m_flags >> 7 & SURF_LIGHT;
 
@@ -176,7 +176,7 @@ bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *ente
 	m_lost_dmg = lost_dmg;
 
 	current_damage -= std::fmaxf( 0.f, lost_dmg );
-	if( current_damage < 1.f )
+	if( current_damage < 1.f || current_damage < min_dmg )
 		return false;
 
 	*origin = exit_trace.m_endpos;
@@ -273,7 +273,7 @@ bool c_autowall::think( const vec3_t &position, c_csplayer *entity, const int mi
 			if( trace_length > 3000.f || enter_surface_data->game.penetrationmodifier < 0.1f )
 				hits_left = 0;
 
-			if( !handle_bullet_pen( enter_surface_data, &trace, direction, &start, weapon_info->penetration, hits_left, m_autowall_dmg ) )
+			if( !handle_bullet_pen( enter_surface_data, &trace, direction, &start, weapon_info->penetration, hits_left, m_autowall_dmg, mindmg ) )
 				break;
 		}
 	}

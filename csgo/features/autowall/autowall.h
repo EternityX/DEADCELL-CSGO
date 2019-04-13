@@ -20,7 +20,7 @@ private:
 	static void clip_trace( const vec3_t &src, vec3_t &end, trace_t *tr, c_base_entity *target );
 	bool is_breakable( c_base_entity *entity ) const;
 	bool trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &dir, trace_t *enter_trace, trace_t *exit_trace ) const;
-	bool handle_bullet_pen( surface_data_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage );
+	bool handle_bullet_pen( surface_data_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage, float min_dmg );
 
 public:
 	std::string m_enter_material_name;
