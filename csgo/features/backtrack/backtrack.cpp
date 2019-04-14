@@ -120,6 +120,9 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 	if( !animstate )
 		return;
 
+	animation_layer_t backup_layers[ 13 ];
+	std::memcpy( backup_layers, e->animoverlays( ).base( ), sizeof( animation_layer_t ) * e->animoverlays( ).count( ) );
+
 	float backup_curtime = g_csgo.m_global_vars->m_cur_time;
 	float backup_frametime = g_csgo.m_global_vars->m_frametime;
 
@@ -128,6 +131,15 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 
 	int backup_flags = e->flags( );
 	int backup_eflags = e->eflags( );
+
+	if( animstate->on_ground )
+		e->flags( ) |= FL_ONGROUND;
+	else
+		e->flags( ) &= ~FL_ONGROUND;
+
+	e->eflags( ) &= ~0x1000;
+
+	e->abs_velocity( ) = e->velocity( );
 
 	int last_update = animstate->last_client_side_animation_update_framecount;
 	if ( last_update == g_csgo.m_global_vars->m_frame_count )
@@ -138,16 +150,15 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 
 	} e->client_side_anims( ) = false;
 
-	e->invalidate_bone_cache( );
-
-	e->flags( ) &= ~FL_ONGROUND;
-	
-
 	e->flags( ) = backup_flags;
 	e->eflags( ) = backup_eflags;
 
 	g_csgo.m_global_vars->m_cur_time = backup_curtime;
 	g_csgo.m_global_vars->m_frametime = backup_frametime;
+
+	std::memcpy( e->animoverlays( ).base( ), backup_layers, sizeof( animation_layer_t ) * e->animoverlays( ).count( ) );
+
+	e->invalidate_bone_cache( );
 
 	e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
 }

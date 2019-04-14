@@ -124,34 +124,35 @@ void c_ragebot::select_target( ) {
 
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
 			std::deque< lag_record_t > sorted_records;
-			if ( get_best_records( e, sorted_records ) ) {
-				for ( auto &record : sorted_records ) {
-					if ( !record.is_valid( ) )
+			if ( !get_best_records( e, sorted_records ) )
+				continue;
+
+			for ( auto &record : sorted_records ) {
+				if ( !record.is_valid( ) )
+					continue;
+
+				if ( !g_backtrack.restore( e, record ) )
+					continue;
+
+				if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
+					continue;
+
+				std::vector< vec3_t > points;
+				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
 						continue;
 
-					if ( !g_backtrack.restore( e, record ) )
-						continue;
+				if ( points.empty( ) )
+					continue;
 
-					if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
-						continue;
+				for ( auto& p : points ) {
+					if ( g_vars.visuals.extra.points )
+						g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-					std::vector< vec3_t > points;
-					if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
-						continue;
-
-					if ( points.empty( ) )
-						continue;
-
-					for ( auto& p : points ) {
-						if ( g_vars.visuals.extra.points )
-							g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
-
-						if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
-							if ( g_autowall.m_autowall_dmg > player_best_damage ) {
+					if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
+						if ( g_autowall.m_autowall_dmg > player_best_damage ) {
 								player_best_damage = g_autowall.m_autowall_dmg;
 								player_best_point = p;
 								player_record = record;
-							}
 						}
 					}
 				}
