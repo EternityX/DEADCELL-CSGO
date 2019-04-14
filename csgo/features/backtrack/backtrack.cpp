@@ -39,15 +39,20 @@ bool lag_record_t::is_valid( ) const{
 	if( !channel_info )
 		return false;
 
+	float max_unlag = 0.2f;
+	static auto sv_maxunlag = g_csgo.m_convar->find_var( "sv_maxunlag" );
+	if ( sv_maxunlag )
+		max_unlag = sv_maxunlag->get_float( );
+
 	// predict cur time.
 	float curtime = TICKS_TO_TIME( g_cl.m_local->tickbase( ) );
 
 	// correct for latency and lerp time.
 	float correct = channel_info->get_average_latency( FLOW_OUTGOING ) + channel_info->get_average_latency( FLOW_INCOMING ) + get_lerp_time( );
-	math::clamp( correct, 0.f, 0.2f /*sv_maxunlag*/ );
+	math::clamp( correct, 0.f, max_unlag );
 
 	// get difference between tick sent by player and the latency tick.
-	return std::abs( correct - ( curtime - m_simtime ) ) < 0.19f;
+	return std::abs( correct - ( curtime - m_simtime ) ) < max_unlag;
 }
 
 void c_backtrack::log( ){
@@ -113,11 +118,6 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 
 void c_backtrack::update_animation_data( c_csplayer *e ){
 	e->client_side_anims( ) = true; {
-		auto animstate = e->animstate( );
-		if ( animstate ) { // invalidate previous animations
-			animstate->last_client_side_animation_update_framecount = g_csgo.m_global_vars->m_frame_count - 1;
-		}
-
 		e->update_anims( );
 
 		e->invalidate_bone_cache( );
@@ -126,7 +126,6 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 		e->flags( ) &= ~FL_ONGROUND;
 		e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
 		e->flags( ) = backup_flags;
-
 	} e->client_side_anims( ) = false;
 }
 

@@ -41,15 +41,18 @@ void c_ragebot::select_target( ) {
 		const auto bbmin = record.m_mins + record.m_origin;
 		const auto bbmax = record.m_maxs + record.m_origin;
 
-		vec3_t points[ 5 ];
+		vec3_t points[ 7 ];
 		points[ 0 ] = bbmax;
 		points[ 1 ] = ( bbmin + bbmax ) * 0.5f;
 		points[ 2 ] = ( head_hitbox->bb_min + head_hitbox->bb_max ) * 0.5f;
-		points[ 3 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
-		points[ 4 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
+		points[ 3 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
+		points[ 4 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
+		points[ 5 ] = vec3_t( bbmin.x, bbmin.y, bbmax.z );
+		points[ 6 ] = vec3_t( bbmin.x, bbmax.y, bbmax.z );
+
 
 		for ( const auto& p : points ) {
-			if ( g_autowall.think( p, e, min_dmg, true ) )
+			if ( g_autowall.think( p, e, 1.f, true ) )
 				return true;
 		}
 
@@ -129,12 +132,12 @@ void c_ragebot::select_target( ) {
 					if ( !g_backtrack.restore( e, record ) )
 						continue;
 
-				if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
-					continue;
+					if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
+						continue;
 
-				std::vector< vec3_t > points;
-				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
-					continue;
+					std::vector< vec3_t > points;
+					if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
+						continue;
 
 					if ( points.empty( ) )
 						continue;
@@ -368,7 +371,7 @@ bool c_ragebot::get_best_records( c_csplayer* e, std::deque< lag_record_t > &out
 	}
 
 	std::sort( out.begin( ), out.end( ), []( lag_record_t &a, lag_record_t &b ) {
-		return a.m_priority < b.m_priority;
+		return a.m_priority > b.m_priority;
 	} );
 
 	return true;

@@ -132,7 +132,7 @@ void c_main_form::ragebot_tab( ) {
 	auto autofire = new c_checkbox( "Auto fire", aimbot_page, &g_vars.rage.auto_fire );
 	auto autostop = new c_checkbox( "Quickstop", aimbot_page, &g_vars.rage.autostop );
 	auto autoscope = new c_combo( "Automatic scope", { "Off", "Always on", "Hitchance fail" }, aimbot_page, 4, &g_vars.rage.autoscope, aimbot_groupbox->GetWidth( ) - 15 );
-	auto save_fps = new c_checkbox( "Save FPS", aimbot_page, &g_vars.rage.safe_fps );
+	auto save_fps = new c_checkbox( "BBox Check", aimbot_page, &g_vars.rage.safe_fps );
 	auto bodyaim_lethal = new c_checkbox( "Bodyaim if lethal", aimbot_page, &g_vars.rage.bodyaim_lethal );
 	auto bodyaim_prefer = new c_checkbox( "Prefer bodyaim", aimbot_page, &g_vars.rage.prefer_bodyaim );
 
