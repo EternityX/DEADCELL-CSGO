@@ -29,6 +29,33 @@ void c_ragebot::select_target( ) {
 	if( !weapon || weapon->clip( ) <= 0 )
 		return;
 
+	auto bounding_check = [ this, local ]( c_csplayer* e, const lag_record_t& record, float min_dmg ) -> bool {
+		auto *studio_hdr = e->model_ptr( )->m_studio_hdr;
+		if ( !studio_hdr )
+			return false;
+
+		auto head_hitbox = studio_hdr->hitbox( head, 0 );
+		if ( !head_hitbox )
+			return false;
+
+		const auto bbmin = record.m_mins + record.m_origin;
+		const auto bbmax = record.m_maxs + record.m_origin;
+
+		vec3_t points[ 5 ];
+		points[ 0 ] = bbmax;
+		points[ 1 ] = ( bbmin + bbmax ) * 0.5f;
+		points[ 2 ] = ( head_hitbox->bb_min + head_hitbox->bb_max ) * 0.5f;
+		points[ 3 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
+		points[ 4 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
+
+		for ( const auto& p : points ) {
+			if ( g_autowall.think( p, e, min_dmg, true ) )
+				return true;
+		}
+
+		return false;
+	};
+
 	try {
 		std::vector< int > hitboxes = { };
 		hitboxes.push_back( g_vars.rage.primary_hitbox );
@@ -102,9 +129,12 @@ void c_ragebot::select_target( ) {
 					if ( !g_backtrack.restore( e, record ) )
 						continue;
 
-					std::vector< vec3_t > points;
-					if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
-						continue;
+				if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
+					continue;
+
+				std::vector< vec3_t > points;
+				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
+					continue;
 
 					if ( points.empty( ) )
 						continue;
@@ -368,19 +398,15 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 
 			points.push_back( center );
 
-
 			// don't bother multipointing if body/head is visible.
-			// pretty sure this is called dynamic hitboxes in aimware.
 			if( g_vars.rage.dynamic_hitbox ) {
-				// framerate is lower than the servers, start optimizing points.
 				if( g_cl.m_under_tickrate && m_last_target ) {
-					// check if we're aiming at the same target and if we are lets only multipoint this target until they are no longer the target.
-					if( e != m_last_target )
+					if( e != m_last_target ) // check if we're aiming at the same target and only multipoint this target.
 						continue;
 				}
 
 				if( hitboxes.empty( ) || points.empty( ) )
-					return false; // return false, we have nowhere to aim at
+					return false;
 
 				if( points.size( ) >= hitboxes.size( ) ) {
 					switch( h ) {
@@ -445,6 +471,8 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 				points.push_back( vec3_t( bbox->bb_max.x, bbox->bb_min.y, bbox->bb_min.z ) * scale );*/
 			}
 			else if( bbox->m_flRadius > 0.f ) { // pill.
+
+
 				const float length = ( bbox->bb_min - bbox->bb_max ).length( ) + bbox->m_flRadius * 2.f;
 
 				if( h != l_upperarm && h != r_upperarm && h != l_thigh && h != r_thigh ) {
