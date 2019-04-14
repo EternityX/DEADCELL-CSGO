@@ -7,15 +7,7 @@ class c_antiaim {
 	vec3_t m_input = vec3_t{};
 	vec3_t m_stored_input = vec3_t{};
 
-	c_animstate* m_server_animstate;
-
 	bool m_desync_next_tick;
-
-	float m_next_lby_update;
-	bool m_break_lby;
-
-	void update_animstate( c_animstate* state, vec3_t angle ); // hack, since gay mango doesnt let me do asm in lambdas
-	void handle_animstate( );
 
 	bool allow( c_user_cmd *ucmd );
 	void adjust_yaw( c_user_cmd *ucmd );
