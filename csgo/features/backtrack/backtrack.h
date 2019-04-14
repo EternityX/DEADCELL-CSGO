@@ -27,6 +27,8 @@ struct lag_record_t {
 
 	bool is_valid( ) const;
 
+	int m_priority;
+
 	int m_tickcount;
 	int m_flags;
 	int m_bonecount;

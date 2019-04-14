@@ -93,29 +93,32 @@ void c_ragebot::select_target( ) {
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
-			for ( auto &record : g_backtrack.get( idx )->m_records ) {
-				if( !record.is_valid( ) )
-					continue;
+			std::deque< lag_record_t > sorted_records;
+			if ( get_best_records( e, sorted_records ) ) {
+				for ( auto &record : sorted_records ) {
+					if ( !record.is_valid( ) )
+						continue;
 
-				if ( !g_backtrack.restore( e, record ) )
-					continue;
+					if ( !g_backtrack.restore( e, record ) )
+						continue;
 
-				std::vector< vec3_t > points;
-				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
-					continue;
+					std::vector< vec3_t > points;
+					if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
+						continue;
 
-				if ( points.empty( ) )
-					continue;
+					if ( points.empty( ) )
+						continue;
 
-				for ( auto& p : points ) {
-					if ( g_vars.visuals.extra.points )
-						g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
+					for ( auto& p : points ) {
+						if ( g_vars.visuals.extra.points )
+							g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-					if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
-						if ( g_autowall.m_autowall_dmg > player_best_damage ) {
-							player_best_damage = g_autowall.m_autowall_dmg;
-							player_best_point = p;
-							player_record = record;
+						if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
+							if ( g_autowall.m_autowall_dmg > player_best_damage ) {
+								player_best_damage = g_autowall.m_autowall_dmg;
+								player_best_point = p;
+								player_record = record;
+							}
 						}
 					}
 				}
@@ -301,14 +304,42 @@ void c_ragebot::choose_angles( ){
 	}
 }
 
-bool c_ragebot::get_best_records( c_csplayer*e, std::deque< lag_record_t > &out ){
-	
+bool c_ragebot::get_best_records( c_csplayer* e, std::deque< lag_record_t > &out ){
+	if ( !e || !g_cl.m_local )
+		return false;
+
 	out = g_backtrack.get( e->get_index( ) )->m_records;
 	auto it = std::find_if( out.begin( ), out.end( ), [](lag_record_t &record){
 		return !record.is_valid();
 	});
 
 	out.erase( it, out.end( ) );
+
+	const auto local_origin = g_cl.m_local->origin( ); // we dont need to keep getting this
+	for ( auto &record : out ) {
+		int end_priority = 0;
+		if ( record.m_vel.length_2d( ) > 15.f ) { // moving fairly fast, lower desync delta, want to not prioritize slow walking records
+			if ( record.m_flags & FL_ONGROUND ) {
+				end_priority += 1;
+			}
+			else { // probably bhopping, very low desync delta if they are
+				end_priority += 2;
+			}
+		}
+
+		float at_target = math::normalize_angle( math::calc_angle( local_origin, record.m_origin ).y );
+		float sideways_delta = math::min( math::normalize_angle( at_target + 90.f ) - record.m_angles.y, 
+										  math::normalize_angle( at_target - 90.f ) - record.m_angles.y );
+		if ( sideways_delta < 35.f ) { // sideways is easier to hit
+			end_priority += 1;
+		}
+
+		record.m_priority = end_priority;
+	}
+
+	std::sort( out.begin( ), out.end( ), []( lag_record_t &a, lag_record_t &b ) {
+		return a.m_priority < b.m_priority;
+	} );
 
 	return true;
 }

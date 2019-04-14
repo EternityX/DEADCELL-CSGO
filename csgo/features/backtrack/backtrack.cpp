@@ -4,26 +4,34 @@
 c_backtrack g_backtrack;
 
 float get_lerp_time( ) {
-	int ud_rate = g_csgo.m_convar->find_var( "cl_updaterate" )->get_int( );
+	static auto cl_ud_rate = g_csgo.m_convar->find_var( "cl_updaterate" );
+	static auto min_ud_rate = g_csgo.m_convar->find_var( "sv_minupdaterate" );
+	static auto max_ud_rate = g_csgo.m_convar->find_var( "sv_maxupdaterate" );
 
-	cvar *min_ud_rate = g_csgo.m_convar->find_var( "sv_minupdaterate" );
-	cvar *max_ud_rate = g_csgo.m_convar->find_var( "sv_maxupdaterate" );
+	int ud_rate = 64;
+	if ( cl_ud_rate )
+		ud_rate = cl_ud_rate->get_int( );
 
 	if ( min_ud_rate && max_ud_rate )
 		ud_rate = max_ud_rate->get_int( );
 
-	float ratio = g_csgo.m_convar->find_var( "cl_interp_ratio" )->get_float( );
-	if ( !ratio )
-		ratio = 1.f;
+	float ratio = 1.f;
+	static auto cl_interp_ratio = g_csgo.m_convar->find_var( "cl_interp_ratio" );
+	if ( cl_interp_ratio )
+		ratio = cl_interp_ratio->get_float( );
 
-	float lerp = g_csgo.m_convar->find_var( "cl_interp" )->get_float( );
-	cvar *c_min_ratio = g_csgo.m_convar->find_var( "sv_client_min_interp_ratio" );
-	cvar *c_max_ratio = g_csgo.m_convar->find_var( "sv_client_max_interp_ratio" );
+	static auto cl_interp = g_csgo.m_convar->find_var( "cl_interp" );
+	static auto c_min_ratio = g_csgo.m_convar->find_var( "sv_client_min_interp_ratio" );
+	static auto c_max_ratio = g_csgo.m_convar->find_var( "sv_client_max_interp_ratio" );
+
+	float lerp = g_csgo.m_global_vars->m_interval_per_tick;
+	if ( cl_interp )
+		lerp = cl_interp->get_float( );
 
 	if ( c_min_ratio && c_max_ratio && c_min_ratio->get_float( ) != 1 )
 		ratio = util::misc::clamp( ratio, c_min_ratio->get_float( ), c_max_ratio->get_float( ) );
 
-	return std::max( lerp, ratio / ud_rate );
+	return math::max( lerp, ratio / ud_rate );
 }
 
 bool lag_record_t::is_valid( ) const{
@@ -79,9 +87,6 @@ void c_backtrack::log( ){
 }
 
 void c_backtrack::reset( ) {
-	if( m_players.empty( ) )
-		return;
-
 	for ( auto &player : m_players ) {
 		player.m_records.clear( );
 	}
@@ -108,6 +113,11 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 
 void c_backtrack::update_animation_data( c_csplayer *e ){
 	e->client_side_anims( ) = true; {
+		auto animstate = e->animstate( );
+		if ( animstate ) { // invalidate previous animations
+			animstate->last_client_side_animation_update_framecount = g_csgo.m_global_vars->m_frame_count - 1;
+		}
+
 		e->update_anims( );
 
 		e->invalidate_bone_cache( );
