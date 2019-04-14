@@ -40,7 +40,7 @@ public:
 	}
 
 	bool is_player( ) {
-		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 153 )( this );
+		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 151 )( this );
 	}
 
 	bool is_weapon( ) {

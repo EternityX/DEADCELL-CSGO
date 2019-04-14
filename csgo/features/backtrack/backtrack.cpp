@@ -59,10 +59,10 @@ void c_backtrack::log( ){
 	for ( auto &entry : g_listener.m_players ) {
 		int idx = entry.m_idx;
 		c_csplayer* e = entry.m_player;
-		if( !e || !g_cl.m_local || e == g_cl.m_local || e->team( ) == g_cl.m_local->team( ) )
+		if( !e || !g_cl.m_local )
 			continue;
 
-		if( !e->is_valid_player( true, true ) )
+		if( e == g_cl.m_local || e->team( ) == g_cl.m_local->team( ) || !e->is_valid_player( true, true ) )
 			continue;
 
 		// get player record entry.
