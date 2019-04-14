@@ -70,10 +70,10 @@ void c_antiaim::adjust_yaw( c_user_cmd *ucmd ) {
 		math::normalize_angles( m_stored_input );
 	}
 	else if ( g_cl.m_sendpacket ) {
-		m_input.y = m_stored_input.y - ( g_cl.m_local->max_desync( ) + 30.f );
+		m_input.y = m_stored_input.y - ( g_cl.m_local->max_desync( ) );
 	}
 	else if ( m_desync_next_tick ) {
-		m_input.y = m_stored_input.y - ( g_cl.m_local->max_desync( ) + 30.f );
+		m_input.y = m_stored_input.y - ( g_cl.m_local->max_desync( ) );
 		g_cl.m_sendpacket = true;
 		m_desync_next_tick = false;
 	}
