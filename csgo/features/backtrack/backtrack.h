@@ -4,7 +4,7 @@
 struct lag_record_t {
 	lag_record_t( ){ }
 
-	lag_record_t( c_csplayer *player )  {
+	lag_record_t( c_csplayer* player ) : m_priority{ 0 } {
 
 		std::memcpy( m_matrix, player->bone_cache( ).base( ), player->get_bone_count( ) * sizeof( matrix3x4_t ) );
 
@@ -15,11 +15,9 @@ struct lag_record_t {
 		// save all data here.
 		m_simtime = player->simtime( );
 		m_origin = player->origin( );
-		m_abs_origin = player->abs_origin( );
 		m_angles = player->angles( );
 		m_lby = player->lby_t( );
 		m_flags = player->flags( );
-		m_vel = player->velocity( );
 
 		m_mins = player->get_collideable( )->mins( );
 		m_maxs = player->get_collideable( )->maxs( );
@@ -37,9 +35,7 @@ struct lag_record_t {
 	float m_simtime;
 
 	vec3_t m_origin;
-	vec3_t m_abs_origin;
 	vec3_t m_angles;
-	vec3_t m_vel;
 	vec3_t m_mins;
 	vec3_t m_maxs;
 

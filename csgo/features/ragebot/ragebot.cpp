@@ -342,11 +342,12 @@ bool c_ragebot::get_best_records( c_csplayer* e, std::deque< lag_record_t > &out
 		return false;
 
 	out = g_backtrack.get( e->get_index( ) )->m_records;
-	auto it = std::find_if( out.begin( ), out.end( ), [](lag_record_t &record){
-		return !record.is_valid();
+	auto it = std::find_if( out.begin( ), out.end( ), [ ]( lag_record_t &record ){
+		return !record.is_valid( );
 	});
 
-	out.erase( it, out.end( ) );
+	if( it != out.end( ) )
+		out.erase( it );
 
 	const auto local_origin = g_cl.m_local->origin( ); // we dont need to keep getting this
 	for ( auto &record : out ) {
