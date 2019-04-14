@@ -18,6 +18,7 @@ struct lag_record_t {
 		m_angles = player->angles( );
 		m_lby = player->lby_t( );
 		m_flags = player->flags( );
+		m_vel = player->velocity( );
 
 		m_mins = player->get_collideable( )->mins( );
 		m_maxs = player->get_collideable( )->maxs( );
@@ -38,6 +39,7 @@ struct lag_record_t {
 	vec3_t m_angles;
 	vec3_t m_mins;
 	vec3_t m_maxs;
+	vec3_t m_vel;
 
 	matrix3x4_t m_matrix[ 128 ];
 };
