@@ -8,6 +8,7 @@ public:
 		int target_selection;
 		float pointscale = 60.f;
 		bool prefer_bodyaim;
+		bool safe_fps;
 		bool bodyaim_lethal;
 		int hitchance;
 		int min_dmg;

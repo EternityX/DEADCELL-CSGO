@@ -28,13 +28,13 @@ class c_ragebot {
 	c_user_cmd *m_cmd;
 
 	void choose_angles( );
+	bool get_best_records( c_csplayer *e, std::deque<lag_record_t> &out );
 	void select_target( );
 	void restore_players( );
 	bool get_points_from_hitbox( c_csplayer * e, std::vector< int > hitboxes, matrix3x4_t* matrix, std::vector<vec3_t>& points, float scale );
 	void quickstop( c_base_combat_weapon *local_weapon );
 	bool is_valid( c_csplayer * player );
 	bool hitchance( vec3_t &angle, c_csplayer *ent );
-	bool get_best_records( c_csplayer* e, std::deque< lag_record_t > &out );
 
 public:
 	int shots_fired;
