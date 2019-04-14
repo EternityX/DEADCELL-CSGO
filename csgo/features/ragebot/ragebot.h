@@ -34,7 +34,7 @@ class c_ragebot {
 	void quickstop( c_base_combat_weapon *local_weapon );
 	bool is_valid( c_csplayer * player );
 	bool hitchance( vec3_t &angle, c_csplayer *ent );
-	static std::vector< lag_record_t > get_best_records( std::deque< lag_record_t > records );
+	bool get_best_records( c_csplayer* e, std::deque< lag_record_t > &out );
 
 public:
 	int shots_fired;
