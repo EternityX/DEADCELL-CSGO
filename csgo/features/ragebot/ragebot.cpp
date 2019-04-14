@@ -41,15 +41,18 @@ void c_ragebot::select_target( ) {
 		const auto bbmin = record.m_mins + record.m_origin;
 		const auto bbmax = record.m_maxs + record.m_origin;
 
-		vec3_t points[ 5 ];
+		vec3_t points[ 7 ];
 		points[ 0 ] = bbmax;
 		points[ 1 ] = ( bbmin + bbmax ) * 0.5f;
 		points[ 2 ] = ( head_hitbox->bb_min + head_hitbox->bb_max ) * 0.5f;
-		points[ 3 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
-		points[ 4 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
+		points[ 3 ] = vec3_t( ( bbmax.x + bbmin.x ) * 0.5f, ( bbmax.y + bbmin.y ) * 0.5f, bbmin.z );
+		points[ 4 ] = vec3_t( bbmax.x, bbmin.y, bbmax.z );
+		points[ 5 ] = vec3_t( bbmin.x, bbmin.y, bbmax.z );
+		points[ 6 ] = vec3_t( bbmin.x, bbmax.y, bbmax.z );
+
 
 		for ( const auto& p : points ) {
-			if ( g_autowall.think( p, e, min_dmg, true ) )
+			if ( g_autowall.think( p, e, 1.f, true ) )
 				return true;
 		}
 
@@ -115,34 +118,41 @@ void c_ragebot::select_target( ) {
 			if( !is_valid( e ) )
 				continue;
 
-			lag_record_t* player_record;
+			lag_record_t player_record;
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 
 			auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
-			for ( auto &record : g_backtrack.get( idx ).m_records ) {
+			std::deque< lag_record_t > sorted_records;
+			if ( !get_best_records( e, sorted_records ) )
+				continue;
+
+			for ( auto &record : sorted_records ) {
+				if ( !record.is_valid( ) )
+					continue;
+
 				if ( !g_backtrack.restore( e, record ) )
 					continue;
 
-				if ( !bounding_check( e, record, best_min_dmg ) )
+				if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
 					continue;
 
 				std::vector< vec3_t > points;
-				if ( !get_points_from_hitbox( e, hitboxes, e->bone_cache( ).base( ), points, ( g_vars.rage.pointscale / 100.f ) ) )
-					continue;
+				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
+						continue;
 
 				if ( points.empty( ) )
 					continue;
 
 				for ( auto& p : points ) {
-					//if ( g_vars.visuals.extra.points )
-					//	g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
+					if ( g_vars.visuals.extra.points )
+						g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
 					if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
 						if ( g_autowall.m_autowall_dmg > player_best_damage ) {
-							player_best_damage = g_autowall.m_autowall_dmg;
-							player_best_point = p;
-							player_record = &record;
+								player_best_damage = g_autowall.m_autowall_dmg;
+								player_best_point = p;
+								player_record = record;
 						}
 					}
 				}
@@ -176,7 +186,7 @@ void c_ragebot::restore_players( ) {
 		if ( !is_valid( e ) )
 			continue;
 
-		auto records = g_backtrack.get( idx ).m_records;
+		auto &records = g_backtrack.get( idx )->m_records;
 		if ( records.size( ) )
 			g_backtrack.restore( e, records.front( ) );
 	}
@@ -246,7 +256,7 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 
 void c_ragebot::choose_angles( ){
 	c_csplayer*		selected_target = nullptr;
-	lag_record_t*	best_record = nullptr;
+	lag_record_t	best_record{};
 	vec3_t			best_hitboxpos;
 	float			best_damage = 0.f;
 
@@ -262,7 +272,7 @@ void c_ragebot::choose_angles( ){
 		auto target = data.m_player;
 
 		auto calc_damage = [ & ] (  ) {
-			lag_record_t* player_record = data.m_record;
+			lag_record_t player_record = data.m_record;
 			float player_best_damage = data.m_damage;
 			vec3_t player_best_point = data.m_bestpoint;
 
@@ -324,18 +334,49 @@ void c_ragebot::choose_angles( ){
 		if( !g_vars.rage.silent )
 			g_csgo.m_engine->set_viewangles( m_cmd->m_viewangles );
 
-		g_backtrack.process_cmd( m_cmd, selected_target, *best_record );
+		g_backtrack.process_cmd( m_cmd, selected_target, best_record );
 	}
 }
 
-std::vector< lag_record_t > c_ragebot::get_best_records( std::deque< lag_record_t > records ){
-	std::vector< lag_record_t > output{ };
-	for( size_t i = 0; i < records.size( ); ++i ){
-		auto lag_record = records.at( i );
+bool c_ragebot::get_best_records( c_csplayer* e, std::deque< lag_record_t > &out ){
+	if ( !e || !g_cl.m_local )
+		return false;
 
+	out = g_backtrack.get( e->get_index( ) )->m_records;
+	auto it = std::find_if( out.begin( ), out.end( ), [ ]( lag_record_t &record ){
+		return !record.is_valid( );
+	});
+
+	if( it != out.end( ) )
+		out.erase( it );
+
+	const auto local_origin = g_cl.m_local->origin( ); // we dont need to keep getting this
+	for ( auto &record : out ) {
+		int end_priority = 0;
+		if ( record.m_vel.length_2d( ) > 15.f ) { // moving fairly fast, lower desync delta, want to not prioritize slow walking records
+			if ( record.m_flags & FL_ONGROUND ) {
+				end_priority += 1;
+			}
+			else { // probably bhopping, very low desync delta if they are
+				end_priority += 2;
+			}
+		}
+
+		float at_target = math::normalize_angle( math::calc_angle( local_origin, record.m_origin ).y );
+		float sideways_delta = math::min( math::normalize_angle( at_target + 90.f ) - record.m_angles.y, 
+										  math::normalize_angle( at_target - 90.f ) - record.m_angles.y );
+		if ( sideways_delta < 35.f ) { // sideways is easier to hit
+			end_priority += 1;
+		}
+
+		record.m_priority = end_priority;
 	}
 
-	return output;
+	std::sort( out.begin( ), out.end( ), []( lag_record_t &a, lag_record_t &b ) {
+		return a.m_priority > b.m_priority;
+	} );
+
+	return true;
 }
 
 bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitboxes, matrix3x4_t *matrix, std::vector< vec3_t >& points, float scale ) {
@@ -362,19 +403,15 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 
 			points.push_back( center );
 
-
 			// don't bother multipointing if body/head is visible.
-			// pretty sure this is called dynamic hitboxes in aimware.
 			if( g_vars.rage.dynamic_hitbox ) {
-				// framerate is lower than the servers, start optimizing points.
 				if( g_cl.m_under_tickrate && m_last_target ) {
-					// check if we're aiming at the same target and if we are lets only multipoint this target until they are no longer the target.
-					if( e != m_last_target )
+					if( e != m_last_target ) // check if we're aiming at the same target and only multipoint this target.
 						continue;
 				}
 
 				if( hitboxes.empty( ) || points.empty( ) )
-					return false; // return false, we have nowhere to aim at
+					return false;
 
 				if( points.size( ) >= hitboxes.size( ) ) {
 					switch( h ) {
@@ -439,6 +476,8 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 				points.push_back( vec3_t( bbox->bb_max.x, bbox->bb_min.y, bbox->bb_min.z ) * scale );*/
 			}
 			else if( bbox->m_flRadius > 0.f ) { // pill.
+
+
 				const float length = ( bbox->bb_min - bbox->bb_max ).length( ) + bbox->m_flRadius * 2.f;
 
 				if( h != l_upperarm && h != r_upperarm && h != l_thigh && h != r_thigh ) {

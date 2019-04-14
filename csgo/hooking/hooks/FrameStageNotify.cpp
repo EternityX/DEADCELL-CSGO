@@ -25,20 +25,6 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_fra
 		case FRAME_NET_UPDATE_POSTDATAUPDATE_START: {
 			g_resolver.frame_stage_notify( );
 		}
-		case FRAME_NET_UPDATE_POSTDATAUPDATE_END: {
-			for ( auto &entry : g_listener.m_players ) {
-				int idx = entry.m_idx;
-				c_csplayer* e = entry.m_player;
-				if ( !e || !e->alive( ) )
-					continue;
-
-				if ( auto var_map = e->var_mapping( ); var_map ) {
-					for ( int j = 0; j < var_map->m_interpolated_entries; j++ ) {
-						var_map->m_entries[ j ].m_needs_to_interpolate = !g_vars.rage.enabled;
-					}
-				}
-			}
-		}
 	}
 
 	g_hooks.m_client.get_old_method< fn::FrameStageNotify_t >( hook::idx::FRAME_STAGE_NOTIFY )( ecx, curstage );
@@ -51,7 +37,12 @@ void __fastcall hook::FrameStageNotify( uintptr_t ecx, uintptr_t edx, client_fra
 		}
 		case FRAME_NET_UPDATE_END: {
 			if ( g_vars.rage.enabled ) {
-				g_backtrack.log( );
+				if ( g_cl.m_local && g_cl.m_local->alive( ) ) {
+					g_backtrack.log( );
+				}
+				else {
+					g_backtrack.reset( );
+				}
 			}
 		}
 	}
