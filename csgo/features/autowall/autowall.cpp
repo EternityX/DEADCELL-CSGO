@@ -42,15 +42,27 @@ bool c_autowall::is_breakable( c_base_entity *entity ) const {
 	const int take_damage = entity->get_take_damage( );
 
 	const client_class *client_class = entity->get_client_class( );
+	if( !client_class )
+		return false;
 
-	if( client_class->m_network_name[ 1 ] == 'B' && client_class->m_network_name[ 9 ] == 'e' && client_class->m_network_name[ 10 ] == 'S' && client_class->m_network_name[ 16 ] == 'e' )
-		entity->get_take_damage( ) = 2;
+	// convert to string since std::string::at throws std::out_of_range when pos > length
+	std::string network_name = client_class->m_network_name;
+	try { 
 
-	else if( client_class->m_network_name[ 1 ] != 'B' && client_class->m_network_name[ 5 ] != 'D' )
-		entity->get_take_damage( ) = 2;
+		if( network_name.at( 1 ) == 'B' && network_name.at( 9 ) == 'e' && network_name.at( 10 ) == 'S' && network_name.at( 16 ) == 'e' )
+			entity->get_take_damage( ) = 2;
 
-	else if( client_class->m_network_name[ 1 ] != 'F' && client_class->m_network_name[ 4 ] != 'c' && client_class->m_network_name[ 5 ] != 'B' && client_class->m_network_name[ 9 ] != 'h' ) // CFuncBrush
-		entity->get_take_damage( ) = 2;
+		else if( network_name.at( 1 ) != 'B' && network_name.at( 5 ) != 'D' )
+			entity->get_take_damage( ) = 2;
+
+		else if( network_name.at( 1 ) != 'F' && network_name.at( 4 ) != 'c' && network_name.at( 5 ) != 'B' && network_name.at( 9 ) != 'h' ) // CFuncBrush
+			entity->get_take_damage( ) = 2;
+
+	} catch( std::out_of_range &ex ){
+		UNREFERENCED_PARAMETER( ex );
+		_RPT1( _CRT_WARN, "Out of range access on the entity's networked name, ( autowall )", ex.what( ) );
+		return nullptr;
+	}
 
 	using IsBreakableEntity_t = bool( __thiscall *)( c_base_entity * );
 	static IsBreakableEntity_t IsBreakableEntityEx = nullptr;
