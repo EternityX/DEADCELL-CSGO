@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 enum shader_type_t {
 	VertexLitGeneric,
