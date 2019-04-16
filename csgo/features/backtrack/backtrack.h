@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 struct lag_record_t {
 	lag_record_t( ){ }

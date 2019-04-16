@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/animations/anim.h"
 
 void __fastcall animations::DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx, c_studio_hdr *hdr, vec3_t *pos, quaternion *q, matrix3x4_t *matrix, c_bone_bit_list &bone_list, c_ik_context *context ) {

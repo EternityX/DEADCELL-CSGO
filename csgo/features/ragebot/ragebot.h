@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../autowall/autowall.h"
 #include "../misc/misc.h"
 #include "../entity listener/ent_listener.h"

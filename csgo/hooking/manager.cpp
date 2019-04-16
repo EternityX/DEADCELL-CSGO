@@ -1,4 +1,4 @@
-#include "../inc.hpp"
+#include "../inc.h"
 
 c_hooks g_hooks{ };
 
