@@ -117,6 +117,12 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
+	if ( !m_surface.hook_method( hook::idx::DRAW_SET_COLOR, &hook::DrawSetColor ) )
+	{
+		_RPTF0( _CRT_ERROR, "Failed to hook DrawSetColor. This is fatal." );
+		return false;
+	}
+
 	if( !m_panel.hook_method( hook::idx::PAINT_TRAVERSE, &hook::PaintTraverse ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook PaintTraverse. This is fatal." );
 		return false;
