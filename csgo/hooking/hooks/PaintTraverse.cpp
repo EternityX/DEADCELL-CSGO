@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/visuals/visuals.h"
 
 c_csplayer* UTIL_PlayerByIndex( int index ) {

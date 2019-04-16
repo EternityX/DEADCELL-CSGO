@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/chams/chams.h"
 
 void __fastcall hook::DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRenderContext *ctx, void *state, model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld ){

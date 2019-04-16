@@ -64,7 +64,7 @@ typedef OSHGui::Drawing::Color OSHColor;
 #include "sdk/sdk.h"
 
 #include "hooking/manager.h"
-#include "menu/menu.hpp"
+#include "menu/menu.h"
 
 #include "configs/config.h"
 

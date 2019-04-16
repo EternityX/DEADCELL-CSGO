@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 
 // credits to L3D451R7, thanks to him for showing me what this actually does

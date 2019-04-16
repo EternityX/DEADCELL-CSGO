@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/misc/misc.h"
 
 void __fastcall hook::OverrideView( uintptr_t ecx, uintptr_t edx, c_view_setup *pSetup ) {
