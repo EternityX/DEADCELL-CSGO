@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 class c_event_listener : public i_game_event_listener {
 public:
