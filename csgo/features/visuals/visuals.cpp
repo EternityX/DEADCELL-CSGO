@@ -11,7 +11,7 @@ void c_visuals::run( ) {
 	if( !g_renderer.get_instance( ) )
 		return;
 
-	if( g_vars.visuals.misc.remove_scope )
+	if( g_vars.visuals.misc.remove_scope && g_vars.visuals.misc.remove_scope < 3 )
 		draw_scope( );
 
 	activation_type( );
