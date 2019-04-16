@@ -23,9 +23,8 @@ We invite anyone interested in supporting development to join our Discord.
 This is NOT for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
 
 ## Known issues
-- Rendering issues when multi-core rendering is enabled (menu crashes and visuals flickering)
 - Weapon script assertions.
-- Lots of code is unoptimized.
+- Some of the code is unoptimized.
 - If you come across any more issues, please notify us via the issue tracker.
 
 We are accepting any pull requests that fix any of the aforementioned issues.

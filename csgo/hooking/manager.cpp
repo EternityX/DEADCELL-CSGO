@@ -1,4 +1,4 @@
-#include "../inc.hpp"
+#include "../inc.h"
 
 c_hooks g_hooks{ };
 
@@ -79,7 +79,7 @@ bool c_hooks::hook( ) {
 
 	if( !m_clientmode.hook_method( hook::idx::CREATE_MOVE, &hook::CreateMove ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook CreateMove. This is fatal." );
-		return false;	
+		return false;
 	}
 
 	if( !m_clientmode.hook_method( hook::idx::OVERRIDE_VIEW, &hook::OverrideView ) ) {
@@ -117,6 +117,12 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
+	if ( !m_surface.hook_method( hook::idx::DRAW_SET_COLOR, &hook::DrawSetColor ) )
+	{
+		_RPTF0( _CRT_ERROR, "Failed to hook DrawSetColor. This is fatal." );
+		return false;
+	}
+
 	if( !m_panel.hook_method( hook::idx::PAINT_TRAVERSE, &hook::PaintTraverse ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook PaintTraverse. This is fatal." );
 		return false;
@@ -134,7 +140,7 @@ bool c_hooks::hook( ) {
 
 	if( !m_viewrender.hook_method( hook::idx::RENDER_SMOKE_OVERLAY, hook::RenderSmokeOverlay ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook RenderSmokeOverlay. This is fatal." );
-		return false;	
+		return false;
 	}
 
 	if( !m_materialsystem.hook_method( hook::idx::GET_MATERIAL, hook::GetMaterial ) ) {

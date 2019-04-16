@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 class c_fakelag {
 private:

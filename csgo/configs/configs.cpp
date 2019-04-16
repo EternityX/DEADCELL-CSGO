@@ -136,10 +136,12 @@ bool c_config::init( ) {
 	item( g_vars.rage.teammate, "g_vars.rage.teammate", m_items );
 	item( g_vars.rage.dynamic_hitbox, "g_vars.rage.dynamic_hitbox", m_items );
 	item( g_vars.rage.primary_hitbox, "g_vars.rage.primary_hitbox", m_items );
+	item( g_vars.rage.safe_fps, "g_vars.rage.save_fps", m_items );
 	item( g_vars.antiaim.enabled, "g_vars.antiaim.enabled", m_items );
 	item( g_vars.antiaim.jitter, "g_vars.antiaim.jitter", m_items );
 	item( g_vars.antiaim.pitch, "g_vars.antiaim.pitch", m_items );
 	item( g_vars.antiaim.yaw, "g_vars.antiaim.yaw", m_items );
+	item( g_vars.antiaim.side_switch_key, "g_vars.antiaim.side_switch_key", m_items );
 	item( g_vars.antiaim.left_override_key, "g_vars.antiaim.left_override_key", m_items );
 	item( g_vars.antiaim.right_override_key, "g_vars.antiaim.right_override_key", m_items );
 	item( g_vars.antiaim.backwards_override_key, "g_vars.antiaim.backwards_override_key", m_items );

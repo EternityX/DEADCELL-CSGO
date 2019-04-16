@@ -8,6 +8,7 @@ public:
 		int target_selection;
 		float pointscale = 60.f;
 		bool prefer_bodyaim;
+		bool safe_fps;
 		bool bodyaim_lethal;
 		int hitchance;
 		int min_dmg;
@@ -134,6 +135,7 @@ public:
 		int right_override_key = 39;
 		int backwards_override_key = 40;
 		int reset_override_key = 38;
+		int side_switch_key;
 	} antiaim;
 	struct dangerzone{
 		int max_item_distance;

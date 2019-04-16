@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 struct notifications_t {
 	notifications_t( OSHColor c, OSHColor c1, float time, std::string buf  )

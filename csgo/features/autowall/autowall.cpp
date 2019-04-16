@@ -42,15 +42,27 @@ bool c_autowall::is_breakable( c_base_entity *entity ) const {
 	const int take_damage = entity->get_take_damage( );
 
 	const client_class *client_class = entity->get_client_class( );
+	if( !client_class )
+		return false;
 
-	if( client_class->m_network_name[ 1 ] == 'B' && client_class->m_network_name[ 9 ] == 'e' && client_class->m_network_name[ 10 ] == 'S' && client_class->m_network_name[ 16 ] == 'e' )
-		entity->get_take_damage( ) = 2;
+	// convert to string since std::string::at throws std::out_of_range when pos > length
+	std::string network_name = client_class->m_network_name;
+	try { 
 
-	else if( client_class->m_network_name[ 1 ] != 'B' && client_class->m_network_name[ 5 ] != 'D' )
-		entity->get_take_damage( ) = 2;
+		if( network_name.at( 1 ) == 'B' && network_name.at( 9 ) == 'e' && network_name.at( 10 ) == 'S' && network_name.at( 16 ) == 'e' )
+			entity->get_take_damage( ) = 2;
 
-	else if( client_class->m_network_name[ 1 ] != 'F' && client_class->m_network_name[ 4 ] != 'c' && client_class->m_network_name[ 5 ] != 'B' && client_class->m_network_name[ 9 ] != 'h' ) // CFuncBrush
-		entity->get_take_damage( ) = 2;
+		else if( network_name.at( 1 ) != 'B' && network_name.at( 5 ) != 'D' )
+			entity->get_take_damage( ) = 2;
+
+		else if( network_name.at( 1 ) != 'F' && network_name.at( 4 ) != 'c' && network_name.at( 5 ) != 'B' && network_name.at( 9 ) != 'h' ) // CFuncBrush
+			entity->get_take_damage( ) = 2;
+
+	} catch( std::out_of_range &ex ){
+		UNREFERENCED_PARAMETER( ex );
+		_RPT1( _CRT_WARN, "Out of range access on the entity's networked name, ( autowall )", ex.what( ) );
+		return nullptr;
+	}
 
 	using IsBreakableEntity_t = bool( __thiscall *)( c_base_entity * );
 	static IsBreakableEntity_t IsBreakableEntityEx = nullptr;
@@ -121,7 +133,7 @@ bool c_autowall::trace_to_exit( vec3_t &end, const vec3_t &start, const vec3_t &
 	return false;
 }
 
-bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage ) {
+bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *enter_trace, const vec3_t &direction, vec3_t *origin, float penetration, int &penetration_count, float &current_damage, float min_dmg ) {
 	bool a5 = enter_trace->m_contents >> 3 & CONTENTS_SOLID;
 	bool v19 = enter_trace->m_surface.m_flags >> 7 & SURF_LIGHT;
 
@@ -176,7 +188,7 @@ bool c_autowall::handle_bullet_pen( surface_data_t *enter_surface, trace_t *ente
 	m_lost_dmg = lost_dmg;
 
 	current_damage -= std::fmaxf( 0.f, lost_dmg );
-	if( current_damage < 1.f )
+	if( current_damage < 1.f || current_damage < min_dmg )
 		return false;
 
 	*origin = exit_trace.m_endpos;
@@ -273,7 +285,7 @@ bool c_autowall::think( const vec3_t &position, c_csplayer *entity, const int mi
 			if( trace_length > 3000.f || enter_surface_data->game.penetrationmodifier < 0.1f )
 				hits_left = 0;
 
-			if( !handle_bullet_pen( enter_surface_data, &trace, direction, &start, weapon_info->penetration, hits_left, m_autowall_dmg ) )
+			if( !handle_bullet_pen( enter_surface_data, &trace, direction, &start, weapon_info->penetration, hits_left, m_autowall_dmg, mindmg ) )
 				break;
 		}
 	}

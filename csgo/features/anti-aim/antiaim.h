@@ -1,10 +1,13 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../misc/misc.h"
 #include "../autowall/autowall.h"
 
 class c_antiaim {
 	vec3_t m_input = vec3_t{};
+	vec3_t m_stored_input = vec3_t{};
+
+	bool m_desync_next_tick;
 
 	bool allow( c_user_cmd *ucmd );
 	void adjust_yaw( c_user_cmd *ucmd );

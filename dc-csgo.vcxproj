@@ -33,7 +33,7 @@
     <ClCompile Include="csgo\features\misc\misc.cpp" />
     <ClCompile Include="csgo\features\nade_pred\nade_pred.cpp" />
     <ClCompile Include="csgo\features\notifications\notifications.cpp" />
-    <ClCompile Include="csgo\features\player_log\player_log.cpp" />
+    <ClCompile Include="csgo\features\backtrack\backtrack.cpp" />
     <ClCompile Include="csgo\features\ragebot\ragebot.cpp" />
     <ClCompile Include="csgo\features\resolver\resolver.cpp" />
     <ClCompile Include="csgo\features\visuals\visuals.cpp" />
@@ -58,6 +58,7 @@
     <ClCompile Include="csgo\hooking\hooks\ShouldDrawFog.cpp" />
     <ClCompile Include="csgo\hooking\manager.cpp" />
     <ClCompile Include="csgo\menu\menu.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\DrawSetColor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\features\entity listener\ent_listener.h" />
@@ -74,15 +75,15 @@
     <ClInclude Include="csgo\features\misc\misc.h" />
     <ClInclude Include="csgo\features\nade_pred\nade_pred.h" />
     <ClInclude Include="csgo\features\notifications\notifications.h" />
-    <ClInclude Include="csgo\features\player_log\player_log.h" />
+    <ClInclude Include="csgo\features\backtrack\backtrack.h" />
     <ClInclude Include="csgo\features\ragebot\ragebot.h" />
     <ClInclude Include="csgo\features\resolver\resolver.h" />
     <ClInclude Include="csgo\features\vars.h" />
     <ClInclude Include="csgo\features\visuals\visuals.h" />
     <ClInclude Include="csgo\hooking\manager.h" />
-    <ClInclude Include="csgo\inc.hpp" />
+    <ClInclude Include="csgo\inc.h" />
     <ClInclude Include="csgo\json.h" />
-    <ClInclude Include="csgo\menu\menu.hpp" />
+    <ClInclude Include="csgo\menu\menu.h" />
     <ClInclude Include="csgo\sdk\address.h" />
     <ClInclude Include="csgo\sdk\csgo\csgo.h" />
     <ClInclude Include="csgo\sdk\custom classes\angle.h" />
@@ -269,7 +270,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>deadcell.lib;oshgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
