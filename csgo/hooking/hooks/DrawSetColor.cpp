@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 void __fastcall hook::DrawSetColor( i_surface* ecx, uintptr_t edx, int r, int g, int b, int a )
 {
