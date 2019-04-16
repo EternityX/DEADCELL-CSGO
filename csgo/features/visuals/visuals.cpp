@@ -243,6 +243,11 @@ void c_visuals::player( c_csplayer *entity ) {
 
 	if( g_vars.visuals.flags )
 		draw_flags( entity, flag_color, box.x, box.y, box.w, box.h );
+
+	/// even if no flags are drawn the flag counter ( used above in money ) and
+	/// the offset ( used for e.g. weapon/ammo ) has to be reset
+	m_ctx.flag_count = 0;
+	m_ctx.offset = 0;
 }
 
 void c_visuals::handle_glow( ) {
