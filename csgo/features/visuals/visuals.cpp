@@ -11,7 +11,7 @@ void c_visuals::run( ) {
 	if( !g_renderer.get_instance( ) )
 		return;
 
-	if( g_vars.visuals.misc.remove_scope )
+	if( g_vars.visuals.misc.remove_scope && g_vars.visuals.misc.remove_scope < 3 )
 		draw_scope( );
 
 	activation_type( );
@@ -243,6 +243,11 @@ void c_visuals::player( c_csplayer *entity ) {
 
 	if( g_vars.visuals.flags )
 		draw_flags( entity, flag_color, box.x, box.y, box.w, box.h );
+
+	/// even if no flags are drawn the flag counter ( used above in money ) and
+	/// the offset ( used for e.g. weapon/ammo ) has to be reset
+	m_ctx.flag_count = 0;
+	m_ctx.offset = 0;
 }
 
 void c_visuals::handle_glow( ) {
@@ -759,7 +764,7 @@ void c_visuals::watermark( ) const {
 	auto time = oss.str( );
 
 	if( connected ) {
-		const bool choking = g_csgo.m_clientstate->m_nChokedCommands > 1;	
+		const bool choking = g_csgo.m_clientstate->m_choked_commands > 1;	
 
 		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor::FromARGB( 220, 255, 255, 255 ),
 			OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, 22, 0,

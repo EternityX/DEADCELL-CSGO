@@ -28,7 +28,7 @@ namespace hook {
 		using RenderSmokeOverlay_t = bool (__thiscall *)( uintptr_t, bool );
 		using RunCommand_t = void( __thiscall *)( uintptr_t, c_base_player *, c_user_cmd *, i_move_helper * );
 		using IsHltv_t = bool( __thiscall * )( uintptr_t );
-
+		using DrawSetColor_t = void( __thiscall * )( i_surface*, int, int, int, int );
 	};
 
 	// enum for indexes for easier updating
@@ -37,7 +37,7 @@ namespace hook {
 		RESET =						16,
 		PRESENT =					17,
 		END_SCENE =					42,
-		
+
 		// clientmode
 		SHOULD_DRAW_FOG =			17,
 		OVERRIDE_VIEW =				18,
@@ -55,6 +55,7 @@ namespace hook {
 
 		// surface
 		LOCK_CURSOR =				 67,
+		DRAW_SET_COLOR =			 15,
 
 		// panel
 		PAINT_TRAVERSE =			 41,
@@ -95,6 +96,7 @@ namespace hook {
 	bool __fastcall DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const c_view_setup *pSetup );
 	void __fastcall RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 );
 	bool __fastcall IsHltv( uintptr_t ecx, uintptr_t edx );
+	void __fastcall DrawSetColor( i_surface* ecx, uintptr_t edx, int r, int g, int b, int a );
 };
 
 class c_hooks {

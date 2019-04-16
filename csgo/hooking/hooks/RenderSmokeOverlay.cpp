@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 void __fastcall hook::RenderSmokeOverlay( uintptr_t ecx, uintptr_t edx, bool a1 ){
 	if( !g_vars.visuals.misc.remove_smoke )

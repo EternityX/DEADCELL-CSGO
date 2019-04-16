@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 enum shader_type_t {
 	VertexLitGeneric,
@@ -17,9 +17,10 @@ private:
 
 	void push_players( );
 	i_material *create_material( shader_type_t shade, bool ignorez, bool wireframe = false );
-	
-	
+
 public:
+	bool m_kv_needs_update = false;
+
 	void on_sceneend( );
 	bool on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_render_info_t &pInfo, matrix3x4_t *pCustomBoneToWorld, hook::fn::DrawModelExecute_t orig );
 };

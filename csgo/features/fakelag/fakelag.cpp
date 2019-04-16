@@ -22,7 +22,7 @@ void c_fakelag::think( c_user_cmd* cmd ) {
 		}
 	}
 
-	if( choke > static_cast< int >( g_csgo.m_clientstate->m_nChokedCommands ) )
+	if( choke > static_cast< int >( g_csgo.m_clientstate->m_choked_commands ) )
 		g_cl.m_sendpacket = false;
 }
 

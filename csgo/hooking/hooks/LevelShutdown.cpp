@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/animations/anim.h"
 
 void __fastcall hook::LevelShutdown( uintptr_t ecx, uintptr_t edx ) {

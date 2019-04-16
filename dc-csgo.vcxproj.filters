@@ -77,9 +77,6 @@
     <Filter Include="dc-csgo\features\engine_pred">
       <UniqueIdentifier>{a53443f8-457d-465b-a205-9b066572187e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dc-csgo\features\player_log">
-      <UniqueIdentifier>{d66f17ca-ba80-436a-b7a7-c5199330f0c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dc-csgo\features\chams">
       <UniqueIdentifier>{1aa07ca5-72cb-470c-bdc2-d5c01b5fc3cb}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,9 @@
     </Filter>
     <Filter Include="dc-csgo\features\geometry">
       <UniqueIdentifier>{29b831d0-8e9c-48be-8a45-acda888cc90d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\backtrack">
+      <UniqueIdentifier>{a145db99-63d9-4018-a68b-5b41e4a269e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,9 +172,6 @@
     <ClCompile Include="csgo\features\engine_pred\engine_pred.cpp">
       <Filter>dc-csgo\features\engine_pred</Filter>
     </ClCompile>
-    <ClCompile Include="csgo\features\player_log\player_log.cpp">
-      <Filter>dc-csgo\features\player_log</Filter>
-    </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\DrawModelExecute.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
@@ -214,11 +211,14 @@
     <ClCompile Include="csgo\hooking\hooks\EndScene.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\features\backtrack\backtrack.cpp">
+      <Filter>dc-csgo\features\backtrack</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\DrawSetColor.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="csgo\inc.hpp">
-      <Filter>dc-csgo</Filter>
-    </ClInclude>
     <ClInclude Include="csgo\sdk\custom classes\animstate.h">
       <Filter>dc-csgo\sdk\custom classes</Filter>
     </ClInclude>
@@ -276,9 +276,6 @@
     <ClInclude Include="csgo\features\visuals\visuals.h">
       <Filter>dc-csgo\features\visuals</Filter>
     </ClInclude>
-    <ClInclude Include="csgo\menu\menu.hpp">
-      <Filter>dc-csgo\menu</Filter>
-    </ClInclude>
     <ClInclude Include="csgo\configs\config.h">
       <Filter>dc-csgo\configs</Filter>
     </ClInclude>
@@ -317,9 +314,6 @@
     </ClInclude>
     <ClInclude Include="csgo\features\engine_pred\engine_pred.h">
       <Filter>dc-csgo\features\engine_pred</Filter>
-    </ClInclude>
-    <ClInclude Include="csgo\features\player_log\player_log.h">
-      <Filter>dc-csgo\features\player_log</Filter>
     </ClInclude>
     <ClInclude Include="csgo\features\chams\chams.h">
       <Filter>dc-csgo\features\chams</Filter>
@@ -452,6 +446,15 @@
     </ClInclude>
     <ClInclude Include="csgo\features\geometry\geometry.h">
       <Filter>dc-csgo\features\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\features\backtrack\backtrack.h">
+      <Filter>dc-csgo\features\backtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\inc.h">
+      <Filter>dc-csgo</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\menu\menu.h">
+      <Filter>dc-csgo\menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

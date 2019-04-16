@@ -36,23 +36,23 @@ void c_chams::on_sceneend( ) {
 			default: break;
 		}
 
-		// bruh moment.
-		if( g_vars.visuals.chams.type == 0 ) {
-			static auto kv = static_cast<key_values *>( g_csgo.m_memalloc->alloc( 36 ) );
+		// this will only update when the slider(s) value has changed.
+		if( m_kv_needs_update && g_vars.visuals.chams.type == 0 ) {
+			static auto kv = static_cast< key_values * >( g_csgo.m_memalloc->alloc( 36 ) );
 			kv->init( "VertexLitGeneric" );
 
 			auto reflectivity_str = std::to_string( g_vars.visuals.chams.reflectivity / 100.f );
 			auto luminance_str = std::to_string( g_vars.visuals.chams.reflectivity / 100.f );
 
-			std::string reflectivity = "["
+			auto reflectivity = "["
 				+ reflectivity_str + " "
-				+ reflectivity_str + " "
-				+ reflectivity_str + "]";
+				+= reflectivity_str + " "
+				+= reflectivity_str + "]";
 
-			std::string luminance = "["
+			auto luminance = "["
 				+ luminance_str + " "
-				+ luminance_str + " "
-				+ luminance_str + "]";
+				+= luminance_str + " "
+				+= luminance_str + "]";
 
 			kv->set_string( "$basetexture", "vgui/white_additive" );
 			kv->set_string( "$envmaptint", reflectivity.c_str( ) );
@@ -79,6 +79,8 @@ void c_chams::on_sceneend( ) {
 			kv->set_int( "$ignorez", 1 );
 
 			material.second->set_shader_and_params( kv );
+
+			m_kv_needs_update = false;
 		}
 
 		OSHColor c1 = OSHColor::FromARGB( g_vars.visuals.chams.vis_color );
@@ -114,14 +116,14 @@ bool c_chams::on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_
 	std::string model_name = g_csgo.m_model_info->get_model_name( ( model_t* )pInfo.m_model );
 
 	if( pInfo.m_entity_index == g_csgo.m_engine->get_local_player( ) && g_csgo.m_input->m_camera_in_thirdperson && g_vars.visuals.chams.local ) {
-		// idk why but this is broken while jumping
+		// draw model on last sent origin
+		// BUG: bone matrix is incorrect(?) when jumping
 		if( local->velocity().length_2d( ) > 0.f ) {
 			static i_material *dogtag = g_csgo.m_material_system->get_material( "models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL );
 
 			g_csgo.m_model_render->forced_material_override( dogtag );
-			auto color2 = OSHColor::FromARGB( g_vars.visuals.chams.local_col );
-			float col2[ 3 ] = { 1.f, 1.f, 1.f };
-			g_csgo.m_render_view->set_color_modulation( col2 );
+			float col[ 3 ] = { 1.f, 1.f, 1.f };
+			g_csgo.m_render_view->set_color_modulation( col );
 
 			orig( ecx, ctx, state, pInfo, g_cl.m_last_matrix.data( ) ? g_cl.m_last_matrix.data( ) : pCustomBoneToWorld );
 		}

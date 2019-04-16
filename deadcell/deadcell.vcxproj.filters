@@ -45,9 +45,6 @@
     <ClInclude Include="hash\hash.hpp">
       <Filter>deadcell\hash</Filter>
     </ClInclude>
-    <ClInclude Include="math\math.hpp">
-      <Filter>deadcell\math</Filter>
-    </ClInclude>
     <ClInclude Include="pe\pe.hpp">
       <Filter>deadcell\pe</Filter>
     </ClInclude>
@@ -57,17 +54,20 @@
     <ClInclude Include="pe\types.hpp">
       <Filter>deadcell\pe</Filter>
     </ClInclude>
-    <ClInclude Include="console\console.hpp">
-      <Filter>deadcell\console</Filter>
-    </ClInclude>
     <ClInclude Include="oshgui\renderer.hpp">
+      <Filter>deadcell\oshgui</Filter>
+    </ClInclude>
+    <ClInclude Include="oshgui\font.hpp">
       <Filter>deadcell\oshgui</Filter>
     </ClInclude>
     <ClInclude Include="input\input.hpp">
       <Filter>deadcell\input</Filter>
     </ClInclude>
-    <ClInclude Include="oshgui\font.hpp">
-      <Filter>deadcell\oshgui</Filter>
+    <ClInclude Include="console\console.hpp">
+      <Filter>deadcell\console</Filter>
+    </ClInclude>
+    <ClInclude Include="math\math.hpp">
+      <Filter>deadcell\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
