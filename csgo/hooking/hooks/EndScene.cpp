@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/visuals/visuals.h"
 #include "../../features/nade_pred/nade_pred.h"
 

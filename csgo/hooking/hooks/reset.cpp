@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 HRESULT __stdcall hook::Reset( IDirect3DDevice9Ex *device, D3DPRESENT_PARAMETERS *pPresentationParameters ) {
 	g_renderer.get_renderer( ).PreD3DReset( );

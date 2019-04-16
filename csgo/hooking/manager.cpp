@@ -1,4 +1,4 @@
-#include "../inc.hpp"
+#include "../inc.h"
 
 c_hooks g_hooks{ };
 
@@ -114,6 +114,12 @@ bool c_hooks::hook( ) {
 
 	if( !m_surface.hook_method( hook::idx::LOCK_CURSOR, &hook::LockCursor ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook LockCursor. This is fatal." );
+		return false;
+	}
+
+	if ( !m_surface.hook_method( hook::idx::DRAW_SET_COLOR, &hook::DrawSetColor ) )
+	{
+		_RPTF0( _CRT_ERROR, "Failed to hook DrawSetColor. This is fatal." );
 		return false;
 	}
 

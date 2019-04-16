@@ -34,7 +34,7 @@ float get_lerp_time( ) {
 	return math::max( lerp, ratio / ud_rate );
 }
 
-bool lag_record_t::is_valid( ) const{
+bool lag_record_t::is_valid( ) const {
 	i_net_channel_info *channel_info = g_csgo.m_engine->get_net_channel_info();
 	if( !channel_info )
 		return false;
@@ -59,10 +59,10 @@ void c_backtrack::log( ){
 	for ( auto &entry : g_listener.m_players ) {
 		int idx = entry.m_idx;
 		c_csplayer* e = entry.m_player;
-		if( !e || !g_cl.m_local || e == g_cl.m_local || e->team( ) == g_cl.m_local->team( ) )
+		if( !e || !g_cl.m_local )
 			continue;
 
-		if( !e->is_valid_player( true, true ) )
+		if( e == g_cl.m_local || e->team( ) == g_cl.m_local->team( ) || !e->is_valid_player( true, true ) )
 			continue;
 
 		// get player record entry.
@@ -72,7 +72,9 @@ void c_backtrack::log( ){
 
 		// we have no records or we received a player update from the server, make a new entry.
 		if( entry->m_records.empty( ) || e->simtime( ) != entry->m_records.front( ).m_simtime ) {
+
 			update_animation_data( e );
+
 			auto lag_record = lag_record_t( e );
 
 			// only push valid records.
@@ -83,10 +85,8 @@ void c_backtrack::log( ){
 			size_t size = entry->m_records.size( );
 
 			// too many records...
-			if ( size > m_max_records ) {
-				for ( size_t s = 0; s < size - m_max_records; s++ )
-					entry->m_records.pop_back( );
-			}
+			if( size > m_max_records )
+				entry->m_records.resize( m_max_records );
 		}
 	}
 }
@@ -103,8 +103,7 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 
 	e->angles( ) = record.m_angles;
 	e->origin( ) = record.m_origin;
-	e->abs_origin( ) = record.m_abs_origin;
-	e->velocity( ) = record.m_vel;
+	e->set_abs_origin( record.m_origin );
 	e->flags( ) = record.m_flags;
 	e->get_collideable( )->mins( ) = record.m_mins;
 	e->get_collideable( )->maxs( ) = record.m_maxs;
@@ -117,21 +116,56 @@ bool c_backtrack::restore( c_csplayer *e, lag_record_t &record ) {
 }
 
 void c_backtrack::update_animation_data( c_csplayer *e ){
+	c_animstate *animstate = e->animstate( );
+	if( !animstate )
+		return;
+
+	animation_layer_t backup_layers[ 13 ];
+	std::memcpy( backup_layers, e->animoverlays( ).base( ), sizeof( animation_layer_t ) * e->animoverlays( ).count( ) );
+
+	float backup_curtime = g_csgo.m_global_vars->m_cur_time;
+	float backup_frametime = g_csgo.m_global_vars->m_frametime;
+
+	g_csgo.m_global_vars->m_cur_time = e->simtime( );
+	g_csgo.m_global_vars->m_frametime = g_csgo.m_global_vars->m_interval_per_tick;
+
+	int backup_flags = e->flags( );
+	int backup_eflags = e->eflags( );
+
+	if( animstate->on_ground )
+		e->flags( ) |= FL_ONGROUND;
+	else
+		e->flags( ) &= ~FL_ONGROUND;
+
+	e->eflags( ) &= ~0x1000;
+
+	e->abs_velocity( ) = e->velocity( );
+
+	int last_update = animstate->last_client_side_animation_update_framecount;
+	if ( last_update == g_csgo.m_global_vars->m_frame_count )
+		animstate->last_client_side_animation_update_framecount = last_update - 1;
+
 	e->client_side_anims( ) = true; {
 		e->update_anims( );
 
-		e->invalidate_bone_cache( );
-
-		int backup_flags = e->flags( );
-		e->flags( ) &= ~FL_ONGROUND;
-		e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
-		e->flags( ) = backup_flags;
 	} e->client_side_anims( ) = false;
+
+	e->flags( ) = backup_flags;
+	e->eflags( ) = backup_eflags;
+
+	g_csgo.m_global_vars->m_cur_time = backup_curtime;
+	g_csgo.m_global_vars->m_frametime = backup_frametime;
+
+	std::memcpy( e->animoverlays( ).base( ), backup_layers, sizeof( animation_layer_t ) * e->animoverlays( ).count( ) );
+
+	e->invalidate_bone_cache( );
+
+	e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
 }
 
 void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &record ) {
 	if ( !record.is_valid( ) ) {
-		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( ) );
+		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( )  );
 	}
 	else {
 		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
