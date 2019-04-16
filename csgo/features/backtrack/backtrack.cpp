@@ -165,10 +165,10 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 
 void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &record ) {
 	if ( !record.is_valid( ) ) {
-		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( ) + get_lerp_time( ) );
+		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( )  );
 	}
 	else {
-		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime + get_lerp_time( ) );
+		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
 	}
 }
 
