@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 enum resolve_mode_e {
 	RESOLVE_MODE_NONE,

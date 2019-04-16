@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 struct autowall_info_t {
 	autowall_info_t( const vec3_t start, const vec3_t end, c_csplayer *to, c_csplayer *from ){

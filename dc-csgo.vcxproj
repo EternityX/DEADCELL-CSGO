@@ -81,9 +81,9 @@
     <ClInclude Include="csgo\features\vars.h" />
     <ClInclude Include="csgo\features\visuals\visuals.h" />
     <ClInclude Include="csgo\hooking\manager.h" />
-    <ClInclude Include="csgo\inc.hpp" />
+    <ClInclude Include="csgo\inc.h" />
     <ClInclude Include="csgo\json.h" />
-    <ClInclude Include="csgo\menu\menu.hpp" />
+    <ClInclude Include="csgo\menu\menu.h" />
     <ClInclude Include="csgo\sdk\address.h" />
     <ClInclude Include="csgo\sdk\csgo\csgo.h" />
     <ClInclude Include="csgo\sdk\custom classes\angle.h" />

@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/visuals/visuals.h"
 
 bool __fastcall hook::DoPostScreenSpaceEffects( uintptr_t ecx, uintptr_t edx, const c_view_setup *pSetup ) {
