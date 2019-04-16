@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../../features/misc/misc.h"
 #include "../../features/ragebot/ragebot.h"
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 struct ent_container_t {
 	ent_container_t( ) { }
