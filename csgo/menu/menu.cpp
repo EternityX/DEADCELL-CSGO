@@ -148,7 +148,7 @@ void c_main_form::ragebot_tab( ) {
 	g_menu.set_x_pos( 125 );
 	g_menu.push_y_pos( -18 );
 	auto legs_check = new c_checkbox( "Legs", target_page, &g_vars.rage.hitbox_legs );
-	auto primaryhitbox = new c_combo( "Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 4, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth( ) - 15 );
+	auto primaryhitbox = new c_combo( "Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 5, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth( ) - 15 );
 	g_menu.set_x_pos( 38 );
 	auto dynamic_hitbox = new c_checkbox( "Dynamic scanning", target_page, &g_vars.rage.dynamic_hitbox );
 	auto multipoint_head_check = new c_checkbox( "Scan head", target_page, &g_vars.rage.head );
@@ -327,7 +327,7 @@ void c_main_form::visuals_tab( ) {
 	auto remove_flash = new c_checkbox( "Flash", extra_removals, &g_vars.visuals.misc.no_flash );
 	auto remove_fog = new c_checkbox( "Fog", extra_removals, &g_vars.visuals.misc.fog );
 	auto remove_scope_zoom = new c_checkbox( "Scope zoom", extra_removals, &g_vars.visuals.misc.remove_scope_zoom );
-	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic" }, extra_removals, 3, &g_vars.visuals.misc.remove_scope, other_esp_groupbox->GetWidth( ) - 15 );
+	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic", "Engine" }, extra_removals, 4, &g_vars.visuals.misc.remove_scope, other_esp_groupbox->GetWidth( ) - 15 );
 	auto remove_smoke_type = new c_combo( "Smoke", { "None", "Remove", "Wireframe" }, extra_removals, 3, &g_vars.visuals.misc.remove_smoke, other_esp_groupbox->GetWidth( ) - 15 );
 	auto nightmode = new c_slider( "World brightness", extra_removals, 0, 100, &g_vars.misc.nightmode, 100, "%" );
 	nightmode->GetValueChangedEvent( ) += OSHGui::ValueChangedEventHandler( []( Control *sender ) {

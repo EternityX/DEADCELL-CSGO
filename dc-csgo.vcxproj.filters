@@ -214,6 +214,9 @@
     <ClCompile Include="csgo\features\backtrack\backtrack.cpp">
       <Filter>dc-csgo\features\backtrack</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\DrawSetColor.cpp">
+      <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\inc.hpp">
