@@ -73,7 +73,8 @@ void c_backtrack::log( ){
 		// we have no records or we received a player update from the server, make a new entry.
 		if( entry->m_records.empty( ) || e->simtime( ) != entry->m_records.front( ).m_simtime ) {
 
-			update_animation_data( e );
+			if ( !e->get_info( ).m_is_fake_player )
+				update_animation_data( e );
 
 			auto lag_record = lag_record_t( e );
 
