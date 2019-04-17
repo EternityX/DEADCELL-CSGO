@@ -1,6 +1,5 @@
 #include "chams.h"
 #include "../entity listener/ent_listener.h"
-#include "../backtrack/backtrack.h"
 
 c_chams g_chams;
 
@@ -100,24 +99,6 @@ void c_chams::on_sceneend( ) {
 		g_csgo.m_model_render->forced_material_override( material.first );
 		g_csgo.m_render_view->set_color_modulation( vis_color );	
 		ent->draw_model( STUDIO_RENDER, 255 );
-
-		if ( g_vars.rage.enabled ) {
-			auto &records = g_backtrack.get( ent->get_index( ) )->m_records;
-			if ( records.size( ) >= size_t( 2 ) ) {
-				if ( !g_backtrack.restore( ent, records.back( ) ) )
-					continue;
-
-				static i_material *dogtag = g_csgo.m_material_system->get_material( "models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL );
-				dogtag->set_material_var_flag( MATERIAL_VAR_IGNOREZ, true );
-
-				static float col[ 3 ] = { 1.f, 1.f, 1.f };
-				g_csgo.m_model_render->forced_material_override( dogtag );
-				g_csgo.m_render_view->set_color_modulation( col );
-				ent->draw_model( STUDIO_RENDER, 255 );
-
-				g_backtrack.restore( ent, records.front( ) );
-			}
-		}
 	}
 
 	if( !m_players.empty( ) )
@@ -141,7 +122,7 @@ bool c_chams::on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_
 			static i_material *dogtag = g_csgo.m_material_system->get_material( "models/inventory_items/dogtags/dogtags_outline", TEXTURE_GROUP_MODEL );
 
 			g_csgo.m_model_render->forced_material_override( dogtag );
-			static float col[ 3 ] = { 1.f, 1.f, 1.f };
+			float col[ 3 ] = { 1.f, 1.f, 1.f };
 			g_csgo.m_render_view->set_color_modulation( col );
 
 			orig( ecx, ctx, state, pInfo, g_cl.m_last_matrix.data( ) ? g_cl.m_last_matrix.data( ) : pCustomBoneToWorld );
