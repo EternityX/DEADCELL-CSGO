@@ -199,7 +199,7 @@
     <IntDir>$(SolutionDir)\build\dc-csgo-obj\</IntDir>
     <IncludePath>$(DXSDK_DIR)include\;$(SolutionDir)imgui\;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(SolutionDir)build\bin\lib_debug\;$(LibraryPath)</LibraryPath>
-    <TargetName>$(ProjectName)-debug</TargetName>
+    <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -230,7 +230,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>deadcell_debug.lib;oshgui_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>deadcell_debug.lib;FreeType_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -271,7 +271,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>deadcell.lib;oshgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>deadcell.lib;FreeType.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

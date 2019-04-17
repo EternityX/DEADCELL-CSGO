@@ -2,7 +2,6 @@
 #include "renderer.hpp"
 
 #include <misc/freetype/imgui_freetype.h>
-#include "font.hpp"
 
 bool get_system_font_path( const std::string &font_name, std::string &font_path );
 
@@ -45,8 +44,10 @@ void c_renderer::init( IDirect3DDevice9Ex *device ) {
 			return;
 		}
 
+		// menu font
 		io.Fonts->AddFontFromFileTTF( tahoma.data( ), 15.0f, nullptr, ImGui::GetIO( ).Fonts->GetGlyphRangesDefault( ) );
 
+		// misc fonts
 		m_fonts[ FONT_VERDANA_7PX ] = io.Fonts->AddFontFromFileTTF( verdana.data( ), 12.0f, nullptr, io.Fonts->GetGlyphRangesDefault( ) );
 		m_fonts[ FONT_VERDANA_BOLD_7PX ] = io.Fonts->AddFontFromFileTTF( verdana_bold.data( ), 12.0f, nullptr, io.Fonts->GetGlyphRangesDefault( ) );
 		m_fonts[ FONT_04B03_6PX ] = m_fonts[ FONT_VERDANA_7PX ];
@@ -156,8 +157,7 @@ ImFont *c_renderer::get_font( int index ) {
 	return m_fonts[ index ];
 }
 
-bool get_system_font_path( const std::string &font_name, std::string &font_path )
-{
+bool get_system_font_path( const std::string &font_name, std::string &font_path ) {
 	char buffer [ MAX_PATH ];
 
 	if( !GetWindowsDirectoryA( buffer, MAX_PATH ) ) {
@@ -196,8 +196,7 @@ bool get_system_font_path( const std::string &font_name, std::string &font_path 
 
 		index++;
 
-		if( error == ERROR_NO_MORE_ITEMS )
-		{
+		if( error == ERROR_NO_MORE_ITEMS ) {
 			RegCloseKey( registry_key );
 			return false;
 		}
@@ -206,8 +205,7 @@ bool get_system_font_path( const std::string &font_name, std::string &font_path 
 			continue;
 		}
 
-		if( !_strnicmp( font_name.data( ), value_name, font_name.size( ) ) )
-		{
+		if( !_strnicmp( font_name.data( ), value_name, font_name.size( ) ) ) {
 			font_path = fonts_directory + std::string( reinterpret_cast< char * >( value_data ), value_data_size );
 			RegCloseKey( registry_key );
 			return true;

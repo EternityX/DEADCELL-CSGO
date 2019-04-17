@@ -108,9 +108,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SolutionDir)build\bin\lib-debug\</OutDir>
-    <IntDir>$(SolutionDir)build\freetype-obj\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <OutDir>$(SolutionDir)build\bin\lib_debug\</OutDir>
+    <IntDir>$(SolutionDir)build\freetype-obj-debug\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)_d</TargetName>
