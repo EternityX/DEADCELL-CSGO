@@ -41,7 +41,7 @@ public:
 	c_csplayer *m_last_target = nullptr;
 
 	void work( c_user_cmd * cmd );
-	void auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd );
+	bool auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd );
 };
 
 extern c_ragebot g_ragebot;

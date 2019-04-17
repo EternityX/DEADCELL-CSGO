@@ -15,6 +15,9 @@ void c_ragebot::work( c_user_cmd * cmd ) {
 
 	m_cmd = cmd;
 
+	if ( !auto_revolver( g_cl.m_local->get_active_weapon( ), cmd ) )
+		return;
+
 	select_target( );
 	choose_angles( );
 	restore_players( );
@@ -115,52 +118,30 @@ void c_ragebot::select_target( ) {
 		for ( auto &entry : g_listener.m_players ) {
 			int idx = entry.m_idx;
 			c_csplayer* e = entry.m_player;
-			if( !is_valid( e ) )
+			if ( !is_valid( e ) )
 				continue;
 
-			lag_record_t player_record = lag_record_t{};
+			lag_record_t player_record = lag_record_t {};
 			float player_best_damage = 0.f;
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 
 			auto best_min_dmg = weapon->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
 			std::deque< lag_record_t > sorted_records;
-			if ( get_best_records( e, sorted_records ) ) {
-				for ( auto &record : sorted_records ) {
-					if ( !record.is_valid( ) )
-						continue;
+			if ( !get_best_records( e, sorted_records ) )
+				continue;
 
-					if ( !g_backtrack.restore( e, record ) )
-						continue;
+			for ( auto &record : sorted_records ) {
+				if ( !record.is_valid( ) )
+					continue;
 
-					if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
-						continue;
+				if ( !g_backtrack.restore( e, record ) )
+					continue;
 
-					std::vector< vec3_t > points;
-					if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
-						continue;
-
-					if ( points.empty( ) )
-						continue;
-
-					for ( auto& p : points ) {
-						if ( g_vars.visuals.extra.points )
-							g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
-
-						if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
-							if ( g_autowall.m_autowall_dmg > player_best_damage ) {
-								player_best_damage = g_autowall.m_autowall_dmg;
-								player_best_point = p;
-								player_record = record;
-							}
-						}
-					}
-				}
-			}
-			else {
-				e->setup_bones( nullptr, -1, 0x100, g_csgo.m_global_vars->m_cur_time );
+				if ( g_vars.rage.safe_fps && !bounding_check( e, record, best_min_dmg ) )
+					continue;
 
 				std::vector< vec3_t > points;
-				if ( !get_points_from_hitbox( e, hitboxes, e->bone_cache( ).base( ), points, ( g_vars.rage.pointscale / 100.f ) ) )
+				if ( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, ( g_vars.rage.pointscale / 100.f ) ) )
 					continue;
 
 				if ( points.empty( ) )
@@ -170,18 +151,15 @@ void c_ragebot::select_target( ) {
 					if ( g_vars.visuals.extra.points )
 						g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
 
-					auto best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
-
 					if ( g_autowall.think( p, e, best_min_dmg, true ) ) {
 						if ( g_autowall.m_autowall_dmg > player_best_damage ) {
-							player_best_damage = static_cast< int >( g_autowall.m_autowall_dmg );
+							player_best_damage = g_autowall.m_autowall_dmg;
 							player_best_point = p;
+							player_record = record;
 						}
 					}
 				}
 			}
-
-			m_players.emplace_back( e, lag_record_t( e ), idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ) );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
@@ -556,7 +534,7 @@ void c_ragebot::quickstop( c_base_combat_weapon *local_weapon ) {
 	}
 }
 
-void c_ragebot::auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd ) {
+bool c_ragebot::auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd ) {
 	if ( !local_weapon || local_weapon->item_index( ) != WEAPON_REVOLVER )
 		return;
 
@@ -574,17 +552,18 @@ void c_ragebot::auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *c
 		 || g_cl.m_local->next_attack( ) > g_csgo.m_global_vars->m_cur_time
 		 || local_weapon->in_reload( ) ) {
 		cocks_done = 0;
-		return;
+		return true;
 	}
 
 	if ( cocks_done < count_needed ) {
 		cmd->m_buttons |= IN_ATTACK;
 		++cocks_done;
-		return;
+		return false;
 	}
 
 	cmd->m_buttons &= ~IN_ATTACK;
 	cocks_done = 0;
+	return true;
 }
 
 bool c_ragebot::is_valid( c_csplayer *player ){

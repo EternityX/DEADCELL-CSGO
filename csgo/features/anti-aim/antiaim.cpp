@@ -29,9 +29,11 @@ bool c_antiaim::allow( c_user_cmd *ucmd ) {
 			return false;
 	}
 
-	if ( ucmd->m_buttons & IN_ATTACK && local->can_shoot( weapon ) && !weapon->is_grenade( ) ) {
-		m_desync_next_tick = true;
-		g_cl.m_sendpacket = false;
+	if ( ucmd->m_buttons & IN_ATTACK && local->can_shoot( weapon ) ) {
+		if ( !weapon->is_grenade( ) ) {
+			m_desync_next_tick = true;
+			g_cl.m_sendpacket = false;
+		}
 		return false;
 	}
 
