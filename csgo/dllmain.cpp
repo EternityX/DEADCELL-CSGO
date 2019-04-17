@@ -26,15 +26,17 @@ bool unload() {
 
 	g_listener.remove( );
 
-	ImGui_ImplDX9_Shutdown( );
-	ImGui_ImplWin32_Shutdown( );
-	ImGui::DestroyContext( );
-
 	if( !g_hooks.release( ) )
 		return false;
 
 	if( !g_input.remove( ) )
 		return false;
+
+	std::this_thread::sleep_for( std::chrono::milliseconds( 200 ) );
+
+	ImGui_ImplDX9_Shutdown( );
+	ImGui_ImplWin32_Shutdown( );
+	ImGui::DestroyContext( );
 
 	return true;
 }

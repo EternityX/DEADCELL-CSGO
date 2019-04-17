@@ -62,7 +62,7 @@ public:
 		bool impact;
 		int impact_color[ 4 ] = { 255, 255, 0, 0 };
 		bool radar;
-		float visualize_spread_color[ 4 ] = { 70, 113, 59, 198 };
+		int visualize_spread_color[ 4 ] = { 70, 113, 59, 198 };
 		struct chams{
 			bool teammates;
 			bool enabled;
