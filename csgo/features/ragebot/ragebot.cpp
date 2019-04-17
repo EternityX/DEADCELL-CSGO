@@ -536,10 +536,10 @@ void c_ragebot::quickstop( c_base_combat_weapon *local_weapon ) {
 
 bool c_ragebot::auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd ) {
 	if ( !local_weapon || local_weapon->item_index( ) != WEAPON_REVOLVER )
-		return;
+		return true;
 
 	if ( !( TIME_TO_TICKS( g_csgo.m_global_vars->m_cur_time - local_weapon->ready_time( ) ) <= -1 ) )
-		return;
+		return false;
 
 	// 0.234375f to cock and shoot, 15 ticks in 64 servers, 30(31?) in 128
 	// DONT USE TIME_TO_TICKS as these values aren't good for it. it's supposed to be 0.2f but that's also wrong
