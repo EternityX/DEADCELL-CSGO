@@ -1,4 +1,4 @@
-#include "inc.hpp"
+#include "inc.h"
 
 #include "features/misc/misc.h"
 #include "features/animations/anim.h"
@@ -79,13 +79,6 @@ static ulong_t __stdcall cheat_init( void *arg ) {
 			throw std::runtime_error( "Failed to hook function(s)" );
 
 		g_misc.transparent_props( g_vars.misc.prop_transparency );
-
-#ifdef _DEBUG
-		while( !&g_renderer.get_renderer( ) )
-			std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-
-		console::print( "game resolution ==> %x%.\n", g_renderer.get_renderer( ).GetDisplaySize( ).Width, g_renderer.get_renderer( ).GetDisplaySize( ).Height );
-#endif
 
 		if( !g_csgo.m_command_line->find_param( "-insecure" ) ) {
 #ifdef _DEBUG

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../inc.hpp"
+#include "../../inc.h"
 #include "../misc/misc.h"
 #include "../autowall/autowall.h"
 

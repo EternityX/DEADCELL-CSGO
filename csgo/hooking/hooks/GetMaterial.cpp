@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 i_material * __fastcall hook::GetMaterial( uintptr_t ecx, uintptr_t edx, const char *material_name, const char *texture_group_name, bool complain,
 	const char *complain_prefix ) {
