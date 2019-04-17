@@ -61,7 +61,7 @@ void c_notifications::draw( ) {
 				continue;
 			}
 
-			color.Value.w        = alpha / 255.0f;
+			color.Value.w = alpha / 255.0f;
 			shadow_color.Value.w = alpha / 255.0f;
 		}
 

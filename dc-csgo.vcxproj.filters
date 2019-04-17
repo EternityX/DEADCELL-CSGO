@@ -59,9 +59,6 @@
     <Filter Include="dc-csgo\features\autowall">
       <UniqueIdentifier>{a55473ad-6e61-436c-88e3-55eeb15ff4dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dc-csgo\features\ragebot">
-      <UniqueIdentifier>{d961d724-fe04-45af-859f-4d4dcf4b3cba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dc-csgo\features\animations">
       <UniqueIdentifier>{2bbc6511-4c92-497f-be33-98828c9305bf}</UniqueIdentifier>
     </Filter>
@@ -94,6 +91,9 @@
     </Filter>
     <Filter Include="dc-csgo\features\backtrack">
       <UniqueIdentifier>{a145db99-63d9-4018-a68b-5b41e4a269e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dc-csgo\features\ragebot">
+      <UniqueIdentifier>{d961d724-fe04-45af-859f-4d4dcf4b3cba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
