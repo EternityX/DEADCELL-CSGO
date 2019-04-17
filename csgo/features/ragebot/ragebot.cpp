@@ -160,6 +160,8 @@ void c_ragebot::select_target( ) {
 					}
 				}
 			}
+
+			m_players.emplace_back( e, player_record, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ) );
 		}
 
 		std::sort( m_players.begin( ), m_players.end( ), [ & ] ( rage_t &a, rage_t &b ) {
@@ -364,8 +366,8 @@ bool c_ragebot::get_best_records( c_csplayer* e, std::deque< lag_record_t > &out
 		}
 
 		float at_target = math::normalize_angle( math::calc_angle( local_origin, record.m_origin ).y );
-		float sideways_delta = math::min( math::normalize_angle( at_target + 90.f - record.m_angles.y ), 
-										  math::normalize_angle( at_target - 90.f - record.m_angles.y ) );
+		float sideways_delta = math::min( std::fabsf( math::normalize_angle( at_target + 90.f - record.m_angles.y ) ), 
+										  std::fabsf( math::normalize_angle( at_target - 90.f - record.m_angles.y ) ) );
 		if ( sideways_delta < 30.f ) { // sideways is easier to hit
 			end_priority += 1;
 		}
