@@ -18,11 +18,11 @@ private:
 	bool calculate_bbox( c_base_entity *entity, bbox_t &box ) const;
 	void activation_type();
 	void run_dormancy_fade( c_csplayer *entity, int idx );
-	void draw_box( OSHColor color, int index, float x, float y, float w, float h );
-	void ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, OSHColor color, float x, float y, float w, float h, int clip );
-	void flash_bar( c_csplayer * player, OSHColor color, float x, float y, float w, float h );
-	void weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, OSHColor color, float x, float y, float w, float h );
-	void draw_flags( c_csplayer *player, OSHColor color, float x, float y, float w, float h );
+	void draw_box( const ImU32 &color, int index, float x, float y, float w, float h );
+	void ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, const ImU32 &color, float x, float y, float w, float h, int clip );
+	void flash_bar( c_csplayer * player, const ImU32 &color, float x, float y, float w, float h );
+	void weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, const ImU32 &color, float x, float y, float w, float h );
+	void draw_flags( c_csplayer *player, const ImU32 &color, float x, float y, float w, float h );
 	void draw_spectators( ) const;
 
 	void world( c_base_entity * entity );

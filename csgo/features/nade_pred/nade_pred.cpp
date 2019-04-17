@@ -186,7 +186,7 @@ void c_nade_prediction::draw( ) {
 
 			vec3_t start2d;
 			if( g_visuals.world_to_screen( start, start2d ) )
-				g_renderer.line( OSHColor::FromRGB( 255, 255, 255 ), start2d.x, start2d.y, start2d.x + 1, start2d.y + 1 );
+				g_renderer.line( ImColor( 255, 255, 255 ), start2d.x, start2d.y, start2d.x + 1, start2d.y + 1 );
 		}
 	};
 
@@ -201,11 +201,11 @@ void c_nade_prediction::draw( ) {
 
 			if( g_visuals.world_to_screen( p.m_start, start ) && g_visuals.world_to_screen( p.m_end, end ) ) {
 				//	draw line
-				g_renderer.line( OSHColor::FromRGB( 0, 125, 255 ), start.x, start.y, end.x, end.y );
+				g_renderer.line( ImColor( 0, 125, 255 ), start.x, start.y, end.x, end.y );
 
 				//	draw small box if detonated or hit a wall
 				if( p.m_detonate || p.m_plane ) {
-					g_renderer.rect( p.m_detonate ? OSHColor::FromRGB( 255, 0, 0 ) : OSHColor::White( ), start.x - 2, start.y - 2, 5, 5 );
+					g_renderer.rect( p.m_detonate ? ImColor( 255, 0, 0 ) : ImColor( 255, 255, 255 ), start.x - 2, start.y - 2, 5, 5 );
 				}
 
 				if( p.m_detonate )

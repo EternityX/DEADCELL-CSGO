@@ -32,32 +32,43 @@ long __stdcall hook::EndScene( IDirect3DDevice9Ex *device ) {
 		save( device ); {
 			static bool once { false };
 			if ( !once ) {
+				g_input.init( "Valve001" );
 				g_renderer.init( device );
-				g_menu.init( );
-				g_input.init( "Valve001", g_renderer.get_instance( ) );
 				once = true;
 			}
+			else {
+				ImGuiIO &io = ImGui::GetIO( );
+				io.MouseDrawCursor = g_menu.m_is_active;
 
-			g_renderer.start_drawing( device );
+				g_renderer.start_drawing( );
+				{
+					g_visuals.run( );
 
-			g_visuals.run( );
+					g_nadepred.draw( );
 
-			g_nadepred.draw( );
+					g_notify.draw( );
 
-			g_notify.draw( );
+					if ( g_vars.visuals.extra.misc_flags ) {
+						int flag_count = 0;
 
-			if ( g_vars.visuals.extra.misc_flags ) {
-				int flag_count = 0;
+						if ( g_cl.m_under_tickrate ) {
+							g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_ENHANCE_9PX ), ImGui::GetColorU32( { 0.90f, 0.90f, 0.17f, 0.04f } ), ImGui::GetColorU32( { 0.78f, 0.0f, 0.0f, 0.0f } ), 15, ( io.DisplaySize.x / 2 ) - flag_count++ * 21, DROPSHADOW, "FPS" );
+							g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_7PX ), ImGui::GetColorU32( { 0.90f, 0.90f, 0.17f, 0.04f } ), ImGui::GetColorU32( { 0.78f, 0.0f, 0.0f, 0.0f } ), 15, ( io.DisplaySize.y / 2 ) - 1 * 11, DROPSHADOW, "%i", g_cl.m_client_framerate );
+						}
+					}
 
-				if ( g_cl.m_under_tickrate ) {
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_ENHANCE_9PX ), OSHColor::FromARGB( 230, 230, 43, 10 ), OSHColor::FromARGB( 200, 0, 0, 0 ), 15, ( g_renderer.get_renderer( ).GetDisplaySize( ).Height / 2 ) - flag_count++ * 21, DROPSHADOW, "FPS" );
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_7PX ), OSHColor::FromARGB( 230, 230, 43, 10 ), OSHColor::FromARGB( 200, 0, 0, 0 ), 15, ( g_renderer.get_renderer( ).GetDisplaySize( ).Height / 2 ) - 1 * 11, DROPSHADOW, "%i", g_cl.m_client_framerate );
+					g_visuals.watermark( );
 				}
+				g_renderer.end_drawing( );
+
+				// g_menu.draw( );
+
+				if( g_menu.m_is_active ) {
+					ImGui::ShowDemoWindow( );
+				}
+
+				g_renderer.render( );
 			}
-
-			g_visuals.watermark( );
-
-			g_renderer.end_drawing( device );
 		} restore( device );
 	}
 

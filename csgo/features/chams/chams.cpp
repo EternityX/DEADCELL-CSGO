@@ -83,10 +83,10 @@ void c_chams::on_sceneend( ) {
 			m_kv_needs_update = false;
 		}
 
-		OSHColor c1 = OSHColor::FromARGB( g_vars.visuals.chams.vis_color );
-		OSHColor c2 = OSHColor::FromARGB( g_vars.visuals.chams.hid_color );
-		float vis_color[ 3 ] = { c1.GetRed( ), c1.GetGreen( ), c1.GetBlue( ) };
-		float hid_color[ 3 ] = { c2.GetRed( ), c2.GetGreen( ), c2.GetBlue( ) };		
+		ImColorARGB c1 = ImColorARGB( g_vars.visuals.chams.vis_color );
+		ImColorARGB c2 = ImColorARGB( g_vars.visuals.chams.hid_color );
+		float vis_color[ 3 ] = { c1.Value.x * 255.0f, c1.Value.y * 255.0f, c1.Value.z * 255.0f };
+		float hid_color[ 3 ] = { c2.Value.x * 255.0f, c2.Value.y * 255.0f, c2.Value.z * 255.0f };		
 
 		if( g_vars.visuals.chams.twopass ) {
 			g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
@@ -131,8 +131,8 @@ bool c_chams::on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_
 		static auto mat = create_material( VertexLitGeneric, false, false );
 		g_csgo.m_model_render->forced_material_override( mat );
 
-		auto color = OSHColor::FromARGB( g_vars.visuals.chams.local_col );
-		float col[ 3 ] = { color.GetRed( ), color.GetGreen( ), color.GetBlue( ) };
+		auto color = ImColorARGB( g_vars.visuals.chams.local_col );
+		float col[ 3 ] = { color.Value.x * 255.0f, color.Value.y * 255.0f, color.Value.z * 255.0f };
 		g_csgo.m_render_view->set_color_modulation( col );
 
 		if( g_vars.visuals.chams.blend_scope && local->is_scoped( ) )

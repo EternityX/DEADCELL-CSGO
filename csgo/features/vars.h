@@ -32,26 +32,26 @@ public:
 		int activation_type;
 		int activation_key;
 		bool bbox;
-		float box_color[ 4 ] = { 220, 255, 0, 0 };
+		int box_color[ 4 ] = { 220, 255, 0, 0 };
 		bool name;
-		float name_color[ 4 ] = { 220, 255, 255, 255 };
+		int name_color[ 4 ] = { 220, 255, 255, 255 };
 		bool weapon;
-		float weapon_color[ 4 ] = { 220, 255, 255, 255 };
+		int weapon_color[ 4 ] = { 220, 255, 255, 255 };
 		bool healthbar;
 		bool ammo_bar;
-		float ammo_bar_color[ 4 ] = { 220, 79, 130, 255 };
+		int ammo_bar_color[ 4 ] = { 220, 79, 130, 255 };
 		bool money;
-		float money_color[ 4 ] = { 200, 149, 184, 6 };
+		int money_color[ 4 ] = { 200, 149, 184, 6 };
 		bool flags;
-		float flag_color[ 4 ] = { 200, 255, 255, 255 };
+		int flag_color[ 4 ] = { 200, 255, 255, 255 };
 		bool flash_bar;
-		float flash_bar_color[ 4 ] = { 220, 255, 255, 255 };
+		int flash_bar_color[ 4 ] = { 220, 255, 255, 255 };
 		bool glow;
-		float glow_color[4] = { 155, 206, 115, 136 };
+		int glow_color[4] = { 155, 206, 115, 136 };
 		int filter;
 		bool dropped_weapons;
 		bool dropped_ammo;
-		float dropped_ammo_color[ 4 ] = { 220, 79, 130, 255 };
+		int dropped_ammo_color[ 4 ] = { 220, 79, 130, 255 };
 		bool chicken;
 		bool projectiles;
 		bool objectives;
@@ -60,7 +60,7 @@ public:
 		int visualize_spread;
 		bool hitmarker;
 		bool impact;
-		float impact_color[ 4 ] = { 255, 255, 0, 0 };
+		int impact_color[ 4 ] = { 255, 255, 0, 0 };
 		bool radar;
 		float visualize_spread_color[ 4 ] = { 70, 113, 59, 198 };
 		struct chams{
@@ -72,10 +72,10 @@ public:
 			float reflectivity;
 			float luminance;
 			bool blend_scope;
-			float vis_color[ 4 ] = { 220, 255, 0, 0 };
-			float hid_color[ 4 ] = { 220, 255, 255, 255 };
+			int vis_color[ 4 ] = { 220, 255, 0, 0 };
+			int hid_color[ 4 ] = { 220, 255, 255, 255 };
 			bool local;
-			float local_col[ 4 ] = { 220, 206, 115, 136 };
+			int local_col[ 4 ] = { 220, 206, 115, 136 };
 		} chams;
 		struct misc {
 			bool no_flash;
@@ -83,13 +83,13 @@ public:
 			int remove_scope;
 			bool remove_scope_zoom;
 			bool remove_blur;
-			float scope_color[ 4 ] = { 220, 0, 0, 0 };
+			int scope_color[ 4 ] = { 220, 0, 0, 0 };
 			int remove_smoke;
 		} misc;
 		struct extra {
 			bool speclist;
 			bool antiaim_direction;
-			float antiaim_direction_color[ 4 ] = { 178, 113, 59, 198 };
+			int antiaim_direction_color[ 4 ] = { 178, 113, 59, 198 };
 			bool misc_flags;
 			bool points;
 		} extra;
@@ -121,9 +121,9 @@ public:
 		bool dangerzone_menu;
 		int hitmarker_sound;
 		bool client_hitboxes;
-		float client_hitboxes_duration = 2.f;
+		int client_hitboxes_duration = 2.f;
 		bool bullet_impacts;
-		float bullet_impacts_duration = 4.f;
+		int bullet_impacts_duration = 4.f;
 	} misc;
 	struct antiaim{
 		bool enabled;

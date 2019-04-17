@@ -21,11 +21,12 @@ using ulong_t = unsigned long;
 #include <chrono>
 #include <iostream>
 
-// oshgui.
-#include <OSHGui.hpp>
-#include <Drawing/Direct3D9Ex/Direct3D9ExRenderer.hpp>
-#include <Drawing/RenderTarget.hpp>
-#include <Input/Input.hpp>
+// imgui.
+#include <d3d9.h>
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <examples/imgui_impl_dx9.h>
+#include <examples/imgui_impl_win32.h>
 
 #include "hash/hash.hpp"
 #include "pe/types.hpp"
@@ -38,4 +39,4 @@ using ulong_t = unsigned long;
 #include "input/input.hpp"
 
 // renderer.
-#include "oshgui/renderer.hpp"
+#include "imgui/renderer.hpp"

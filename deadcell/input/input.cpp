@@ -1,6 +1,10 @@
 #include "../inc.hpp"
 #include "input.hpp"
 
+#include "../../csgo/menu/menu.h"
+
+extern LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
+
 input_mngr g_input;
 
 ulong_t __stdcall hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
@@ -11,15 +15,12 @@ ulong_t __stdcall hook( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 }
 
 input_mngr::input_mngr( )
-	: m_window_handle{ }, m_original_wndproc{ }, m_key_pressed{ }, m_instance{ nullptr } {
-	
-}
+	: m_window_handle{ }, m_original_wndproc{ }, m_key_pressed{ } { }
 
-bool input_mngr::init( const std::string &window_name, OSHGui::Application *instance ) {
-	if( m_window_handle || !instance )
+bool input_mngr::init( const std::string &window_name ) {
+	if( m_window_handle )
 		return false;
 
-	m_instance = instance;
 	m_window_handle = FindWindowA( window_name.c_str(), nullptr );
 	m_original_wndproc = reinterpret_cast< WNDPROC >( SetWindowLongA( m_window_handle, GWLP_WNDPROC, reinterpret_cast< LONG_PTR >( hook ) ) );
 
@@ -100,9 +101,6 @@ bool input_mngr::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 		default: break;
 	}
 
-	if( !OSHGui::Application::HasBeenInitialized( ) )
-		return false;
-
 	static bool is_down = false;
 	static bool is_clicked = false;
 
@@ -120,22 +118,9 @@ bool input_mngr::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 	}
 
 	if( is_clicked )
-		m_instance->IsEnabled( ) ? m_instance->Disable( ) : m_instance->Enable( );
+		g_menu.m_is_active = !g_menu.m_is_active;
 
-	if( m_instance->IsEnabled( ) ) {
-		// pass input to oshgui.
-		MSG new_msg;
-		new_msg.hwnd = hwnd;
-		new_msg.message = msg;
-		new_msg.wParam = wparam;
-		new_msg.lParam = lparam;
-
-		process_message( &new_msg, wparam, lparam );
-
-		return true;
-	}
-
-	return false;
+	return g_menu.m_is_active && ImGui_ImplWin32_WndProcHandler( hwnd, msg, wparam, lparam );
 }
 
 bool input_mngr::remove() {
@@ -147,148 +132,8 @@ bool input_mngr::remove() {
 	return true;
 }
 
-bool input_mngr::process_message( LPMSG msg, WPARAM wparam, LPARAM lparam ) {
-	switch( msg->message ) {
-		case WM_MOUSEMOVE:
-		case WM_LBUTTONDOWN:
-		case WM_LBUTTONUP:
-		case WM_RBUTTONDOWN:
-		case WM_RBUTTONUP:
-		case WM_XBUTTONDOWN:
-		case WM_XBUTTONUP:
-		case WM_MOUSEWHEEL: {
-			if( enableMouseInput ) {
-				static OSHGui::Drawing::PointI last_mouse_location;
-				OSHGui::Drawing::PointI location( static_cast< int >( static_cast< short >( LOWORD( msg->lParam ) ) ),
-												  static_cast< int >( static_cast< short >( HIWORD( msg->lParam ) ) ) );
-
-				auto state = OSHGui::MouseState::Unknown;
-				auto button = OSHGui::MouseButton::None;
-
-				int delta = 0;
-				switch( msg->message ) {
-					case WM_MOUSEMOVE:
-						state = OSHGui::MouseState::Move;
-						break;
-					case WM_LBUTTONDOWN:
-						SetCapture( msg->hwnd );
-						state = OSHGui::MouseState::Down;
-						button = OSHGui::MouseButton::Left;
-						break;
-					case WM_LBUTTONUP:
-						ReleaseCapture( );
-						state = OSHGui::MouseState::Up;
-						button = OSHGui::MouseButton::Left;
-						break;
-					case WM_RBUTTONDOWN:
-						SetCapture( msg->hwnd );
-						state = OSHGui::MouseState::Down;
-						button = OSHGui::MouseButton::Right;
-						break;
-					case WM_RBUTTONUP:
-						ReleaseCapture( );
-						state = OSHGui::MouseState::Up;
-						button = OSHGui::MouseButton::Right;
-						break;
-					case WM_XBUTTONDOWN:
-						SetCapture( msg->hwnd );
-						state = OSHGui::MouseState::Down;
-						switch( GET_XBUTTON_WPARAM( wparam ) ) {
-							case XBUTTON1:
-								button = OSHGui::MouseButton::XButton1;
-								break;
-							case XBUTTON2:
-								button = OSHGui::MouseButton::XButton2;
-								break;
-							default:
-								break;
-						}
-						break;
-					case WM_XBUTTONUP:
-						ReleaseCapture( );
-						state = OSHGui::MouseState::Up;
-						switch( GET_XBUTTON_WPARAM( wparam ) ) {
-							case XBUTTON1:
-								button = OSHGui::MouseButton::XButton1;
-								break;
-							case XBUTTON2:
-								button = OSHGui::MouseButton::XButton2;
-								break;
-							default:
-								break;
-						}
-						break;
-					case WM_MBUTTONDOWN:
-						SetCapture( msg->hwnd );
-						state = OSHGui::MouseState::Down;
-						button = OSHGui::MouseButton::Middle;
-						break;
-					case WM_MBUTTONUP:
-						ReleaseCapture( );
-						state = OSHGui::MouseState::Up;
-						button = OSHGui::MouseButton::Middle;
-						break;
-					case WM_MOUSEWHEEL:
-						state = OSHGui::MouseState::Scroll;
-						location = last_mouse_location; // not valid when scrolling.
-						delta = -( static_cast< short >( HIWORD( msg->wParam ) ) / 120 ) * 2; // number of lines to scroll.
-						break;
-
-					default:
-						break;
-				}
-
-				last_mouse_location = location;
-
-				return InjectMouseMessage( OSHGui::MouseMessage( state, button, location, delta ) );
-			}
-
-			break;
-		}
-
-		case WM_KEYDOWN:
-		case WM_SYSKEYDOWN:
-		case WM_KEYUP:
-		case WM_SYSKEYUP:
-		case WM_CHAR:
-		case WM_SYSCHAR:
-		case WM_IME_CHAR: {
-			if( enableKeyboardInput ) {
-				char key_char = '\0';
-				auto key_data = OSHGui::Key::None;
-
-				OSHGui::KeyboardState state;
-
-				if( msg->message == WM_CHAR || msg->message == WM_SYSCHAR ) {
-					state = OSHGui::KeyboardState::Character;
-					key_char = static_cast< OSHGui::Misc::AnsiChar >( msg->wParam );
-				}
-				else {
-					auto modifier = OSHGui::Key::None;
-					if( GetKeyState( static_cast< int >( OSHGui::Key::ControlKey ) ) < 0 )
-						modifier |= OSHGui::Key::Control;
-					if( GetKeyState( static_cast< int >( OSHGui::Key::ShiftKey ) ) < 0 )
-						modifier |= OSHGui::Key::Shift;
-					if( GetKeyState( static_cast< int >( OSHGui::Key::Menu ) ) < 0 )
-						modifier |= OSHGui::Key::Alt;
-
-					state = msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN ? OSHGui::KeyboardState::KeyDown : OSHGui::KeyboardState::KeyUp;
-
-					key_data = static_cast< OSHGui::Key >( msg->wParam ) | modifier;
-				}
-
-				if( state != OSHGui::KeyboardState::Unknown )
-					return InjectKeyboardMessage( OSHGui::KeyboardMessage( state, key_data, key_char ) );
-			}
-
-			break;
-		}
-
-		default:
-			break;
-	}
-
-	return false;
+HWND input_mngr::get_window_handle( ) const {
+	return m_window_handle;
 }
 
 WNDPROC input_mngr::get_original_wndproc( ) const {

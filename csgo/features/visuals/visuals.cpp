@@ -8,9 +8,6 @@
 c_visuals g_visuals;
 
 void c_visuals::run( ) {
-	if( !g_renderer.get_instance( ) )
-		return;
-
 	if( g_vars.visuals.misc.remove_scope && g_vars.visuals.misc.remove_scope < 3 )
 		draw_scope( );
 
@@ -48,10 +45,10 @@ bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
 	if( width > 0.01f ) {
 		const float inverse = 1.f / width;
 
-		const OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
+		const ImVec2 display_size = ImGui::GetIO( ).DisplaySize;
 
-		screen.x = static_cast< float >( display_size.Width / 2 + ( 0.5 * ( ( matrix.m[ 0 ][ 0 ] * origin.x + matrix.m[ 0 ][ 1 ] * origin.y + matrix.m[ 0 ][ 2 ] * origin.z + matrix.m[ 0 ][ 3 ] ) * inverse ) * display_size.Width + 0.5 ) );
-		screen.y = static_cast< float >( display_size.Height / 2 - ( 0.5 * ( ( matrix.m[ 1 ][ 0 ] * origin.x + matrix.m[ 1 ][ 1 ] * origin.y + matrix.m[ 1 ][ 2 ] * origin.z + matrix.m[ 1 ][ 3 ] ) * inverse ) * display_size.Height + 0.5 ) );
+		screen.x = static_cast< float >( display_size.x / 2 + ( 0.5 * ( ( matrix.m[ 0 ][ 0 ] * origin.x + matrix.m[ 0 ][ 1 ] * origin.y + matrix.m[ 0 ][ 2 ] * origin.z + matrix.m[ 0 ][ 3 ] ) * inverse ) * display_size.x + 0.5 ) );
+		screen.y = static_cast< float >( display_size.y / 2 - ( 0.5 * ( ( matrix.m[ 1 ][ 0 ] * origin.x + matrix.m[ 1 ][ 1 ] * origin.y + matrix.m[ 1 ][ 2 ] * origin.z + matrix.m[ 1 ][ 3 ] ) * inverse ) * display_size.y + 0.5 ) );
 		screen.z = 0.0f;
 
 		return true;
@@ -198,13 +195,13 @@ void c_visuals::player( c_csplayer *entity ) {
 	if( !info )
 		return;
 
-	const auto name_color     = OSHColor::FromARGB( g_vars.visuals.name_color, m_alpha.at( index ) );
-	const auto box_color      = OSHColor::FromARGB( g_vars.visuals.box_color, m_alpha.at( index ) );
-	const auto ammo_bar_color = OSHColor::FromARGB( g_vars.visuals.ammo_bar_color, m_alpha.at( index ) );
-	const auto weapon_color   = OSHColor::FromARGB( g_vars.visuals.weapon_color, m_alpha.at( index ) );
-	const auto flag_color     = OSHColor::FromARGB( g_vars.visuals.flag_color, m_alpha.at( index ) );
-	const auto money_color    = OSHColor::FromARGB( g_vars.visuals.money_color, m_alpha.at( index ) );
-	const auto flashed_color  = OSHColor::FromARGB( g_vars.visuals.flash_bar_color, m_alpha.at( index ) );
+	auto name_color     = ImColorARGB( g_vars.visuals.name_color, m_alpha.at( index ) );
+	auto box_color      = ImColorARGB( g_vars.visuals.box_color, m_alpha.at( index ) );
+	auto ammo_bar_color = ImColorARGB( g_vars.visuals.ammo_bar_color, m_alpha.at( index ) );
+	auto weapon_color   = ImColorARGB( g_vars.visuals.weapon_color, m_alpha.at( index ) );
+	auto flag_color     = ImColorARGB( g_vars.visuals.flag_color, m_alpha.at( index ) );
+	auto money_color    = ImColorARGB( g_vars.visuals.money_color, m_alpha.at( index ) );
+	auto flashed_color  = ImColorARGB( g_vars.visuals.flash_bar_color, m_alpha.at( index ) );
 
 	if( g_vars.visuals.bbox )
 		draw_box( box_color, index, box.x, box.y, box.w, box.h );
@@ -218,7 +215,7 @@ void c_visuals::player( c_csplayer *entity ) {
 		//std::transform( name.begin( ), name.end( ), name.begin( ), tolower );
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ),
 		                      name_color,
-		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+		                      ImColorARGB( 220, 10, 10, 10 ),
 		                      box.x + box.w * 0.5, box.y - 12, CENTERED_X | DROPSHADOW,
 		                      entity->get_info( ).xuid_low == 0 ? name.append( " ( BOT ) " ) : name );
 	}
@@ -238,7 +235,7 @@ void c_visuals::player( c_csplayer *entity ) {
 	if( g_vars.visuals.money )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
 		                      money_color,
-		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+		                      ImColorARGB( 220, 10, 10, 10 ),
 		                      box.x + box.w + 3, box.y + m_ctx.flag_count++ * 8, OUTLINED, "$%i", entity->money( ) );
 
 	if( g_vars.visuals.flags )
@@ -303,29 +300,29 @@ void c_visuals::handle_glow( ) {
 
 void c_visuals::draw_healthbar( c_csplayer *entity, float x, float y, float w, float h ) {
 	int hp = std::clamp( entity->health( ), 0, 100 );
-	const OSHColor health_color = OSHColor::FromARGB( 220, 255 - hp * 2.55, hp * 2.55, 0 );
+	const ImColorARGB health_color = ImColorARGB( 220, 255 - hp * 2.55, hp * 2.55, 0 );
 
 	const int height = hp * static_cast< int >( h ) / 100;
 
-	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 6, y - 1, 4, h + 2 );
-	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 50, 50, 50 ) ), x - 5, y + h - height, 2, height );
+	g_renderer.filled_rect( ImColorARGB( 220, 10, 10, 10 ), x - 6, y - 1, 4, h + 2 );
+	g_renderer.filled_rect( health_color, x - 5, y + h - height, 2, height ); // removed gradient (temp)
 
 	if( hp >= 90 || hp <= 10 )
 		return;
 
 	g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-	                      OSHColor::FromARGB( 220, 255, 255, 255 ),
-	                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+	                      ImColorARGB( 220, 255, 255, 255 ),
+	                      ImColorARGB( 220, 10, 10, 10 ),
 	                      x - 8, y + h - height - 6, OUTLINED, "%i", hp );
 }
 
-void c_visuals::draw_box( OSHColor color, int index, float x, float y, float w, float h ) {
-	g_renderer.rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 1, y - 1, w + 2, h + 2 );
-	g_renderer.rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x + 1, y + 1, w - 2, h - 2 );
+void c_visuals::draw_box( const ImU32 &color, int index, float x, float y, float w, float h ) {
+	g_renderer.rect( ImColorARGB( 220, 10, 10, 10 ), x - 1, y - 1, w + 2, h + 2 );
+	g_renderer.rect( ImColorARGB( 220, 10, 10, 10 ), x + 1, y + 1, w - 2, h - 2 );
 	g_renderer.rect( color, x, y, w, h );
 }
 
-void c_visuals::weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, OSHColor color, float x, float y, float w, float h ) {
+void c_visuals::weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, const ImU32 &color, float x, float y, float w, float h ) {
 	auto info = weapon->get_weapon_info( );
 	if( !info )
 		return;
@@ -338,14 +335,14 @@ void c_visuals::weapon_name( c_base_combat_weapon *weapon, c_csplayer *player, O
 
 	g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
 	                      color,
-	                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+	                      ImColorARGB( 220, 10, 10, 10 ),
 	                      x + w * 0.5f,
 	                      y + h + 2 + m_ctx.offset,
 	                      CENTERED_X | OUTLINED,
 	                      print );
 }
 
-void c_visuals::ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, OSHColor color, float x, float y, float w, float h, int clip ) {
+void c_visuals::ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, const ImU32 &color, float x, float y, float w, float h, int clip ) {
 	auto info = weapon->get_weapon_info( );
 	if( !info )
 		return;
@@ -372,19 +369,15 @@ void c_visuals::ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, OSHC
 	}
 
 	// background
-	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 1, y + h + 2 + m_ctx.offset, w + 2, 4 );
+	g_renderer.filled_rect( ImColorARGB( 220, 10, 10, 10 ), x - 1, y + h + 2 + m_ctx.offset, w + 2, 4 );
 
 	// ammo bar
-	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 220, 10, 10, 10 ),
-																	  color,
-																	  color - OSHColor::FromARGB( 0, 50, 50, 50 ),
-	                                                                  color ),
-																	  x, y + h + 3 + m_ctx.offset, width, 2 );
+	g_renderer.filled_rect( color, x, y + h + 3 + m_ctx.offset, width, 2 ); // removed gradient (temp)
 
 	if( ammo < 5 && ammo != 0 )
 		g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
-		                      OSHColor::FromARGB( 220, 255, 255, 255 ),
-		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+		                      ImColorARGB( 220, 255, 255, 255 ),
+		                      ImColorARGB( 220, 10, 10, 10 ),
 		                      x + width,
 		                      y + h,
 		                      OUTLINED,
@@ -393,7 +386,7 @@ void c_visuals::ammo_bar( c_base_combat_weapon *weapon, c_csplayer *player, OSHC
 	m_ctx.offset += 5;
 }
 
-void c_visuals::flash_bar( c_csplayer *player, OSHColor color, float x, float y, float w, float h ) {
+void c_visuals::flash_bar( c_csplayer *player, const ImU32 &color, float x, float y, float w, float h ) {
 	const auto max_alpha = 255.f;
 
 	float flash_alpha = player->get_flashed( );
@@ -406,7 +399,7 @@ void c_visuals::flash_bar( c_csplayer *player, OSHColor color, float x, float y,
 	width *= ( flash_alpha / 255.f );
 
 	// background
-	g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), x - 1, y + h + 2, w + 2, 4 );
+	g_renderer.filled_rect( ImColorARGB( 220, 10, 10, 10 ), x - 1, y + h + 2, w + 2, 4 );
 
 	// flash bar
 	g_renderer.filled_rect( color, x, y + h + 3, width, 2 );
@@ -414,7 +407,7 @@ void c_visuals::flash_bar( c_csplayer *player, OSHColor color, float x, float y,
 	m_ctx.offset += 5;
 }
 
-void c_visuals::draw_flags( c_csplayer *player, OSHColor color, float x, float y, float w, float h ) {
+void c_visuals::draw_flags( c_csplayer *player, const ImU32 &color, float x, float y, float w, float h ) {
 	m_ctx.offset = 0;
 	m_ctx.flag_count = 0;
 
@@ -427,23 +420,23 @@ void c_visuals::draw_flags( c_csplayer *player, OSHColor color, float x, float y
 
 	if( !armor_flag.empty( ) )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
-		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+		                      ImColorARGB( 220, 10, 10, 10 ),
 		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, armor_flag );
 
 	if( player->get_flashed( ) > 140.f )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
-		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+		                      ImColorARGB( 220, 10, 10, 10 ),
 		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "F" );
 
 	if( player->is_scoped( ) )
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
-		                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+		                      ImColorARGB( 220, 10, 10, 10 ),
 		                      x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "+" );
 
 	if( g_vars.rage.enabled ) {
 		if( g_ragebot.m_last_target == player ){
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), color,
-							  OSHColor::FromARGB( 220, 10, 10, 10 ),
+							  ImColorARGB( 220, 10, 10, 10 ),
 							  x + w + 3, y + m_ctx.flag_count++ * 8, OUTLINED, "TARGET" );
 		}
 	}
@@ -472,9 +465,9 @@ void c_visuals::draw_spectators( ) const {
 		if( spectator != local )
 			continue;
 
-		const OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
-		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_LUCIDA_CONSOLE_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ),
-		                      display_size.Width - 150, display_size.Height / 2 + 10 * spec_count - 300, DROPSHADOW, "%s", player_info_spec.m_player_name );
+		const ImVec2 display_size = ImGui::GetIO( ).DisplaySize;
+		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_LUCIDA_CONSOLE_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ),
+		                      display_size.x - 150, display_size.y / 2 + 10 * spec_count - 300, DROPSHADOW, "%s", player_info_spec.m_player_name );
 
 		spec_count++;
 	}
@@ -540,8 +533,8 @@ void c_visuals::world( c_base_entity *entity ) {
 		std::transform( weapon_name.begin( ), weapon_name.end( ), weapon_name.begin( ), toupper );
 		if( g_vars.visuals.dropped_weapons )
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-			                      OSHColor::FromARGB( 200, 255, 255, 255 ),
-			                      OSHColor::FromARGB( 130, 10, 10, 10 ),
+			                      ImColorARGB( 200, 255, 255, 255 ),
+			                      ImColorARGB( 130, 10, 10, 10 ),
 			                      box.x + box.w * 0.5f, box.y + box.h, CENTERED_X | OUTLINED, weapon_name );
 
 		if( g_vars.visuals.dropped_ammo ) {
@@ -553,16 +546,16 @@ void c_visuals::world( c_base_entity *entity ) {
 			width /= max_ammo;
 
 			// background
-			g_renderer.filled_rect( OSHColor::FromARGB( 220, 10, 10, 10 ), box.x - 1, box.y + box.h + 9, box.w + 2, 4 );
+			g_renderer.filled_rect( ImColorARGB( 220, 10, 10, 10 ), box.x - 1, box.y + box.h + 9, box.w + 2, 4 );
 
 			// ammo bar
-			g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.dropped_ammo_color ),
+			g_renderer.filled_rect( ImColorARGB( g_vars.visuals.dropped_ammo_color ),
 			                        box.x, box.y + box.h + 10, width, 2 );
 
 			if( ammo < 10 )
 				g_renderer.ansi_text( g_renderer.get_font( FONT_04B03_6PX ),
-				                      OSHColor::FromARGB( 220, 255, 255, 255 ),
-				                      OSHColor::FromARGB( 220, 10, 10, 10 ),
+				                      ImColorARGB( 220, 255, 255, 255 ),
+				                      ImColorARGB( 220, 10, 10, 10 ),
 				                      box.x + width,
 				                      box.y + box.h,
 				                      OUTLINED,
@@ -581,38 +574,38 @@ void c_visuals::world( c_base_entity *entity ) {
 			text += "BOMB";
 
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-			                      OSHColor::FromARGB( 240, 79, 130, 180 ),
-			                      OSHColor::FromARGB( 200, 10, 10, 10 ),
+			                      ImColorARGB( 240, 79, 130, 180 ),
+			                      ImColorARGB( 200, 10, 10, 10 ),
 			                      box.x + box.w * 0.5f, box.y - 15.f, CENTERED_X | OUTLINED, text );
 
 			const float bomb_duration = entity->blow_time( ) - g_csgo.m_global_vars->m_cur_time;
 			if( bomb_duration > 0.f ) {
 				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-				                      OSHColor::FromARGB( 240, 255, 255, 255 ),
-				                      OSHColor::FromARGB( 200, 10, 10, 10 ),
+				                      ImColorARGB( 240, 255, 255, 255 ),
+				                      ImColorARGB( 200, 10, 10, 10 ),
 				                      box.x + box.w * 0.5f, box.y - 5.f, CENTERED_X | OUTLINED, "%2.1f", bomb_duration );
 			}
 		}
 
 		if( !owner && client_class->m_class_id == CC4 ) {
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-			                      OSHColor::Lime( ),
-			                      OSHColor::FromARGB( 200, 10, 10, 10 ),
+			                      ImColorARGB( 255, 0, 255, 0 ),
+			                      ImColorARGB( 200, 10, 10, 10 ),
 			                      box.x + box.w * 0.5f, box.y - 5.f, CENTERED_X | OUTLINED, "BOMB" );
 		}
 
 		if( owner && client_class->m_class_id == CHostageCarriableProp ) {
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-			                      OSHColor::FromARGB( 240, 0, 0, 220 ),
-			                      OSHColor::FromARGB( 200, 10, 10, 10 ),
+			                      ImColorARGB( 240, 0, 0, 220 ),
+			                      ImColorARGB( 200, 10, 10, 10 ),
 			                      box.x + box.w * 0.5f, box.y - 15.f, CENTERED_X | OUTLINED, "HOSTAGE" );
 		}
 	}
 
 	if( g_vars.visuals.chicken && !owner && client_class->m_class_id == CChicken ) {
 		g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-		                      OSHColor::FromARGB( 200, 255, 255, 100 ),
-		                      OSHColor::FromARGB( 200, 10, 10, 10 ),
+		                      ImColorARGB( 200, 255, 255, 100 ),
+		                      ImColorARGB( 200, 10, 10, 10 ),
 		                      box.x + box.w * 0.5f, box.y - 5.f, CENTERED_X | OUTLINED, "CHICKEN" );
 	}
 
@@ -621,20 +614,20 @@ void c_visuals::world( c_base_entity *entity ) {
 		if( !model_name.empty( ) ) {
 			if( client_class->m_class_id == CBaseCSGrenadeProjectile ) {
 				if( model_name.find( "fraggrenade" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "HEGRENADE" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "HEGRENADE" );
 				else if( model_name.find( "flashbang" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "FLASHBANG" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "FLASHBANG" );
 			}
 
 			if( client_class->m_class_id == CMolotovProjectile ) {
 				if( model_name.find( "molotov" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "MOLOTOV" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "MOLOTOV" );
 				else if( model_name.find( "incendiary" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "INCENDIARY" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "INCENDIARY" );
 			}
 
 			if( client_class->m_class_id == CSmokeGrenadeProjectile )
-				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "SMOKE" );
+				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | OUTLINED, "SMOKE" );
 		}
 	}
 
@@ -643,49 +636,49 @@ void c_visuals::world( c_base_entity *entity ) {
 			return;
 
 		if( client_class->m_class_id == CItemCash && g_vars.dz.cash )
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 149, 184, 6 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Cash" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 149, 184, 6 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Cash" );
 
 		if( client_class->m_class_id == CItem_Healthshot && !owner && g_vars.dz.healthshot )
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 211, 27, 39 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Healthshot" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 211, 27, 39 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Healthshot" );
 
 		if( client_class->m_class_id == CDrone && g_vars.dz.drone ) {
 			if( !owner )
-				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Drone" );
+				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Drone" );
 
 			const auto drone_owner = static_cast< c_csplayer * >( owner );
 			if( drone_owner )
-				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Drone - %s", drone_owner->get_info( ).m_player_name );
+				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Drone - %s", drone_owner->get_info( ).m_player_name );
 		}
 
 		if( client_class->m_class_id == CDronegun && g_vars.dz.turret ) {
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y - 12, CENTERED_X | DROPSHADOW, "Turret" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y - 12, CENTERED_X | DROPSHADOW, "Turret" );
 
-			g_renderer.rect( OSHColor::FromARGB( 200, 10, 10, 10 ), box.x - 1, box.y - 1, box.w + 2, box.h + 2 );
-			g_renderer.rect( OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + 1, box.y + 1, box.w - 2, box.h - 2 );
-			g_renderer.rect( OSHColor::FromARGB( 200, 255, 255, 255 ), box.x, box.y, box.w, box.h );
+			g_renderer.rect( ImColorARGB( 200, 10, 10, 10 ), box.x - 1, box.y - 1, box.w + 2, box.h + 2 );
+			g_renderer.rect( ImColorARGB( 200, 10, 10, 10 ), box.x + 1, box.y + 1, box.w - 2, box.h - 2 );
+			g_renderer.rect( ImColorARGB( 200, 255, 255, 255 ), box.x, box.y, box.w, box.h );
 
 			if( entity->dronegun_has_target( ) )
-				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | OUTLINED, "TARGETING" );
+				g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | OUTLINED, "TARGETING" );
 
 			/*int hp = std::clamp( entity->dronegun_health(), 0, 220 );
-			OSHColor health_color = OSHColor::FromARGB( 255, 255 - hp * 2.55, hp * 2.55, 0 );
+			ImColorARGB health_color = ImColorARGB( 255, 255 - hp * 2.55, hp * 2.55, 0 );
 
 			int height = hp * ( int )box.h / 220;
 
-			g_renderer.filled_rect( OSHColor::FromARGB( 200, 10, 10, 10 ), box.x - 6, box.y - 1, 4, box.h + 2 );
-			g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - OSHColor::FromARGB( 0, 50, 50, 0 ) ), box.x - 5, box.y + box.h - height, 2, height );
+			g_renderer.filled_rect( ImColorARGB( 200, 10, 10, 10 ), box.x - 6, box.y - 1, 4, box.h + 2 );
+			g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( health_color, health_color - ImColorARGB( 0, 50, 50, 0 ) ), box.x - 5, box.y + box.h - height, 2, height );
 
 			if( hp >= 90 || hp <= 10 )
 				return;
 
 			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ),
-				OSHColor::FromARGB( 200, 255, 255, 255 ),
-				OSHColor::FromARGB( 200, 10, 10, 10 ),
+				ImColorARGB( 200, 255, 255, 255 ),
+				ImColorARGB( 200, 10, 10, 10 ),
 				box.x - 8, box.y + box.h - height - 6, OUTLINED, "%i", hp );*/
 		}
 
 		if( client_class->m_class_id == CBRC4Target && g_vars.dz.safe )
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 149, 184, 6 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Safe" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 149, 184, 6 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Safe" );
 
 		if( client_class->m_class_id == CPhysPropAmmoBox || client_class->m_class_id == CPhysPropLootCrate
 			|| client_class->m_class_id == CPhysPropRadarJammer || client_class->m_class_id == CPhysPropWeaponUpgrade ) {
@@ -695,66 +688,64 @@ void c_visuals::world( c_base_entity *entity ) {
 			// epic.
 			if( !model_name.empty( ) ) {
 				if( g_vars.dz.weapon_case && model_name.find( "case_pistol" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Pistol case" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Pistol case" );
 				else if( g_vars.dz.weapon_case && model_name.find( "case_light_weapon" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Light case" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Light case" );
 				else if( g_vars.dz.weapon_case && model_name.find( "case_heavy_weapon" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Heavy case" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Heavy case" );
 				else if( g_vars.dz.weapon_case && model_name.find( "case_explosive" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Explosives case" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Explosives case" );
 				else if( g_vars.dz.tool_case && model_name.find( "case_tools" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Tools case" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Tools case" );
 				else if( g_vars.dz.airdrop && model_name.find( "random" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Airdrop" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Airdrop" );
 				else if( g_vars.dz.armor && model_name.find( "dz_armor_helmet" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Full armor" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Full armor" );
 				else if( g_vars.dz.armor && model_name.find( "dz_helmet" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Helmet" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Helmet" );
 				else if( g_vars.dz.armor && model_name.find( "dz_armor" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Body armor" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Body armor" );
 				else if( g_vars.dz.tablet_upgrade && model_name.find( "upgrade_tablet" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Tablet upgrade" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Tablet upgrade" );
 				else if( g_vars.dz.contract && model_name.find( "briefcase" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 149, 184, 6 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Contract" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 149, 184, 6 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Contract" );
 				else if( g_vars.dz.parachute && model_name.find( "parachutepack" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Parachute" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Parachute" );
 				else if( g_vars.dz.cash && model_name.find( "dufflebag" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 149, 184, 6 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Cash dufflebag" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 149, 184, 6 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Cash dufflebag" );
 				else if( g_vars.dz.ammobox && model_name.find( "ammobox" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Ammobox" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Ammobox" );
 				else if( g_vars.dz.jammer && model_name.find( "jammer" ) != std::string::npos )
-					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Radar jammer" );
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x + box.w * 0.5f, box.y + box.h + 2, CENTERED_X | DROPSHADOW, "Radar jammer" );
 			}
 		}
 
 		if( client_class->m_class_id == CBreachCharge && g_vars.dz.breach_charge )
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Breach charge" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Breach charge" );
 
 		if( client_class->m_class_id == CMelee && !owner && g_vars.dz.melee_weapon )
-			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), OSHColor::FromARGB( 200, 255, 255, 255 ), OSHColor::FromARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Melee weapon" );
+			g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ), ImColorARGB( 200, 255, 255, 255 ), ImColorARGB( 200, 10, 10, 10 ), box.x, box.y - 15.f, CENTERED_X | DROPSHADOW, "Melee weapon" );
 	}
 }
 
 void c_visuals::draw_bomb_timer( float time_left ) const {
-	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
+	const ImVec2 display_size = ImGui::GetIO( ).DisplaySize;
 
 	// todo: only grab this once on map load.
 	cvar *max_c4_timer = g_csgo.m_convar->find_var( "mp_c4timer" );
-	float x = time_left * size.Width / max_c4_timer->get_float( );
+	float x = time_left * display_size.x / max_c4_timer->get_float( );
 
-	g_renderer.filled_rect( OSHColor::FromARGB( 145, 24, 24, 32 ), 0, 0, size.Width, 3 );
-	g_renderer.filled_rect( OSHColor::FromARGB( 255, 113, 59, 198 ), x, 0, time_left * -size.Width / max_c4_timer->get_float( ), 3 );
-	g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), OSHColor::White( ), OSHColor::Black( ), x - 1, -1, DROPSHADOW, "%2.1f", time_left );
+	g_renderer.filled_rect( ImColorARGB( 145, 24, 24, 32 ), 0, 0, display_size.x, 3 );
+	g_renderer.filled_rect( ImColorARGB( 255, 113, 59, 198 ), x, 0, time_left * -display_size.x / max_c4_timer->get_float( ), 3 );
+	g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_04B03_6PX ), ImColorARGB( 255, 255, 255, 255 ), ImColorARGB( 255, 0, 0, 0 ), x - 1, -1, DROPSHADOW, "%2.1f", time_left );
 }
 
 void c_visuals::watermark( ) const {
 	const bool connected = g_csgo.m_engine->is_connected( );
 
-	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
+	const ImVec2 display_size = ImGui::GetIO( ).DisplaySize;
 
-	g_renderer.filled_rect_gradient( OSHGui::Drawing::ColorRectangle( OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ),
-		                             OSHColor::FromARGB( 225, 24, 24, 32 ), OSHColor::FromARGB( 10, 24, 24, 32 ) ),
-								     size.Width - 270, 20, 250, 15 );
+	g_renderer.filled_rect( ImColorARGB( 225, 24, 24, 32 ), display_size.x - 270, 20, 250, 15 ); // removed gradient (temp)
 
 	time_t t = std::time( nullptr );
 	tm tm = *std::localtime( &t );
@@ -766,13 +757,13 @@ void c_visuals::watermark( ) const {
 	if( connected ) {
 		const bool choking = g_csgo.m_clientstate->m_choked_commands > 1;	
 
-		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor::FromARGB( 220, 255, 255, 255 ),
-			OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, 22, 0,
+		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], ImColorARGB( 220, 255, 255, 255 ),
+			ImColorARGB( 0.f, 0.f, 0.f, 0.f ), display_size.x - 268, 22, 0,
 			"deadcell | %s | out %ims | choking %s", time.c_str(), g_cl.m_ping, choking ? "true" : "false" );
 	}
 	else {
-		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], OSHColor( 0.8f, 1.f, 1.f, 1.f ),
-			OSHColor( 0.f, 0.f, 0.f, 0.f ), size.Width - 268, 22, 0,
+		g_renderer.ansi_text( g_renderer.m_fonts[ FONT_VERDANA_7PX ], ImColorARGB( 205, 255, 255, 255 ),
+			ImColorARGB( 0.f, 0.f, 0.f, 0.f ), display_size.x - 268, 22, 0,
 			"deadcell | unconnected | %s", time.c_str() );
 	}
 }
@@ -782,21 +773,21 @@ void c_visuals::draw_scope( ) const {
 	if( !local || !local->is_scoped( ) || !local->get_active_weapon( ) || !local->get_active_weapon( )->has_sniper_scope( ) )
 		return;
 
-	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
+	const ImVec2 display_size = ImGui::GetIO( ).DisplaySize;
 
 	if ( g_vars.visuals.misc.remove_scope == 1 ) {
-		g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), 0, size.Height * 0.5f, size.Width, 1 );
-		g_renderer.filled_rect( OSHColor::FromARGB( g_vars.visuals.misc.scope_color ), size.Width * 0.5f, 0, 1, size.Height );
+		g_renderer.filled_rect( ImColorARGB( g_vars.visuals.misc.scope_color ), 0, display_size.y * 0.5f, display_size.x, 1 );
+		g_renderer.filled_rect( ImColorARGB( g_vars.visuals.misc.scope_color ), display_size.x * 0.5f, 0, 1, display_size.y );
 	}
 	else {
 		float spread = ( local->get_active_weapon( )->inaccuracy( ) + local->get_active_weapon( )->spread( ) ) * 320;
 		float height = std::clamp( spread, 1.f, 25.f );
 		float alpha = ( 255.f - ( height * 4.2f ) );
 
-		auto color = OSHColor::FromARGB( g_vars.visuals.misc.scope_color, alpha );
+		auto color = ImColorARGB( g_vars.visuals.misc.scope_color, alpha );
 
-		g_renderer.filled_rect( color, 0, ( size.Height * 0.5f ) - ( height / 2.f ), size.Width, height );
-		g_renderer.filled_rect( color, ( size.Width * 0.5f ) - ( height / 2.f ), 0, height, size.Height );
+		g_renderer.filled_rect( color, 0, ( display_size.y * 0.5f ) - ( height / 2.f ), display_size.x, height );
+		g_renderer.filled_rect( color, ( display_size.x * 0.5f ) - ( height / 2.f ), 0, height, display_size.y );
 	}
 }
 
@@ -818,13 +809,13 @@ void c_visuals::draw_crosshair( ) const {
 		}
 	} );
 
-	const auto size = g_renderer.get_renderer( ).GetDisplaySize( );
+	const ImVec2 display_size = ImGui::GetIO( ).DisplaySize;
 
 	if ( g_vars.visuals.visualize_spread == 1 ) {
 		const float spread_distance = ( weapon->inaccuracy( ) + weapon->spread( ) ) * 320.f / std::tan( math::deg_to_rad( g_vars.visuals.effects.camera_fov ) * 0.5f );
-		const float spread_radius = size.Height * 2 * 0.002083 * spread_distance;
+		const float spread_radius = display_size.y * 2 * 0.002083 * spread_distance;
 
-		g_renderer.circle( OSHColor::FromARGB( g_vars.visuals.visualize_spread_color, 70.f ), size.Width / 2, size.Height / 2, spread_radius );
+		g_renderer.circle( ImColorARGB( g_vars.visuals.visualize_spread_color, 70.f ), display_size.x / 2, display_size.y / 2, spread_radius );
 	}
 	else if ( weapon ) {
 		int screen_w, screen_h;
@@ -865,20 +856,20 @@ void c_visuals::draw_crosshair( ) const {
 
 			float percentage = ( rand_a * inaccuracy + rand_b * spread ) / ( inaccuracy + spread );
 
-			g_renderer.rect( OSHColor::FromARGB( g_vars.visuals.visualize_spread_color, 255 * ( 0.4f + percentage * 0.6f ) * ( 0.1f + percentage * 0.9f ) ), 
+			g_renderer.rect( ImColorARGB( g_vars.visuals.visualize_spread_color, 255 * ( 0.4f + percentage * 0.6f ) * ( 0.1f + percentage * 0.9f ) ), 
 							 cross_x + screen_spread_x, cross_y + screen_spread_y, 1, 1 );
 		}
 	}
 }
 
 void c_visuals::draw_hitmarker( ) {
-	auto size = g_renderer.get_renderer( ).GetDisplaySize( );
+	auto display_size = ImGui::GetIO( ).DisplaySize;
 
 	if( g_cl.m_hitmarker_alpha > 0.f ) {
-		g_renderer.line( OSHColor( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), size.Width / 2.f - 8.f, size.Height / 2.f - 8.f, size.Width / 2.f - 3.f, size.Height / 2.f - 3.f );
-		g_renderer.line( OSHColor( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), size.Width / 2.f - 8.f, size.Height / 2.f + 8.f, size.Width / 2.f - 3.f, size.Height / 2.f + 3.f );
-		g_renderer.line( OSHColor( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), size.Width / 2.f + 8.f, size.Height / 2.f - 8.f, size.Width / 2.f + 3.f, size.Height / 2.f - 3.f );
-		g_renderer.line( OSHColor( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), size.Width / 2.f + 8.f, size.Height / 2.f + 8.f, size.Width / 2.f + 3.f, size.Height / 2.f + 3.f );
+		g_renderer.line( ImColorARGB( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), display_size.x / 2.f - 8.f, display_size.y / 2.f - 8.f, display_size.x / 2.f - 3.f, display_size.y / 2.f - 3.f );
+		g_renderer.line( ImColorARGB( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), display_size.x / 2.f - 8.f, display_size.y / 2.f + 8.f, display_size.x / 2.f - 3.f, display_size.y / 2.f + 3.f );
+		g_renderer.line( ImColorARGB( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), display_size.x / 2.f + 8.f, display_size.y / 2.f - 8.f, display_size.x / 2.f + 3.f, display_size.y / 2.f - 3.f );
+		g_renderer.line( ImColorARGB( g_cl.m_hitmarker_alpha, 1.f, 1.f, 1.f ), display_size.x / 2.f + 8.f, display_size.y / 2.f + 8.f, display_size.x / 2.f + 3.f, display_size.y / 2.f + 3.f );
 
 		g_cl.m_hitmarker_alpha -= 1.f / 0.5f * g_csgo.m_global_vars->m_frametime;
 	}
