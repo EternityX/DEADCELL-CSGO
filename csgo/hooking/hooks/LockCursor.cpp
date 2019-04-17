@@ -1,4 +1,4 @@
-#include "../../inc.hpp"
+#include "../../inc.h"
 
 void __stdcall hook::LockCursor( ) {
 	if( g_renderer.get_instance( ) ) {

@@ -219,9 +219,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="csgo\inc.hpp">
-      <Filter>dc-csgo</Filter>
-    </ClInclude>
     <ClInclude Include="csgo\sdk\custom classes\animstate.h">
       <Filter>dc-csgo\sdk\custom classes</Filter>
     </ClInclude>
@@ -278,9 +275,6 @@
     </ClInclude>
     <ClInclude Include="csgo\features\visuals\visuals.h">
       <Filter>dc-csgo\features\visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="csgo\menu\menu.hpp">
-      <Filter>dc-csgo\menu</Filter>
     </ClInclude>
     <ClInclude Include="csgo\configs\config.h">
       <Filter>dc-csgo\configs</Filter>
@@ -455,6 +449,12 @@
     </ClInclude>
     <ClInclude Include="csgo\features\backtrack\backtrack.h">
       <Filter>dc-csgo\features\backtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\inc.h">
+      <Filter>dc-csgo</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\menu\menu.h">
+      <Filter>dc-csgo\menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
