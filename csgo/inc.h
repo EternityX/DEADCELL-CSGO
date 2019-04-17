@@ -24,25 +24,18 @@
 #include <random>
 #include <thread>
 #include <chrono>
-
-// Direct X
-#include <d3d9.h>
-#include <d3dx9.h>
-
-#pragma comment( lib, "d3d9.lib" )
-#pragma comment( lib, "d3dx9.lib" )
+#include <deque>
 
 #include "sdk/address.h"
-
 #include "sdk/stack.h"
 
 // framework include.
 #include "../deadcell/inc.hpp"
 
+#include <imgui.h>
+
 using namespace renderer;
 extern c_renderer g_renderer;
-
-typedef OSHGui::Drawing::Color OSHColor;
 
 // used for compile-time FNV-1a 32bit hashes.
 #define CT_HASH32( str )                                \

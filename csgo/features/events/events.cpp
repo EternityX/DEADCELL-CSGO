@@ -152,10 +152,10 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 			player_info_t info;
 			if( g_csgo.m_engine->get_player_info( target, &info ) && ent ){
 				if( g_vars.misc.hitmarker_sound ) {
-					std::string sound_path = "hitsounds\\" + g_menu.m_selected_sound_text;
+					// std::string sound_path = "hitsounds\\" + g_menu.m_selected_sound_text;
 
 					// you can do this better but im lazy.
-					PlaySoundA( sound_path.c_str(), nullptr, SND_ASYNC );
+					// PlaySoundA( sound_path.c_str(), nullptr, SND_ASYNC );
 				}
 
 				std::string s = info.m_player_name;
@@ -165,7 +165,7 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 					g_cl.m_hitmarker_alpha = 1.f;
 
 				if( g_vars.misc.log_damage )
-					g_notify.add( true, OSHGui::Drawing::Color::FromARGB( 220, 249, 44, 69 ), "hit %s in the %s for %i damage.", s.c_str( ),
+					g_notify.add( true, ImColorARGB( 220, 249, 44, 69 ), "hit %s in the %s for %i damage.", s.c_str( ),
 						hitgroup_to_name( m_event->get_int( "hitgroup" ) ), m_event->get_int( "dmg_health" ) );
 
 				if( g_vars.misc.client_hitboxes )
@@ -183,7 +183,7 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 		player_info_t info;
 		if( g_csgo.m_engine->get_player_info( user, &info ) ){
 			if( g_vars.misc.log_purchases )
-				g_notify.add( true, OSHGui::Drawing::Color::FromARGB( 220, 249, 44, 69 ), "%s bought %s", info.m_player_name, m_event->get_string( "weapon" ) );
+				g_notify.add( true, ImColorARGB( 220, 249, 44, 69 ), "%s bought %s", info.m_player_name, m_event->get_string( "weapon" ) );
 		}
 	}
 

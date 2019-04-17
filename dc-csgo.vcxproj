@@ -197,7 +197,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\bin\</OutDir>
     <IntDir>$(SolutionDir)\build\dc-csgo-obj\</IntDir>
-    <IncludePath>$(SolutionDir)oshgui\;$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)include\;$(SolutionDir)imgui\;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(SolutionDir)build\bin\lib_debug\;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)-debug</TargetName>
   </PropertyGroup>
@@ -209,7 +209,7 @@
     <OutDir>$(SolutionDir)build\bin\</OutDir>
     <IntDir>$(SolutionDir)\build\dc-csgo-obj\</IntDir>
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(SolutionDir)build\bin\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)oshgui\;$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)include\;$(SolutionDir)imgui\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

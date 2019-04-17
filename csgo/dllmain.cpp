@@ -26,8 +26,9 @@ bool unload() {
 
 	g_listener.remove( );
 
-	if( OSHGui::Application::HasBeenInitialized( ) )
-		g_renderer.get_renderer( ).PreD3DReset( );
+	ImGui_ImplDX9_Shutdown( );
+	ImGui_ImplWin32_Shutdown( );
+	ImGui::DestroyContext( );
 
 	if( !g_hooks.release( ) )
 		return false;

@@ -2,10 +2,10 @@
 #include "../../inc.h"
 
 struct notifications_t {
-	notifications_t( OSHColor c, OSHColor c1, float time, std::string buf  )
+	notifications_t( const ImU32 &c, const ImU32 &c1, float time, std::string buf )
 		: color( c ), background_color( c1 ), m_time( time ), m_buf( buf ) { }
-	OSHColor color;
-	OSHColor background_color;
+	ImU32 color;
+	ImU32 background_color;
 	float m_time;
 	std::string m_buf;
 };
@@ -16,7 +16,7 @@ private:
 
 	std::deque< notifications_t > m_notifications;
 public:
-	void add( bool display, OSHColor color, const std::string message, ... );
+	void add( bool display, const ImU32 &color, const std::string message, ... );
 	void clear( );
 	void draw( );
 };

@@ -28,11 +28,23 @@
     <Filter Include="deadcell\console">
       <UniqueIdentifier>{aedca8ca-cab0-4703-830a-2b1d6d7fbcca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="deadcell\oshgui">
-      <UniqueIdentifier>{dc18e173-a715-43c6-835b-9487a0e0b137}</UniqueIdentifier>
-    </Filter>
     <Filter Include="deadcell\input">
       <UniqueIdentifier>{d1347303-a56d-404d-9fcf-72db47d97c6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\imgui">
+      <UniqueIdentifier>{22fbde03-b241-4a58-9e94-f61c7638ebc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\imgui\d3d9">
+      <UniqueIdentifier>{d765b046-3b36-448a-bdb6-3607c34e6a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\imgui\win32">
+      <UniqueIdentifier>{1c3c10e4-27e3-4311-94cf-1be04547aad1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\imgui\framework">
+      <UniqueIdentifier>{164457ef-99dd-482c-8b03-f9310239e087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="deadcell\imgui\freetype">
+      <UniqueIdentifier>{12a632e6-dd17-47b0-ad19-50f9661cd9bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,12 +66,6 @@
     <ClInclude Include="pe\types.hpp">
       <Filter>deadcell\pe</Filter>
     </ClInclude>
-    <ClInclude Include="oshgui\renderer.hpp">
-      <Filter>deadcell\oshgui</Filter>
-    </ClInclude>
-    <ClInclude Include="oshgui\font.hpp">
-      <Filter>deadcell\oshgui</Filter>
-    </ClInclude>
     <ClInclude Include="input\input.hpp">
       <Filter>deadcell\input</Filter>
     </ClInclude>
@@ -68,6 +74,30 @@
     </ClInclude>
     <ClInclude Include="math\math.hpp">
       <Filter>deadcell\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\examples\imgui_impl_dx9.h">
+      <Filter>deadcell\imgui\d3d9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\examples\imgui_impl_win32.h">
+      <Filter>deadcell\imgui\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imconfig.h">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui.h">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_internal.h">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\font.hpp">
+      <Filter>deadcell\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\renderer.hpp">
+      <Filter>deadcell\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\misc\freetype\imgui_freetype.h">
+      <Filter>deadcell\imgui\freetype</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -86,11 +116,32 @@
     <ClCompile Include="console\console.cpp">
       <Filter>deadcell\console</Filter>
     </ClCompile>
-    <ClCompile Include="oshgui\renderer.cpp">
-      <Filter>deadcell\oshgui</Filter>
-    </ClCompile>
     <ClCompile Include="input\input.cpp">
       <Filter>deadcell\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\examples\imgui_impl_dx9.cpp">
+      <Filter>deadcell\imgui\d3d9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\examples\imgui_impl_win32.cpp">
+      <Filter>deadcell\imgui\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui.cpp">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_demo.cpp">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_draw.cpp">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_widgets.cpp">
+      <Filter>deadcell\imgui\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\renderer.cpp">
+      <Filter>deadcell\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\misc\freetype\imgui_freetype.cpp">
+      <Filter>deadcell\imgui\freetype</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

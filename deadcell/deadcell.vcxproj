@@ -72,12 +72,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)build\bin\lib\</OutDir>
     <IntDir>$(SolutionDir)\build\deadcell-obj\</IntDir>
-    <IncludePath>$(SolutionDir)oshgui\;$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)include\;$(SolutionDir)imgui\;$(SolutionDir)imgui\misc\freetype\freetype\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)oshgui\;$(DXSDK_DIR)include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)include\;$(SolutionDir)imgui\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\bin\lib_debug\</OutDir>
     <IntDir>$(SolutionDir)\build\deadcell-obj-debug\</IntDir>
     <TargetName>$(ProjectName)_debug</TargetName>
@@ -133,23 +133,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\imgui\examples\imgui_impl_dx9.h" />
+    <ClInclude Include="..\imgui\examples\imgui_impl_win32.h" />
+    <ClInclude Include="..\imgui\imconfig.h" />
+    <ClInclude Include="..\imgui\imgui.h" />
+    <ClInclude Include="..\imgui\imgui_internal.h" />
+    <ClInclude Include="..\imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="console\console.hpp" />
     <ClInclude Include="hash\hash.hpp" />
+    <ClInclude Include="imgui\font.hpp" />
+    <ClInclude Include="imgui\renderer.hpp" />
     <ClInclude Include="inc.hpp" />
     <ClInclude Include="input\input.hpp" />
     <ClInclude Include="math\math.hpp" />
-    <ClInclude Include="oshgui\font.hpp" />
-    <ClInclude Include="oshgui\renderer.hpp" />
     <ClInclude Include="pe\module\module.hpp" />
     <ClInclude Include="pe\pe.hpp" />
     <ClInclude Include="pe\types.hpp" />
     <ClInclude Include="util\misc\misc.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\imgui\examples\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\imgui\examples\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\imgui\imgui.cpp" />
+    <ClCompile Include="..\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\imgui\misc\freetype\imgui_freetype.cpp" />
     <ClCompile Include="console\console.cpp" />
+    <ClCompile Include="imgui\renderer.cpp" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="math\math.cpp" />
-    <ClCompile Include="oshgui\renderer.cpp" />
     <ClCompile Include="pe\module\module.cpp" />
     <ClCompile Include="util\misc\misc.cpp" />
     <ClCompile Include="util\pattern\pattern.cpp" />
