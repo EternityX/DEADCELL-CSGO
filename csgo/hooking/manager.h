@@ -73,6 +73,7 @@ namespace hook {
 		GET_MATERIAL =				 84,
 
 		// ccsplayer
+
 		DO_EXTRA_BONE_PROC =		 193,
 
 		// cbaseanimating
