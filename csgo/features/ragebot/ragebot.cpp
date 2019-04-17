@@ -5,8 +5,6 @@
 c_ragebot g_ragebot;
 
 void c_ragebot::work( c_user_cmd *cmd ) {
-	m_players.clear( );
-
 	if( !g_vars.rage.enabled )
 		return;
 
@@ -18,6 +16,9 @@ void c_ragebot::work( c_user_cmd *cmd ) {
 	select_target( );
 	choose_angles( );
 	restore_players( );
+
+	if ( !m_players.empty( ) )
+		m_players.clear( );
 }
 
 void c_ragebot::select_target( ) {
@@ -143,14 +144,6 @@ void c_ragebot::select_target( ) {
 				if( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, sorted_records, i, g_vars.rage.pointscale / 100.f ) )
 					continue;
 
-				if( g_vars.rage.selectively_multipoint_records ) {
-					if( sorted_records.size( ) > 4 ) {
-
-
-
-					}				
-				}
-
 				if( points.empty( ) )
 					continue;
 
@@ -167,45 +160,6 @@ void c_ragebot::select_target( ) {
 					}
 				}
 			}
-
-			/*for( auto &record : sorted_records ) {
-				if( !record.is_valid( ) )
-					continue;
-
-				if( !g_backtrack.restore( e, record ) )
-					continue;
-
-				if( g_vars.rage.save_fps && !bounding_check( e, record, best_min_dmg ) )
-					continue;
-
-				std::vector< vec3_t > points;
-				if( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, g_vars.rage.pointscale / 100.f ) )
-					continue;
-
-				if( g_vars.rage.selectively_multipoint_records ) {
-					if( sorted_records.size( ) > 4 ) {
-						
-
-
-					}				
-				}
-
-				if( points.empty( ) )
-					continue;
-
-				for( auto &p : points ) {
-					if( g_vars.visuals.extra.points )
-						g_csgo.m_debug_overlay->add_box_overlay( p, vec3_t( -0.7f, -0.7f, -0.7f ), vec3_t( 0.7f, 0.7f, 0.7f ), vec3_t( 0.f, 0.f, 0.f ), 0, 255, 0, 100, g_csgo.m_global_vars->m_interval_per_tick * 2 );
-
-					if( g_autowall.think( p, e, best_min_dmg, true ) ) {
-						if( g_autowall.m_autowall_dmg > player_best_damage ) {
-							player_best_damage = g_autowall.m_autowall_dmg;
-							player_best_point = p;
-							player_record = record;
-						}
-					}
-				}
-			}*/
 
 			m_players.emplace_back( e, player_record, idx, static_cast< int >( player_best_damage ), player_best_point, e->abs_origin( ).distance( local->abs_origin( ) ) );
 		}

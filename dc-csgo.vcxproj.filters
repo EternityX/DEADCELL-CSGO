@@ -217,6 +217,9 @@
     <ClCompile Include="csgo\hooking\hooks\DrawSetColor.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\hooking\hooks\SetupBones.cpp">
+      <Filter>dc-csgo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\sdk\custom classes\animstate.h">

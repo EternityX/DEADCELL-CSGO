@@ -15,9 +15,9 @@ struct container_t {
 	container_t( c_base_entity* ent ) {
 		m_idx = ent->get_index( );
 		m_vmt = std::make_unique< c_vmt >( ent );
-		m_renderable_vmt = std::make_unique< c_vmt >( ent->get_client_renderable() );
-		m_vmt->hook_method(hook::idx::DO_EXTRA_BONE_PROC, animations::DoExtraBonesProcessing);
-		m_renderable_vmt->hook_method(hook::idx::SETUP_BONES, animations::SetupBones);
+		m_renderable_vmt = std::make_unique< c_vmt >( ent->get_client_renderable( ) );
+		m_vmt->hook_method( hook::idx::DO_EXTRA_BONE_PROC, animations::DoExtraBonesProcessing );
+		m_renderable_vmt->hook_method( hook::idx::SETUP_BONES, animations::SetupBones );
 		m_hooked = true;
 	}
 
