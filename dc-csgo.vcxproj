@@ -140,6 +140,7 @@
     <ClInclude Include="csgo\sdk\utils\interface_manager.h" />
     <ClInclude Include="csgo\sdk\utils\netvars.h" />
     <ClInclude Include="csgo\sdk\valve utils\cutlvector.h" />
+    <ClInclude Include="csgo\sdk\utils\msg_queue.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

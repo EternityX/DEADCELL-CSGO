@@ -456,5 +456,8 @@
     <ClInclude Include="csgo\menu\menu.h">
       <Filter>dc-csgo\menu</Filter>
     </ClInclude>
+    <ClInclude Include="csgo\sdk\utils\msg_queue.h">
+      <Filter>dc-csgo\sdk\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
