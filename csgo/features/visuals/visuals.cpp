@@ -17,15 +17,18 @@ void c_visuals::run( ) {
 	activation_type( );
 
 	for( int i = 1; i <= g_csgo.m_entity_list->get_highest_entity_index( ); i++ ) {
-		auto entity = g_csgo.m_entity_list->get< c_csplayer >( i );
+		auto entity = g_csgo.m_entity_list->get< c_base_entity >( i );
 		if( !entity )
 			continue;
 
 		if( g_vars.visuals.radar )
 			entity->spotted( ) = true;
 
-		player( entity );
-		world( entity );
+		if( entity->get_client_class()->m_class_id == ClassID::CCSPlayer )
+			player( reinterpret_cast< c_csplayer* >( entity ) );
+		else
+			world( entity );
+
 		g_misc.nightmode( entity );
 	}
 
