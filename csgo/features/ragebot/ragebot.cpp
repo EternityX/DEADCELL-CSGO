@@ -379,7 +379,7 @@ bool c_ragebot::get_best_records( c_csplayer *e, std::deque< lag_record_t > &out
 	}
 
 	std::sort( out.begin( ), out.end( ), []( lag_record_t &a, lag_record_t &b ) {
-		return a.m_priority > b.m_priority;
+		return a.m_priority >= b.m_priority;
 	} );
 
 	return true;
