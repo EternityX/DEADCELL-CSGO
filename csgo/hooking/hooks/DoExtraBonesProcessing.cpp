@@ -10,7 +10,7 @@ void __fastcall animations::DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx
 	}
 	catch( std::out_of_range &ex ){
 		UNREFERENCED_PARAMETER( ex );
-		_RPT1( _CRT_WARN, "Failed to get player backtrack records", ex.what( ) );
+		_RPT1( _CRT_WARN, "Out of range track access inside debp.", ex.what( ) );
 		return;
 	}
 

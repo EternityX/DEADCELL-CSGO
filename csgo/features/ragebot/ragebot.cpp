@@ -127,7 +127,6 @@ void c_ragebot::select_target( ) {
 			if( !get_best_records( e, sorted_records ) )
 				continue;
 
-
 			for( size_t i = 0; i < sorted_records.size(); ++i ) {
 				auto record = sorted_records.at( i );
 
