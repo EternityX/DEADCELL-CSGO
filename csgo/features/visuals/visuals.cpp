@@ -13,7 +13,42 @@ void c_visuals::run( ) {
 
 	activation_type( );
 
-	for( int i = 1; i <= g_csgo.m_entity_list->get_highest_entity_index( ); i++ ) {
+	std::array<int, 4> m_placed;
+	for ( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; i++ )
+	{
+		auto& data = m_vis_data.at( i );
+		if ( !data.m_valid )
+			continue;
+
+		for ( auto placed : m_placed )
+			placed = 0;
+
+		while ( data.m_texts.size() )
+		{
+			text_t text;
+			if ( !data.m_texts.wait_for( text, std::chrono::milliseconds( 5 ) ) )
+				continue;
+
+			switch ( text.m_pos )
+			{
+				case e_vis_pos::POS_TOP:
+				{
+					g_renderer.ansi_text( g_renderer.m_fonts.at( FONT_VERDANA_BOLD_7PX ),
+										  text.m_col,
+										  ImColorARGB( 220, 10, 10, 10 ),
+										  data.m_bbox.x + data.m_bbox.w * 0.5, data.m_bbox.y - 12 - 8 * m_placed[ e_vis_pos::POS_TOP ]++, CENTERED_X | DROPSHADOW, text.m_text );
+				}
+			}
+		}
+
+		for ( auto placed : m_placed )
+			placed = 0;
+
+		/// do bars here
+
+	}
+
+	/*for( int i = 1; i <= g_csgo.m_entity_list->get_highest_entity_index( ); i++ ) {
 		auto entity = g_csgo.m_entity_list->get< c_csplayer >( i );
 		if( !entity )
 			continue;
@@ -24,7 +59,10 @@ void c_visuals::run( ) {
 		player( entity );
 		world( entity );
 		g_misc.nightmode( entity );
-	}
+	}*/
+
+	for ( auto& data : m_vis_data )
+		data.clear();
 
 	if( g_vars.visuals.extra.speclist )
 		draw_spectators( );
@@ -55,6 +93,26 @@ bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
 	}
 
 	return false;
+}
+
+void c_visuals::queue()
+{
+	if ( !g_csgo.m_engine->is_in_game() || !g_csgo.m_engine->is_connected() )
+		return;
+
+	for ( int i = 1; i <= g_csgo.m_entity_list->get_highest_entity_index(); i++ )
+	{
+		auto entity = g_csgo.m_entity_list->get< c_csplayer >( i );
+		if ( !entity )
+			continue;
+
+		if ( !calculate_bbox( entity, m_vis_data[ i ].m_bbox ) )
+			m_vis_data[ i ].m_valid = false;
+
+		m_vis_data[ i ].m_texts.post( text_t( entity->get_info().m_player_name, ImColorARGB( 255, 255, 255, 255 ) ) );
+
+		m_vis_data[ i ].m_valid = true;
+	}
 }
 
 bool c_visuals::calculate_bbox( c_base_entity *entity, bbox_t &box ) const {

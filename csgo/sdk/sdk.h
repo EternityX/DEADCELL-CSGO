@@ -67,6 +67,7 @@
 #include "csgo\csgo.h"
 
 #include "utils\netvars.h"
+#include "utils\msg_queue.h"
 
 #include "custom classes\entity.h"
 
