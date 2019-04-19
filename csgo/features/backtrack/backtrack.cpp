@@ -44,15 +44,15 @@ bool lag_record_t::is_valid( ) const {
 	if ( sv_maxunlag )
 		max_unlag = sv_maxunlag->get_float( );
 
-	// predict cur time.
-	float curtime = TICKS_TO_TIME( g_cl.m_local->tickbase( ) );
+	// use normal curtime here, we filter using predicted curtime in ragebot
+	float curtime = g_csgo.m_global_vars->m_cur_time;
 
-	// correct for latency and lerp time.
-	float correct = channel_info->get_average_latency( FLOW_OUTGOING ) + channel_info->get_average_latency( FLOW_INCOMING ) + get_lerp_time( );
+	// correct for latency.
+	float correct = channel_info->get_average_latency( FLOW_OUTGOING ) + channel_info->get_average_latency( FLOW_INCOMING );
 	math::clamp( correct, 0.f, max_unlag );
 
 	// get difference between tick sent by player and the latency tick.
-	return std::abs( correct - ( curtime - m_simtime ) ) < max_unlag;
+	return std::abs( correct - ( curtime - m_simtime ) ) <= 0.2f;
 }
 
 void c_backtrack::log( ){
@@ -92,6 +92,7 @@ void c_backtrack::log( ){
 }
 
 void c_backtrack::reset( ) {
+
 	for ( auto &player : m_players ) {
 		player.m_records.clear( );
 	}
@@ -119,9 +120,6 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 	c_animstate *animstate = e->animstate( );
 	if( !animstate )
 		return;
-
-	animation_layer_t backup_layers[ 13 ];
-	std::memcpy( backup_layers, e->animoverlays( ).base( ), sizeof( animation_layer_t ) * e->animoverlays( ).count( ) );
 
 	float backup_curtime = g_csgo.m_global_vars->m_cur_time;
 	float backup_frametime = g_csgo.m_global_vars->m_frametime;
@@ -156,18 +154,19 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 	g_csgo.m_global_vars->m_cur_time = backup_curtime;
 	g_csgo.m_global_vars->m_frametime = backup_frametime;
 
-	std::memcpy( e->animoverlays( ).base( ), backup_layers, sizeof( animation_layer_t ) * e->animoverlays( ).count( ) );
-
 	e->invalidate_bone_cache( );
+
+	e->last_setupbones_frame( ) = 0;
 
 	e->setup_bones( nullptr, -1, 0x7FF00, g_csgo.m_global_vars->m_cur_time );
 }
 
 void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &record ) {
 	if ( !record.is_valid( ) ) {
-		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( )  );
+		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( ) );
 	}
 	else {
+		g_notify.add( true, OSHColor::Red( ), "shot at backtrack record ( player %s, %i ticks ).", e->get_info( ).m_player_name, cmd->m_tick_count - TIME_TO_TICKS( record.m_simtime ) );
 		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
 	}
 }
