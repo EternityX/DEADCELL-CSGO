@@ -127,7 +127,6 @@ void c_ragebot::select_target( ) {
 			if( !get_best_records( e, sorted_records ) )
 				continue;
 
-
 			for( size_t i = 0; i < sorted_records.size(); ++i ) {
 				auto record = sorted_records.at( i );
 
@@ -380,7 +379,7 @@ bool c_ragebot::get_best_records( c_csplayer *e, std::deque< lag_record_t > &out
 	}
 
 	std::sort( out.begin( ), out.end( ), []( lag_record_t &a, lag_record_t &b ) {
-		return a.m_priority > b.m_priority;
+		return a.m_priority >= b.m_priority;
 	} );
 
 	return true;
