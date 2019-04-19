@@ -40,7 +40,7 @@ public:
 	}
 
 	bool is_player( ) {
-		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 151 )( this );
+		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 153 )( this );
 	}
 
 	bool is_weapon( ) {
@@ -278,6 +278,7 @@ public:
 	OFFSET( int, eflags, 0xE8 )
 	OFFSET( vec3_t, abs_velocity, 0x94 )
 	OFFSET( int, get_bone_count, 0x291C )
+	OFFSET( int, last_setupbones_frame, 0xA68 )
 	
 
 	c_studio_hdr *model_ptr( ){
@@ -440,8 +441,8 @@ public:
 	void invalidate_bone_cache( ) {
 		static auto invalidate_bone_cache = pattern::find( g_csgo.m_client_dll, "80 3D ?? ?? ?? ?? ?? 74 16 A1 ?? ?? ?? ?? 48 C7 81" );
 		static auto model_bone_counter = **reinterpret_cast< uintptr_t** >( invalidate_bone_cache + 10 );
-		*reinterpret_cast< unsigned int* >( this + 0x2924 ) = 0xFF7FFFFF; // m_flLastBoneSetupTime = -FLT_MAX;
-		*reinterpret_cast< unsigned int* >( this + 0x2690 ) = ( model_bone_counter - 1 ); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
+		*reinterpret_cast< unsigned int* >( uintptr_t( this ) + 0x2924 ) = 0xFF7FFFFF; // m_flLastBoneSetupTime = -FLT_MAX;
+		*reinterpret_cast< unsigned int* >( uintptr_t( this ) + 0x2690 ) = ( model_bone_counter - 1 ); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
 	}
 
 	float max_desync( c_animstate* override_animstate = nullptr, bool jitter = false ) {

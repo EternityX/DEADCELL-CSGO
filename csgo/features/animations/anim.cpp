@@ -14,6 +14,7 @@ void c_animations::remove( ) {
 	for( int i = 0; i < 64; i++ ) {
 		if( m_track.at( i ).m_hooked ) {
 			m_track.at( i ).m_vmt->unhook_all( );
+			m_track.at( i ).m_renderable_vmt->unhook_all( );
 		}
 	}
 }
@@ -58,6 +59,7 @@ void c_animations::on_entity_deleted( c_base_entity *ent ) {
 
 	if( m_track.at( it->m_idx ).m_hooked ){
 		m_track.at( it->m_idx ).m_vmt->unhook_all( );
+		m_track.at( it->m_idx ).m_renderable_vmt->unhook_all( );
 		m_track.at( it->m_idx ).m_hooked = false;
 	}
 		

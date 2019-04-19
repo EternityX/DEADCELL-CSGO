@@ -133,22 +133,22 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
-	if( !m_renderview.hook_method( hook::idx::SCENE_END, hook::SceneEnd ) ) {
+	if( !m_renderview.hook_method( hook::idx::SCENE_END, &hook::SceneEnd ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook SceneEnd. This is fatal." );
 		return false;
 	}
 
-	if( !m_viewrender.hook_method( hook::idx::RENDER_SMOKE_OVERLAY, hook::RenderSmokeOverlay ) ) {
+	if( !m_viewrender.hook_method( hook::idx::RENDER_SMOKE_OVERLAY, &hook::RenderSmokeOverlay ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook RenderSmokeOverlay. This is fatal." );
 		return false;
 	}
 
-	if( !m_materialsystem.hook_method( hook::idx::GET_MATERIAL, hook::GetMaterial ) ) {
+	if( !m_materialsystem.hook_method( hook::idx::GET_MATERIAL, &hook::GetMaterial ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook GetMaterial. This is fatal." );
 		return false;
 	}
 
-	if( !m_engine.hook_method( hook::idx::IS_HLTV, hook::IsHltv ) ) {
+	if( !m_engine.hook_method( hook::idx::IS_HLTV, &hook::IsHltv ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook IsHltv. This is fatal." );
 		return false;
 	}
