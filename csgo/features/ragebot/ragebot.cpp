@@ -368,8 +368,8 @@ bool c_ragebot::get_best_records( c_csplayer *e, std::deque< lag_record_t > &out
 		}
 
 		float at_target = math::normalize_angle( math::calc_angle( local_origin, record.m_origin ).y );
-		float sideways_delta = math::min( math::normalize_angle( at_target + 90.f ) - record.m_angles.y,
-		                                  math::normalize_angle( at_target - 90.f ) - record.m_angles.y );
+		float sideways_delta = math::min( std::fabsf( math::normalize_angle( at_target + 90.f - record.m_angles.y ) ),
+		                                  std::fabsf( math::normalize_angle( at_target - 90.f - record.m_angles.y ) ) );
 		if( sideways_delta < 35.f ) {
 			// sideways is easier to hit
 			end_priority += 1;
