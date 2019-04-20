@@ -39,6 +39,7 @@ class c_ragebot {
 public:
 	int shots_fired;
 	c_csplayer *m_last_target = nullptr;
+	std::vector< vec3_t > m_spread;
 
 	void work( c_user_cmd * cmd );
 	void auto_revolver( c_base_combat_weapon *local_weapon, c_user_cmd *cmd );

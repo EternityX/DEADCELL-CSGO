@@ -201,6 +201,8 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 	if( !local )
 		return false;
 
+	m_spread.clear( );
+
 	vec3_t forward, right, up;
 	const vec3_t eye_position = local->eye_pos( );
 	math::angle_to_vectors( angle + local->punch_angle( ) * 2.f, &forward, &right, &up ); // maybe add an option to not account for punch.
@@ -246,6 +248,8 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 		ray.init( eye_position, eye_position + bullet_end * weapon->get_weapon_info( )->range );
 
 		g_csgo.m_engine_trace->clip_ray_to_entity( ray, MASK_SHOT, ent, &trace );
+
+		m_spread.push_back( trace.m_endpos );
 
 		if( trace.m_hit_entity == ent )
 			++traces_hit;
@@ -346,12 +350,14 @@ bool c_ragebot::get_best_records( c_csplayer *e, std::deque< lag_record_t > &out
 		return false;
 
 	out = g_backtrack.get( e->get_index( ) )->m_records;
-	auto it = std::find_if( out.begin( ), out.end( ), [ ]( lag_record_t &record ) {
-		return !record.is_valid( );
-	} );
 
-	if( it != out.end( ) )
-		out.erase( it );
+	out.erase( std::find_if( out.begin( ), out.end( ), [ ]( lag_record_t &record ) {
+		return !record.is_valid( );
+		} ), out.end( ) );
+
+	out.erase( std::unique( out.begin( ), out.end( ), [ ]( lag_record_t &a, lag_record_t &b ) {
+		return ( a.m_angles == b.m_angles && a.m_origin == b.m_origin ) || a.m_origin.distance( b.m_origin ) < 15.f;
+		} ), out.end( ) );
 
 	const auto local_origin = g_cl.m_local->origin( ); // we dont need to keep getting this
 	for( auto &record : out ) {
@@ -378,7 +384,7 @@ bool c_ragebot::get_best_records( c_csplayer *e, std::deque< lag_record_t > &out
 		record.m_priority = end_priority;
 	}
 
-	std::sort( out.begin( ), out.end( ), []( lag_record_t &a, lag_record_t &b ) {
+	std::sort( out.begin( ), out.end( ), [ ]( lag_record_t &a, lag_record_t &b ) {
 		return a.m_priority >= b.m_priority;
 	} );
 
@@ -448,6 +454,9 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 					hitboxes.at( 0 ) = pelvis;
 				}
 			}
+
+			if( scale == 0.f )
+				continue;
 
 			// optimize points on certain records.
 			bool should_multipoint = true;
