@@ -34,11 +34,12 @@ long __stdcall hook::EndScene( IDirect3DDevice9Ex *device ) {
 			if ( !once ) {
 				g_input.init( "Valve001" );
 				g_renderer.init( device );
+				g_menu.init( device );
 				once = true;
 			}
 			else {
 				ImGuiIO &io = ImGui::GetIO( );
-				io.MouseDrawCursor = g_menu.m_is_active;
+				io.MouseDrawCursor = g_menu.is_active();
 
 				g_renderer.start_drawing( );
 				{
@@ -61,11 +62,7 @@ long __stdcall hook::EndScene( IDirect3DDevice9Ex *device ) {
 				}
 				g_renderer.end_drawing( );
 
-				// g_menu.draw( );
-
-				if( g_menu.m_is_active ) {
-					ImGui::ShowDemoWindow( );
-				}
+				g_menu.render();
 
 				g_renderer.render( );
 			}

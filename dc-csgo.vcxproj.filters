@@ -95,6 +95,9 @@
     <Filter Include="dc-csgo\features\ragebot">
       <UniqueIdentifier>{d961d724-fe04-45af-859f-4d4dcf4b3cba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dc-csgo\menu\tabs">
+      <UniqueIdentifier>{38644b80-ae9f-4a5a-982a-6af5b6319d70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="csgo\dllmain.cpp">
@@ -216,6 +219,12 @@
     </ClCompile>
     <ClCompile Include="csgo\hooking\hooks\DrawSetColor.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\menu\ui.cpp">
+      <Filter>dc-csgo\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\menu\tabs\tab_visuals.cpp">
+      <Filter>dc-csgo\menu\tabs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +467,12 @@
     </ClInclude>
     <ClInclude Include="csgo\sdk\utils\msg_queue.h">
       <Filter>dc-csgo\sdk\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\menu\ui.h">
+      <Filter>dc-csgo\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="csgo\menu\tabs\tab_visuals.h">
+      <Filter>dc-csgo\menu\tabs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

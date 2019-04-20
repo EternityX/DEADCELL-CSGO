@@ -32,8 +32,6 @@
 // framework include.
 #include "../deadcell/inc.hpp"
 
-#include <imgui.h>
-
 using namespace renderer;
 extern c_renderer g_renderer;
 
@@ -58,6 +56,7 @@ extern c_renderer g_renderer;
 
 #include "hooking/manager.h"
 #include "menu/menu.h"
+#include "menu/ui.h"
 
 #include "configs/config.h"
 

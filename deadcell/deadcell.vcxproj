@@ -140,6 +140,7 @@
     <ClInclude Include="..\imgui\imgui_internal.h" />
     <ClInclude Include="..\imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="console\console.hpp" />
+    <ClInclude Include="imgui\fontawesome5.h" />
     <ClInclude Include="hash\hash.hpp" />
     <ClInclude Include="imgui\font.hpp" />
     <ClInclude Include="imgui\renderer.hpp" />

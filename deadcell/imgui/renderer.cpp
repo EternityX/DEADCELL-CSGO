@@ -25,12 +25,12 @@ void c_renderer::init( IDirect3DDevice9Ex *device ) {
 	ImGui::StyleColorsDark( );
 
 	ImGuiIO &io = ImGui::GetIO( );
-	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+	//io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
 	{
 		m_fonts.resize( FONT_MAX );
 
-		std::string tahoma, verdana, verdana_bold;
+		std::string tahoma, verdana, verdana_bold, fontawesome;
 		
 		if( !get_system_font_path( "Tahoma", tahoma ) ) {
 			return;
@@ -44,9 +44,9 @@ void c_renderer::init( IDirect3DDevice9Ex *device ) {
 			return;
 		}
 
-		// menu font
-		io.Fonts->AddFontFromFileTTF( tahoma.data( ), 15.0f, nullptr, ImGui::GetIO( ).Fonts->GetGlyphRangesDefault( ) );
-
+		io.Fonts->AddFontFromFileTTF( tahoma.data(), 16.0f, nullptr, io.Fonts->GetGlyphRangesDefault() );
+		io.Fonts->AddFontAwesome( 56.0f );
+		
 		// misc fonts
 		m_fonts[ FONT_VERDANA_7PX ] = io.Fonts->AddFontFromFileTTF( verdana.data( ), 12.0f, nullptr, io.Fonts->GetGlyphRangesDefault( ) );
 		m_fonts[ FONT_VERDANA_BOLD_7PX ] = io.Fonts->AddFontFromFileTTF( verdana_bold.data( ), 12.0f, nullptr, io.Fonts->GetGlyphRangesDefault( ) );

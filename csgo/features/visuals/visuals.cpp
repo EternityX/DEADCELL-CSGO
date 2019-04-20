@@ -100,7 +100,7 @@ void c_visuals::queue()
 	if ( !g_csgo.m_engine->is_in_game() || !g_csgo.m_engine->is_connected() )
 		return;
 
-	for ( int i = 1; i <= g_csgo.m_entity_list->get_highest_entity_index(); i++ )
+	for ( int i = 1; i <= g_csgo.m_global_vars->m_max_clients; i++ )
 	{
 		auto entity = g_csgo.m_entity_list->get< c_csplayer >( i );
 		if ( !entity )

@@ -118,9 +118,9 @@ bool input_mngr::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
 	}
 
 	if( is_clicked )
-		g_menu.m_is_active = !g_menu.m_is_active;
+		g_menu.is_active() = !g_menu.is_active();
 
-	return g_menu.m_is_active && ImGui_ImplWin32_WndProcHandler( hwnd, msg, wparam, lparam );
+	return g_menu.is_active() && ImGui_ImplWin32_WndProcHandler( hwnd, msg, wparam, lparam );
 }
 
 bool input_mngr::remove() {

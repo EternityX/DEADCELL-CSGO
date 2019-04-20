@@ -46,6 +46,9 @@
     <Filter Include="deadcell\imgui\freetype">
       <UniqueIdentifier>{12a632e6-dd17-47b0-ad19-50f9661cd9bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="deadcell\imgui\fontawesome">
+      <UniqueIdentifier>{2cee6a0f-6438-4efe-834e-f87e52618404}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc.hpp">
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="..\imgui\misc\freetype\imgui_freetype.h">
       <Filter>deadcell\imgui\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\fontawesome5.h">
+      <Filter>deadcell\imgui\fontawesome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ using ulong_t = unsigned long;
 #define WIN32_LEAN_AND_MEAN
 #define NOCOMM
 #define NOMINMAX
+#define IMGUI_DEFINE_MATH_OPERATORS
 
 #include <windows.h>
 #include <cstdint>
@@ -25,6 +26,7 @@ using ulong_t = unsigned long;
 #include <d3d9.h>
 #include <imgui.h>
 #include <imgui_internal.h>
+#include "imgui/fontawesome5.h"
 #include <examples/imgui_impl_dx9.h>
 #include <examples/imgui_impl_win32.h>
 
