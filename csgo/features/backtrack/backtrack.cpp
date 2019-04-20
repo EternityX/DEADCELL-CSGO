@@ -130,11 +130,6 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 	int backup_flags = e->flags( );
 	int backup_eflags = e->eflags( );
 
-	if( animstate->on_ground )
-		e->flags( ) |= FL_ONGROUND;
-	else
-		e->flags( ) &= ~FL_ONGROUND;
-
 	e->eflags( ) &= ~0x1000;
 
 	e->abs_velocity( ) = e->velocity( );

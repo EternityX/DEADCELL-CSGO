@@ -31,9 +31,6 @@ bool input_mngr::init( HWND wnd ) {
 }
 
 bool input_mngr::handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam ) {
-	if( !(GetForegroundWindow( ) == m_window_handle) )
-		return false;
-
 	switch( msg ) {
 		// left mouse
 		case WM_LBUTTONDOWN:

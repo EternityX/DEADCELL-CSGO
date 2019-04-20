@@ -2,7 +2,7 @@
 #include "../../inc.h"
 
 struct lag_record_t {
-	lag_record_t( ){ }
+	lag_record_t( ) : m_bonecount{ 0 }, m_simtime{ 0.f }, m_lby{ 0.f }{ }
 
 	lag_record_t( c_csplayer* player ) : m_priority{ 0 } {
 
