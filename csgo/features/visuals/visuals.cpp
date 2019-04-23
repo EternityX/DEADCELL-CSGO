@@ -209,6 +209,9 @@ void c_visuals::player( c_csplayer *entity ) {
 	const auto money_color    = OSHColor::FromARGB( g_vars.visuals.money_color, m_alpha.at( index ) );
 	const auto flashed_color  = OSHColor::FromARGB( g_vars.visuals.flash_bar_color, m_alpha.at( index ) );
 
+	m_ctx.flag_count = 0;
+	m_ctx.offset = 0;
+
 	if( g_vars.visuals.bbox )
 		draw_box( box_color, index, box.x, box.y, box.w, box.h );
 
@@ -246,11 +249,6 @@ void c_visuals::player( c_csplayer *entity ) {
 
 	if( g_vars.visuals.flags )
 		draw_flags( entity, flag_color, box.x, box.y, box.w, box.h );
-
-	/// even if no flags are drawn the flag counter ( used above in money ) and
-	/// the offset ( used for e.g. weapon/ammo ) has to be reset
-	m_ctx.flag_count = 0;
-	m_ctx.offset = 0;
 }
 
 void c_visuals::handle_glow( ) {
@@ -418,9 +416,6 @@ void c_visuals::flash_bar( c_csplayer *player, OSHColor color, float x, float y,
 }
 
 void c_visuals::draw_flags( c_csplayer *player, OSHColor color, float x, float y, float w, float h ) {
-	m_ctx.offset = 0;
-	m_ctx.flag_count = 0;
-
 	std::string armor_flag;
 	if( player->helmet( ) )
 		armor_flag += "H";
