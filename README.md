@@ -22,7 +22,7 @@ We invite anyone interested in supporting development to join our Discord.
 This is NOT for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
 
 ## Known issues
-- Weapon script assertions.
+- Crashes.
 - Some of the code is unoptimized.
 - If you come across any more issues, please notify us via the issue tracker.
 
