@@ -208,8 +208,10 @@ namespace OSHGui {
 			device->SetRenderState( D3DRS_ZWRITEENABLE, FALSE );
 			device->SetRenderState( D3DRS_MULTISAMPLEANTIALIAS, FALSE );
 
-			device->SetSamplerState( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
-			device->SetSamplerState( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
+			device->SetSamplerState( 0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP );
+			device->SetSamplerState( 0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP );
+			device->SetSamplerState( 0, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP );
+			device->SetSamplerState( 0, D3DSAMP_SRGBTEXTURE, 0 );
 
 			device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
 			device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
@@ -224,6 +226,7 @@ namespace OSHGui {
 
 			device->SetTextureStageState( 1, D3DTSS_COLOROP, D3DTOP_DISABLE );
 
+			device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 			device->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
 			device->SetRenderState( D3DRS_SRGBWRITEENABLE, FALSE );
 
@@ -242,6 +245,8 @@ namespace OSHGui {
 				return;
 
 			stateBlock->Apply();
+
+			device->SetRenderState( D3DRS_SRGBWRITEENABLE, TRUE );
 		}
 
 		//---------------------------------------------------------------------------
@@ -260,6 +265,7 @@ namespace OSHGui {
 
 		//---------------------------------------------------------------------------
 		void Direct3D9Renderer::PostD3DReset() {
+			SetDisplaySize( GetViewportSize( ) );
 			device->CreateStateBlock( D3DSBT_PIXELSTATE, &stateBlock );
 
 			RemoveWeakReferences();
