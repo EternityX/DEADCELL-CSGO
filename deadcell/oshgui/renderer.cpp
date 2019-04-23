@@ -23,37 +23,21 @@ void c_renderer::init( IDirect3DDevice9Ex *device ) {
 	get_instance( )->SetDefaultFont( m_fonts[ FONT_VERDANA_7PX ] );
 }
 
-void c_renderer::start_drawing( IDirect3DDevice9Ex *device ) {
-	if( !device )
+void c_renderer::start_drawing( ) {
+	m_render_target = get_renderer( ).GetDefaultRenderTarget( );
+	if ( !m_render_target )
 		return;
-
-	m_old_color_write_enable = -1;
-
-	device->GetRenderState( D3DRS_COLORWRITEENABLE, &m_old_color_write_enable );
-	device->SetRenderState( D3DRS_COLORWRITEENABLE, 0xFFFFFFFF );
 
 	m_geometry = get_renderer( ).CreateGeometryBuffer( );
 	if( !m_geometry )
 		return;
 
-	m_render_target = get_renderer( ).GetDefaultRenderTarget( );
-	if( !m_render_target )
-		return;
-
 	get_renderer( ).BeginRendering( );
 }
 
-void c_renderer::end_drawing( IDirect3DDevice9Ex *device ) const {
-	if( !m_render_target )
+void c_renderer::end_drawing( ) const {
+	if( !m_render_target || !m_geometry )
 		return;
-
-	D3DDEVICE_CREATION_PARAMETERS creation_parameters;
-	RECT rect;
-
-	device->GetCreationParameters( &creation_parameters );
-	GetClientRect( creation_parameters.hFocusWindow, &rect );
-
-	m_render_target->SetArea( OSHGui::Drawing::RectangleF( rect.left, rect.top, rect.right, rect.bottom ) );
 
 	m_render_target->Activate( );
 
@@ -63,12 +47,7 @@ void c_renderer::end_drawing( IDirect3DDevice9Ex *device ) const {
 
 	get_instance( )->Render( );
 
-	get_instance( )->GetRenderer( ).EndRendering();
-
-	if( !m_old_color_write_enable )
-		return;
-
-	device->SetRenderState( D3DRS_COLORWRITEENABLE, m_old_color_write_enable );
+	get_instance( )->GetRenderer( ).EndRendering( );
 }
 
 void c_renderer::rect( const OSHGui::Drawing::Color &color, int x, int y, int width, int height ) const {

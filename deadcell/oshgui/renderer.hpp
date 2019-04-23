@@ -21,10 +21,6 @@ namespace renderer {
 	};
 
 	class c_renderer {
-	private:
-		std::unique_ptr< OSHGui::Drawing::Direct3D9Renderer > m_renderer;
-		ulong_t m_old_color_write_enable;
-
 	public:
 		OSHGui::Drawing::RenderTargetPtr m_render_target;
 		OSHGui::Drawing::GeometryBufferPtr m_geometry;
@@ -33,8 +29,8 @@ namespace renderer {
 		c_renderer();
 		void init( IDirect3DDevice9Ex *device );
 
-		void start_drawing( IDirect3DDevice9Ex *device );
-		void end_drawing( IDirect3DDevice9Ex *device ) const;
+		void start_drawing( );
+		void end_drawing( ) const;
 
 		// drawing.
 		void rect( const OSHGui::Drawing::Color &color, int x, int y, int width, int height ) const;
