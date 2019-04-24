@@ -201,8 +201,6 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 	if( !local )
 		return false;
 
-	m_spread.clear( );
-
 	vec3_t forward, right, up;
 	const vec3_t eye_position = local->eye_pos( );
 	math::angle_to_vectors( angle + local->punch_angle( ) * 2.f, &forward, &right, &up ); // maybe add an option to not account for punch.
@@ -248,8 +246,6 @@ bool c_ragebot::hitchance( vec3_t &angle, c_csplayer *ent ) {
 		ray.init( eye_position, eye_position + bullet_end * weapon->get_weapon_info( )->range );
 
 		g_csgo.m_engine_trace->clip_ray_to_entity( ray, MASK_SHOT, ent, &trace );
-
-		m_spread.push_back( trace.m_endpos );
 
 		if( trace.m_hit_entity == ent )
 			++traces_hit;
@@ -307,9 +303,6 @@ void c_ragebot::choose_angles( ) {
 
 	m_last_target = selected_target;
 
-	if( !local->can_shoot( weapon ) )
-		return;
-
 	if( g_vars.rage.autoscope == 1 && ( !local->is_scoped( ) && weapon->has_scope( ) ) && selected_target )
 		m_cmd->m_buttons |= IN_ATTACK2;
 
@@ -326,6 +319,10 @@ void c_ragebot::choose_angles( ) {
 		if( g_vars.rage.auto_fire )
 			return;
 	}
+
+
+	if( !local->can_shoot( weapon ) )
+		return;
 
 	if( g_vars.rage.auto_fire && !( m_cmd->m_buttons & IN_ATTACK ) ) {
 		m_cmd->m_buttons |= IN_ATTACK;
@@ -408,12 +405,26 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 			int h = hitboxes.at( idx );
 			auto *bbox = studiohdr->hitbox( h, 0 );
 
+			// philip015's old hack
+			float mod = bbox->m_flRadius != -1.f ? bbox->m_flRadius : 0.f;
+
 			vec3_t max, min;
-			math::vector_transform( bbox->bb_min, matrix[ bbox->bone_index ], min );
-			math::vector_transform( bbox->bb_max, matrix[ bbox->bone_index ], max );
+			math::vector_transform( bbox->bb_min - mod, matrix[ bbox->bone_index ], min );
+			math::vector_transform( bbox->bb_max + mod, matrix[ bbox->bone_index ], max );
 			auto center = ( min + max ) / 2.f;
 
 			points.push_back( center );
+
+			auto angle = math::calc_angle( center, local->eye_pos( ) );
+
+			vec3_t forward;
+			math::angle_to_vector( angle, forward );
+
+			vec3_t right = forward.cross( vec3_t( 0, 0, 1 ) );
+			vec3_t left = vec3_t( -right.x, -right.y, right.z );
+
+			vec3_t top = vec3_t( 0, 0, 1 );
+			vec3_t bot = vec3_t( 0, 0, -1 );
 
 			// don't bother multipointing if body/head is visible.
 			if( g_vars.rage.dynamic_hitbox ) {
@@ -477,13 +488,11 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 
 			switch( h ) {
 				case head:
-				case neck:
 					if( !g_vars.rage.head || !should_multipoint )
 						continue;
 					break;
 				case l_chest:
 				case u_chest:
-				case thorax:
 				case pelvis:
 					if( !g_vars.rage.pelvis || !should_multipoint ) // should always multipoint the torso regardless of the selective multipoint option.
 						continue;
@@ -495,8 +504,6 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 					break;
 				case l_thigh:
 				case r_thigh:
-				case l_foot:
-				case r_foot:
 					if( !g_vars.rage.legs || !should_multipoint )
 						continue;
 					break;
@@ -504,30 +511,19 @@ bool c_ragebot::get_points_from_hitbox( c_csplayer *e, std::vector< int > hitbox
 					continue;
 			}
 
+			float rs = bbox->m_flRadius * scale;
+
 			if( bbox->m_flRadius == -1.f ) {
-				/*points.push_back( vec3_t( bbox->bb_min.x, bbox->bb_min.y, bbox->bb_min.z ) * scale );
-				points.push_back( vec3_t( bbox->bb_min.x, bbox->bb_max.y, bbox->bb_min.z ) * scale );
-				points.push_back( vec3_t( bbox->bb_max.x, bbox->bb_max.y, bbox->bb_min.z ) * scale );
-				points.push_back( vec3_t( bbox->bb_max.x, bbox->bb_min.y, bbox->bb_min.z ) * scale );*/
+	
 			}
 			else if( bbox->m_flRadius > 0.f ) {
-				// pill.
+				//// pill.
+				if( h == head )
+					points.push_back( center + top * rs );
 
-				const float length = ( bbox->bb_min - bbox->bb_max ).length( ) + bbox->m_flRadius * 2.f;
-
-				if( h != l_upperarm && h != r_upperarm && h != l_thigh && h != r_thigh ) {
-					points.push_back( center + vec3_t( length / 3.f, 0.f, 0.f ) );
-					points.push_back( center - vec3_t( length / 3.f, 0.f, 0.f ) );
-				}
-
-				if( h != l_chest && h != u_chest )
-					points.push_back( center + vec3_t( 0.f, 0.f, bbox->m_flRadius * scale ) ); // top
-
-				if( h != u_chest && h != l_chest && h != thorax )
-					points.push_back( center - vec3_t( 0.f, 0.f, bbox->m_flRadius * scale ) ); // bottom
-
-				points.push_back( center + vec3_t( 0.f, bbox->m_flRadius * scale, 0.f ) ); // front center
-				points.push_back( center - vec3_t( 0.f, bbox->m_flRadius * scale, 0.f ) ); // back center
+				points.push_back( center + right * rs );
+				points.push_back( center + left * rs );
+				
 			}
 		}
 	}

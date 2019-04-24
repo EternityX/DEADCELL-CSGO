@@ -68,6 +68,25 @@ public:
 		return *this;
 	}
 
+	vec3_t& operator+=( const float& v )
+	{
+		x += v; y += v; z += v;
+		return *this;
+	}
+
+	vec3_t& operator+( const float& v )
+	{
+		x = x + v; y = y + v; z = z + v;
+		return *this;
+	}
+
+	vec3_t& operator-( const float& v )
+	{
+		x = x - v; y = y - v; z = z - v;
+		return *this;
+	}
+
+
 	vec3_t& operator-=( const vec3_t& v )
 	{
 		x -= v.x; y -= v.y; z -= v.z;
@@ -157,6 +176,16 @@ public:
 	float dot( const vec3_t &vOther ) const
 	{
 		return ( x * vOther.x + y * vOther.y + z * vOther.z );
+	}
+
+	vec3_t cross_product( const vec3_t& a, const vec3_t& b ) const
+	{
+		return vec3_t( a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x );
+	}
+
+	vec3_t cross( const vec3_t& vOther ) const
+	{
+		return cross_product( *this, vOther );
 	}
 
 	float length( ) const
