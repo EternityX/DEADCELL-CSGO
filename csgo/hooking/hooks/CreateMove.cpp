@@ -52,7 +52,7 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 	g_engine_pred.pre_start( );
 	g_engine_pred.start( cmd );
 	{
-		c_misc::automatic_fire( g_cl.m_local->get_active_weapon( ), cmd );
+		g_misc.automatic_fire( g_cl.m_local->get_active_weapon( ), cmd );
 		//if ( g_vars.misc.autozeus )
 		//	g_misc.auto_zeus( cmd );
 

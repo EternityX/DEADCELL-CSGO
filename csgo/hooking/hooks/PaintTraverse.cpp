@@ -18,7 +18,7 @@ void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel
 			hud_zoom_panel = vguiPanel;
 	}
 	else {
-		if( g_vars.visuals.misc.remove_scope && g_vars.visuals.misc.remove_scope < 3 ) {
+		if( g_vars.visuals.misc.remove_scope && g_vars.visuals.misc.remove_scope == 1 ) {
 			if( vguiPanel == hud_zoom_panel )
 				return;
 		}

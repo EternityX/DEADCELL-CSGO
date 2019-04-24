@@ -328,7 +328,7 @@ void c_main_form::visuals_tab( ) {
 	auto remove_flash = new c_checkbox( "Flash", extra_removals, &g_vars.visuals.misc.no_flash );
 	auto remove_fog = new c_checkbox( "Fog", extra_removals, &g_vars.visuals.misc.fog );
 	auto remove_scope_zoom = new c_checkbox( "Scope zoom", extra_removals, &g_vars.visuals.misc.remove_scope_zoom );
-	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic", "Engine" }, extra_removals, 4, &g_vars.visuals.misc.remove_scope, other_esp_groupbox->GetWidth( ) - 15 );
+	auto remove_scope = new c_combo( "Scope overlay", { "None", "Static", "Dynamic" }, extra_removals, 4, &g_vars.visuals.misc.remove_scope, other_esp_groupbox->GetWidth( ) - 15 );
 	auto remove_smoke_type = new c_combo( "Smoke", { "None", "Remove", "Wireframe" }, extra_removals, 3, &g_vars.visuals.misc.remove_smoke, other_esp_groupbox->GetWidth( ) - 15 );
 	auto nightmode = new c_slider( "World brightness", extra_removals, 0, 100, &g_vars.misc.nightmode, 100, "%" );
 	nightmode->GetValueChangedEvent( ) += OSHGui::ValueChangedEventHandler( []( Control *sender ) {
