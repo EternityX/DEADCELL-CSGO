@@ -167,6 +167,7 @@ bool c_config::init( ) {
 	item( g_vars.misc.client_hitboxes_duration, "g_vars.visuals.client_hitboxes_duration", m_items );
 	item( g_vars.misc.bullet_impacts, "g_vars.visuals.bullet_impacts", m_items );
 	item( g_vars.misc.bullet_impacts_duration, "g_vars.visuals.bullet_impacts_duration", m_items );
+	item( g_vars.misc.chaiscript_enabled, "g_vars.misc.chaiscript_enabled", m_items );
 	item( g_vars.dz.healthshot, "g_vars.dz.healthshot", m_items );
 	item( g_vars.dz.drone, "g_vars.dz.drone", m_items );
 	item( g_vars.dz.turret, "g_vars.dz.turret", m_items );
