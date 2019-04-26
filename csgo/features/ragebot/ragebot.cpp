@@ -123,12 +123,12 @@ void c_ragebot::select_target( ) {
 			vec3_t player_best_point = vec3_t( 0.f, 0.f, 0.f );
 
 			const int best_min_dmg = local->get_active_weapon( )->clip( ) <= 3 ? e->health( ) : g_vars.rage.min_dmg; // ensure we get the kill
-			std::deque< lag_record_t > sorted_records;
-			if( !get_best_records( e, sorted_records ) )
+			std::deque< lag_record_t > best_records;
+			if( !get_best_records( e, best_records ) )
 				continue;
 
-			for( size_t i = 0; i < sorted_records.size(); ++i ) {
-				auto record = sorted_records.at( i );
+			for( size_t i = 0; i < best_records.size(); ++i ) {
+				auto record = best_records.at( i );
 
 				if( !record.is_valid( ) )
 					continue;
@@ -140,7 +140,7 @@ void c_ragebot::select_target( ) {
 					continue;
 
 				std::vector< vec3_t > points;
-				if( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, sorted_records, i, g_vars.rage.pointscale / 100.f ) )
+				if( !get_points_from_hitbox( e, hitboxes, record.m_matrix, points, best_records, i, g_vars.rage.pointscale / 100.f ) )
 					continue;
 
 				if( points.empty( ) )
