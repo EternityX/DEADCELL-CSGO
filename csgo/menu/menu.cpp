@@ -190,6 +190,7 @@ void c_main_form::ragebot_tab( ) {
 	auto aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
 	auto pitch = new c_combo( "Pitch", { "Off", "Default" }, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth( ) - 15 );
 	auto yaw = new c_combo( "Yaw", { "Off", "180" }, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth( ) - 15 );
+	auto switch1 = new c_hotkey("Switch AA", antiaim_page, &g_vars.antiaim.side_switch_key, antiaim_groupbox->GetWidth() - 15);
 	//auto jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"�" );
 
 	g_menu.set_y_pos( 10 );
