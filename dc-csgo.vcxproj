@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="csgo\features\chaiscript\chai_console.cpp" />
+    <ClCompile Include="csgo\features\chaiscript\chai_wrapper.cpp" />
     <ClCompile Include="csgo\features\entity listener\ent_listener.cpp" />
     <ClCompile Include="csgo\configs\configs.cpp" />
     <ClCompile Include="csgo\dllmain.cpp" />
@@ -62,6 +64,8 @@
     <ClCompile Include="csgo\hooking\hooks\DrawSetColor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="csgo\features\chaiscript\chai_console.hpp" />
+    <ClInclude Include="csgo\features\chaiscript\chai_wrapper.hpp" />
     <ClInclude Include="csgo\features\entity listener\ent_listener.h" />
     <ClInclude Include="csgo\configs\config.h" />
     <ClInclude Include="csgo\features\animations\anim.h" />
@@ -147,7 +151,7 @@
     <ProjectGuid>{4A1BC10A-64B0-4BB4-8BD1-5D081D76DE09}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>dccsgo</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -125,6 +125,7 @@ public:
 		float client_hitboxes_duration = 2.f;
 		bool bullet_impacts;
 		float bullet_impacts_duration = 4.f;
+		bool chaiscript_enabled;
 	} misc;
 	struct antiaim{
 		bool enabled;
