@@ -350,40 +350,11 @@ bool c_ragebot::get_best_records( c_csplayer *e, std::deque< lag_record_t > &out
 
 	out.erase( std::find_if( out.begin( ), out.end( ), [ ]( lag_record_t &record ) {
 		return !record.is_valid( );
-		} ), out.end( ) );
+	} ), out.end( ) );
 
 	out.erase( std::unique( out.begin( ), out.end( ), [ ]( lag_record_t &a, lag_record_t &b ) {
 		return ( a.m_angles == b.m_angles && a.m_origin == b.m_origin ) || a.m_origin.distance( b.m_origin ) < 15.f;
-		} ), out.end( ) );
-
-	const auto local_origin = g_cl.m_local->origin( ); // we dont need to keep getting this
-	for( auto &record : out ) {
-		int end_priority = 0;
-		if( record.m_vel.length_2d( ) > 15.f ) {
-			// moving fairly fast, lower desync delta, want to not prioritize slow walking records
-			if( record.m_flags & FL_ONGROUND ) {
-				end_priority += 1;
-			}
-			else {
-				// probably bhopping, very low desync delta if they are
-				end_priority += 2;
-			}
-		}
-
-		float at_target = math::normalize_angle( math::calc_angle( local_origin, record.m_origin ).y );
-		float sideways_delta = math::min( std::fabsf( math::normalize_angle( at_target + 90.f - record.m_angles.y ) ),
-		                                  std::fabsf( math::normalize_angle( at_target - 90.f - record.m_angles.y ) ) );
-		if( sideways_delta < 35.f ) {
-			// sideways is easier to hit
-			end_priority += 1;
-		}
-
-		record.m_priority = end_priority;
-	}
-
-	std::sort( out.begin( ), out.end( ), [ ]( lag_record_t &a, lag_record_t &b ) {
-		return a.m_priority >= b.m_priority;
-	} );
+	} ), out.end( ) );
 
 	return true;
 }
