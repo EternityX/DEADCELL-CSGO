@@ -3,7 +3,8 @@
 
 #include "../features/misc/misc.h"
 #include "../features/chams/chams.h"
-
+#include "../features/chaiscript/chai_wrapper.hpp"
+#include "../features/chaiscript/chai_console.hpp"
 #include <experimental/filesystem>
 
 using namespace controls;
@@ -17,21 +18,29 @@ c_menu::c_menu( )
 	: m_control_x_pos{ default_x_pos }, m_control_y_pos{ default_y_pos } { }
 
 void c_menu::init( ) {
-	m_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_main_form >( ) );
-	m_form->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	m_form = std::static_pointer_cast<OSHGui::Form>(std::make_shared< c_main_form >());
+	m_form->SetFont(g_renderer.get_instance()->GetDefaultFont());
 
-	m_dangerzone_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_dangerzone_form >( ) );
-	m_dangerzone_form->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	m_dangerzone_form = std::static_pointer_cast<OSHGui::Form>(std::make_shared< c_dangerzone_form >());
+	m_dangerzone_form->SetFont(g_renderer.get_instance()->GetDefaultFont());
 
-	g_renderer.get_instance( )->Run( m_form );
+	m_chaiscript_form = std::static_pointer_cast<OSHGui::Form>(std::make_shared< c_chaiscript_form >());
+	m_chaiscript_form->SetFont(g_renderer.get_instance()->GetDefaultFont());
 
-	m_dangerzone_form->SetEnabled( true );
-	m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
-	m_dangerzone_form->SetLocation( 50, 500 );
+	g_renderer.get_instance()->Run(m_form);
 
-	m_form->Show( m_dangerzone_form );
+	m_dangerzone_form->SetEnabled(true);
+	m_dangerzone_form->SetVisible(g_vars.misc.dangerzone_menu);
+	m_dangerzone_form->SetLocation(50, 500);
 
-	g_renderer.get_instance( )->Enable( );
+	m_chaiscript_form->SetEnabled(true);
+	m_chaiscript_form->SetVisible(g_vars.misc.chaiscript_enabled);
+	m_chaiscript_form->SetLocation(50, 500);
+
+	m_form->Show(m_dangerzone_form);
+	m_form->Show(m_chaiscript_form);
+
+	g_renderer.get_instance()->Enable();
 }
 
 /* CONTROL PLACEMENT */
@@ -397,6 +406,11 @@ void c_main_form::misc_tab( ) {
 	dangerzone_check->GetCheckedChangedEvent( ) += OSHGui::CheckedChangedEventHandler( [ & ]( Control *sender ) {
 		g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
 	} );
+	
+	auto chaiscript_check = new c_checkbox("ChaiScript menu", generic_misc_page, &g_vars.misc.chaiscript_enabled);
+	chaiscript_check->GetCheckedChangedEvent() += OSHGui::CheckedChangedEventHandler([&](Control *sender) {
+		g_menu.m_chaiscript_form->SetVisible(g_vars.misc.chaiscript_enabled);
+	});
 
 	auto sounds = new c_sound_combo( "Hitsound", { "None" }, generic_misc_page, 5, &g_vars.misc.hitmarker_sound, general_groupbox->GetWidth( ) - 15 );
 
@@ -1040,3 +1054,65 @@ c_slider::c_slider( const AnsiString &text, Control *parent, float min, float ma
 
 	g_menu.push_y_pos( text.empty( ) ? Control::GetSize( ).Height - 4 : Control::GetSize( ).Height + 10 );
 }
+
+// chai menu
+chai_console* console_text;
+void print_to_console(chai_console_text str) {
+	// this is so we can pass chaiscript this function to print to
+	console_text->AppendText(str);
+}
+
+void c_chaiscript_form::init_component()
+{
+	SetSize(SizeI(524, 400));
+	init_controls();
+
+	controls::c_label *form_name = new controls::c_label("ChaiScript", this);
+	form_name->SetLocation(OSHGui::Drawing::PointI(6, -14));
+}
+
+void c_chaiscript_form::submit_code() {
+
+	console_text->AppendText(text_input->GetText());
+	chai_wrapper::chai_init(&print_to_console);
+	chai_wrapper::chai_loadscript(text_input->GetText());
+	text_input->SetText("");
+	console_text->Invalidate();
+}
+
+void c_chaiscript_form::init_controls()
+{
+	// textbox for input to chaiscript
+	text_input = new OSHGui::TextBox();
+	text_input->SetSize(438, 21);
+	text_input->SetLocation(7, 343);
+	text_input->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
+	text_input->SetFont(g_renderer.get_instance()->GetDefaultFont());
+	text_input->SetText("");
+
+	// button to send input to chaiscript
+	auto text_input_submit = new OSHGui::Button();
+	text_input_submit->SetSize(60, 20);
+	text_input_submit->SetLocation(445, 343);
+	text_input_submit->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
+	text_input_submit->SetFont(g_renderer.get_instance()->GetDefaultFont());
+	text_input_submit->SetText("Submit");
+
+	// console to display output from chaiscript
+	console_text = new chai_console();
+	console_text->SetSize(497, 320);
+	console_text->SetLocation(3, 3);
+	console_text->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
+	console_text->SetFont(g_renderer.get_instance()->GetDefaultFont());
+	console_text->SetForeColor(OSHGui::Drawing::Color::FromRGB(255, 255, 255));
+
+	text_input_submit->GetClickEvent() += OSHGui::ClickEventHandler([this](Control *sender) {
+		c_chaiscript_form::submit_code();
+	});
+
+
+	AddControl(text_input);
+	AddControl(text_input_submit);
+	AddControl(console_text);
+}
+
