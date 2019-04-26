@@ -220,6 +220,12 @@
     <ClCompile Include="csgo\hooking\hooks\SetupBones.cpp">
       <Filter>dc-csgo\hooking\hooks</Filter>
     </ClCompile>
+    <ClCompile Include="csgo\features\chaiscript\chai_console.cpp">
+      <Filter>dc-csgo</Filter>
+    </ClCompile>
+    <ClCompile Include="csgo\features\chaiscript\chai_wrapper.cpp">
+      <Filter>dc-csgo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="csgo\sdk\custom classes\animstate.h">
@@ -459,5 +465,7 @@
     <ClInclude Include="csgo\menu\menu.h">
       <Filter>dc-csgo\menu</Filter>
     </ClInclude>
+    <ClInclude Include="csgo\features\chaiscript\chai_wrapper.hpp" />
+    <ClInclude Include="csgo\features\chaiscript\chai_console.hpp" />
   </ItemGroup>
 </Project>
