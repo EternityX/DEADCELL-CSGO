@@ -22,7 +22,7 @@ long __stdcall hook::EndScene( IDirect3DDevice9Ex *device ) {
 
 		g_notify.draw( );
 
-		if ( g_vars.visuals.extra.misc_flags ) {
+		if ( g_vars.visuals.extra.misc_flags && g_csgo.m_engine->is_connected( ) ) {
 			int flag_count = 0;
 
 			if ( g_cl.m_under_tickrate ) {
