@@ -44,4 +44,25 @@ public:
 		}
 		return false;
 	}
+	bool player_check(bool team_check = true, bool local_check = true, bool dormant_check = false, bool protected_check = false) {
+		bool ret = true;
+		c_csplayer* local = g_cl.m_local;
+
+		if (dormant_check && ent->is_dormant())
+			ret = false;
+
+		if (protected_check && ent->immune())
+			ret = false;
+
+		if (team_check && ent->team() == local->team())
+			ret = false;
+
+		if (local_check && ent == local)
+			ret = false;
+
+		return ret;
+	}
+	int get_index() {
+		return ent->get_index();
+	}
 };
