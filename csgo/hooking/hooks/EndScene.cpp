@@ -1,4 +1,5 @@
 #include "../../inc.h"
+#include "../../features/chaiscript/chai_wrapper.hpp"
 #include "../../features/visuals/visuals.h"
 #include "../../features/nade_pred/nade_pred.h"
 
@@ -17,6 +18,9 @@ long __stdcall hook::EndScene( IDirect3DDevice9Ex *device ) {
 		g_renderer.start_drawing( );
 
 		g_visuals.run( );
+
+		if (g_vars.misc.chaiscript_enabled && chai_wrapper::chai_finished_init && chai_wrapper::chai_defined_endscene)
+			chai_wrapper::chai_hook_endscene(&g_renderer);
 
 		g_nadepred.draw( );
 
