@@ -2,6 +2,9 @@
 
 c_antiaim g_antiaim;
 
+int chai_curr_x = -1; // makes chaiscript easier
+int chai_curr_y = -1; // makes chaiscript easier
+
 bool c_antiaim::allow( c_user_cmd *ucmd ) {
 	if ( !g_vars.antiaim.enabled )
 		return false;
@@ -41,6 +44,65 @@ bool c_antiaim::allow( c_user_cmd *ucmd ) {
 	return true;
 }
 
+void c_antiaim::chai_yaw(c_user_cmd *ucmd) {
+	if (g_vars.antiaim.yaw > 1) {
+		// chaiscript antiaim yaw
+		if (chai_curr_y != g_vars.antiaim.yaw) {
+			try {
+				chai_curr_y = g_vars.antiaim.yaw;
+				yaw_aa.chai_init();
+				yaw_aa.chai_load("profiles//aa/y//" + chai_manager::chai_aa_yaw.at(g_vars.antiaim.yaw));
+				chai_manager::chai_print("profiles//aa//y//" + chai_manager::chai_aa_yaw.at(g_vars.antiaim.yaw));
+			}
+			catch (const std::exception &e) {
+				//chai_manager::chai_error(e.what());
+			}
+		}
+		else {
+			if (yaw_aa.chai_finished_init) {
+				try {
+					auto func = yaw_aa.chai->eval<std::function<void(c_user_cmd *, vec3_t *, bool *, bool *)>>("create_move");
+					bool side = g_input.key_pressed(g_vars.antiaim.side_switch_key);
+					func(ucmd, &m_input, &g_cl.m_sendpacket, &side);
+				}
+				catch (const std::exception &e) {
+					//chai_manager::chai_error(e.what());
+				}
+			}
+		}
+
+	}
+}
+
+void c_antiaim::chai_pitch(c_user_cmd *ucmd) {
+	if (g_vars.antiaim.pitch > 1) {
+		// chaiscript antiaim pitch
+		if (chai_curr_x != g_vars.antiaim.pitch) {
+			try {
+				chai_curr_x = g_vars.antiaim.pitch;
+				pitch_aa.chai_init();
+				pitch_aa.chai_load("profiles//aa/x//" + chai_manager::chai_aa_pitch.at(g_vars.antiaim.pitch));
+				chai_manager::chai_print("profiles//aa//x//" + chai_manager::chai_aa_pitch.at(g_vars.antiaim.pitch));
+			}
+			catch (const std::exception &e) {
+				//chai_manager::chai_error(e.what());
+			}
+		}
+		else {
+			if (pitch_aa.chai_finished_init) {
+				try {
+					auto func = pitch_aa.chai->eval<std::function<void(c_user_cmd *, vec3_t *)>>("create_move");
+					func(ucmd, &m_input);
+				}
+				catch (const std::exception &e) {
+					//chai_manager::chai_error(e.what());
+				}
+			}
+		}
+
+	}
+}
+
 void c_antiaim::adjust_yaw( c_user_cmd *ucmd ) {
 	auto local = c_csplayer::get_local( );
 	if ( !local || !local->alive( ) )
@@ -63,6 +125,8 @@ void c_antiaim::adjust_yaw( c_user_cmd *ucmd ) {
 				at_target( ) != 0.f ? m_input.y = at_target( ) + 90.f : m_input.y += 90.f;
 				break;
 			default:
+				if (g_vars.antiaim.yaw > 1)
+					chai_yaw(ucmd);
 				break;
 		}
 
@@ -89,6 +153,8 @@ void c_antiaim::adjust_pitch( c_user_cmd *ucmd ) {
 			m_input.x = 89.f;
 			break;
 		default:
+			if (g_vars.antiaim.pitch > 1)
+				chai_pitch(ucmd);
 			break;
 	}
 }
