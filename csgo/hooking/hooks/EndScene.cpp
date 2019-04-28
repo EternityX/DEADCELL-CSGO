@@ -19,8 +19,12 @@ long __stdcall hook::EndScene( IDirect3DDevice9Ex *device ) {
 
 		g_visuals.run( );
 
-		if (g_vars.misc.chaiscript_enabled && chai_wrapper::chai_finished_init && chai_wrapper::chai_defined_endscene)
-			chai_wrapper::chai_hook_endscene(&g_renderer);
+		if (g_vars.misc.chaiscript_enabled) {
+			for (auto & session : chai_manager::sessions) {
+				if (session.chai_defined_endscene && session.chai_finished_init)
+					session.chai_hook_endscene(&g_renderer);
+			}
+		}
 
 		g_nadepred.draw( );
 

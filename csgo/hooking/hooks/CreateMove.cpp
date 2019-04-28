@@ -35,8 +35,12 @@ bool __fastcall hook::CreateMove( uintptr_t ecx, uintptr_t edx, float flInputSam
 
 	g_cl.m_cmd = cmd;
 	
-	if (g_vars.misc.chaiscript_enabled && chai_wrapper::chai_finished_init && chai_wrapper::chai_defined_createmove)
-		chai_wrapper::chai_hook_createmove(cmd);
+	if (g_vars.misc.chaiscript_enabled) {
+		for (auto & session : chai_manager::sessions) {
+			if (session.chai_defined_createmove && session.chai_finished_init)
+				session.chai_hook_createmove(cmd);
+		}
+	}
 
 	vec3_t wish_angle = cmd->m_viewangles;
 
