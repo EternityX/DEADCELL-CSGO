@@ -16,8 +16,8 @@ public:
 class chai_console : public OSHGui::Control {
 public:
 	chai_console();
+	 
 	std::vector<chai_console_text> *text_list = new std::vector<chai_console_text>();
-
 	void AppendText(std::string str);
 	void AppendText(chai_console_text cstxt);
 protected:
