@@ -7,6 +7,7 @@ namespace hook {
 	namespace fn {
 		using Present_t = HRESULT (__stdcall *)( IDirect3DDevice9Ex *, const RECT *, const RECT *, HWND, const RGNDATA * );
 		using Reset_t = HRESULT (__stdcall *)( IDirect3DDevice9Ex *, D3DPRESENT_PARAMETERS * );
+		using ResetEx_t = HRESULT(__stdcall *)( IDirect3DDevice9Ex *, D3DPRESENT_PARAMETERS *, D3DDISPLAYMODEEX * );
 		using EndScene_t = HRESULT (__stdcall *)( IDirect3DDevice9Ex * );
 		using PaintTraverse_t = void (__thiscall *)( uintptr_t, int, bool, bool );
 		using LevelInitPostEntity_t = void (__thiscall *)( uintptr_t );
@@ -37,6 +38,7 @@ namespace hook {
 		RESET =						16,
 		PRESENT =					17,
 		END_SCENE =					42,
+		RESETEX =					132,
 
 		// clientmode
 		SHOULD_DRAW_FOG =			17,
@@ -84,6 +86,7 @@ namespace hook {
 	HRESULT __stdcall Present( IDirect3DDevice9Ex *device, const RECT *pSourceRect, const RECT *pDestRect,
 	                           HWND hDestWindowOverride, const RGNDATA *pDirtyRegion );
 	HRESULT __stdcall Reset( IDirect3DDevice9Ex *device, D3DPRESENT_PARAMETERS *pPresentationParameters );
+	HRESULT __stdcall ResetEx(IDirect3DDevice9Ex *device, D3DPRESENT_PARAMETERS *pPresentationParameters, D3DDISPLAYMODEEX *pFullscreenDisplayMode );
 	HRESULT __stdcall EndScene( IDirect3DDevice9Ex *device );
 	void __stdcall LockCursor( );
 	void __fastcall PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel, bool forceRepaint, bool allowForce );
