@@ -67,6 +67,11 @@ bool c_hooks::hook( ) {
 		return false;
 	}
 
+	if (!m_directx.hook_method(hook::idx::RESETEX, &hook::ResetEx)) {
+		_RPTF0(_CRT_ERROR, "Failed to hook ResetEx. This is fatal.");
+		return false;
+	}
+
 	if( !m_directx.hook_method( hook::idx::END_SCENE, &hook::EndScene ) ) {
 		_RPTF0( _CRT_ERROR, "Failed to hook EndScene. This is fatal." );
 		return false;

@@ -56,6 +56,7 @@
     <ClCompile Include="csgo\hooking\hooks\Present.cpp" />
     <ClCompile Include="csgo\hooking\hooks\RenderSmokeOverlay.cpp" />
     <ClCompile Include="csgo\hooking\hooks\Reset.cpp" />
+    <ClCompile Include="csgo\hooking\hooks\ResetEx.cpp" />
     <ClCompile Include="csgo\hooking\hooks\SceneEnd.cpp" />
     <ClCompile Include="csgo\hooking\hooks\SetupBones.cpp" />
     <ClCompile Include="csgo\hooking\hooks\ShouldDrawFog.cpp" />
