@@ -1106,7 +1106,15 @@ void c_chaiscript_form::init_component()
 
 void c_chaiscript_form::submit_code() {
 	console_text->AppendText(text_input->GetText());
-	chai_manager::sessions.at(current_selection).chai_loadscript(text_input->GetText());
+	std::string text = text_input->GetText();
+	if (text[0] == 'l' && text[1] == 'o' && text[2] == 'a' && text[3] == 'd' && text[4] == ' ') { // check if first 5 characters spell "load "
+		std::string location = text.substr(5);
+		chai_manager::sessions.at(current_selection).chai_load(location);
+	}
+	else {
+		chai_manager::sessions.at(current_selection).chai_loadscript(text);
+		
+	}
 	text_input->SetText("");
 	console_text->Invalidate();
 }
