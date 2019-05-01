@@ -101,7 +101,7 @@ public:
 	void set_local_viewangles( vec3_t &angle ) {
 		//  (*(*player + 1468))(player, &cmd->viewangles);
 		using fnSetLocalViewAngles = void( __thiscall * )( void *, vec3_t & );
-		util::misc::vfunc< fnSetLocalViewAngles >( this, 367 )( this, angle );
+		util::misc::vfunc< fnSetLocalViewAngles >( this, 369 )( this, angle );
 	}
 
 	bool physics_run_think( int unk01 ) {
@@ -118,15 +118,11 @@ public:
 	}
 
 	void pre_think( ) {
-		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 312 )( this );
+		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 314 )( this );
 	}
 
 	void post_think( ) {
 		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 313 )( this );
-	}
-
-	void select_item( const char *name, int a2 ){
-		util::misc::vfunc< void( __thiscall * )( void *, const char *, int ) >( this, 323 )( this, name, a2 );
 	}
 
 	var_mapping_t* var_mapping( ) {
@@ -241,7 +237,7 @@ public:
 	NETVAR( bool, client_side_anims, "DT_BaseAnimating", "m_bClientSideAnimation" );
 	NETVAR( int, hitbox_set, "DT_BaseAnimating", "m_nHitboxSet" );
 
-	VFUNC( 219, update_anims(), void( __thiscall* )( void* ) )( )
+	VFUNC( 221, update_anims(), void( __thiscall* )( void* ) )( )
 };
 
 class c_csplayer : public c_base_animating {
