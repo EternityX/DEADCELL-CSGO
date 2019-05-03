@@ -167,9 +167,6 @@ void c_event_listener::fire_game_event( i_game_event *m_event ) {
 				if( g_vars.misc.log_damage )
 					g_notify.add( true, OSHGui::Drawing::Color::FromARGB( 220, 249, 44, 69 ), "hit %s in the %s for %i damage.", s.c_str( ),
 						hitgroup_to_name( m_event->get_int( "hitgroup" ) ), m_event->get_int( "dmg_health" ) );
-
-				if( g_vars.misc.client_hitboxes )
-					g_misc.capsule_overlay( ent, g_vars.misc.client_hitboxes_duration, ent->bone_cache( ).base( ) );
 			}
 		}
 	}
