@@ -6,6 +6,4 @@ void __fastcall hook::DrawModelExecute( uintptr_t ecx, uintptr_t edx, IMatRender
 
 	g_chams.on_dme( ecx, ctx, state, pInfo, pCustomBoneToWorld, original );
 	original( ecx, ctx, state, pInfo, pCustomBoneToWorld );
-
-	g_csgo.m_model_render->forced_material_override( nullptr );
 }

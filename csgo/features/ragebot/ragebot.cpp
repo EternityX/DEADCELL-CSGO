@@ -338,6 +338,9 @@ void c_ragebot::choose_angles( ) {
 		if( !g_vars.rage.silent )
 			g_csgo.m_engine->set_viewangles( m_cmd->m_viewangles );
 
+		if( g_vars.misc.client_hitboxes )
+			g_misc.capsule_overlay( selected_target, g_vars.misc.client_hitboxes_duration, best_record.m_matrix );
+
 		g_backtrack.process_cmd( m_cmd, selected_target, best_record );
 	}
 }
