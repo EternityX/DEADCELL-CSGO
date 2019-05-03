@@ -73,7 +73,7 @@ public:
 			float reflectivity;
 			float luminance;
 			bool blend_scope;
-			float vis_color[ 4 ] = { 220, 255, 0, 0 };
+			float vis_color[ 4 ] = { 220, 206, 115, 136 };
 			float hid_color[ 4 ] = { 220, 255, 255, 255 };
 			bool local;
 			float local_col[ 4 ] = { 220, 206, 115, 136 };

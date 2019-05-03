@@ -161,7 +161,10 @@ void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &rec
 		cmd->m_tick_count = TIME_TO_TICKS( e->simtime( ) );
 	}
 	else {
-		g_notify.add( true, OSHColor::Red( ), "shot at backtrack record ( player %s, %i ticks ).", e->get_info( ).m_player_name, cmd->m_tick_count - TIME_TO_TICKS( record.m_simtime ) );
+		std::string name = e->get_info( ).m_player_name;
+		std::transform( name.begin( ) , name.end( ), name.begin( ), ::tolower );
+
+		g_notify.add( true, OSHColor::FromARGB( 220, 249, 44, 69 ), "fired shot at backtrack record ( player %s, %i ticks ).", e->get_info( ).m_player_name, cmd->m_tick_count - TIME_TO_TICKS( record.m_simtime ) );
 		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
 	}
 }

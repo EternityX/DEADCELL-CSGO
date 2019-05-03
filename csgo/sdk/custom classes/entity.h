@@ -40,11 +40,11 @@ public:
 	}
 
 	bool is_player( ) {
-		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 153 )( this );
+		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 155 )( this );
 	}
 
 	bool is_weapon( ) {
-		return util::misc::vfunc< bool(__thiscall*)( void * ) >( this, 162 )( this );
+		return util::misc::vfunc< bool(__thiscall*)( void * ) >( this, 164 )( this );
 	}
 
 	bool is_valid_world( bool check_dormant ) {
@@ -205,11 +205,11 @@ public:
 	}
 
 	float spread( ) {
-		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 440 )( this );
+		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 446 )( this );
 	}
 
 	float inaccuracy( ) {
-		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 471 )( this );
+		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 476 )( this );
 	}
 
 	void update_accuracy( ) {
@@ -326,7 +326,7 @@ public:
 		vec3_t vec{ };
 
 		util::misc::vfunc< void( __thiscall *)( void *, vec3_t & ) >
-			( this, 279 )( this, vec );
+			( this, 281 )( this, vec );
 
 		return vec;
 	}

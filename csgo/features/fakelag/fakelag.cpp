@@ -12,11 +12,11 @@ void c_fakelag::think( c_user_cmd* cmd ) {
 	if( g_vars.misc.fakelag.enabled ) {
 		switch( g_vars.misc.fakelag.type ) {
 			case 0:{ // Maximum
-				choke = std::min< int >( g_vars.misc.fakelag.amount + 1, 14 );
+				choke = std::min< int >( g_vars.misc.fakelag.amount, 14 );
 				break;
 			}
 			case 1: { // Adaptive
-				choke = std::min< int >( static_cast< int >( std::ceilf( 64 / ( g_cl.m_local->velocity( ).length( ) * g_csgo.m_global_vars->m_interval_per_tick ) ) ), g_vars.misc.fakelag.amount + 1 );
+				choke = std::min< int >( static_cast< int >( std::ceilf( 64 / ( g_cl.m_local->velocity( ).length( ) * g_csgo.m_global_vars->m_interval_per_tick ) ) ), g_vars.misc.fakelag.amount );
 				break;
 			}
 		}
