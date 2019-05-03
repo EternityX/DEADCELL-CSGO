@@ -4,7 +4,14 @@
 struct lag_record_t {
 	lag_record_t( ) : m_bonecount{ 0 }, m_simtime{ 0.f }, m_lby{ 0.f }{ }
 
-	lag_record_t( c_csplayer* player ) : m_priority{ 0 } {
+	lag_record_t( c_csplayer* player, std::deque< lag_record_t > records ) : m_priority{ 0 } {
+
+		if ( !records.empty( ) ) {
+			m_prev_record = &records.front( );
+		}
+		else {
+			m_prev_record = nullptr;
+		}
 
 		std::memcpy( m_matrix, player->bone_cache( ).base( ), player->get_bone_count( ) * sizeof( matrix3x4_t ) );
 
@@ -42,6 +49,8 @@ struct lag_record_t {
 	vec3_t m_vel;
 
 	matrix3x4_t m_matrix[ 128 ];
+
+	lag_record_t* m_prev_record;
 };
 
 struct player_log_t {

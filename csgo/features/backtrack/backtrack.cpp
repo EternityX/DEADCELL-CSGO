@@ -75,7 +75,7 @@ void c_backtrack::log( ){
 
 			update_animation_data( e );
 
-			auto lag_record = lag_record_t( e );
+			auto lag_record = lag_record_t( e, entry->m_records );
 
 			// only push valid records.
 			if ( lag_record.is_valid( ) ) {
@@ -134,6 +134,7 @@ void c_backtrack::update_animation_data( c_csplayer *e ){
 
 	e->abs_velocity( ) = e->velocity( );
 
+
 	int last_update = animstate->last_client_side_animation_update_framecount;
 	if ( last_update == g_csgo.m_global_vars->m_frame_count )
 		animstate->last_client_side_animation_update_framecount = last_update - 1;
@@ -164,7 +165,14 @@ void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &rec
 		std::string name = e->get_info( ).m_player_name;
 		std::transform( name.begin( ) , name.end( ), name.begin( ), ::tolower );
 
-		g_notify.add( true, OSHColor::FromARGB( 220, 249, 44, 69 ), "fired shot at backtrack record ( player %s, %i ticks ).", e->get_info( ).m_player_name, cmd->m_tick_count - TIME_TO_TICKS( record.m_simtime ) );
+		int ticks_choked = TIME_TO_TICKS( record.m_simtime - record.m_prev_record->m_simtime );
+
+		// possible fix for the negative backtrack ticks
+		float corrected_simtime = record.m_simtime + TICKS_TO_TIME( ticks_choked );
+
+		g_notify.add( true, OSHColor::FromARGB( 220, 249, 44, 69 ), "fired shot at backtrack record ( player %s, %i ticks, %i choked ).",
+			e->get_info( ).m_player_name, cmd->m_tick_count - corrected_simtime, ticks_choked );
+
 		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
 	}
 }

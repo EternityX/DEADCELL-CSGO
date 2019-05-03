@@ -113,4 +113,16 @@ struct c_animstate {
 	float velocity_subtract_z; //0x0338 
 	float standing_head_height; //0x033C 
 	char pad_0x0340[0x4]; //0x0340
+
+
+	void update( float y, float x ){
+		static auto update = pattern::find( "client_panorama.dll", "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54" );
+
+		_asm {
+			mov ecx, this
+			movss xmm1, y
+			movss xmm2, x
+			call update
+		}
+	}
 }; //Size=0x0344

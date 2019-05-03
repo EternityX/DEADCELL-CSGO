@@ -24,4 +24,7 @@ void __fastcall hook::PaintTraverse( uintptr_t ecx, uintptr_t edx, int vguiPanel
 
 	if( vguiPanel != mat_system_panel )
 		return;
+
+	g_csgo.m_surface->draw_set_color( Color( 0, 0, 0, 255 ) );
+	g_csgo.m_surface->draw_filled_rect( 1, 1, 1, 1 );
 }
