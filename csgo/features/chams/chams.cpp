@@ -96,8 +96,9 @@ void c_chams::on_sceneend( ) {
 		}
 
 		g_csgo.m_render_view->set_blend( g_vars.visuals.chams.alpha / 100.f );
+		g_csgo.m_render_view->set_color_modulation( vis_color );
 		g_csgo.m_model_render->forced_material_override( material.first );
-		g_csgo.m_render_view->set_color_modulation( vis_color );	
+		g_csgo.m_model_render->forced_material_override( material.first );
 		ent->draw_model( STUDIO_RENDER, 255 );
 	}
 
