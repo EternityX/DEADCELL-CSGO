@@ -213,7 +213,7 @@ public:
 	}
 
 	void update_accuracy( ) {
-		return util::misc::vfunc< void( __thiscall *)( void * ) >( this, 472 )( this );
+		return util::misc::vfunc< void( __thiscall *)( void * ) >( this, 477 )( this );
 	}
 };
 
