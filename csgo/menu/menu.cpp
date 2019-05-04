@@ -18,29 +18,29 @@ c_menu::c_menu( )
 	: m_control_x_pos{ default_x_pos }, m_control_y_pos{ default_y_pos } { }
 
 void c_menu::init( ) {
-	m_form = std::static_pointer_cast<OSHGui::Form>(std::make_shared< c_main_form >());
-	m_form->SetFont(g_renderer.get_instance()->GetDefaultFont());
+	m_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_main_form >( ) );
+	m_form->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
-	m_dangerzone_form = std::static_pointer_cast<OSHGui::Form>(std::make_shared< c_dangerzone_form >());
-	m_dangerzone_form->SetFont(g_renderer.get_instance()->GetDefaultFont());
+	m_dangerzone_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_dangerzone_form >( ) );
+	m_dangerzone_form->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
-	m_chaiscript_form = std::static_pointer_cast<OSHGui::Form>(std::make_shared< c_chaiscript_form >());
-	m_chaiscript_form->SetFont(g_renderer.get_instance()->GetDefaultFont());
+	m_chaiscript_form = std::static_pointer_cast< OSHGui::Form >( std::make_shared< c_chaiscript_form >( ) );
+	m_chaiscript_form->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
 
-	g_renderer.get_instance()->Run(m_form);
+	g_renderer.get_instance( )->Run( m_form );
 
-	m_dangerzone_form->SetEnabled(true);
-	m_dangerzone_form->SetVisible(g_vars.misc.dangerzone_menu);
-	m_dangerzone_form->SetLocation(50, 500);
+	m_dangerzone_form->SetEnabled( true );
+	m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
+	m_dangerzone_form->SetLocation( 50, 500 );
 
-	m_chaiscript_form->SetEnabled(true);
-	m_chaiscript_form->SetVisible(g_vars.misc.chaiscript_enabled);
-	m_chaiscript_form->SetLocation(50, 500);
+	m_chaiscript_form->SetEnabled( true );
+	m_chaiscript_form->SetVisible( g_vars.misc.chaiscript_enabled );
+	m_chaiscript_form->SetLocation( 50, 500 );
 
-	m_form->Show(m_dangerzone_form);
-	m_form->Show(m_chaiscript_form);
+	m_form->Show( m_dangerzone_form );
+	m_form->Show( m_chaiscript_form );
 
-	g_renderer.get_instance()->Enable();
+	g_renderer.get_instance( )->Enable( );
 }
 
 /* CONTROL PLACEMENT */
@@ -111,113 +111,113 @@ void c_main_form::init_tabs( ) {
 
 void c_main_form::playerlist_tab( ) { }
 
-std::vector<std::string> get_antiaims(const std::string dir, std::vector<std::string> &vec) {
-	std::vector<std::string> str_list = vec;
-	for (auto &file_path : std::experimental::filesystem::directory_iterator(dir)) {
-		if (file_path.path().string().empty())
+std::vector< std::string > get_antiaims( const std::string dir, std::vector< std::string > &vec ) {
+	std::vector< std::string > str_list = vec;
+	for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
+		if( file_path.path( ).string( ).empty( ) )
 			continue;
 
-		if (file_path.path().string().find('.') != std::string::npos)
+		if( file_path.path( ).string( ).find( '.' ) != std::string::npos )
 			continue;
 
-		std::string file_name = file_path.path().string().erase(0, dir.length() + 1);
-		str_list.push_back(file_name);
+		std::string file_name = file_path.path( ).string( ).erase( 0, dir.length( ) + 1 );
+		str_list.push_back( file_name );
 	}
 
 	return str_list;
 }
 
-void c_main_form::ragebot_tab() {
-	auto aimbot_tab = new OSHGui::TabControl();
-	aimbot_tab->SetSize(241, 310);
-	aimbot_tab->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	aimbot_tab->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	aimbot_tab->SetButtonWidth(121);
+void c_main_form::ragebot_tab( ) {
+	auto aimbot_tab = new OSHGui::TabControl( );
+	aimbot_tab->SetSize( 241, 310 );
+	aimbot_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	aimbot_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	aimbot_tab->SetButtonWidth( 121 );
 
-	auto aimbot_page = new OSHGui::TabPage();
-	aimbot_page->SetText("General");
-	aimbot_page->SetBorder(false);
+	auto aimbot_page = new OSHGui::TabPage( );
+	aimbot_page->SetText( "General" );
+	aimbot_page->SetBorder( false );
 
-	auto target_page = new OSHGui::TabPage();
-	target_page->SetText("Target");
-	target_page->SetBorder(false);
+	auto target_page = new OSHGui::TabPage( );
+	target_page->SetText( "Target" );
+	target_page->SetBorder( false );
 
-	aimbot_tab->AddTabPage(aimbot_page);
-	aimbot_tab->AddTabPage(target_page);
+	aimbot_tab->AddTabPage( aimbot_page );
+	aimbot_tab->AddTabPage( target_page );
 
-	auto aimbot_groupbox = new c_groupbox("Ragebot", 17, 6, 260, 334);
-	aimbot_groupbox->AddControl(aimbot_tab);
+	auto aimbot_groupbox = new c_groupbox( "Ragebot", 17, 6, 260, 334 );
+	aimbot_groupbox->AddControl( aimbot_tab );
 
-	g_menu.set_x_pos(19);
+	g_menu.set_x_pos( 19 );
 
-	auto enabled = new c_checkbox("Enabled", aimbot_page, &g_vars.rage.enabled);
+	auto enabled = new c_checkbox( "Enabled", aimbot_page, &g_vars.rage.enabled );
 	//auto activation_hotkey = new c_hotkey( "Activation key", aimbot_page, &g_vars.visuals.activation_key, aimbot_groupbox->GetWidth() - 15 );
-	auto teammate = new c_checkbox("Teammate", aimbot_page, &g_vars.rage.teammate);
-	auto silent = new c_checkbox("Silent", aimbot_page, &g_vars.rage.silent);
-	auto autofire = new c_checkbox("Auto fire", aimbot_page, &g_vars.rage.auto_fire);
-	auto autostop = new c_checkbox("Quickstop", aimbot_page, &g_vars.rage.autostop);
-	auto autoscope = new c_combo("Automatic scope", { "Off", "Always on", "Hitchance fail" }, aimbot_page, 4, &g_vars.rage.autoscope, aimbot_groupbox->GetWidth() - 15);
-	auto save_fps = new c_checkbox("Check bounding box", aimbot_page, &g_vars.rage.save_fps);
-	auto bodyaim_lethal = new c_checkbox("Bodyaim if lethal", aimbot_page, &g_vars.rage.bodyaim_lethal);
-	auto bodyaim_prefer = new c_checkbox("Prefer bodyaim", aimbot_page, &g_vars.rage.prefer_bodyaim);
+	auto teammate = new c_checkbox( "Teammate", aimbot_page, &g_vars.rage.teammate );
+	auto silent = new c_checkbox( "Silent", aimbot_page, &g_vars.rage.silent );
+	auto autofire = new c_checkbox( "Auto fire", aimbot_page, &g_vars.rage.auto_fire );
+	auto autostop = new c_checkbox( "Quickstop", aimbot_page, &g_vars.rage.autostop );
+	auto autoscope = new c_combo( "Automatic scope", { "Off", "Always on", "Hitchance fail" }, aimbot_page, 4, &g_vars.rage.autoscope, aimbot_groupbox->GetWidth( ) - 15 );
+	auto save_fps = new c_checkbox( "Check bounding box", aimbot_page, &g_vars.rage.save_fps );
+	auto bodyaim_lethal = new c_checkbox( "Bodyaim if lethal", aimbot_page, &g_vars.rage.bodyaim_lethal );
+	auto bodyaim_prefer = new c_checkbox( "Prefer bodyaim", aimbot_page, &g_vars.rage.prefer_bodyaim );
 
-	g_menu.set_y_pos(10);
-	g_menu.set_x_pos(38);
-	auto selection = new c_combo("Target selection", { "Highest damage", "Closest distance", "Cycle" }, target_page, 4, &g_vars.rage.target_selection, aimbot_groupbox->GetWidth() - 15);
-	auto head_check = new c_checkbox("Head", target_page, &g_vars.rage.hitbox_head);
-	g_menu.set_x_pos(125);
-	g_menu.push_y_pos(-18);
-	auto body_check = new c_checkbox("Body", target_page, &g_vars.rage.hitbox_pelvis);
-	g_menu.set_x_pos(38);
-	auto arms_check = new c_checkbox("Arms", target_page, &g_vars.rage.hitbox_arms);
-	g_menu.set_x_pos(125);
-	g_menu.push_y_pos(-18);
-	auto legs_check = new c_checkbox("Legs", target_page, &g_vars.rage.hitbox_legs);
-	auto primaryhitbox = new c_combo("Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 5, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth() - 15);
-	g_menu.set_x_pos(38);
-	auto dynamic_hitbox = new c_checkbox("Dynamic scanning", target_page, &g_vars.rage.dynamic_hitbox);
-	auto nigger = new c_checkbox("Selectively multipoint records", target_page, &g_vars.rage.selectively_multipoint_records);
-	auto multipoint_head_check = new c_checkbox("Scan head", target_page, &g_vars.rage.head);
-	g_menu.set_x_pos(125);
-	g_menu.push_y_pos(-18);
-	auto multipoint_body_check = new c_checkbox("Scan body", target_page, &g_vars.rage.pelvis);
-	g_menu.set_x_pos(38);
-	auto multipoint_arms_check = new c_checkbox("Scan arms", target_page, &g_vars.rage.arms);
-	g_menu.set_x_pos(125);
-	g_menu.push_y_pos(-18);
-	auto multipoint_legs_check = new c_checkbox("Scan legs", target_page, &g_vars.rage.legs);
-	g_menu.set_x_pos(19);
-	auto pointscame = new c_slider("Multipoint scale", target_page, 0.f, 100.f, &g_vars.rage.pointscale, 0, 100.f, "%");
-	auto hitchance = new c_slider("Hitchance", target_page, 0, 100, &g_vars.rage.hitchance, 0, "%");
-	auto min_dmg = new c_slider("Minimum damage", target_page, 0, 100, &g_vars.rage.min_dmg, 0, "");
+	g_menu.set_y_pos( 10 );
+	g_menu.set_x_pos( 38 );
+	auto selection = new c_combo( "Target selection", { "Highest damage", "Closest distance", "Cycle" }, target_page, 4, &g_vars.rage.target_selection, aimbot_groupbox->GetWidth( ) - 15 );
+	auto head_check = new c_checkbox( "Head", target_page, &g_vars.rage.hitbox_head );
+	g_menu.set_x_pos( 125 );
+	g_menu.push_y_pos( -18 );
+	auto body_check = new c_checkbox( "Body", target_page, &g_vars.rage.hitbox_pelvis );
+	g_menu.set_x_pos( 38 );
+	auto arms_check = new c_checkbox( "Arms", target_page, &g_vars.rage.hitbox_arms );
+	g_menu.set_x_pos( 125 );
+	g_menu.push_y_pos( -18 );
+	auto legs_check = new c_checkbox( "Legs", target_page, &g_vars.rage.hitbox_legs );
+	auto primaryhitbox = new c_combo( "Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 5, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth( ) - 15 );
+	g_menu.set_x_pos( 38 );
+	auto dynamic_hitbox = new c_checkbox( "Dynamic scanning", target_page, &g_vars.rage.dynamic_hitbox );
+	auto nigger = new c_checkbox( "Selectively multipoint records", target_page, &g_vars.rage.selectively_multipoint_records );
+	auto multipoint_head_check = new c_checkbox( "Scan head", target_page, &g_vars.rage.head );
+	g_menu.set_x_pos( 125 );
+	g_menu.push_y_pos( -18 );
+	auto multipoint_body_check = new c_checkbox( "Scan body", target_page, &g_vars.rage.pelvis );
+	g_menu.set_x_pos( 38 );
+	auto multipoint_arms_check = new c_checkbox( "Scan arms", target_page, &g_vars.rage.arms );
+	g_menu.set_x_pos( 125 );
+	g_menu.push_y_pos( -18 );
+	auto multipoint_legs_check = new c_checkbox( "Scan legs", target_page, &g_vars.rage.legs );
+	g_menu.set_x_pos( 19 );
+	auto pointscame = new c_slider( "Multipoint scale", target_page, 0.f, 100.f, &g_vars.rage.pointscale, 0, 100.f, "%" );
+	auto hitchance = new c_slider( "Hitchance", target_page, 0, 100, &g_vars.rage.hitchance, 0, "%" );
+	auto min_dmg = new c_slider( "Minimum damage", target_page, 0, 100, &g_vars.rage.min_dmg, 0, "" );
 
-	auto antiaim_tab = new OSHGui::TabControl();
-	antiaim_tab->SetSize(241, 310);
-	antiaim_tab->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	antiaim_tab->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	antiaim_tab->SetButtonWidth(121);
+	auto antiaim_tab = new OSHGui::TabControl( );
+	antiaim_tab->SetSize( 241, 310 );
+	antiaim_tab->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	antiaim_tab->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	antiaim_tab->SetButtonWidth( 121 );
 
-	auto antiaim_page = new OSHGui::TabPage();
-	antiaim_page->SetText("Anti-aim");
-	antiaim_page->SetBorder(false);
+	auto antiaim_page = new OSHGui::TabPage( );
+	antiaim_page->SetText( "Anti-aim" );
+	antiaim_page->SetBorder( false );
 
-	auto fakelag_page = new OSHGui::TabPage();
-	fakelag_page->SetText("Fake lag");
-	fakelag_page->SetBorder(false);
+	auto fakelag_page = new OSHGui::TabPage( );
+	fakelag_page->SetText( "Fake lag" );
+	fakelag_page->SetBorder( false );
 
-	antiaim_tab->AddTabPage(antiaim_page);
-	antiaim_tab->AddTabPage(fakelag_page);
+	antiaim_tab->AddTabPage( antiaim_page );
+	antiaim_tab->AddTabPage( fakelag_page );
 
-	auto antiaim_groupbox = new c_groupbox("Anti-aim", aimbot_groupbox->GetRight() + 19, 6, 260, 334);
-	antiaim_groupbox->AddControl(antiaim_tab);
-	g_menu.set_x_pos(19);
+	auto antiaim_groupbox = new c_groupbox( "Anti-aim", aimbot_groupbox->GetRight( ) + 19, 6, 260, 334 );
+	antiaim_groupbox->AddControl( antiaim_tab );
+	g_menu.set_x_pos( 19 );
 
-	std::vector< std::string > output{ };
+	std::vector< std::string > output{};
 
 	std::vector< std::string > yaw_vec = { "Off", "180" };
 	std::vector< std::string > pitch_vec = { "Off", "Default" };
-	yaw_vec = get_antiaims("profiles//aa//y", yaw_vec);
-	pitch_vec = get_antiaims("profiles//aa//x", pitch_vec);
+	yaw_vec = get_antiaims( "profiles//aa//y", yaw_vec );
+	pitch_vec = get_antiaims( "profiles//aa//x", pitch_vec );
 
 	chai_manager::chai_aa_yaw = yaw_vec;
 	chai_manager::chai_aa_pitch = pitch_vec;
@@ -225,7 +225,7 @@ void c_main_form::ragebot_tab() {
 	auto aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
 	auto pitch = new c_combo( "Pitch", pitch_vec, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth( ) - 15 );
 	auto yaw = new c_combo( "Yaw", yaw_vec, antiaim_page, 2, &g_vars.antiaim.yaw, antiaim_groupbox->GetWidth( ) - 15 );
-	auto switch1 = new c_hotkey("Switch AA", antiaim_page, &g_vars.antiaim.side_switch_key, antiaim_groupbox->GetWidth() - 15);
+	auto switch1 = new c_hotkey( "Switch AA", antiaim_page, &g_vars.antiaim.side_switch_key, antiaim_groupbox->GetWidth( ) - 15 );
 	//auto jitter = new c_slider( "", antiaim_page, -60.f, 60.f, &g_vars.antiaim.jitter, 0, 0.f, u8"�" );
 
 	g_menu.set_y_pos( 10 );
@@ -432,11 +432,11 @@ void c_main_form::misc_tab( ) {
 	dangerzone_check->GetCheckedChangedEvent( ) += OSHGui::CheckedChangedEventHandler( [ & ]( Control *sender ) {
 		g_menu.m_dangerzone_form->SetVisible( g_vars.misc.dangerzone_menu );
 	} );
-	
-	auto chaiscript_check = new c_checkbox("ChaiScript menu", generic_misc_page, &g_vars.misc.chaiscript_enabled);
-	chaiscript_check->GetCheckedChangedEvent() += OSHGui::CheckedChangedEventHandler([&](Control *sender) {
-		g_menu.m_chaiscript_form->SetVisible(g_vars.misc.chaiscript_enabled);
-	});
+
+	auto chaiscript_check = new c_checkbox( "ChaiScript menu", generic_misc_page, &g_vars.misc.chaiscript_enabled );
+	chaiscript_check->GetCheckedChangedEvent( ) += OSHGui::CheckedChangedEventHandler( [&]( Control *sender ) {
+		g_menu.m_chaiscript_form->SetVisible( g_vars.misc.chaiscript_enabled );
+	} );
 
 	auto sounds = new c_sound_combo( "Hitsound", { "None" }, generic_misc_page, 5, &g_vars.misc.hitmarker_sound, general_groupbox->GetWidth( ) - 15 );
 
@@ -1082,154 +1082,150 @@ c_slider::c_slider( const AnsiString &text, Control *parent, float min, float ma
 }
 
 // chai menu
-chai_console* console_text; 
+chai_console *console_text;
 int current_selection = 0;
 
-void print_to_console(chai_console_text str) {
+void print_to_console( chai_console_text str ) {
 	// this is so we can pass chaiscript this function to print to
-	console_text->AppendText(str);
-	console_text->Invalidate();
+	console_text->AppendText( str );
+	console_text->Invalidate( );
 }
 
-void c_chaiscript_form::update_label() {
-	label_console_pos->SetText(std::to_string(current_selection + 1) + " / " + std::to_string(chai_manager::sessions.size()));
+void c_chaiscript_form::update_label( ) {
+	label_console_pos->SetText( std::to_string( current_selection + 1 ) + " / " + std::to_string( chai_manager::sessions.size( ) ) );
 }
 
-void c_chaiscript_form::init_component()
-{
-	SetSize(SizeI(524, 400));
-	init_controls();
+void c_chaiscript_form::init_component( ) {
+	SetSize( SizeI( 524, 400 ) );
+	init_controls( );
 
-	controls::c_label *form_name = new controls::c_label("ChaiScript", this);
-	form_name->SetLocation(OSHGui::Drawing::PointI(6, -14));
+	controls::c_label *form_name = new controls::c_label( "ChaiScript", this );
+	form_name->SetLocation( OSHGui::Drawing::PointI( 6, -14 ) );
 }
 
-void c_chaiscript_form::submit_code() {
-	console_text->AppendText(text_input->GetText());
-	std::string text = text_input->GetText();
-	if (text[0] == 'l' && text[1] == 'o' && text[2] == 'a' && text[3] == 'd' && text[4] == ' ') { // check if first 5 characters spell "load "
-		std::string location = text.substr(5);
-		chai_manager::sessions.at(current_selection).chai_load(location);
+void c_chaiscript_form::submit_code( ) {
+	console_text->AppendText( text_input->GetText( ) );
+	std::string text = text_input->GetText( );
+	if( text[ 0 ] == 'l' && text[ 1 ] == 'o' && text[ 2 ] == 'a' && text[ 3 ] == 'd' && text[ 4 ] == ' ' ) {
+		// check if first 5 characters spell "load "
+		std::string location = text.substr( 5 );
+		chai_manager::sessions.at( current_selection ).chai_load( location );
 	}
 	else {
-		chai_manager::sessions.at(current_selection).chai_loadscript(text);
-		
+		chai_manager::sessions.at( current_selection ).chai_loadscript( text );
+
 	}
-	text_input->SetText("");
-	console_text->Invalidate();
+	text_input->SetText( "" );
+	console_text->Invalidate( );
 }
 
-void c_chaiscript_form::init_controls()
-{
+void c_chaiscript_form::init_controls( ) {
 	// textbox for input to chaiscript
-	label_console_pos = new OSHGui::Label();
-	text_input = new OSHGui::TextBox();
-	text_input->SetSize(438, 21);
-	text_input->SetLocation(7, 343);
-	text_input->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	text_input->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	text_input->SetText("");
+	label_console_pos = new OSHGui::Label( );
+	text_input = new OSHGui::TextBox( );
+	text_input->SetSize( 438, 21 );
+	text_input->SetLocation( 7, 343 );
+	text_input->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	text_input->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	text_input->SetText( "" );
 	// button to send input to chaiscript
-	auto text_input_submit = new OSHGui::Button();
-	text_input_submit->SetSize(60, 20);
-	text_input_submit->SetLocation(445, 343);
-	text_input_submit->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	text_input_submit->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	text_input_submit->SetText("Submit");
+	auto text_input_submit = new OSHGui::Button( );
+	text_input_submit->SetSize( 60, 20 );
+	text_input_submit->SetLocation( 445, 343 );
+	text_input_submit->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	text_input_submit->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	text_input_submit->SetText( "Submit" );
 
-	auto button_input_remove = new OSHGui::Button();
-	button_input_remove->SetSize(20, 20);
-	button_input_remove->SetLocation(3, 367);
-	button_input_remove->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	button_input_remove->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	button_input_remove->SetText("-");
+	auto button_input_remove = new OSHGui::Button( );
+	button_input_remove->SetSize( 20, 20 );
+	button_input_remove->SetLocation( 3, 367 );
+	button_input_remove->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	button_input_remove->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	button_input_remove->SetText( "-" );
 
-	auto button_input_add = new OSHGui::Button();
-	button_input_add->SetSize(20, 20);
-	button_input_add->SetLocation(26, 367);
-	button_input_add->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	button_input_add->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	button_input_add->SetText("+");
+	auto button_input_add = new OSHGui::Button( );
+	button_input_add->SetSize( 20, 20 );
+	button_input_add->SetLocation( 26, 367 );
+	button_input_add->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	button_input_add->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	button_input_add->SetText( "+" );
 
-	auto button_input_left = new OSHGui::Button();
-	button_input_left->SetSize(20, 20);
-	button_input_left->SetLocation(49, 367);
-	button_input_left->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	button_input_left->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	button_input_left->SetText("<");
+	auto button_input_left = new OSHGui::Button( );
+	button_input_left->SetSize( 20, 20 );
+	button_input_left->SetLocation( 49, 367 );
+	button_input_left->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	button_input_left->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	button_input_left->SetText( "<" );
 
-	auto button_input_right = new OSHGui::Button();
-	button_input_right->SetSize(20, 20);
-	button_input_right->SetLocation(72, 367);
-	button_input_right->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	button_input_right->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	button_input_right->SetText(">");
+	auto button_input_right = new OSHGui::Button( );
+	button_input_right->SetSize( 20, 20 );
+	button_input_right->SetLocation( 72, 367 );
+	button_input_right->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	button_input_right->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	button_input_right->SetText( ">" );
 
-	label_console_pos->SetLocation(120, 373);
-	label_console_pos->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	label_console_pos->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	label_console_pos->SetText("1 / 1");
+	label_console_pos->SetLocation( 120, 373 );
+	label_console_pos->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	label_console_pos->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	label_console_pos->SetText( "1 / 1" );
 
 	// console to display output from chaiscript
-	console_text = new chai_console();
-	console_text->SetSize(497, 320);
-	console_text->SetLocation(3, 3);
-	console_text->SetBackColor(OSHGui::Drawing::Color::FromARGB(255, 27, 27, 34));
-	console_text->SetFont(g_renderer.get_instance()->GetDefaultFont());
-	console_text->SetForeColor(OSHGui::Drawing::Color::FromRGB(255, 255, 255));
+	console_text = new chai_console( );
+	console_text->SetSize( 497, 320 );
+	console_text->SetLocation( 3, 3 );
+	console_text->SetBackColor( OSHGui::Drawing::Color::FromARGB( 255, 27, 27, 34 ) );
+	console_text->SetFont( g_renderer.get_instance( )->GetDefaultFont( ) );
+	console_text->SetForeColor( OSHGui::Drawing::Color::FromRGB( 255, 255, 255 ) );
 
-	text_input_submit->GetClickEvent() += OSHGui::ClickEventHandler([this](Control *sender) {
-		c_chaiscript_form::submit_code();
-	});
-	button_input_add->GetClickEvent() += OSHGui::ClickEventHandler([this](Control *sender) {
+	text_input_submit->GetClickEvent( ) += OSHGui::ClickEventHandler( [this]( Control *sender ) {
+		c_chaiscript_form::submit_code( );
+	} );
+	button_input_add->GetClickEvent( ) += OSHGui::ClickEventHandler( [this]( Control *sender ) {
 		chai_wrapper base_wrapper;
 		base_wrapper.wrapper_name = "Session";
-		base_wrapper.chai_init();
-		chai_manager::sessions.push_back(base_wrapper);
+		base_wrapper.chai_init( );
+		chai_manager::sessions.push_back( base_wrapper );
 
-		chai_manager::sessions.at(chai_manager::sessions.size()-1).text_list = new std::vector<chai_console_text>();
-		update_label();
-	});
-	button_input_remove->GetClickEvent() += OSHGui::ClickEventHandler([this](Control *sender) {
+		chai_manager::sessions.at( chai_manager::sessions.size( ) - 1 ).text_list = new std::vector< chai_console_text >( );
+		update_label( );
+	} );
+	button_input_remove->GetClickEvent( ) += OSHGui::ClickEventHandler( [this]( Control *sender ) {
 		// add later
-		update_label();
-	});
-	button_input_right->GetClickEvent() += OSHGui::ClickEventHandler([this](Control *sender) {
-		console_text->Invalidate();
-		if (current_selection < chai_manager::sessions.size() - 1)
+		update_label( );
+	} );
+	button_input_right->GetClickEvent( ) += OSHGui::ClickEventHandler( [this]( Control *sender ) {
+		console_text->Invalidate( );
+		if( current_selection < chai_manager::sessions.size( ) - 1 )
 			current_selection++;
-		console_text->text_list = chai_manager::sessions.at(current_selection).text_list;
-		update_label();
-	});
-	button_input_left->GetClickEvent() += OSHGui::ClickEventHandler([this](Control *sender) {
-		console_text->Invalidate();
-		if (current_selection > 0)
+		console_text->text_list = chai_manager::sessions.at( current_selection ).text_list;
+		update_label( );
+	} );
+	button_input_left->GetClickEvent( ) += OSHGui::ClickEventHandler( [this]( Control *sender ) {
+		console_text->Invalidate( );
+		if( current_selection > 0 )
 			current_selection--;
-		console_text->text_list = chai_manager::sessions.at(current_selection).text_list;
-		update_label();
-	});
+		console_text->text_list = chai_manager::sessions.at( current_selection ).text_list;
+		update_label( );
+	} );
 
 	chai_wrapper base_wrapper;
 	base_wrapper.wrapper_name = "Session 1";
-	base_wrapper.chai_init();
-	chai_manager::sessions.push_back(base_wrapper);
+	base_wrapper.chai_init( );
+	chai_manager::sessions.push_back( base_wrapper );
 
-	chai_manager::sessions.at(0).text_list = new std::vector<chai_console_text>();
+	chai_manager::sessions.at( 0 ).text_list = new std::vector< chai_console_text >( );
 
-	console_text->text_list = chai_manager::sessions.at(0).text_list;
-	
+	console_text->text_list = chai_manager::sessions.at( 0 ).text_list;
 
-
-	
 	chai_manager::print_func = &print_to_console;
 
-	AddControl(text_input);
-	AddControl(text_input_submit);
-	AddControl(button_input_left);
-	AddControl(button_input_right);
-	AddControl(label_console_pos);
-	AddControl(console_text);
-	AddControl(button_input_remove);
-	AddControl(button_input_add);
+	AddControl( text_input );
+	AddControl( text_input_submit );
+	AddControl( button_input_left );
+	AddControl( button_input_right );
+	AddControl( label_console_pos );
+	AddControl( console_text );
+	AddControl( button_input_remove );
+	AddControl( button_input_add );
 }
 
