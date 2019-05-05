@@ -100,9 +100,9 @@ namespace OSHGui {
 	void TabPage::PopulateGeometry() {
 		using namespace Drawing;
 
-		Graphics g( *geometry_ );
-
 		if( !parent_->GetBackColor().IsTranslucent() ) {
+			Graphics g( *geometry_ );
+			
 			if( border_ )
 				g.FillRectangle( parent_->GetBackColor() + Color::FromARGB( 0, 32, 32, 42 ), PointF( 0, 0 ), GetSize() );
 			else

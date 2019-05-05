@@ -33,9 +33,9 @@ namespace OSHGui {
 	void Panel::PopulateGeometry() {
 		using namespace Drawing;
 
-		Graphics g( *geometry_ );
-
 		if( GetBackColor().GetAlpha() > 0 ) {
+			Graphics g( *geometry_ );
+			
 			g.FillRectangle( GetBackColor() - Color::FromARGB( 0, 100, 100, 110 ), GetBounds() );
 			const auto color = GetBackColor() - Color::FromARGB( 0, 90, 90, 100 );
 			g.FillRectangleGradient( ColorRectangle( GetBackColor(), GetBackColor(), color, color ),
