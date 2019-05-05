@@ -118,10 +118,10 @@ namespace OSHGui {
 			if( vertices.empty() ) {
 				return;
 			}
-
+			/*
 			std::vector< int > nodes;
 
-			/*auto size = texture->GetSize();
+			auto size = texture->GetSize();
 
 			for (int y = 0; y < size.Height; ++y)
 			{
