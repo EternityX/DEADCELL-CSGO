@@ -417,11 +417,11 @@ namespace OSHGui {
 
 		Graphics g( *geometry_ );
 
-		const auto color = isFocused_ || isInside_
+		if( active_ ) {
+			const auto color = isFocused_ || isInside_
 			                   ? Color::FromARGB( 255, 55, 55, 64 ) + GetMouseOverFocusColor()
 			                   : Color::FromARGB( 255, 55, 55, 64 );
-
-		if( active_ ) {
+			
 			g.FillRectangleGradient( Color::FromARGB( 255, 55, 55, 64 ), PointF( 0, 0 ), GetSize() );
 			g.FillRectangleGradient( ColorRectangle( color, Color::FromARGB( 255, 35, 35, 43 ) ), PointF( 1, 1 ),
 			                         GetSize() - SizeF( 2, 0 ) );
