@@ -171,7 +171,7 @@ void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &rec
 		float corrected_simtime = record.m_simtime + TICKS_TO_TIME( ticks_choked );
 
 		g_notify.add( true, OSHColor::FromARGB( 220, 249, 44, 69 ), "fired shot at backtrack record ( player %s, %i ticks, %i choked ).",
-			e->get_info( ).m_player_name, cmd->m_tick_count - corrected_simtime, ticks_choked );
+			e->get_info( ).m_player_name, cmd->m_tick_count - TIME_TO_TICKS( corrected_simtime ), ticks_choked );
 
 		cmd->m_tick_count = TIME_TO_TICKS( record.m_simtime );
 	}
