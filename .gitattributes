@@ -1,5 +1,4 @@
 # need to ignore fonts for linguist
 fonts/* linguist-vendored
 
-# unsure of this
-# *.c linguist-language=C++
+*.h linguist-language=C++
