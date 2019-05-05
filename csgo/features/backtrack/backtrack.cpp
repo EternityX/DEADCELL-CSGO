@@ -165,7 +165,7 @@ void c_backtrack::process_cmd( c_user_cmd *cmd, c_csplayer* e, lag_record_t &rec
 		std::string name = e->get_info( ).m_player_name;
 		std::transform( name.begin( ) , name.end( ), name.begin( ), ::tolower );
 
-		int ticks_choked;
+		int ticks_choked = 0;
 		if( record.m_prev_record )
 		    ticks_choked = TIME_TO_TICKS( record.m_simtime - record.m_prev_record->m_simtime );
 
