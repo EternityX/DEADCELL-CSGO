@@ -122,7 +122,7 @@ public:
 	}
 
 	void post_think( ) {
-		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 313 )( this );
+		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 315 )( this );
 	}
 
 	var_mapping_t* var_mapping( ) {
