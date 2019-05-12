@@ -128,7 +128,11 @@ void c_engine_pred::start( c_user_cmd *ucmd ) {
 			player->think( );
 		}
 	}
-
+	
+	//fix crash when 2rd inject
+	
+	memset(m_movedata, 0, 182);
+	
 	//	set host
 	g_csgo.m_movehelper->set_host( player );
 
