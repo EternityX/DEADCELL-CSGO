@@ -464,7 +464,7 @@ void c_visuals::draw_spectators( ) const {
 		if( !g_csgo.m_engine->get_player_info( i, &player_info_spec ) )
 			continue;
 
-		if( player_info_spec.m_player_name == "GOTV" )
+		if( !strcmp(player_info_spec.m_player_name, "GOTV") )
 			continue;
 
 		if( spectator != local )

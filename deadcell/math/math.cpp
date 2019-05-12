@@ -110,7 +110,7 @@ float math::normalize_vector( vec3_t &v ) {
 	if( l != 0.0f )
 		v /= l;
 	else
-		v.x = v.y = 0.0f; v.z = 1.f;
+		v.x = v.y = 0.0f, v.z = 1.f;
 
 	return l;
 }
