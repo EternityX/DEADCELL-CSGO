@@ -37,7 +37,7 @@ namespace pattern {
 		explicit Pattern( const std::string &str );
 
 		const PatternByte_t &operator []( size_t index ) const {
-			if( index > m_pattern.size() )
+			if( index >= m_pattern.size() )
 				return { };
 
 			return m_pattern[ index ];
