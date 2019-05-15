@@ -28,6 +28,9 @@ This is NOT for tech support. If you have an issue, open one [here](https://gith
 
 We are accepting any pull requests that fix any of the aforementioned issues.
 
+## Known scams that use this project and do not follow the license agreements
+- http://instancy.space/
+
 ## Contributing
 See [CONTRIBUTING.md](https://github.com/EternityX/DEADCELL-CSGO/blob/master/CONTRIBUTING.md).
 
