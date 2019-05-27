@@ -105,7 +105,7 @@ void c_engine_pred::start( c_user_cmd *ucmd ) {
 	}
 
 	//	check if player is standing on moving ground
-	g_csgo.m_prediction->check_moving_ground( player, g_csgo.m_global_vars->m_frame_count );
+	g_csgo.m_prediction->check_moving_ground( player, g_csgo.m_global_vars->m_frametime );
 
 	//	copy from command to player
 	player->set_local_viewangles( ucmd->m_viewangles );
