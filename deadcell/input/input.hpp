@@ -4,7 +4,7 @@ class input_mngr : public OSHGui::Input::Input {
 private:
 	HWND                    m_window_handle;
 	WNDPROC                 m_original_wndproc;
-	std::array< bool, 255 > m_key_pressed;
+	std::array< bool, 256 > m_key_pressed;
 	OSHGui::Application     *m_instance;
 
 public:
