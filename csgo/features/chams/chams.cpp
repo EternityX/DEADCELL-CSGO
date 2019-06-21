@@ -116,7 +116,7 @@ bool c_chams::on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_
 
 	std::string model_name = g_csgo.m_model_info->get_model_name( ( model_t* )pInfo.m_model );
 
-	if( pInfo.m_entity_index == g_csgo.m_engine->get_local_player( ) && g_csgo.m_input->m_camera_in_thirdperson && g_vars.visuals.chams.local ) {
+	if( pInfo.m_entity_index == g_csgo.m_engine->get_local_player( ) && g_csgo.m_input->m_camera_in_thirdperson && g_vars.visuals.chams.local && model_name.find( "shadow" ) == std::string::npos ) {
 		// draw model on last sent origin
 		// BUG: bone matrix is incorrect(?) when jumping
 		if( local->velocity().length_2d( ) > 0.f ) {
@@ -126,7 +126,18 @@ bool c_chams::on_dme( uintptr_t ecx, IMatRenderContext *ctx, void *state, model_
 			float col[ 3 ] = { 1.f, 1.f, 1.f };
 			g_csgo.m_render_view->set_color_modulation( col );
 
-			orig( ecx, ctx, state, pInfo, g_cl.m_last_matrix.data( ) ? g_cl.m_last_matrix.data( ) : pCustomBoneToWorld );
+			auto set_matrix_pos = [ & ]( matrix3x4_t &mat, vec3_t origin ) {
+				for( size_t i{ }; i < 3; ++i ) {
+					mat[ i ][ 3 ] = origin[ i ];
+				}
+			};
+
+			matrix3x4_t *new_matrix = pCustomBoneToWorld;
+			for( size_t i{ }; i < 128; ++i ) {
+				set_matrix_pos( new_matrix[ i ], g_cl.m_last_sent_origin );
+			}
+
+			orig( ecx, ctx, state, pInfo, new_matrix );
 		}
 		
 		static auto mat = create_material( VertexLitGeneric, false, false );
