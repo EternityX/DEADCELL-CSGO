@@ -21,8 +21,6 @@ public:
 	int          m_pen_crosshair = 0;
 
 	bool m_sendpacket;
-
-	std::array< matrix3x4_t, 128 > m_last_matrix = {};
 };
 
 extern c_client g_cl;
