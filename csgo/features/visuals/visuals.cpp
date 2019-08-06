@@ -43,7 +43,6 @@ void c_visuals::run( ) {
 }
 
 bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
-	// going to use the outdated matrix for now...
 	const D3DMATRIX &matrix = g_csgo.m_engine->world_to_screen_matrix_d3d( );
 
 	const float width = matrix.m[ 3 ][ 0 ] * origin.x + matrix.m[ 3 ][ 1 ] * origin.y + matrix.m[ 3 ][ 2 ] * origin.z + matrix.m[ 3 ][ 3 ];
