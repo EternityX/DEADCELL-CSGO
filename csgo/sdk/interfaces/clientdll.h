@@ -231,7 +231,6 @@ public:
 	virtual void set_timescale( float flTimescale ) = 0;
 	virtual void set_gamestats_data( c_gamestats_data *pGamestatsData ) = 0;
 	virtual c_gamestats_data *get_gamestats_data() = 0;
-	virtual void get_mouse_delta( int &dx, int &dy, bool b ) = 0; // unknown
 	virtual const char *key_lookup_binding_ex( const char *pBinding, int iUserId = -1, int iStartCount = 0,
 	                                         int iAllowJoystick = -1 ) = 0;
 	virtual int key_code_for_binding( char const *, int, int, int ) = 0;
