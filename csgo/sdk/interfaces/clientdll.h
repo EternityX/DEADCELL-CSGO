@@ -299,9 +299,11 @@ public:
 	virtual bool is_replay( void ) = 0;
 
 	D3DMATRIX &world_to_screen_matrix_d3d() {
-		static auto procedure = ( *reinterpret_cast< ulong_t * * >( this ) )[ 37 ];
-		auto ret = *( std::uintptr_t* )( *( std::uintptr_t* )( procedure + 1 ) + 0x00DC );
-		return *( D3DMATRIX* ) ( ret + 0x03DC );
+		ulong_t function_ptr = ( *reinterpret_cast< ulong_t * * >( this ) )[ 37 ];
+		ulong_t render_ptr = *reinterpret_cast< ulong_t* >( function_ptr + 1 );
+		ulong_t view_matrix = *reinterpret_cast< ulong_t* >( render_ptr + 0xDC ) + 0x3DC;
+
+		return reinterpret_cast< D3DMATRIX& >( *reinterpret_cast< ulong_t* >( view_matrix ) );
 	}
 };
 
