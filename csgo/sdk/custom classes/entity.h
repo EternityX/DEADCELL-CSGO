@@ -157,8 +157,8 @@ public:
 	NETVAR( float, next_primary_attack, "DT_BaseCombatWeapon", "m_flNextPrimaryAttack" );
 	NETVAR( float, next_attack, "DT_BaseCombatCharacter", "m_flNextAttack" );
 	NETVAR( float, next_sec_attack, "DT_BaseCombatWeapon", "m_flNextSecondaryAttack" );
-	NETVAR( int, burst_shot_remaining, "DT_WeaponCSBaseGun", "m_iBurstShotsRemaining" );
-	NETVAR( bool, burst_mode, "DT_WeaponCSBaseGun", "m_bBurstMode" );
+	NETVAR( int , burst_shot_remaining , "DT_WeaponCSBaseGun" , "m_iBurstShotsRemaining" );
+	NETVAR( bool , burst_mode , "DT_WeaponCSBase" , "m_bBurstMode" );
 
 	OFFSET( bool, in_reload, 0x3285 )
 

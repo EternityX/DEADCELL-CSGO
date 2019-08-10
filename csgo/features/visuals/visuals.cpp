@@ -42,24 +42,45 @@ void c_visuals::run( ) {
 		draw_hitmarker( );
 }
 
-bool c_visuals::world_to_screen( const vec3_t &origin, vec3_t &screen ) {
-	const D3DMATRIX &matrix = g_csgo.m_engine->world_to_screen_matrix_d3d( );
+bool c_visuals::world_to_screen( const vec3_t& origin , vec3_t& screen )
+{
+	auto w2s = [ &origin , &screen ]( ) -> bool
+	{
+		static uintptr_t view_matrix = 0;
+		if( !view_matrix )
+		{
+			view_matrix = static_cast< std::uintptr_t >( pattern::find( "client_panorama.dll" , "0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9" ) );
+			view_matrix = *reinterpret_cast< uintptr_t* >( view_matrix + 0x3 ) + 176;
+		}
 
-	const float width = matrix.m[ 3 ][ 0 ] * origin.x + matrix.m[ 3 ][ 1 ] * origin.y + matrix.m[ 3 ][ 2 ] * origin.z + matrix.m[ 3 ][ 3 ];
+		const matrix3x4_t& matrix = *( matrix3x4_t* ) view_matrix;
+		screen.x = matrix[ 0 ][ 0 ] * origin[ 0 ] + matrix[ 0 ][ 1 ] * origin[ 1 ] + matrix[ 0 ][ 2 ] * origin[ 2 ] + matrix[ 0 ][ 3 ];
+		screen.y = matrix[ 1 ][ 0 ] * origin[ 0 ] + matrix[ 1 ][ 1 ] * origin[ 1 ] + matrix[ 1 ][ 2 ] * origin[ 2 ] + matrix[ 1 ][ 3 ];
 
-	if( width > 0.01f ) {
-		const float inverse = 1.f / width;
+		float w = matrix[ 3 ][ 0 ] * origin[ 0 ] + matrix[ 3 ][ 1 ] * origin[ 1 ] + matrix[ 3 ][ 2 ] * origin[ 2 ] + matrix[ 3 ][ 3 ];
 
-		const OSHGui::Drawing::SizeF display_size = g_renderer.get_renderer( ).GetDisplaySize( );
+		if( w < 0.001f )
+		{
+//screen.x *= 100000.f;
+//screen.y *= 100000.f;
+			return true;
+		}
 
-		screen.x = static_cast< float >( display_size.Width / 2 + ( 0.5 * ( ( matrix.m[ 0 ][ 0 ] * origin.x + matrix.m[ 0 ][ 1 ] * origin.y + matrix.m[ 0 ][ 2 ] * origin.z + matrix.m[ 0 ][ 3 ] ) * inverse ) * display_size.Width + 0.5 ) );
-		screen.y = static_cast< float >( display_size.Height / 2 - ( 0.5 * ( ( matrix.m[ 1 ][ 0 ] * origin.x + matrix.m[ 1 ][ 1 ] * origin.y + matrix.m[ 1 ][ 2 ] * origin.z + matrix.m[ 1 ][ 3 ] ) * inverse ) * display_size.Height + 0.5 ) );
-		screen.z = 0.0f;
+		float invw = 1.0f / w;
+		screen.x *= invw;
+		screen.y *= invw;
 
-		return true;
-	}
+		return false;
+	};
 
-	return false;
+	w2s( );
+
+	int w , h;
+	g_csgo.m_engine->get_screen_size( w , h ); // oshgui probably can fuck up ur screen size
+	screen.x = ( w * .5f ) + ( screen.x * w ) * .5f;
+	screen.y = ( h * .5f ) - ( screen.y * h ) * .5f;
+
+	return true;
 }
 
 bool c_visuals::calculate_bbox( c_base_entity *entity, bbox_t &box ) const {
