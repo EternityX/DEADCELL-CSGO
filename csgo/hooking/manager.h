@@ -51,8 +51,8 @@ namespace hook {
 		IS_HLTV = 93,
 
 		// client
-		LEVEL_INIT_POST_ENTITY =	 6,
-		LEVEL_SHUTDOWN =			 7,
+		LEVEL_INIT_POST_ENTITY =	 7,
+		LEVEL_SHUTDOWN =			 8,
 		FRAME_STAGE_NOTIFY =		 37,
 
 		// surface
