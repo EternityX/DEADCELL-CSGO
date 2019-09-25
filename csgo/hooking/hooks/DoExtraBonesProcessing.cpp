@@ -17,3 +17,6 @@ void __fastcall animations::DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx
 	original( ecx, hdr, pos, q, matrix, bone_list, context );
 	state->on_ground = backup_onground;
 }
+
+
+// n9ybk
