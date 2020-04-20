@@ -76,7 +76,7 @@ namespace hook {
 
 		// ccsplayer
 
-		DO_EXTRA_BONE_PROC =		 195,
+		DO_EXTRA_BONE_PROC =		 197,
 
 		// cbaseanimating
 		SETUP_BONES =                13
