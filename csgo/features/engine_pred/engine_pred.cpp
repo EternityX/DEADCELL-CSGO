@@ -10,15 +10,15 @@ int c_engine_pred::post_think( c_base_player *player ) const {
 	util::misc::vfunc< void( __thiscall *)( void * ) >( g_csgo.m_modelcache, 33 )( g_csgo.m_modelcache );
 	if( player->alive( ) ) {
 
-		util::misc::vfunc< void( __thiscall *)( void * ) >( player, 336 )( player );
+		util::misc::vfunc< void( __thiscall *)( void * ) >( player, 339 )( player );
 
 		if( player->flags( ) & FL_ONGROUND )
 			*reinterpret_cast< uintptr_t * >( uintptr_t( player ) + 0x3014 ) = 0;
 
 		if( *reinterpret_cast< int * >( uintptr_t( player ) + 0x28BC ) == -1 )
-			util::misc::vfunc< void( __thiscall *)( void *, int ) >( player, 216 )( player, 0 );
+			util::misc::vfunc< void( __thiscall *)( void *, int ) >( player, 218 )( player, 0 );
 
-		util::misc::vfunc< void( __thiscall *)( void * ) >( player, 217 )( player );
+		util::misc::vfunc< void( __thiscall *)( void * ) >( player, 219 )( player );
 
 		PostThinkVPhysics( player );
 	}
@@ -155,7 +155,6 @@ void c_engine_pred::start( c_user_cmd *ucmd ) {
 	//	restore prediction
 	g_csgo.m_prediction->m_is_first_time_predicted = old_first_prediction;
 	g_csgo.m_prediction->m_in_prediction = old_in_prediction;
-
 }
 
 void c_engine_pred::end( ) const {

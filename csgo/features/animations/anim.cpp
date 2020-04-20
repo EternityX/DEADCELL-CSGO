@@ -62,5 +62,4 @@ void c_animations::on_entity_deleted( c_base_entity *ent ) {
 		m_track.at( it->m_idx ).m_renderable_vmt->unhook_all( );
 		m_track.at( it->m_idx ).m_hooked = false;
 	}
-		
 }
