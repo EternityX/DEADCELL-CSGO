@@ -12,8 +12,8 @@ void __fastcall animations::DoExtraBonesProcessing( uintptr_t ecx, uintptr_t edx
 		return original( ecx, hdr, pos, q, matrix, bone_list, context );
 
 	// prevent call to do_procedural_foot_plant
-	const auto backup_onground = state->on_ground;
-	state->on_ground = false;
+	auto backup_tickcount = 0;
+	std::swap( *reinterpret_cast< int* >( uintptr_t( state ) + 0x8 ), backup_tickcount );
 	original( ecx, hdr, pos, q, matrix, bone_list, context );
-	state->on_ground = backup_onground;
+	std::swap( *reinterpret_cast< int* >( uintptr_t( state ) + 0x8 ), backup_tickcount );
 }

@@ -101,7 +101,7 @@ public:
 	void set_local_viewangles( vec3_t &angle ) {
 		//  (*(*player + 1468))(player, &cmd->viewangles);
 		using fnSetLocalViewAngles = void( __thiscall * )( void *, vec3_t & );
-		util::misc::vfunc< fnSetLocalViewAngles >( this, 369 )( this, angle );
+		util::misc::vfunc< fnSetLocalViewAngles >( this, 372 )( this, angle );
 	}
 
 	bool physics_run_think( int unk01 ) {
@@ -118,11 +118,11 @@ public:
 	}
 
 	void pre_think( ) {
-		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 314 )( this );
+		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 315 )( this );
 	}
 
 	void post_think( ) {
-		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 315 )( this );
+		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 316 )( this );
 	}
 
 	var_mapping_t* var_mapping( ) {
@@ -205,15 +205,15 @@ public:
 	}
 
 	float spread( ) {
-		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 446 )( this );
+		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 452 )( this );
 	}
 
 	float inaccuracy( ) {
-		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 476 )( this );
+		return util::misc::vfunc< float( __thiscall *)( void * ) >( this, 482 )( this );
 	}
 
 	void update_accuracy( ) {
-		return util::misc::vfunc< void( __thiscall *)( void * ) >( this, 477 )( this );
+		return util::misc::vfunc< void( __thiscall *)( void * ) >( this, 483 )( this );
 	}
 };
 
@@ -237,7 +237,7 @@ public:
 	NETVAR( bool, client_side_anims, "DT_BaseAnimating", "m_bClientSideAnimation" );
 	NETVAR( int, hitbox_set, "DT_BaseAnimating", "m_nHitboxSet" );
 
-	VFUNC( 221, update_anims(), void( __thiscall* )( void* ) )( )
+	VFUNC( 223, update_anims(), void( __thiscall* )( void* ) )( )
 };
 
 class c_csplayer : public c_base_animating {
@@ -276,7 +276,6 @@ public:
 	OFFSET( int, get_bone_count, 0x291C )
 	OFFSET( int, last_setupbones_frame, 0xA68 )
 	
-
 	c_studio_hdr *model_ptr( ){
 		return *reinterpret_cast< c_studio_hdr ** >( uintptr_t( this ) + 0x294C );
 	}
@@ -326,7 +325,7 @@ public:
 		vec3_t vec{ };
 
 		util::misc::vfunc< void( __thiscall *)( void *, vec3_t & ) >
-			( this, 281 )( this, vec );
+			( this, 284 )( this, vec );
 
 		return vec;
 	}
