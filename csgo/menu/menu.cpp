@@ -176,7 +176,7 @@ void c_main_form::ragebot_tab( ) {
 	auto primaryhitbox = new c_combo( "Primary hitbox", { "Head", "Neck", "Pelvis", "Stomach", "Thorax" }, target_page, 5, &g_vars.rage.primary_hitbox, aimbot_groupbox->GetWidth( ) - 15 );
 	g_menu.set_x_pos( 38 );
 	auto dynamic_hitbox = new c_checkbox( "Dynamic scanning", target_page, &g_vars.rage.dynamic_hitbox );
-	auto nigger = new c_checkbox( "Selectively multipoint records", target_page, &g_vars.rage.selectively_multipoint_records );
+	auto selective_multipoint = new c_checkbox( "Selectively multipoint records", target_page, &g_vars.rage.selectively_multipoint_records );
 	auto multipoint_head_check = new c_checkbox( "Scan head", target_page, &g_vars.rage.head );
 	g_menu.set_x_pos( 125 );
 	g_menu.push_y_pos( -18 );
