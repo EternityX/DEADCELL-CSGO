@@ -1,6 +1,6 @@
 #include "config.h"
 #include "..\json.h"
-#include <experimental/filesystem>
+#include <filesystem>
 
 nlohmann::json json;
 
@@ -48,8 +48,8 @@ void reset_item( item &item ) {
 }
 
 bool c_config::init( ) {
-	if( !std::experimental::filesystem::exists( m_directory ) ) {
-		if( !std::experimental::filesystem::create_directory( m_directory ) ) {
+	if( !std::filesystem::exists( m_directory ) ) {
+		if( !std::filesystem::create_directory( m_directory ) ) {
 			_RPT1( _CRT_WARN, "Failed to create profile directory. Ignoring this error will result in not being able to create or save profiles.\n\n%s", m_directory );
 			return false;
 		}
@@ -256,7 +256,7 @@ void c_config::remove( const std::string &file ) const {
 std::vector< std::string > c_config::get_configs( ) const {
 	std::vector< std::string > output{ };
 
-	for( auto &file_path : std::experimental::filesystem::directory_iterator( m_directory ) ) {
+	for( auto &file_path : std::filesystem::directory_iterator( m_directory ) ) {
 		if( file_path.path( ).string( ).empty( ) )
 			continue;
 

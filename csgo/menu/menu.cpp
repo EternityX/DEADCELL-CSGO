@@ -5,7 +5,7 @@
 #include "../features/chams/chams.h"
 #include "../features/chaiscript/chai_wrapper.hpp"
 #include "../features/chaiscript/chai_console.hpp"
-#include <experimental/filesystem>
+#include <filesystem>
 
 using namespace controls;
 
@@ -113,7 +113,7 @@ void c_main_form::playerlist_tab( ) { }
 
 std::vector< std::string > get_antiaims( const std::string dir, std::vector< std::string > &vec ) {
 	std::vector< std::string > str_list = vec;
-	for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
+	for( auto &file_path : std::filesystem::directory_iterator( dir ) ) {
 		if( file_path.path( ).string( ).empty( ) )
 			continue;
 
@@ -444,7 +444,7 @@ void c_main_form::misc_tab( ) {
 		std::vector< std::string > names = {};
 		std::string dir = "hitsounds";
 
-		for( auto &file_path : std::experimental::filesystem::directory_iterator( dir ) ) {
+		for( auto &file_path : std::filesystem::directory_iterator( dir ) ) {
 			if( !file_path.path( ).string( ).empty( ) ) {
 				if( file_path.path( ).string( ).find( ".wav" ) != std::string::npos )
 					names.emplace_back( file_path.path( ).string( ).erase( 0, dir.length( ) + 1 ) );
