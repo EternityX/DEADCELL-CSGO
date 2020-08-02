@@ -3,7 +3,7 @@
 </p>
 
 [![Discord](https://img.shields.io/discord/559937792092667904.svg?label=discord)](https://discord.gg/dEMgzUZ)
-[![Build status](https://ci.appveyor.com/api/projects/status/hed52wml7ovx3qxb?svg=true)](https://ci.appveyor.com/project/EternityX/deadcell-csgo) 
+[![Build status](https://ci.appveyor.com/api/projects/status/qu55gdha81pi6t3n?svg=true)](https://ci.appveyor.com/project/auth12/deadcell-csgo)
 [![GitHub Issues](https://img.shields.io/github/issues/EternityX/DEADCELL-CSGO.svg)](https://github.com/EternityX/DEADCELL-CSGO/issues)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE)
 
