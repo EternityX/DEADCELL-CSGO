@@ -62,7 +62,7 @@ void c_renderer::filled_rect( const OSHGui::Drawing::Color &color, int x, int y,
 	g.FillRectangle( color, OSHGui::Drawing::PointI( x, y ), OSHGui::Drawing::SizeI( width, height ) );
 }
 
-void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::Drawing::Color &color, const OSHGui::Drawing::Color &shadow_color, int x, int y, int flags, const std::string str, ... ) const {
+void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::Drawing::Color &color, const OSHGui::Drawing::Color &shadow_color, int x, int y, int flags, const std::string_view str, ... ) const {
 	va_list va;
 	std::string buf;
 
@@ -71,7 +71,7 @@ void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::
 
 	va_start( va, str );
 
-	int str_len = std::vsnprintf( nullptr, 0, str.c_str( ), va );
+	int str_len = std::vsnprintf( nullptr, 0, str.data( ), va );
 	if( str_len < 0 ) {
 		va_end( va );
 		return;
@@ -79,13 +79,13 @@ void c_renderer::ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::
 
 	buf.resize( str_len );
 
-	std::vsnprintf( &buf[ 0 ], str_len + 1, str.c_str( ), va );
+	std::vsnprintf( &buf[ 0 ], str_len + 1, str.data( ), va );
 
 	OSHGui::Drawing::Graphics g( *m_geometry );
 
 	if( flags & CENTERED_X || flags & CENTERED_Y ) {
 		OSHGui::Misc::TextHelper text_helper( font );
-		text_helper.SetText( str );
+		text_helper.SetText( buf );
 
 		if( flags & CENTERED_X )
 			x -= text_helper.GetSize( ).Width / 2.f;

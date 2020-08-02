@@ -10,7 +10,7 @@ private:
 public:
 	input_mngr();
 
-	bool init( const std::string &window_name, OSHGui::Application *instance );
+	bool init( const std::string_view window_name, OSHGui::Application *instance );
 	bool init( HWND wnd );
 
 	bool handle( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam );

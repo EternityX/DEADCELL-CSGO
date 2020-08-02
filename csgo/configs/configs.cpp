@@ -187,9 +187,9 @@ bool c_config::init( ) {
 	return true;
 }
 
-bool c_config::save( const std::string &file ) {
+bool c_config::save( const std::string_view file ) {
 	try {
-		std::ofstream output_file = std::ofstream( m_directory + "/" + file );
+		std::ofstream output_file = std::ofstream( m_directory + "/" + file.data( ) );
 
 		if( !output_file.good() )
 			return false;
@@ -209,8 +209,8 @@ bool c_config::save( const std::string &file ) {
 	}
 }
 
-bool c_config::reset( const std::string &file ) {
-	std::ofstream output_file = std::ofstream( m_directory + "/" + file );
+bool c_config::reset( const std::string_view file ) {
+	std::ofstream output_file = std::ofstream( m_directory + "/" + file.data( ) );
 
 	if( !output_file.good( ) )
 		return false;
@@ -224,8 +224,8 @@ bool c_config::reset( const std::string &file ) {
 	return true;
 }
 
-bool c_config::load( const std::string &file ) {
-	std::ifstream input_file = std::ifstream( m_directory + "/" + file );
+bool c_config::load( const std::string_view file ) {
+	std::ifstream input_file = std::ifstream( m_directory + "/" + file.data( ) );
 	if( !input_file.good( ) )
 		return false;
 
@@ -248,8 +248,8 @@ bool c_config::load( const std::string &file ) {
 	return true;
 }
 
-void c_config::remove( const std::string &file ) const {
-	std::string path = m_directory  + "/" + file;
+void c_config::remove( const std::string_view file ) const {
+	std::string path = m_directory  + "/" + file.data( );
 	std::remove( path.c_str( ) );
 }
 
@@ -269,7 +269,7 @@ std::vector< std::string > c_config::get_configs( ) const {
 	return output;
 }
 
-bool c_config::import_from_clipboard( const std::string &file ) {
+bool c_config::import_from_clipboard( const std::string_view file ) {
 	const auto get_clipboard_data = [ ]( ) -> std::string {
 		OpenClipboard( nullptr );
 
@@ -285,7 +285,7 @@ bool c_config::import_from_clipboard( const std::string &file ) {
 
 	const std::string clipboard = get_clipboard_data( );
 
-	std::ofstream output = std::ofstream( m_directory + "/" + file );
+	std::ofstream output = std::ofstream( m_directory + "/" + file.data( ) );
 	if( !output.good( ) )
 		return false;
 	
@@ -304,8 +304,8 @@ bool c_config::import_from_clipboard( const std::string &file ) {
 	return true;
 }
 
-void c_config::export_to_clipboard( const std::string &file ) const {
-	std::ifstream input_file = std::ifstream( m_directory + "/" + file );
+void c_config::export_to_clipboard( const std::string_view file ) const {
+	std::ifstream input_file = std::ifstream( m_directory + "/" + file.data( ) );
 	std::string str( ( std::istreambuf_iterator< char >( input_file ) ), std::istreambuf_iterator< char >( ) );
 
 	const char* output = str.c_str( );

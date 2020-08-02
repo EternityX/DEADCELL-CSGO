@@ -15,12 +15,12 @@ input_mngr::input_mngr( )
 	
 }
 
-bool input_mngr::init( const std::string &window_name, OSHGui::Application *instance ) {
+bool input_mngr::init( const std::string_view window_name, OSHGui::Application *instance ) {
 	if( m_window_handle || !instance )
 		return false;
 
 	m_instance = instance;
-	m_window_handle = FindWindowA( window_name.c_str(), nullptr );
+	m_window_handle = FindWindowA( window_name.data( ), nullptr );
 	m_original_wndproc = reinterpret_cast< WNDPROC >( SetWindowLongA( m_window_handle, GWLP_WNDPROC, reinterpret_cast< LONG_PTR >( hook ) ) );
 
 	return m_original_wndproc != nullptr;

@@ -4,7 +4,7 @@
 c_engine_pred g_engine_pred;
 
 int c_engine_pred::post_think( c_base_player *player ) const {
-	static auto PostThinkVPhysics = pattern::find< bool( __thiscall*)( c_base_entity * ) >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 81 EC ? ? ? ? 53 8B D9 56 57 83 BB ? ? ? ? ? 75 50" );
+	static auto PostThinkVPhysics = pattern::find< bool( __thiscall*)( c_base_entity * ) >( g_csgo.m_client_dll, "55 8B EC 83 E4 F8 81 EC ? ? ? ? 53 8B D9 56 57 83 BB ? ? ? ? ? 0F 84" );
 	static auto SimulatePlayerSimulatedEntities = pattern::find< void(__thiscall*)( c_base_entity * ) >( g_csgo.m_client_dll, "56 8B F1 57 8B BE ? ? ? ? 83 EF 01 78 72 90 8B 86" );
 
 	util::misc::vfunc< void( __thiscall *)( void * ) >( g_csgo.m_modelcache, 33 )( g_csgo.m_modelcache );
@@ -58,7 +58,7 @@ void c_engine_pred::start( c_user_cmd *ucmd ) {
 		*reinterpret_cast< int * >( m_prediction_seed ) = ucmd ? ucmd->m_random_seed : -1;
 		*reinterpret_cast< int * >( m_prediction_player ) = reinterpret_cast< int >( player );
 
-		*reinterpret_cast< c_user_cmd ** >( uint32_t( player ) + 0x3334 ) = ucmd; // m_pCurrentCommand
+		*reinterpret_cast< c_user_cmd ** >( uint32_t( player ) + 0x3338 ) = ucmd; // m_pCurrentCommand
 		*reinterpret_cast< c_user_cmd ** >( uint32_t( player ) + 0x3288 ) = ucmd; // unk01
 	}
 
