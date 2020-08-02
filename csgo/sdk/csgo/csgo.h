@@ -51,7 +51,7 @@ public:
 
 	bool init( ) {
 		// modules.
-		m_client_dll = pe::get_module( CT_HASH32( "client_panorama.dll" ) );
+		m_client_dll = pe::get_module( CT_HASH32( "client.dll" ) );
 		m_engine_dll = pe::get_module( CT_HASH32( "engine.dll" ) );
 		if( !m_client_dll || !m_engine_dll )
 			return false;
@@ -66,7 +66,7 @@ public:
 		if( !m_memalloc )
 			return false;
 
-		m_command_line = pe::get_export< command_line_t >( pe::get_module( "tier0.dll" ), "CommandLine" )();
+		m_command_line = pe::get_export< command_line_t >( pe::get_module( "tier0.dll" ), "CommandLine" )( );
 		if( !m_command_line )
 			return false;
 
@@ -91,7 +91,7 @@ public:
 		if( !m_entity_list )
 			return false;
 
-		m_global_vars = **c_vmt::get_method( m_client, 0 ).add< c_global_vars *** >( 27 );
+		m_global_vars = **c_vmt::get_method( m_client, 0 ).add< c_global_vars *** >( 31 );
 		if( !m_global_vars )
 			return false;
 

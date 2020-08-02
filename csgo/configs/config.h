@@ -25,15 +25,15 @@ private:
 	std::string m_directory = "profiles";
 public:
 	std::vector< std::string > get_configs( ) const;
-	bool import_from_clipboard( const std::string &file );
-	void export_to_clipboard( const std::string &file ) const;
+	bool import_from_clipboard( const std::string_view file );
+	void export_to_clipboard( const std::string_view file ) const;
 
 	bool init( );
-	bool load( const std::string &file );
-	bool save( const std::string &file );
+	bool load( const std::string_view file );
+	bool save( const std::string_view file );
 
-	bool reset( const std::string &file );
-	void remove( const std::string &file ) const;
+	bool reset( const std::string_view file );
+	void remove( const std::string_view file ) const;
 };
 
 extern c_config g_configs;

@@ -1,7 +1,7 @@
 #include "../inc.hpp"
 #include "console.hpp"
 
-bool console::allocate( const char *window_name ) {
+bool console::allocate( const std::string_view window_name ) {
 	if( !AllocConsole() ) {
 		_RPTF1( _CRT_ERROR, "Failed to allocate console. Error code: %i", GetLastError( ) );
 		return false;
@@ -14,7 +14,7 @@ bool console::allocate( const char *window_name ) {
 		return false;
 	}
 
-	if( !SetConsoleTitleA( window_name ) ) {
+	if( !SetConsoleTitleA( window_name.data( ) ) ) {
 		_RPTF1( _CRT_WARN, "Failed to set console title. Error code: %i", GetLastError( ) );
 		return false;
 	}

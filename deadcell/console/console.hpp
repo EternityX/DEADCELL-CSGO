@@ -20,7 +20,7 @@ enum class console_color {
 };
 
 namespace console {
-	bool allocate( const char *window_name );
+	bool allocate( const std::string_view window_name );
 	void detach( );
 
 	template< class E, class T >

@@ -35,7 +35,7 @@ namespace renderer {
 		// drawing.
 		void rect( const OSHGui::Drawing::Color &color, int x, int y, int width, int height ) const;
 		void filled_rect(const OSHGui::Drawing::Color & color, int x, int y, int width, int height) const;
-		void ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::Drawing::Color &color, const OSHGui::Drawing::Color &shadow_color, int x, int y, int flags, const std::string str, ...) const;
+		void ansi_text( const OSHGui::Drawing::FontPtr &font, const OSHGui::Drawing::Color &color, const OSHGui::Drawing::Color &shadow_color, int x, int y, int flags, const std::string_view str, ...) const;
 		void filled_rect_gradient( const OSHGui::Drawing::ColorRectangle &colors, int x, int y, int width, int height ) const;
 		void line(const OSHGui::Drawing::Color & color, float x, float y, float x1, float y1) const;
 		void circle( const OSHGui::Drawing::Color &color, int x, int y, int radius ) const;

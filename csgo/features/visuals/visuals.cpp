@@ -47,9 +47,9 @@ bool c_visuals::world_to_screen( const vec3_t& origin , vec3_t& screen )
 	auto w2s = [ &origin , &screen ]( ) -> bool
 	{
 		static uintptr_t view_matrix = 0;
-		if( !view_matrix )
+		if( !view_matrix ) 
 		{
-			view_matrix = static_cast< std::uintptr_t >( pattern::find( "client_panorama.dll" , "0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9" ) );
+			view_matrix = static_cast< std::uintptr_t >( pattern::find( g_csgo.m_client_dll , "0F 10 05 ? ? ? ? 8D 85 ? ? ? ? B9" ) );
 			view_matrix = *reinterpret_cast< uintptr_t* >( view_matrix + 0x3 ) + 176;
 		}
 

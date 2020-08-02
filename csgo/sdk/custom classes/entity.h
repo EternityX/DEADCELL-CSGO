@@ -40,7 +40,7 @@ public:
 	}
 
 	bool is_player( ) {
-		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 155 )( this );
+		return util::misc::vfunc< bool( __thiscall *)( void * ) >( this, 157 )( this );
 	}
 
 	bool is_weapon( ) {
@@ -118,7 +118,7 @@ public:
 	}
 
 	void pre_think( ) {
-		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 315 )( this );
+		util::misc::vfunc< void( __thiscall * )( void * ) >( this, 317 )( this );
 	}
 
 	void post_think( ) {
@@ -268,10 +268,10 @@ public:
 	NETVAR( int, shots_fired, "DT_CSPlayer", "m_iShotsFired" )
 
 	OFFSET( float, spawn_time, 0xA350 )
-	OFFSET( c_animstate *, animstate, 0x3900 )
+	OFFSET( c_animstate *, animstate, 0x3914 )
 	OFFSET( int, get_move_type, 0x25C )
 	OFFSET( c_utl_vector< matrix3x4_t >, bone_cache, 0x2910 )
-	OFFSET( int, eflags, 0xE8 )
+	OFFSET( int, eflags, 0xE4 )
 	OFFSET( vec3_t, abs_velocity, 0x94 )
 	OFFSET( int, get_bone_count, 0x291C )
 	OFFSET( int, last_setupbones_frame, 0xA68 )

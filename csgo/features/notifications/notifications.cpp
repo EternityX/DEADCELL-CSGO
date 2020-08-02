@@ -3,7 +3,7 @@
 
 c_notifications g_notify;
 
-void c_notifications::add( bool display, OSHColor color, const std::string message, ... ) {
+void c_notifications::add( bool display, OSHColor color, const std::string_view message, ... ) {
 	if( message.empty( ) )
 		return;
 
@@ -12,7 +12,7 @@ void c_notifications::add( bool display, OSHColor color, const std::string messa
 
 	va_start( va, message );
 
-	const int str_len = std::vsnprintf( nullptr, 0, message.c_str( ), va );
+	const int str_len = std::vsnprintf( nullptr, 0, message.data( ), va );
 	if( str_len < 0 ) {
 		va_end( va );
 
@@ -21,7 +21,7 @@ void c_notifications::add( bool display, OSHColor color, const std::string messa
 
 	buf.resize( str_len );
 
-	std::vsnprintf( &buf[ 0 ], str_len + 1, message.c_str( ), va );
+	std::vsnprintf( &buf[ 0 ], str_len + 1, message.data( ), va );
 
 	if( m_notifications.size( ) > 15 )
 		m_notifications.pop_front( );

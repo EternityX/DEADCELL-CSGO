@@ -216,11 +216,11 @@ void c_main_form::ragebot_tab( ) {
 
 	std::vector< std::string > yaw_vec = { "Off", "180" };
 	std::vector< std::string > pitch_vec = { "Off", "Default" };
-	yaw_vec = get_antiaims( "profiles//aa//y", yaw_vec );
+	/*yaw_vec = get_antiaims( "profiles//aa//y", yaw_vec );
 	pitch_vec = get_antiaims( "profiles//aa//x", pitch_vec );
 
 	chai_manager::chai_aa_yaw = yaw_vec;
-	chai_manager::chai_aa_pitch = pitch_vec;
+	chai_manager::chai_aa_pitch = pitch_vec;*/
 
 	auto aa_enabled = new c_checkbox( "Enabled", antiaim_page, &g_vars.antiaim.enabled );
 	auto pitch = new c_combo( "Pitch", pitch_vec, antiaim_page, 2, &g_vars.antiaim.pitch, antiaim_groupbox->GetWidth( ) - 15 );
@@ -444,12 +444,12 @@ void c_main_form::misc_tab( ) {
 		std::vector< std::string > names = {};
 		std::string dir = "hitsounds";
 
-		for( auto &file_path : std::filesystem::directory_iterator( dir ) ) {
+		/*for( auto &file_path : std::filesystem::directory_iterator( dir ) ) {
 			if( !file_path.path( ).string( ).empty( ) ) {
 				if( file_path.path( ).string( ).find( ".wav" ) != std::string::npos )
 					names.emplace_back( file_path.path( ).string( ).erase( 0, dir.length( ) + 1 ) );
 			}
-		}
+		}*/
 
 		for( auto &item : names ) {
 			std::string final = item;
