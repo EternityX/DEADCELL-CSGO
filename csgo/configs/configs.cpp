@@ -1,6 +1,7 @@
 #include "config.h"
 #include "..\json.h"
 #include <filesystem>
+#include <cstring>
 
 nlohmann::json json;
 
@@ -167,6 +168,9 @@ bool c_config::init( ) {
 	item( g_vars.misc.client_hitboxes_duration, "g_vars.visuals.client_hitboxes_duration", m_items );
 	item( g_vars.misc.bullet_impacts, "g_vars.visuals.bullet_impacts", m_items );
 	item( g_vars.misc.bullet_impacts_duration, "g_vars.visuals.bullet_impacts_duration", m_items );
+	item(g_vars.misc.fakeduck_key, "g_vars.misc.fakeduck_key", m_items);
+	item(g_vars.misc.slowwalk_key, "g_vars.misc.slowwalk_key", m_items);
+	item(g_vars.misc.slowwalk_amout, "g_vars.misc.slowwalk_amout", m_items);
 	item( g_vars.dz.healthshot, "g_vars.dz.healthshot", m_items );
 	item( g_vars.dz.drone, "g_vars.dz.drone", m_items );
 	item( g_vars.dz.turret, "g_vars.dz.turret", m_items );
@@ -183,6 +187,7 @@ bool c_config::init( ) {
 	item( g_vars.dz.jammer, "g_vars.dz.jammer", m_items );
 	item( g_vars.dz.melee_weapon, "g_vars.dz.melee_weapon", m_items );
 	item( g_vars.dz.breach_charge, "g_vars.dz.breach_charge", m_items );
+	
 
 	return true;
 }
@@ -234,7 +239,7 @@ bool c_config::load( const std::string_view file ) {
 	}
 	catch( const std::exception &ex ) {
 		UNREFERENCED_PARAMETER( ex );
-		_RPT2( _CRT_ERROR, "Failed to load %s profile, profile could be corrupted. Ignoring this error may prevent you from loading profiles.\n\n%s", file.c_str( ), ex.what( ) );
+		_RPT2( _CRT_ERROR, "Failed to load %s profile, profile could be corrupted. Ignoring this error may prevent you from loading profiles.\n\n%s", file.substr(), ex.what( ) );
 
 		input_file.close( );
 		return false;
