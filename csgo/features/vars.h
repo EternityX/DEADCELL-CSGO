@@ -126,6 +126,9 @@ public:
 		bool bullet_impacts;
 		float bullet_impacts_duration = 4.f;
 		bool chaiscript_enabled;
+		int fakeduck_key;
+		int slowwalk_key;
+		int slowwalk_amout;
 	} misc;
 	struct antiaim{
 		bool enabled;
