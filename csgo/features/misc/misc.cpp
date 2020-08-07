@@ -1,8 +1,76 @@
+#
 #include "misc.h"
 #include "../anti-aim/antiaim.h"
 #include "../entity listener/ent_listener.h"
 
 c_misc g_misc;
+
+void c_misc::fakeduck(c_user_cmd* cmd) {
+	if (g_vars.misc.thirdperson_key == 0)
+		return;
+	if (g_input.key_pressed(g_vars.misc.fakeduck_key))
+	{
+		static bool counter = false;
+		static int counters = 0;
+		if (counters == 9)
+		{
+			counters = 0;
+			counter = !counter;
+		}
+		counters++;
+		if (counter)
+		{
+			cmd->m_buttons |= IN_DUCK;
+			g_cl.m_sendpacket = true;
+		}
+		else {
+			cmd->m_buttons &= ~IN_DUCK;
+			g_cl.m_sendpacket = false;
+		}
+	}
+}
+
+void c_misc::slowwalk(c_user_cmd* cmd) {
+	if (g_vars.misc.thirdperson_key == 0)
+		return;
+	if (g_input.key_pressed(g_vars.misc.slowwalk_key)) {
+		auto local = c_csplayer::get_local();
+
+		auto weapon = local->get_active_weapon();
+		if (!weapon)
+			return;
+
+		const auto move_type = local->get_move_type();
+		if (move_type == MOVETYPE_LADDER || move_type == MOVETYPE_NOCLIP)
+			return;
+
+
+
+		float amount = 0.0034f * g_vars.misc.slowwalk_amout; // options.misc.slow_walk_amount has 100 max value
+
+		vec3_t velocity = local->velocity();
+		vec3_t direction;
+
+		math::vector_angle(velocity, direction);
+
+		float speed = velocity.length_2d();
+
+		direction.y = cmd->m_viewangles.y - direction.y;
+
+		vec3_t forward;
+
+		math::vector_angle(direction, forward);
+
+		vec3_t source = forward * -speed;
+
+		if (speed >= (weapon->get_weapon_info()->max_speed * amount))
+		{
+			cmd->m_forwardmove = source.x;
+			cmd->m_sidemove = source.y;
+
+		}
+	}
+}
 
 void c_misc::bunnyhop( c_user_cmd *cmd ) {
 	if( !g_cl.m_local )

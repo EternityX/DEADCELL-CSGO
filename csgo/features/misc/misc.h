@@ -8,6 +8,9 @@ private:
 public:
 	vec3_t unpredicted_vel;
 
+	void fakeduck(c_user_cmd* cmd);
+	void slowwalk(c_user_cmd* cmd);
+
 	void bunnyhop( c_user_cmd *cmd );
 	static void automatic_fire( c_base_combat_weapon *active_weapon, c_user_cmd *cmd );
 	void thirdperson( c_view_setup *setup );
@@ -20,6 +23,7 @@ public:
 	void capsule_overlay( c_csplayer * e, float duration, matrix3x4_t* mat );
 	void no_smoke( client_frame_stage_t stage );
 	void flashlight( );
+	
 };
 
 extern c_misc g_misc;
