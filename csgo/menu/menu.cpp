@@ -420,7 +420,7 @@ void c_main_form::misc_tab( ) {
 	extra_groupbox->AddControl(misc_tab);
 	auto fakeduck_key = new c_hotkey("fakeduck key", extra_misc_page, &g_vars.misc.fakeduck_key, extra_groupbox->GetWidth() - 15);
 	auto slowwalk_key = new c_hotkey("Slowwalk key", extra_misc_page, &g_vars.misc.slowwalk_key, extra_groupbox->GetWidth() - 15);
-	auto slowwalk_amout = new c_slider("Slowwalk smout", extra_misc_page, 0, 100, &g_vars.misc.slowwalk_amout, 50, " units");
+	auto slowwalk_amout = new c_slider("Slowwalk smout", extra_misc_page, 0, 100, &g_vars.misc.slowwalk_amout, 50, " %");
 	auto general_groupbox = new c_groupbox( "General", 17, 6, 260, 334 );
 	general_groupbox->AddControl( misc_tab );
 
