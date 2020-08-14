@@ -116,7 +116,7 @@ struct c_animstate {
 
 
 	void update( float y, float x ){
-		static auto update = pattern::find( "client_panorama.dll", "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54" );
+		static auto update = pattern::find( "client.dll", "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54" );
 
 		_asm {
 			mov ecx, this
