@@ -8,16 +8,14 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE)
 
 ## Preface
-Full CS:GO project files for [deadcell.cc](https://deadcell.cc/), for the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
+Full CS:GO project files for deadcell. For the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
 
-This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. As such it is highly recommended that you do not use this if you have no prior programming knowledge. However we are working towards a stable, free, feature-rich cheat for everyone to use!
-
-If you want a clean base without any features, please see the [deadcell SDK](https://github.com/alpine971/DEADCELL-SDK).
+This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. As such it is highly recommended that you do not use this if you have no prior programming knowledge or a lack of game hacking knowledge in general.
 
 ## Discord
 https://discord.gg/dEMgzUZ
 
-We invite anyone interested in supporting development to join our Discord.
+We invite anyone interested in supporting development or just want to chat to join our Discord.
 
 This is NOT for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
 
@@ -46,9 +44,6 @@ You can share profiles with friends by navigating to the configuration tab insid
 
 To import a profile, just copy all of the profile data and press **Import**. Make sure to save your profile by entering a name and pressing **Save**.
 
-### Why does "Generating code..." take forever when building the project?
-Most likely an issue with Visual Studio 2017, you can wait it out or use Visual Studio 2019 instead.
-
 ### Why does moving the menu crash the game?
 Disable multi-core rendering in your CS:GO video settings.
 
@@ -60,8 +55,10 @@ Press `END`.
 
 ## Credits 
 - dex and maddie for their address, hash, module, netvar, pattern, pe, and vmt classes
+- [alpine971 for their extensive contributions](https://github.com/auth12)
 - [KN4CK3R for OSHGui](https://github.com/KN4CK3R/OSHGui)
 - [nlohmann for a modern C++ implementation of JSON](https://github.com/nlohmann/json)
+- everyone who contributed to the project!
 
 ## License
 Licensed under the MIT License. See [LICENSE](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE) for more details.
