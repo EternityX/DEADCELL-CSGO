@@ -2,32 +2,14 @@
   <img width="500" height="250" src="https://i.imgur.com/cEwKoeV.png">
 </p>
 
-[![Discord](https://img.shields.io/discord/559937792092667904.svg?label=discord)](https://discord.gg/dEMgzUZ)
-[![Build status](https://ci.appveyor.com/api/projects/status/qu55gdha81pi6t3n?svg=true)](https://ci.appveyor.com/project/auth12/deadcell-csgo)
-[![GitHub Issues](https://img.shields.io/github/issues/EternityX/DEADCELL-CSGO.svg)](https://github.com/EternityX/DEADCELL-CSGO/issues)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/EternityX/DEADCELL-CSGO/blob/master/LICENSE)
-
 ## Preface
 Full CS:GO project files for deadcell. For the OSHGui project, please see the [OSHGui repository](https://github.com/EternityX/DEADCELL-OSHGUI).
 
 This is *not* a ready-to-use cheat, it is missing a lot of core features and has a multitude of issues. As such it is highly recommended that you do not use this if you have no prior programming knowledge or a lack of game hacking knowledge in general.
 
-## Discord
-https://discord.gg/dEMgzUZ
-
-We invite anyone interested in supporting development or just want to chat to join our Discord.
-
-This is NOT for tech support. If you have an issue, open one [here](https://github.com/EternityX/DEADCELL-CSGO/issues/new/choose).
-
 ## Known issues
 - Crashes.
 - Some of the code is unoptimized.
-- If you come across any more issues, please notify us via the issue tracker.
-
-We are accepting any pull requests that fix any of the aforementioned issues.
-
-## Contributing
-See [CONTRIBUTING.md](https://github.com/EternityX/DEADCELL-CSGO/blob/master/CONTRIBUTING.md).
 
 ## FAQ
 ### Where's the DLL?
